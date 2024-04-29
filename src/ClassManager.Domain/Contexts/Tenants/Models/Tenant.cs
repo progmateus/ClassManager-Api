@@ -2,6 +2,7 @@ using System;
 using ClassManager.Domain.Shared.Entities;
 using ClassManager.Domain.Contexts.Shared.ValueObjects;
 using ClassManager.Domain.Contexts.Shared.Enums;
+using ClassManager.Domain.Contexts.Roles.Entities;
 
 namespace ClassManager.Domain.Contexts.Tenants.Entities
 {
@@ -25,6 +26,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public Email Email { get; private set; }
     public string? Avatar { get; private set; } = string.Empty;
     public ETenantStatus Status { get; private set; } = ETenantStatus.ACTIVE;
+    public List<Role> Roles { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 

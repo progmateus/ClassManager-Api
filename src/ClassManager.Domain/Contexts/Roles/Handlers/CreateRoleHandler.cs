@@ -33,7 +33,7 @@ public class CreateRoleHandler : Notifiable,
       return new CommandResult(false, "ERR_ROLE_ALREADY_EXISTS", null, null, 409);
     }
 
-    var role = new Role(command.Name, command.Description);
+    var role = new Role(command.Name, command.TenantId, command.Description);
 
     await _repository.CreateAsync(role, new CancellationToken());
 

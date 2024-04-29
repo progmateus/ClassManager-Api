@@ -84,5 +84,25 @@ namespace ClassManager.Tests.Mocks
       var index = _tenants.FindIndex((u) => u.Id == entity.Id);
       _tenants[index] = entity;
     }
+
+    public Task<bool> IdExistsAsync(Guid id, CancellationToken cancellationToken)
+    {
+      throw new NotImplementedException();
+    }
+
+    public List<Tenant> GetByIdsAsync(List<Guid> ids, CancellationToken cancellationToken)
+    {
+      throw new NotImplementedException();
+    }
+
+    public Task CreateRangeAsync(List<Tenant> entities, CancellationToken cancellationToken)
+    {
+      throw new NotImplementedException();
+    }
+
+    public Task DeleteRangeAsync(List<Tenant> entities, CancellationToken cancellationToken)
+    {
+      throw new NotImplementedException();
+    }
   }
 }

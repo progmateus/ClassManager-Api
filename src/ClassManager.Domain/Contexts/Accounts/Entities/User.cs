@@ -2,6 +2,7 @@ using System;
 using ClassManager.Domain.Shared.Entities;
 using ClassManager.Domain.Contexts.Shared.ValueObjects;
 using ClassManager.Domain.Contexts.Shared.Enums;
+using ClassManager.Domain.Contexts.Roles.Entities;
 
 namespace ClassManager.Domain.Contexts.Accounts.Entities
 {
@@ -35,6 +36,7 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     public EUserType Type { get; private set; } = EUserType.NORMAL;
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
+    public List<Role> Roles { get; } = new();
 
     public void ChangeUser(Name name, Email email, Document document)
     {

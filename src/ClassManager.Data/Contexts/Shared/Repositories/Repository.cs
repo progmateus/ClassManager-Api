@@ -56,4 +56,26 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
   {
     return await DbContext.SaveChangesAsync(cancellationToken);
   }
+
+  public async Task<bool> IdExistsAsync(Guid id, CancellationToken cancellationToken)
+  {
+    return await DbSet.AsNoTracking().AnyAsync(x => x.Id == id, cancellationToken);
+  }
+
+  public List<TEntity> GetByIdsAsync(List<Guid> ids, CancellationToken cancellationToken)
+  {
+    return DbSet.Where(x => ids.Contains(x.Id)).ToList();
+  }
+
+  public async Task CreateRangeAsync(List<TEntity> entities, CancellationToken cancellationToken)
+  {
+    DbSet.AddRange(entities);
+    await SaveChangesAsync(cancellationToken);
+  }
+
+  public async Task DeleteRangeAsync(List<TEntity> entities, CancellationToken cancellationToken)
+  {
+    DbSet.RemoveRange(entities);
+    await SaveChangesAsync(cancellationToken);
+  }
 }
