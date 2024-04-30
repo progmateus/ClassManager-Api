@@ -32,7 +32,7 @@ public class CreateTenantHandler :
     if (command.Invalid)
     {
       AddNotifications(command);
-      return new CommandResult(false, "User not Created", null, command.Notifications);
+      return new CommandResult(false, "Tenant not Created", null, command.Notifications);
     }
 
     if (await _repository.DocumentAlreadyExistsAsync(command.Document, new CancellationToken()))

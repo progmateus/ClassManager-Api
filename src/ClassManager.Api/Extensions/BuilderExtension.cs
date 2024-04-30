@@ -108,6 +108,10 @@ public static class BuilderExtension
       IRoleRepository,
       RoleRepository>();
 
+    builder.Services.AddTransient<
+    IUsersRolesRepository,
+    UsersRolesRepository>();
+
     builder.Services.AddTransient<TokenService>();
 
     builder.Services.AddTransient<CreateUserHandler>();
@@ -132,6 +136,8 @@ public static class BuilderExtension
     builder.Services.AddTransient<ListRolesHandler>();
     builder.Services.AddTransient<UpdateRoleHandler>();
     builder.Services.AddTransient<DeleteroleHandler>();
+
+    builder.Services.AddTransient<UpdateUsersRolesHandler>();
 
   }
 }

@@ -201,12 +201,12 @@ namespace ClassManager.Data.Migrations
 
                     b.HasIndex("UsersId");
 
-                    b.ToTable("RoleUser");
+                    b.ToTable("RoleUser", (string)null);
                 });
 
             modelBuilder.Entity("ClassManager.Domain.Contexts.Accounts.Entities.User", b =>
                 {
-                    b.OwnsOne("ClassManager.Domain.Contexts.Shared.ValueObjects.Document", "Document", b1 =>
+                    b.OwnsOne("ClassManager.Domain.Contexts.Accounts.Entities.User.Document#ClassManager.Domain.Contexts.Shared.ValueObjects.Document", "Document", b1 =>
                         {
                             b1.Property<Guid>("UserId")
                                 .HasColumnType("uniqueidentifier");
@@ -223,13 +223,13 @@ namespace ClassManager.Data.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("Users");
+                            b1.ToTable("Users", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
                         });
 
-                    b.OwnsOne("ClassManager.Domain.Contexts.Shared.ValueObjects.Email", "Email", b1 =>
+                    b.OwnsOne("ClassManager.Domain.Contexts.Accounts.Entities.User.Email#ClassManager.Domain.Contexts.Shared.ValueObjects.Email", "Email", b1 =>
                         {
                             b1.Property<Guid>("UserId")
                                 .HasColumnType("uniqueidentifier");
@@ -242,12 +242,12 @@ namespace ClassManager.Data.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("Users");
+                            b1.ToTable("Users", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
 
-                            b1.OwnsOne("ClassManager.Domain.Contexts.Shared.ValueObjects.Verification", "Verification", b2 =>
+                            b1.OwnsOne("ClassManager.Domain.Contexts.Accounts.Entities.User.Email#ClassManager.Domain.Contexts.Shared.ValueObjects.Email.Verification#ClassManager.Domain.Contexts.Shared.ValueObjects.Verification", "Verification", b2 =>
                                 {
                                     b2.Property<Guid>("EmailUserId")
                                         .HasColumnType("uniqueidentifier");
@@ -267,7 +267,7 @@ namespace ClassManager.Data.Migrations
 
                                     b2.HasKey("EmailUserId");
 
-                                    b2.ToTable("Users");
+                                    b2.ToTable("Users", (string)null);
 
                                     b2.WithOwner()
                                         .HasForeignKey("EmailUserId");
@@ -277,7 +277,7 @@ namespace ClassManager.Data.Migrations
                                 .IsRequired();
                         });
 
-                    b.OwnsOne("ClassManager.Domain.Contexts.Shared.ValueObjects.Name", "Name", b1 =>
+                    b.OwnsOne("ClassManager.Domain.Contexts.Accounts.Entities.User.Name#ClassManager.Domain.Contexts.Shared.ValueObjects.Name", "Name", b1 =>
                         {
                             b1.Property<Guid>("UserId")
                                 .HasColumnType("uniqueidentifier");
@@ -296,13 +296,13 @@ namespace ClassManager.Data.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("Users");
+                            b1.ToTable("Users", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
                         });
 
-                    b.OwnsOne("ClassManager.Domain.Contexts.Shared.ValueObjects.Password", "Password", b1 =>
+                    b.OwnsOne("ClassManager.Domain.Contexts.Accounts.Entities.User.Password#ClassManager.Domain.Contexts.Shared.ValueObjects.Password", "Password", b1 =>
                         {
                             b1.Property<Guid>("UserId")
                                 .HasColumnType("uniqueidentifier");
@@ -319,7 +319,7 @@ namespace ClassManager.Data.Migrations
 
                             b1.HasKey("UserId");
 
-                            b1.ToTable("Users");
+                            b1.ToTable("Users", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("UserId");
@@ -371,7 +371,7 @@ namespace ClassManager.Data.Migrations
 
             modelBuilder.Entity("ClassManager.Domain.Contexts.Tenants.Entities.Tenant", b =>
                 {
-                    b.OwnsOne("ClassManager.Domain.Contexts.Shared.ValueObjects.Document", "Document", b1 =>
+                    b.OwnsOne("ClassManager.Domain.Contexts.Tenants.Entities.Tenant.Document#ClassManager.Domain.Contexts.Shared.ValueObjects.Document", "Document", b1 =>
                         {
                             b1.Property<Guid>("TenantId")
                                 .HasColumnType("uniqueidentifier");
@@ -388,13 +388,13 @@ namespace ClassManager.Data.Migrations
 
                             b1.HasKey("TenantId");
 
-                            b1.ToTable("Tenants");
+                            b1.ToTable("Tenants", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("TenantId");
                         });
 
-                    b.OwnsOne("ClassManager.Domain.Contexts.Shared.ValueObjects.Email", "Email", b1 =>
+                    b.OwnsOne("ClassManager.Domain.Contexts.Tenants.Entities.Tenant.Email#ClassManager.Domain.Contexts.Shared.ValueObjects.Email", "Email", b1 =>
                         {
                             b1.Property<Guid>("TenantId")
                                 .HasColumnType("uniqueidentifier");
@@ -407,7 +407,7 @@ namespace ClassManager.Data.Migrations
 
                             b1.HasKey("TenantId");
 
-                            b1.ToTable("Tenants");
+                            b1.ToTable("Tenants", (string)null);
 
                             b1.WithOwner()
                                 .HasForeignKey("TenantId");
