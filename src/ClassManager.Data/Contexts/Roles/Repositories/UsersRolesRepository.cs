@@ -15,4 +15,9 @@ public class UsersRolesRepository : Repository<UsersRoles>, IUsersRolesRepositor
     DbSet.RemoveRange(DbSet.Where(x => x.UserId == userId && x.TenantId == tenantId));
     await SaveChangesAsync(cancellationToken);
   }
+
+  public List<UsersRoles> ListUsersRolesByUserIdAndTenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken)
+  {
+    return DbSet.Where(x => x.UserId == userId && x.TenantId == tenantId).ToList();
+  }
 }

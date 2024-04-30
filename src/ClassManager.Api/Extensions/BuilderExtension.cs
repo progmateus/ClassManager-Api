@@ -138,6 +138,7 @@ public static class BuilderExtension
     builder.Services.AddTransient<DeleteroleHandler>();
 
     builder.Services.AddTransient<UpdateUsersRolesHandler>();
+    builder.Services.AddTransient<ListUsersRolesHandler>();
 
   }
 }

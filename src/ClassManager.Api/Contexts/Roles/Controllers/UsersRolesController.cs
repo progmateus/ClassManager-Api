@@ -25,4 +25,21 @@ public class UsersrolesController : MainController
 
     return Results.Ok(result);
   }
+
+
+  [HttpGet]
+  public async Task<IResult> List(
+      [FromQuery] UsersRolesCommand command,
+      [FromServices] ListUsersRolesHandler handler
+  )
+  {
+    var result = await handler.Handle(command);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
 }
