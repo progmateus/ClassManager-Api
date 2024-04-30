@@ -8,8 +8,6 @@ public class RoleCommand : Notifiable, ICommand
 {
   public string Name { get; set; } = null!;
   public string Description { get; set; } = null!;
-  public Guid TenantId { get; set; }
-
   public void Validate()
   {
     AddNotifications(new Contract()
@@ -18,7 +16,6 @@ public class RoleCommand : Notifiable, ICommand
     .HasMaxLen(Name, 80, "RoleCommand.Name", "Name max 80 characters")
     .HasMinLen(Description, 3, "RoleCommand.Description", "Description min 3 characters")
     .HasMaxLen(Description, 100, "RoleCommand.Description", "Description min 80 characters")
-    .IsNotNull(TenantId, "RoleCommand.TenantId", "TenantId not null")
     );
   }
 }

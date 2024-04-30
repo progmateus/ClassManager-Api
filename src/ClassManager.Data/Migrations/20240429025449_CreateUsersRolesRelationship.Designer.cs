@@ -4,6 +4,7 @@ using ClassManager.Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClassManager.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240429025449_CreateUsersRolesRelationship")]
+    partial class CreateUsersRolesRelationship
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -116,7 +119,7 @@ namespace ClassManager.Data.Migrations
                         .HasColumnType("VARCHAR")
                         .HasColumnName("Name");
 
-                    b.Property<Guid?>("TenantId")
+                    b.Property<Guid>("TenantId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("Updatedat")
@@ -127,32 +130,6 @@ namespace ClassManager.Data.Migrations
                     b.HasIndex("TenantId");
 
                     b.ToTable("Roles", (string)null);
-                });
-
-            modelBuilder.Entity("ClassManager.Domain.Contexts.Roles.Entities.UsersRoles", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("RoleId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("TenantId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UserId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("RoleId");
-
-                    b.HasIndex("TenantId");
-
-                    b.HasIndex("UserId");
-
-                    b.ToTable("UsersRoles", (string)null);
                 });
 
             modelBuilder.Entity("ClassManager.Domain.Contexts.Tenants.Entities.Tenant", b =>
@@ -189,19 +166,19 @@ namespace ClassManager.Data.Migrations
                     b.ToTable("Tenants", (string)null);
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
+            modelBuilder.Entity("UsersRoles", b =>
                 {
-                    b.Property<Guid>("RolesId")
+                    b.Property<Guid>("RoleId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("UsersId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("RolesId", "UsersId");
+                    b.HasKey("RoleId", "UserId");
 
-                    b.HasIndex("UsersId");
+                    b.HasIndex("UserId");
 
-                    b.ToTable("RoleUser");
+                    b.ToTable("UsersRoles");
                 });
 
             modelBuilder.Entity("ClassManager.Domain.Contexts.Accounts.Entities.User", b =>
@@ -340,33 +317,12 @@ namespace ClassManager.Data.Migrations
 
             modelBuilder.Entity("ClassManager.Domain.Contexts.Roles.Entities.Role", b =>
                 {
-                    b.HasOne("ClassManager.Domain.Contexts.Tenants.Entities.Tenant", null)
-                        .WithMany("Roles")
-                        .HasForeignKey("TenantId");
-                });
-
-            modelBuilder.Entity("ClassManager.Domain.Contexts.Roles.Entities.UsersRoles", b =>
-                {
-                    b.HasOne("ClassManager.Domain.Contexts.Roles.Entities.Role", "Role")
-                        .WithMany("UsersRoles")
-                        .HasForeignKey("RoleId")
-                        .IsRequired();
-
                     b.HasOne("ClassManager.Domain.Contexts.Tenants.Entities.Tenant", "Tenant")
-                        .WithMany("UsersRoles")
+                        .WithMany("Roles")
                         .HasForeignKey("TenantId")
                         .IsRequired();
 
-                    b.HasOne("ClassManager.Domain.Contexts.Accounts.Entities.User", "User")
-                        .WithMany("UsersRoles")
-                        .HasForeignKey("UserId")
-                        .IsRequired();
-
-                    b.Navigation("Role");
-
                     b.Navigation("Tenant");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClassManager.Domain.Contexts.Tenants.Entities.Tenant", b =>
@@ -420,34 +376,24 @@ namespace ClassManager.Data.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("RoleUser", b =>
+            modelBuilder.Entity("UsersRoles", b =>
                 {
                     b.HasOne("ClassManager.Domain.Contexts.Roles.Entities.Role", null)
                         .WithMany()
-                        .HasForeignKey("RolesId")
+                        .HasForeignKey("RoleId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("ClassManager.Domain.Contexts.Accounts.Entities.User", null)
                         .WithMany()
-                        .HasForeignKey("UsersId")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-                });
-
-            modelBuilder.Entity("ClassManager.Domain.Contexts.Accounts.Entities.User", b =>
-                {
-                    b.Navigation("UsersRoles");
-                });
-
-            modelBuilder.Entity("ClassManager.Domain.Contexts.Roles.Entities.Role", b =>
-                {
-                    b.Navigation("UsersRoles");
                 });
 
             modelBuilder.Entity("ClassManager.Domain.Contexts.Tenants.Entities.Tenant", b =>
                 {
                     b.Navigation("Roles");
-
-                    b.Navigation("UsersRoles");
                 });
 #pragma warning restore 612, 618
         }

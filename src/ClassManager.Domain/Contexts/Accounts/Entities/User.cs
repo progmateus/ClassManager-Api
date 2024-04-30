@@ -37,6 +37,7 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
     public List<Role> Roles { get; } = new();
+    public List<UsersRoles> UsersRoles { get; } = new();
 
     public void ChangeUser(Name name, Email email, Document document)
     {

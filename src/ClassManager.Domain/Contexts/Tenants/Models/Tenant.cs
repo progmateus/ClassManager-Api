@@ -27,6 +27,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public string? Avatar { get; private set; } = string.Empty;
     public ETenantStatus Status { get; private set; } = ETenantStatus.ACTIVE;
     public List<Role> Roles { get; private set; }
+    public List<UsersRoles> UsersRoles { get; } = new();
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 

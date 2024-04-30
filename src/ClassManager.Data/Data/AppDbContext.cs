@@ -43,6 +43,7 @@ public class AppDbContext : DbContext
     modelBuilder.ApplyConfiguration(new TenantMap());
     modelBuilder.ApplyConfiguration(new PlanMap());
     modelBuilder.ApplyConfiguration(new RoleMap());
+    modelBuilder.ApplyConfiguration(new UsersRolesMap());
 
     base.OnModelCreating(modelBuilder);
   }

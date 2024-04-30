@@ -53,10 +53,5 @@ public class TenantMap : IEntityTypeConfiguration<Tenant>
 
         builder.OwnsOne(x => x.Email)
             .Ignore(x => x.Verification);
-
-        builder.HasMany(t => t.Roles)
-            .WithOne(r => r.Tenant)
-            .HasForeignKey("TenantId")
-            .HasPrincipalKey(e => e.Id);
     }
 }
