@@ -112,6 +112,10 @@ public static class BuilderExtension
     IUsersRolesRepository,
     UsersRolesRepository>();
 
+    builder.Services.AddTransient<
+    ITenantPlanRepository,
+    TenantPlanRepository>();
+
     builder.Services.AddTransient<TokenService>();
 
     builder.Services.AddTransient<CreateUserHandler>();
@@ -140,5 +144,11 @@ public static class BuilderExtension
     builder.Services.AddTransient<UpdateUsersRolesHandler>();
     builder.Services.AddTransient<ListUsersRolesHandler>();
 
+
+    builder.Services.AddTransient<CreateTenantPlanHandler>();
+    builder.Services.AddTransient<UpdateTenantPlanHandler>();
+    builder.Services.AddTransient<ListTenantPlansHandler>();
+    builder.Services.AddTransient<GetTenantPlanByIdHandler>();
+    builder.Services.AddTransient<DeleteTenantPlanHandler>();
   }
 }

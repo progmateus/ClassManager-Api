@@ -27,17 +27,13 @@ public class UpdateTenantPlanHandler :
       AddNotifications(command);
       return new CommandResult(false, "ERR_PLAN_NOT_UPDATED", null, command.Notifications);
     }
-
     var tenantPlan = await _tenantPlanRepository.GetByIdAndTenantId(tenantId, planId, new CancellationToken());
 
     if (tenantPlan is null)
     {
       return new CommandResult(false, "ERR_PLAN_NOT_FOUND", null, null, 404);
     }
-
     tenantPlan.ChangeTenantPlan(command.Name, command.Description, command.TimesOfWeek, command.Price);
-
-
     await _tenantPlanRepository.UpdateAsync(tenantPlan, new CancellationToken());
 
     return new CommandResult(true, "PLAN_UPDATED", tenantPlan, null, 200);
