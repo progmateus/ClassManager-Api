@@ -12,6 +12,11 @@ public class TenantPlanRepository : Repository<TenantPlan>, ITenantPlanRepositor
 {
   public TenantPlanRepository(AppDbContext context) : base(context) { }
 
+  public async Task<TenantPlan> GetByIdAndTenantId(Guid planId, Guid tenantId, CancellationToken cancellationToken)
+  {
+    return await DbSet.FirstAsync((x) => x.TenantId == tenantId && x.Id == planId, cancellationToken);
+  }
+
   public List<TenantPlan> ListByTenantId(Guid tenantId, CancellationToken cancellationToken)
   {
     return DbSet.Where((x) => x.TenantId == tenantId).ToList();

@@ -1,6 +1,7 @@
 using ClassManager.Domain.Contexts.Accounts.Commands;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Shared.ValueObjects;
+using ClassManager.Domain.Contexts.Tenants.Commands;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;
@@ -65,6 +66,6 @@ public class UpdateTenantHandler :
 
     await _repository.UpdateAsync(tenant, default);
 
-    return new CommandResult(true, "Tenant created", tenant, null, 201);
+    return new CommandResult(true, "Tenant created", tenant, null, 200);
   }
 }
