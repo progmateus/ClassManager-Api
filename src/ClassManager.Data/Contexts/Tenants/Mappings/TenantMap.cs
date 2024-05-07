@@ -3,7 +3,7 @@ using ClassManager.Domain.Contexts.Tenants.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ClassManager.Data.Contexts.Accounts.Mappings;
+namespace ClassManager.Data.Contexts.Tenants.Mappings;
 
 public class TenantMap : IEntityTypeConfiguration<Tenant>
 {

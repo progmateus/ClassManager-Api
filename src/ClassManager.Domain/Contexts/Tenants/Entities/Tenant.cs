@@ -32,6 +32,8 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public Plan? Plan { get; private set; }
     public List<Role> Roles { get; private set; }
     public List<UsersRoles> UsersRoles { get; }
+
+    public List<TenantPlan> TenantPlans { get; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
