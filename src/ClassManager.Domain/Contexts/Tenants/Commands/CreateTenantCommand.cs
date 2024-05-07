@@ -2,7 +2,7 @@ using ClassManager.Domain.Shared.Commands;
 using Flunt.Notifications;
 using Flunt.Validations;
 
-namespace ClassManager.Domain.Contexts.Accounts.Commands
+namespace ClassManager.Domain.Contexts.Tenants.Commands
 {
   public class CreateTenantCommand : Notifiable, ICommand
   {

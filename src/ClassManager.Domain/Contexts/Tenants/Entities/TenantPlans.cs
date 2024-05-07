@@ -9,13 +9,12 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
 {
   public class TenantPlan : Entity
   {
-    public TenantPlan(string name, string description, int timesOfweek, Guid tenantId, Tenant tenant)
+    public TenantPlan(string name, string description, int timesOfweek, Guid tenantId)
     {
       Name = name;
       Description = description;
       TimesOfweek = timesOfweek;
       TenantId = tenantId;
-      Tenant = tenant;
     }
 
     protected TenantPlan()
@@ -28,7 +27,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public int TimesOfweek { get; private set; }
     public decimal Price { get; private set; }
     public Guid TenantId { get; private set; }
-    public Tenant Tenant { get; private set; }
+    public Tenant? Tenant { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
