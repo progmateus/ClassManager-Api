@@ -53,5 +53,13 @@ public class TenantMap : IEntityTypeConfiguration<Tenant>
 
         builder.OwnsOne(x => x.Email)
             .Ignore(x => x.Verification);
+
+        builder.HasOne(x => x.Plan)
+            .WithMany(p => p.Tenants)
+            .HasForeignKey(x => x.PlanId)
+            .IsRequired(false);
+
+        builder.Property(x => x.ExpiresDate)
+            .HasColumnName("ExpiresDate");
     }
 }

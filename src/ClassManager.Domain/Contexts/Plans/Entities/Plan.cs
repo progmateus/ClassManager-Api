@@ -1,3 +1,4 @@
+using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Shared.Entities;
 
 namespace ClassManager.Domain.Contexts.Plans.Entities;
@@ -22,6 +23,7 @@ public class Plan : Entity
   public int StudentsLimit { get; private set; }
   public int ClassesLimit { get; private set; }
   public decimal Price { get; private set; }
+  public List<Tenant> Tenants { get; private set; } = [];
   public DateTime CreatedAt { get; private set; }
   public DateTime UpdatedAt { get; private set; }
 
