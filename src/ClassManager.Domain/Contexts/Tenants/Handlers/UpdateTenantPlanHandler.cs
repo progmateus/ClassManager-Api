@@ -1,6 +1,3 @@
-using ClassManager.Domain.Contexts.Accounts.Commands;
-using ClassManager.Domain.Contexts.Shared.Enums;
-using ClassManager.Domain.Contexts.Shared.ValueObjects;
 using ClassManager.Domain.Contexts.Tenants.Commands;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
@@ -14,15 +11,12 @@ public class UpdateTenantPlanHandler :
   Notifiable,
   ITenantActionHandler<TenantPlanCommand>
 {
-  private readonly ITenantRepository _tenantRepository;
   private readonly ITenantPlanRepository _tenantPlanRepository;
 
   public UpdateTenantPlanHandler(
-    ITenantRepository tenantRepository,
     ITenantPlanRepository tenantPlanRepository
     )
   {
-    _tenantRepository = tenantRepository;
     _tenantPlanRepository = tenantPlanRepository;
   }
   public async Task<ICommandResult> Handle(Guid tenantId, Guid planId, TenantPlanCommand command)

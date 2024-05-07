@@ -1,4 +1,3 @@
-using ClassManager.Domain.Contexts.Accounts.Commands;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Shared.ValueObjects;
 using ClassManager.Domain.Contexts.Tenants.Commands;
