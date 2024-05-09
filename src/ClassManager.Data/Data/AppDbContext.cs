@@ -1,4 +1,5 @@
 using ClassManager.Data.Contexts.Accounts.Mappings;
+using ClassManager.Data.Contexts.Classes.Mappings;
 using ClassManager.Data.Contexts.Plans.Mappings;
 using ClassManager.Data.Contexts.Tenants.Mappings;
 using ClassManager.Domain.Contexts.Accounts.Entities;
@@ -46,6 +47,7 @@ public class AppDbContext : DbContext
     modelBuilder.ApplyConfiguration(new RoleMap());
     modelBuilder.ApplyConfiguration(new UsersRolesMap());
     modelBuilder.ApplyConfiguration(new TenantPlanMap());
+    modelBuilder.ApplyConfiguration(new ClassMap());
 
     base.OnModelCreating(modelBuilder);
   }

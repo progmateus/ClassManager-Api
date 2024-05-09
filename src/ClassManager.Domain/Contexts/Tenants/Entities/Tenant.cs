@@ -4,6 +4,7 @@ using ClassManager.Domain.Contexts.Shared.ValueObjects;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Plans.Entities;
+using ClassManager.Domain.Contexts.Classes.Entities;
 
 namespace ClassManager.Domain.Contexts.Tenants.Entities
 {
@@ -32,8 +33,8 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public Plan? Plan { get; private set; }
     public List<Role> Roles { get; private set; }
     public List<UsersRoles> UsersRoles { get; }
-
     public List<TenantPlan> TenantPlans { get; }
+    public List<Class> Classes { get; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
