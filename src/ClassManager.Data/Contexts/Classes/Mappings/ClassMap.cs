@@ -24,6 +24,12 @@ public class ClassMap : IEntityTypeConfiguration<Class>
     .HasMaxLength(500)
     .IsRequired(false);
 
+    builder.Property(x => x.Description)
+    .HasColumnName("Description")
+    .HasColumnType("VARCHAR")
+    .HasMaxLength(200)
+    .IsRequired(false);
+
     builder.HasOne(x => x.Tenant)
         .WithMany(p => p.Classes)
         .HasForeignKey(x => x.TenantId)
