@@ -9,6 +9,12 @@ namespace ClassManager.Domain.Contexts.Classes.Entities
 {
   public class Class : Entity
   {
+    public Class(string name, Guid tenantId, string businessHour)
+    {
+      Name = name;
+      TenantId = tenantId;
+      BusinessHour = businessHour;
+    }
 
     protected Class()
     {
