@@ -4,10 +4,10 @@ using ClassManager.Shared.Commands;
 
 namespace ClassManager.Domain.Contexts.Classes.Handlers;
 
-public class GetTenantPlanByIdHandler
+public class GetClassByIdHandler
 {
   private readonly IClassRepository _classRepository;
-  public GetTenantPlanByIdHandler(
+  public GetClassByIdHandler(
     IClassRepository classRepository
     )
   {

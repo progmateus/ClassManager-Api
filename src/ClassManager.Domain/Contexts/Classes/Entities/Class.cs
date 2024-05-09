@@ -1,24 +1,22 @@
 using System;
 using ClassManager.Domain.Shared.Entities;
-using ClassManager.Domain.Contexts.Shared.ValueObjects;
-using ClassManager.Domain.Contexts.Shared.Enums;
-using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Tenants.Entities;
 
 namespace ClassManager.Domain.Contexts.Classes.Entities
 {
   public class Class : Entity
   {
+    protected Class()
+    {
+
+    }
     public Class(string name, Guid tenantId, string businessHour)
     {
       Name = name;
       TenantId = tenantId;
       BusinessHour = businessHour;
-    }
-
-    protected Class()
-    {
-
+      CreatedAt = DateTime.Now;
+      UpdatedAt = DateTime.Now;
     }
 
     public string Name { get; private set; } = null!;

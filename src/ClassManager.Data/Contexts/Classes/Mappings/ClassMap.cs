@@ -21,6 +21,7 @@ public class ClassMap : IEntityTypeConfiguration<Class>
     builder.Property(x => x.BusinessHour)
     .HasColumnName("BusinessHour")
     .HasColumnType("VARCHAR")
+    .HasMaxLength(500)
     .IsRequired(false);
 
     builder.HasOne(x => x.Tenant)

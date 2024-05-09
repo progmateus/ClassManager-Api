@@ -34,7 +34,7 @@ public class CreateClassHandler :
       return new CommandResult(false, "ERR_PLAN_NOT_CREATED", null, command.Notifications);
     }
     var tenant = await _tenantRepository.IdExistsAsync(tenantId, new CancellationToken());
-    if (tenant)
+    if (!tenant)
     {
       return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, null, 404);
     }
@@ -45,7 +45,8 @@ public class CreateClassHandler :
     }
 
     var newClass = new Class(command.Name, tenantId, command.BusinessHour);
-
+    Console.WriteLine("===========================================================");
+    Console.WriteLine(command.BusinessHour);
     await _classRepository.CreateAsync(newClass, new CancellationToken());
 
     return new CommandResult(true, "CLASS_CREATED", newClass, null, 201);

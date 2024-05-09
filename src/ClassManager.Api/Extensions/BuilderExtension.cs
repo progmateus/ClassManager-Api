@@ -9,6 +9,8 @@ using ClassManager.Domain;
 using ClassManager.Domain.Contexts.Accounts.Handlers;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Auth.Services;
+using ClassManager.Domain.Contexts.Classes.Handlers;
+using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Plans.Handlers;
 using ClassManager.Domain.Contexts.Plans.Repositories;
 using ClassManager.Domain.Contexts.Roles.Commands;
@@ -116,6 +118,10 @@ public static class BuilderExtension
     ITenantPlanRepository,
     TenantPlanRepository>();
 
+    builder.Services.AddTransient<
+    IClassRepository,
+    ClassRepository>();
+
     builder.Services.AddTransient<TokenService>();
 
     builder.Services.AddTransient<CreateUserHandler>();
@@ -150,5 +156,11 @@ public static class BuilderExtension
     builder.Services.AddTransient<ListTenantPlansHandler>();
     builder.Services.AddTransient<GetTenantPlanByIdHandler>();
     builder.Services.AddTransient<DeleteTenantPlanHandler>();
+
+    builder.Services.AddTransient<CreateClassHandler>();
+    builder.Services.AddTransient<UpdateClassHandler>();
+    builder.Services.AddTransient<ListClassesHandler>();
+    builder.Services.AddTransient<GetClassByIdHandler>();
+    builder.Services.AddTransient<DeleteClassHandler>();
   }
 }
