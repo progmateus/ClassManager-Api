@@ -41,6 +41,7 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     public List<UsersRoles> UsersRoles { get; } = [];
     public List<Class> Classes { get; }
     public List<TeachersClasses> TeachersClasses { get; } = [];
+    public List<StudentsClasses> StudentsClasses { get; } = [];
 
     public void ChangeUser(Name name, Email email, Document document)
     {

@@ -28,6 +28,7 @@ public class AppDbContext : DbContext
   public DbSet<UsersRoles> UsersRoles { get; set; } = null!;
   public DbSet<TenantPlan> TenantPlans { get; set; } = null!;
   public DbSet<TeachersClasses> TeachersClasses { get; set; } = null!;
+  public DbSet<StudentsClasses> StudentsClasses { get; set; } = null!;
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
 
@@ -54,6 +55,7 @@ public class AppDbContext : DbContext
     modelBuilder.ApplyConfiguration(new TenantPlanMap());
     modelBuilder.ApplyConfiguration(new ClassMap());
     modelBuilder.ApplyConfiguration(new TeachersClassesMap());
+    modelBuilder.ApplyConfiguration(new StudentsClassesMap());
 
     base.OnModelCreating(modelBuilder);
   }

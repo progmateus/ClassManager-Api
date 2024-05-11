@@ -4,14 +4,14 @@ using ClassManager.Domain.Contexts.Accounts.Entities;
 
 namespace ClassManager.Domain.Contexts.Classes.Entities
 {
-  public class TeachersClasses : Entity
+  public class StudentsClasses : Entity
   {
 
-    protected TeachersClasses()
+    protected StudentsClasses()
     {
 
     }
-    public TeachersClasses(Guid userId, Guid classId)
+    public StudentsClasses(Guid userId, Guid classId)
     {
       UserId = userId;
       ClassId = classId;

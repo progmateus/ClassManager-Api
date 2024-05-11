@@ -29,8 +29,8 @@ namespace ClassManager.Domain.Contexts.Classes.Entities
     public DateTime UpdatedAt { get; private set; }
     public Tenant Tenant { get; }
     public List<User> Users { get; }
-
     public List<TeachersClasses> TeachersClasses { get; } = [];
+    public List<StudentsClasses> StudentsClasses { get; } = [];
 
 
     public void ChangeClass(string name, string businessHour, string description)

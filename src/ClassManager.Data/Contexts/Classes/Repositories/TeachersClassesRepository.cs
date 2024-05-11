@@ -12,6 +12,6 @@ public class TeachersClassesRepository : Repository<TeachersClasses>, ITeacherCl
 
   public async Task<TeachersClasses> GetByUserIdAndClassId(Guid classId, Guid userId)
   {
-    return await DbSet.FirstOrDefaultAsync((tc) => tc.ClassId == classId && tc.TeacherId == userId);
+    return await DbSet.FirstOrDefaultAsync((tc) => tc.ClassId == classId && tc.UserId == userId);
   }
 }
