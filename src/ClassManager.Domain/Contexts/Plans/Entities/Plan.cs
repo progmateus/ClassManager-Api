@@ -14,8 +14,8 @@ public class Plan : Entity
     StudentsLimit = studentsLimit;
     ClassesLimit = classesLimit;
     Price = price;
-    CreatedAt = DateTime.Now;
-    UpdatedAt = DateTime.Now;
+    CreatedAt = DateTime.UtcNow;
+    UpdatedAt = DateTime.UtcNow;
   }
 
   public string Name { get; private set; }

@@ -1,6 +1,7 @@
 using System;
 using ClassManager.Domain.Shared.Entities;
 using ClassManager.Domain.Contexts.Tenants.Entities;
+using ClassManager.Domain.Contexts.Accounts.Entities;
 
 namespace ClassManager.Domain.Contexts.Classes.Entities
 {
@@ -16,8 +17,8 @@ namespace ClassManager.Domain.Contexts.Classes.Entities
       TenantId = tenantId;
       BusinessHour = businessHour;
       Description = description;
-      CreatedAt = DateTime.Now;
-      UpdatedAt = DateTime.Now;
+      CreatedAt = DateTime.UtcNow;
+      UpdatedAt = DateTime.UtcNow;
     }
 
     public string Name { get; private set; } = null!;
@@ -27,6 +28,10 @@ namespace ClassManager.Domain.Contexts.Classes.Entities
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
     public Tenant Tenant { get; }
+    public List<User> Users { get; }
+
+    public List<TeachersClasses> TeachersClasses { get; } = [];
+
 
     public void ChangeClass(string name, string businessHour, string description)
     {

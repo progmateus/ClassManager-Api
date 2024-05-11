@@ -19,8 +19,8 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
       Name = name;
       Document = document;
       Email = email;
-      CreatedAt = DateTime.Now;
-      UpdatedAt = DateTime.Now;
+      CreatedAt = DateTime.UtcNow;
+      UpdatedAt = DateTime.UtcNow;
     }
 
     public string Name { get; private set; } = null!;

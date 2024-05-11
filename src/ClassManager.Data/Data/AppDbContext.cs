@@ -3,6 +3,7 @@ using ClassManager.Data.Contexts.Classes.Mappings;
 using ClassManager.Data.Contexts.Plans.Mappings;
 using ClassManager.Data.Contexts.Tenants.Mappings;
 using ClassManager.Domain.Contexts.Accounts.Entities;
+using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Plans.Entities;
 using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Tenants.Entities;
@@ -23,6 +24,10 @@ public class AppDbContext : DbContext
   public DbSet<Tenant> Tenants { get; set; } = null!;
   public DbSet<Plan> Plans { get; set; } = null!;
   public DbSet<Role> Roles { get; set; } = null!;
+  public DbSet<Class> Classes { get; set; } = null!;
+  public DbSet<UsersRoles> UsersRoles { get; set; } = null!;
+  public DbSet<TenantPlan> TenantPlans { get; set; } = null!;
+  public DbSet<TeachersClasses> TeachersClasses { get; set; } = null!;
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
 
@@ -48,6 +53,7 @@ public class AppDbContext : DbContext
     modelBuilder.ApplyConfiguration(new UsersRolesMap());
     modelBuilder.ApplyConfiguration(new TenantPlanMap());
     modelBuilder.ApplyConfiguration(new ClassMap());
+    modelBuilder.ApplyConfiguration(new TeachersClassesMap());
 
     base.OnModelCreating(modelBuilder);
   }
@@ -59,7 +65,7 @@ public class AppDbContext : DbContext
     {
       if (entry.State == EntityState.Added)
       {
-        entry.Property("CreatedAt").CurrentValue = DateTime.Now;
+        entry.Property("CreatedAt").CurrentValue = DateTime.UtcNow;
       }
 
       if (entry.State == EntityState.Modified)

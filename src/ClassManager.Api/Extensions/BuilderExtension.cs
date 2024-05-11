@@ -1,4 +1,5 @@
 using System.Text;
+using System.Text.Json.Serialization;
 using classManager.Data.Contexts.Roles.Repositories;
 using ClassManager.Data.Contexts.Accounts.Repositories;
 using ClassManager.Data.Contexts.Accounts.Services;
@@ -85,10 +86,14 @@ public static class BuilderExtension
   public static void AddControllers(this WebApplicationBuilder builder)
   {
     builder.Services.AddControllers();
+
   }
 
   public static void AddServices(this WebApplicationBuilder builder)
   {
+
+    builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options => options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
+
     builder.Services.AddTransient<
         IUserRepository,
         UserRepository>();
@@ -121,6 +126,10 @@ public static class BuilderExtension
     builder.Services.AddTransient<
     IClassRepository,
     ClassRepository>();
+
+    builder.Services.AddTransient<
+    ITeacherClassesRepository,
+    TeachersClassesRepository>();
 
     builder.Services.AddTransient<TokenService>();
 
@@ -162,5 +171,8 @@ public static class BuilderExtension
     builder.Services.AddTransient<ListClassesHandler>();
     builder.Services.AddTransient<GetClassByIdHandler>();
     builder.Services.AddTransient<DeleteClassHandler>();
+
+    builder.Services.AddTransient<AddTeachersClassesandle>();
+    builder.Services.AddTransient<RemoveTeachersClassesHandler>();
   }
 }

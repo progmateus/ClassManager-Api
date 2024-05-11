@@ -3,6 +3,7 @@ using ClassManager.Domain.Shared.Entities;
 using ClassManager.Domain.Contexts.Shared.ValueObjects;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Roles.Entities;
+using ClassManager.Domain.Contexts.Classes.Entities;
 
 namespace ClassManager.Domain.Contexts.Accounts.Entities
 {
@@ -21,8 +22,8 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
       Email = email;
       Password = password;
       Avatar = avatar;
-      CreatedAt = DateTime.Now;
-      UpdatedAt = DateTime.Now;
+      CreatedAt = DateTime.UtcNow;
+      UpdatedAt = DateTime.UtcNow;
 
       AddNotifications(name, document, email);
     }
@@ -36,8 +37,10 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     public EUserType Type { get; private set; } = EUserType.NORMAL;
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
-    public List<Role> Roles { get; } = new();
-    public List<UsersRoles> UsersRoles { get; } = new();
+    public List<Role> Roles { get; } = [];
+    public List<UsersRoles> UsersRoles { get; } = [];
+    public List<Class> Classes { get; }
+    public List<TeachersClasses> TeachersClasses { get; } = [];
 
     public void ChangeUser(Name name, Email email, Document document)
     {

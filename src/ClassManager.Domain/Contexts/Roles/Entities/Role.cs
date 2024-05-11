@@ -12,8 +12,8 @@ public class Role : Entity
   {
     Name = name;
     Description = description;
-    CreatedAt = DateTime.Now;
-    Updatedat = DateTime.Now;
+    CreatedAt = DateTime.UtcNow;
+    Updatedat = DateTime.UtcNow;
   }
 
   public string Name { get; set; }

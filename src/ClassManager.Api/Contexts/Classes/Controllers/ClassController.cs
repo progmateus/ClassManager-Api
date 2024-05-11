@@ -9,6 +9,7 @@ namespace ClassManager.Api.Contexts.Classes.Controllers;
 [Route("{tenantId}/classes")]
 public class ClassController : MainController
 {
+
   [HttpPost]
   public async Task<IResult> Create(
     [FromRoute] Guid tenantId,

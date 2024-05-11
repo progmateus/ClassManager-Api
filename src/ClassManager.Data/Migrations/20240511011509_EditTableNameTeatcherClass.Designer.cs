@@ -4,6 +4,7 @@ using ClassManager.Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClassManager.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20240511011509_EditTableNameTeatcherClass")]
+    partial class EditTableNameTeatcherClass
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,28 +97,40 @@ namespace ClassManager.Data.Migrations
                     b.ToTable("Classes", (string)null);
                 });
 
-            modelBuilder.Entity("ClassManager.Domain.Contexts.Classes.Entities.TeachersClasses", b =>
+            modelBuilder.Entity("ClassManager.Domain.Contexts.Classes.Entities.StudentClass", b =>
                 {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
+                    b.Property<Guid>("ClassId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("ClassId")
+                    b.Property<Guid>("UserId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<Guid>("TeacherId")
+                    b.HasKey("ClassId", "UserId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("StudentClass");
+                });
+
+            modelBuilder.Entity("ClassManager.Domain.Contexts.Classes.Entities.TeacherClass", b =>
+                {
+                    b.Property<Guid>("ClassId")
                         .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasIndex("ClassId");
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
 
-                    b.HasIndex("TeacherId");
+                    b.HasKey("ClassId", "UserId");
 
-                    b.ToTable("TeachersClasses", (string)null);
+                    b.HasIndex("UserId");
+
+                    b.ToTable("TeacherClass");
                 });
 
             modelBuilder.Entity("ClassManager.Domain.Contexts.Plans.Entities.Plan", b =>
@@ -302,21 +317,6 @@ namespace ClassManager.Data.Migrations
                     b.ToTable("TenantPlans", (string)null);
                 });
 
-            modelBuilder.Entity("ClassUser", b =>
-                {
-                    b.Property<Guid>("ClassesId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("UsersId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("ClassesId", "UsersId");
-
-                    b.HasIndex("UsersId");
-
-                    b.ToTable("ClassUser");
-                });
-
             modelBuilder.Entity("RoleUser", b =>
                 {
                     b.Property<Guid>("RolesId")
@@ -476,16 +476,33 @@ namespace ClassManager.Data.Migrations
                     b.Navigation("Tenant");
                 });
 
-            modelBuilder.Entity("ClassManager.Domain.Contexts.Classes.Entities.TeachersClasses", b =>
+            modelBuilder.Entity("ClassManager.Domain.Contexts.Classes.Entities.StudentClass", b =>
                 {
                     b.HasOne("ClassManager.Domain.Contexts.Classes.Entities.Class", "Class")
-                        .WithMany("TeachersClasses")
+                        .WithMany("StudentClasses")
                         .HasForeignKey("ClassId")
                         .IsRequired();
 
                     b.HasOne("ClassManager.Domain.Contexts.Accounts.Entities.User", "User")
-                        .WithMany("TeachersClasses")
-                        .HasForeignKey("TeacherId")
+                        .WithMany("StudentClasses")
+                        .HasForeignKey("UserId")
+                        .IsRequired();
+
+                    b.Navigation("Class");
+
+                    b.Navigation("User");
+                });
+
+            modelBuilder.Entity("ClassManager.Domain.Contexts.Classes.Entities.TeacherClass", b =>
+                {
+                    b.HasOne("ClassManager.Domain.Contexts.Classes.Entities.Class", "Class")
+                        .WithMany("TeacherClasses")
+                        .HasForeignKey("ClassId")
+                        .IsRequired();
+
+                    b.HasOne("ClassManager.Domain.Contexts.Accounts.Entities.User", "User")
+                        .WithMany("TeacherClasses")
+                        .HasForeignKey("UserId")
                         .IsRequired();
 
                     b.Navigation("Class");
@@ -591,19 +608,6 @@ namespace ClassManager.Data.Migrations
                     b.Navigation("Tenant");
                 });
 
-            modelBuilder.Entity("ClassUser", b =>
-                {
-                    b.HasOne("ClassManager.Domain.Contexts.Classes.Entities.Class", null)
-                        .WithMany()
-                        .HasForeignKey("ClassesId")
-                        .IsRequired();
-
-                    b.HasOne("ClassManager.Domain.Contexts.Accounts.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("UsersId")
-                        .IsRequired();
-                });
-
             modelBuilder.Entity("RoleUser", b =>
                 {
                     b.HasOne("ClassManager.Domain.Contexts.Roles.Entities.Role", null)
@@ -619,14 +623,18 @@ namespace ClassManager.Data.Migrations
 
             modelBuilder.Entity("ClassManager.Domain.Contexts.Accounts.Entities.User", b =>
                 {
-                    b.Navigation("TeachersClasses");
+                    b.Navigation("StudentClasses");
+
+                    b.Navigation("TeacherClasses");
 
                     b.Navigation("UsersRoles");
                 });
 
             modelBuilder.Entity("ClassManager.Domain.Contexts.Classes.Entities.Class", b =>
                 {
-                    b.Navigation("TeachersClasses");
+                    b.Navigation("StudentClasses");
+
+                    b.Navigation("TeacherClasses");
                 });
 
             modelBuilder.Entity("ClassManager.Domain.Contexts.Plans.Entities.Plan", b =>
