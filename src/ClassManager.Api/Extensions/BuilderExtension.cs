@@ -131,6 +131,10 @@ public static class BuilderExtension
     ITeacherClassesRepository,
     TeachersClassesRepository>();
 
+    builder.Services.AddTransient<
+    IStudentsClassesRepository,
+    StudentsClassesRepository>();
+
     builder.Services.AddTransient<TokenService>();
 
     builder.Services.AddTransient<CreateUserHandler>();
@@ -174,5 +178,8 @@ public static class BuilderExtension
 
     builder.Services.AddTransient<AddTeachersClassesandle>();
     builder.Services.AddTransient<RemoveTeachersClassesHandler>();
+
+    builder.Services.AddTransient<AddStudentsClassesHandler>();
+    builder.Services.AddTransient<RemoveStudentsClassesHandler>();
   }
 }

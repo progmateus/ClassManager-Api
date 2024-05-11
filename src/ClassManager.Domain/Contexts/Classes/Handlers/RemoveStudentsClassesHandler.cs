@@ -30,11 +30,11 @@ public class RemoveStudentsClassesHandler
 
     if (studentClass is null)
     {
-      return new CommandResult(false, "ERR_TACHER_NOT_FOUND", null, null, 404);
+      return new CommandResult(false, "ERR_STUDENT_NOT_FOUND", null, null, 404);
     }
 
     await _studentsClassesRepository.DeleteAsync(studentClass.Id, new CancellationToken());
 
-    return new CommandResult(true, "TEACHER_REMOVED", studentClass, null, 204);
+    return new CommandResult(true, "STUDENT_REMOVED", studentClass, null, 204);
   }
 }
