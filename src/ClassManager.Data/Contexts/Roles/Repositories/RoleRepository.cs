@@ -9,6 +9,12 @@ namespace classManager.Data.Contexts.Roles.Repositories;
 public class RoleRepository : Repository<Role>, IRoleRepository
 {
   public RoleRepository(AppDbContext context) : base(context) { }
+
+  public async Task<Role> GetByNameAsync(string name, CancellationToken cancellationToken)
+  {
+    return await DbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Name == name, cancellationToken);
+  }
+
   public async Task<bool> NameAlreadyExists(string name, CancellationToken cancellationToken)
   {
     return await DbSet.AsNoTracking().AnyAsync(x => x.Name == name, cancellationToken);

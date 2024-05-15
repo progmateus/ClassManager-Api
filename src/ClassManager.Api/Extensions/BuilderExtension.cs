@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
 using classManager.Data.Contexts.Roles.Repositories;
+using classManager.Data.Contexts.Subscriptions.Repositories;
 using ClassManager.Data.Contexts.Accounts.Repositories;
 using ClassManager.Data.Contexts.Accounts.Services;
 using ClassManager.Data.Contexts.Plans.Repositories;
@@ -17,6 +18,8 @@ using ClassManager.Domain.Contexts.Plans.Repositories;
 using ClassManager.Domain.Contexts.Roles.Commands;
 using ClassManager.Domain.Contexts.Roles.Handlers;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Subscriptions.Handlers;
+using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.Handlers;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Services;
@@ -135,6 +138,10 @@ public static class BuilderExtension
     IStudentsClassesRepository,
     StudentsClassesRepository>();
 
+    builder.Services.AddTransient<
+    ISubscriptionRepository,
+    SubscriptionRepository>();
+
     builder.Services.AddTransient<TokenService>();
 
     builder.Services.AddTransient<CreateUserHandler>();
@@ -181,5 +188,9 @@ public static class BuilderExtension
 
     builder.Services.AddTransient<AddStudentsClassesHandler>();
     builder.Services.AddTransient<RemoveStudentsClassesHandler>();
+
+    builder.Services.AddTransient<CreateSubscriptionHandler>();
+    builder.Services.AddTransient<UpdateSubscriptionHandler>();
+    builder.Services.AddTransient<ListSubscriptionsHandler>();
   }
 }

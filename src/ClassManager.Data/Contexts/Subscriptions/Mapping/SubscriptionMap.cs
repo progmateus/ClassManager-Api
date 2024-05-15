@@ -24,11 +24,6 @@ public class SubscriptionMap : IEntityTypeConfiguration<Subscription>
       .HasForeignKey("TenantPlanId")
       .HasPrincipalKey(c => c.Id);
 
-    builder.HasOne(e => e.NextTenantPlan)
-      .WithMany(t => t.Subscriptions)
-      .HasForeignKey("NextTenantPlanId")
-      .HasPrincipalKey(c => c.Id);
-
     builder.Property(e => e.Status)
       .HasColumnType("TINYINT")
       .IsRequired(true)

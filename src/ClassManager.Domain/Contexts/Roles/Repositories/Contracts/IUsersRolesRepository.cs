@@ -7,4 +7,6 @@ public interface IUsersRolesRepository : IRepository<UsersRoles>
 {
   Task DeleteUsersRolesByUserIdAndTenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken);
   List<UsersRoles> ListUsersRolesByUserIdAndTenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken);
+  Task<bool> VerifyRoleExistsAsync(Guid userId, Guid tenantId, Guid roleId, CancellationToken cancellationToken);
+
 }

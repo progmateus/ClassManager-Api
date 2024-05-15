@@ -7,23 +7,30 @@ namespace ClassManager.Domain.Contexts.Subscriptions.Entities;
 public class Subscription : Entity
 {
   protected Subscription() { }
-  public Subscription(Guid userId, Guid planId, Guid nextPlanId, DateTime expiresDate)
+  public Subscription(Guid userId, Guid planId, DateTime expiresDate)
   {
     UserId = userId;
     TenantPlanId = planId;
-    NextPlanId = nextPlanId;
     Status = ESubscriptionStatus.ACTIVE;
     ExpiresDate = expiresDate;
   }
 
   public Guid UserId { get; set; }
   public Guid TenantPlanId { get; set; }
-  public Guid NextPlanId { get; set; }
   public ESubscriptionStatus Status { get; set; }
   public User User { get; set; }
   public TenantPlan TenantPlan { get; set; }
-  public TenantPlan NextTenantPlan { get; set; }
   public DateTime ExpiresDate { get; set; }
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }
+
+  public void ChangePlan(Guid planId)
+  {
+    TenantPlanId = planId;
+  }
+
+  public void ChangeStatus(ESubscriptionStatus status)
+  {
+    Status = status;
+  }
 }

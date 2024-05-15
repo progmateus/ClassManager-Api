@@ -6,6 +6,7 @@ using ClassManager.Domain.Contexts.Accounts.Entities;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Plans.Entities;
 using ClassManager.Domain.Contexts.Roles.Entities;
+using ClassManager.Domain.Contexts.Subscriptions.Entities;
 using ClassManager.Domain.Contexts.Tenants.Entities;
 using Flunt.Notifications;
 using Microsoft.EntityFrameworkCore;
@@ -29,6 +30,7 @@ public class AppDbContext : DbContext
   public DbSet<TenantPlan> TenantPlans { get; set; } = null!;
   public DbSet<TeachersClasses> TeachersClasses { get; set; } = null!;
   public DbSet<StudentsClasses> StudentsClasses { get; set; } = null!;
+  public DbSet<Subscription> Subscriptions { get; set; } = null!;
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
 
@@ -56,6 +58,7 @@ public class AppDbContext : DbContext
     modelBuilder.ApplyConfiguration(new ClassMap());
     modelBuilder.ApplyConfiguration(new TeachersClassesMap());
     modelBuilder.ApplyConfiguration(new StudentsClassesMap());
+    modelBuilder.ApplyConfiguration(new SubscriptionMap());
 
     base.OnModelCreating(modelBuilder);
   }

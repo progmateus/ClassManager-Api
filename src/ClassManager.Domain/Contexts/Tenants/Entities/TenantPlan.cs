@@ -29,7 +29,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public decimal Price { get; private set; }
     public Guid TenantId { get; private set; }
     public Tenant? Tenant { get; private set; }
-    public List<Subscription> Subscriptions { get; } = [];
+    public ICollection<Subscription> Subscriptions { get; } = [];
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 

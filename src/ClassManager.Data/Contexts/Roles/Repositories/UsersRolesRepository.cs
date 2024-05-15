@@ -20,4 +20,9 @@ public class UsersRolesRepository : Repository<UsersRoles>, IUsersRolesRepositor
   {
     return DbSet.Where(x => x.UserId == userId && x.TenantId == tenantId).ToList();
   }
+
+  public async Task<bool> VerifyRoleExistsAsync(Guid userId, Guid tenantId, Guid roleId, CancellationToken cancellationToken)
+  {
+    return await DbSet.AnyAsync(x => x.UserId == userId && x.TenantId == tenantId && x.RoleId == roleId);
+  }
 }
