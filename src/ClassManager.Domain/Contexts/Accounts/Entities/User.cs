@@ -4,6 +4,7 @@ using ClassManager.Domain.Contexts.Shared.ValueObjects;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Classes.Entities;
+using ClassManager.Domain.Contexts.Subscriptions.Entities;
 
 namespace ClassManager.Domain.Contexts.Accounts.Entities
 {
@@ -42,6 +43,7 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     public List<Class> Classes { get; }
     public List<TeachersClasses> TeachersClasses { get; } = [];
     public List<StudentsClasses> StudentsClasses { get; } = [];
+    public List<Subscription> Subscriptions { get; } = [];
 
     public void ChangeUser(Name name, Email email, Document document)
     {
