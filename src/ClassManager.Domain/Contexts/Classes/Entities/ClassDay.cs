@@ -30,9 +30,10 @@ namespace ClassManager.Domain.Contexts.Classes.Entities
     public Class Class { get; private set; }
 
 
-    public void ChangeStatus(EClassDayStatus status)
+    public void ChangeStatus(EClassDayStatus status, string? observation)
     {
       Status = status;
+      Observation = observation;
     }
   }
 }

@@ -198,5 +198,6 @@ public static class BuilderExtension
     builder.Services.AddTransient<ListSubscriptionsHandler>();
 
     builder.Services.AddTransient<CreateClassDayHandler>();
+    builder.Services.AddTransient<UpdateClassDayHandler>();
   }
 }
