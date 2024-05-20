@@ -31,6 +31,7 @@ public class AppDbContext : DbContext
   public DbSet<TeachersClasses> TeachersClasses { get; set; } = null!;
   public DbSet<StudentsClasses> StudentsClasses { get; set; } = null!;
   public DbSet<Subscription> Subscriptions { get; set; } = null!;
+  public DbSet<ClassDay> ClassDays { get; set; } = null!;
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
 
@@ -59,6 +60,7 @@ public class AppDbContext : DbContext
     modelBuilder.ApplyConfiguration(new TeachersClassesMap());
     modelBuilder.ApplyConfiguration(new StudentsClassesMap());
     modelBuilder.ApplyConfiguration(new SubscriptionMap());
+    modelBuilder.ApplyConfiguration(new ClassDayMap());
 
     base.OnModelCreating(modelBuilder);
   }

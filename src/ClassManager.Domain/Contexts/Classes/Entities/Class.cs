@@ -31,7 +31,7 @@ namespace ClassManager.Domain.Contexts.Classes.Entities
     public List<User> Users { get; }
     public List<TeachersClasses> TeachersClasses { get; } = [];
     public List<StudentsClasses> StudentsClasses { get; } = [];
-
+    public List<ClassDay> ClassDays { get; } = [];
 
     public void ChangeClass(string name, string businessHour, string description)
     {
