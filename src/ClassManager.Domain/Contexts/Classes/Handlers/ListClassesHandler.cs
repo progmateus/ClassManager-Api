@@ -18,6 +18,6 @@ public class ListClassesHandler
   {
     var tenantPlans = _classRepository.ListByTenantId(tenantId, new CancellationToken());
 
-    return new CommandResult(true, "PLANS_LISTED", tenantPlans, null, 200);
+    return new CommandResult(true, "CLASSES_LISTED", tenantPlans, null, 200);
   }
 }

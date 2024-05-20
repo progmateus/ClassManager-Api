@@ -142,6 +142,10 @@ public static class BuilderExtension
     ISubscriptionRepository,
     SubscriptionRepository>();
 
+    builder.Services.AddTransient<
+    IClassDayRepository,
+    ClassDayRepository>();
+
     builder.Services.AddTransient<TokenService>();
 
     builder.Services.AddTransient<CreateUserHandler>();
@@ -192,5 +196,7 @@ public static class BuilderExtension
     builder.Services.AddTransient<CreateSubscriptionHandler>();
     builder.Services.AddTransient<UpdateSubscriptionHandler>();
     builder.Services.AddTransient<ListSubscriptionsHandler>();
+
+    builder.Services.AddTransient<CreateClassDayHandler>();
   }
 }

@@ -6,12 +6,12 @@ namespace ClassManager.Domain.Contexts.Classes.Entities
 {
   public class ClassDay : Entity
   {
-    public ClassDay(DateTime date, string start, string end, string? observation)
+    public ClassDay(DateTime date, string hourStart, string hourEnd, Guid classId)
     {
       Date = date;
-      HourStart = start;
-      HourEnd = end;
-      Observation = observation;
+      HourStart = hourStart;
+      HourEnd = hourEnd;
+      ClassId = classId;
     }
 
     protected ClassDay()
