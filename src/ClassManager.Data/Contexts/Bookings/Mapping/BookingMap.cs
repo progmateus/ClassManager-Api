@@ -1,7 +1,4 @@
 using ClasManager.Domain.Contexts.Bookings.Entities;
-using ClassManager.Domain.Contexts.Classes.Entities;
-using ClassManager.Domain.Contexts.Shared.Enums;
-using ClassManager.Domain.Contexts.Subscriptions.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

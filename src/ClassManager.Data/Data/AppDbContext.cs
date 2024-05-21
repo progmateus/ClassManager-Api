@@ -1,4 +1,6 @@
+using ClasManager.Domain.Contexts.Bookings.Entities;
 using ClassManager.Data.Contexts.Accounts.Mappings;
+using ClassManager.Data.Contexts.Bookings.Mappings;
 using ClassManager.Data.Contexts.Classes.Mappings;
 using ClassManager.Data.Contexts.Plans.Mappings;
 using ClassManager.Data.Contexts.Tenants.Mappings;
@@ -32,6 +34,7 @@ public class AppDbContext : DbContext
   public DbSet<StudentsClasses> StudentsClasses { get; set; } = null!;
   public DbSet<Subscription> Subscriptions { get; set; } = null!;
   public DbSet<ClassDay> ClassDays { get; set; } = null!;
+  public DbSet<Booking> Bookings { get; set; } = null!;
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
 
@@ -61,6 +64,7 @@ public class AppDbContext : DbContext
     modelBuilder.ApplyConfiguration(new StudentsClassesMap());
     modelBuilder.ApplyConfiguration(new SubscriptionMap());
     modelBuilder.ApplyConfiguration(new ClassDayMap());
+    modelBuilder.ApplyConfiguration(new BookingMap());
 
     base.OnModelCreating(modelBuilder);
   }
