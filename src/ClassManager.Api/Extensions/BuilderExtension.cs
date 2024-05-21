@@ -1,9 +1,11 @@
 using System.Text;
 using System.Text.Json.Serialization;
+using ClasManager.Domain.Contexts.Bookings.Handlers;
 using classManager.Data.Contexts.Roles.Repositories;
 using classManager.Data.Contexts.Subscriptions.Repositories;
 using ClassManager.Data.Contexts.Accounts.Repositories;
 using ClassManager.Data.Contexts.Accounts.Services;
+using ClassManager.Data.Contexts.Bookings.Repositories;
 using ClassManager.Data.Contexts.Plans.Repositories;
 using ClassManager.Data.Contexts.Tenants.Repositories;
 using ClassManager.Data.Data;
@@ -11,6 +13,7 @@ using ClassManager.Domain;
 using ClassManager.Domain.Contexts.Accounts.Handlers;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Auth.Services;
+using ClassManager.Domain.Contexts.Bookings.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Classes.Handlers;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Plans.Handlers;
@@ -146,6 +149,11 @@ public static class BuilderExtension
     IClassDayRepository,
     ClassDayRepository>();
 
+
+    builder.Services.AddTransient<
+    IBookingRepository,
+    BookingRepository>();
+
     builder.Services.AddTransient<TokenService>();
 
     builder.Services.AddTransient<CreateUserHandler>();
@@ -199,5 +207,7 @@ public static class BuilderExtension
 
     builder.Services.AddTransient<CreateClassDayHandler>();
     builder.Services.AddTransient<UpdateClassDayHandler>();
+
+    builder.Services.AddTransient<CreateBookingHandler>();
   }
 }
