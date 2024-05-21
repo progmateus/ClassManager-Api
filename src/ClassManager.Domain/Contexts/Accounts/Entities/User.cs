@@ -5,6 +5,7 @@ using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Subscriptions.Entities;
+using ClasManager.Domain.Contexts.Bookings.Entities;
 
 namespace ClassManager.Domain.Contexts.Accounts.Entities
 {
@@ -44,6 +45,7 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     public List<TeachersClasses> TeachersClasses { get; } = [];
     public List<StudentsClasses> StudentsClasses { get; } = [];
     public List<Subscription> Subscriptions { get; } = [];
+    public List<Booking> Bookings { get; private set; } = [];
 
     public void ChangeUser(Name name, Email email, Document document)
     {

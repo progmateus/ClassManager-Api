@@ -1,6 +1,7 @@
 using System;
 using ClassManager.Domain.Shared.Entities;
 using ClassManager.Domain.Contexts.Shared.Enums;
+using ClasManager.Domain.Contexts.Bookings.Entities;
 
 namespace ClassManager.Domain.Contexts.Classes.Entities
 {
@@ -28,6 +29,7 @@ namespace ClassManager.Domain.Contexts.Classes.Entities
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
     public Class Class { get; private set; }
+    public List<Booking> Bookings { get; private set; } = [];
 
 
     public void ChangeStatus(EClassDayStatus status, string? observation)
