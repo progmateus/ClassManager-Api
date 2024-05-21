@@ -26,4 +26,12 @@ public class UserRepository : Repository<User>, IUserRepository
         .AsNoTracking()
         .FirstOrDefaultAsync(x => x.Email.Address == email, cancellationToken);
   }
+
+  public async Task<User?> GetRolesByIdAsync(Guid userId, CancellationToken cancellationToken)
+  {
+    return await DbSet
+    .Include(u => u.UsersRoles)
+    .AsNoTracking()
+    .FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+  }
 }

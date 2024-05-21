@@ -8,5 +8,6 @@ namespace ClassManager.Domain.Contexts.Tenants.Repositories.Contracts
     Task<bool> DocumentAlreadyExistsAsync(string document, CancellationToken cancellationToken);
     Task<bool> EmailAlreadyExtstsAsync(string email, CancellationToken cancellationToken);
     Task<Tenant?> GetByEmailAsync(string email, CancellationToken cancellationToken);
+    Task<Tenant?> GetByIdAndIncludePlanAsync(Guid tenantId, CancellationToken cancellationToken);
   }
 }

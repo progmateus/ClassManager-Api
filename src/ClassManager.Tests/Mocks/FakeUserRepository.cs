@@ -103,5 +103,10 @@ namespace ClassManager.Tests.Mocks
     {
       throw new NotImplementedException();
     }
+
+    public Task<User?> GetRolesByIdAsync(Guid userId, CancellationToken cancellationToken)
+    {
+      throw new NotImplementedException();
+    }
   }
 }

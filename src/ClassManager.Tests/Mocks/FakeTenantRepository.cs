@@ -104,5 +104,10 @@ namespace ClassManager.Tests.Mocks
     {
       throw new NotImplementedException();
     }
+
+    public Task<Tenant?> GetByIdAndIncludePlanAsync(Guid tenantId, CancellationToken cancellationToken)
+    {
+      throw new NotImplementedException();
+    }
   }
 }

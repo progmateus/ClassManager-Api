@@ -26,4 +26,12 @@ public class TenantRepository : Repository<Tenant>, ITenantRepository
         .AsNoTracking()
         .FirstOrDefaultAsync(x => x.Email.Address == email, cancellationToken);
   }
+
+  public async Task<Tenant?> GetByIdAndIncludePlanAsync(Guid tenantId, CancellationToken cancellationToken)
+  {
+    return await DbSet
+    .Include(u => u.Plan)
+    .AsNoTracking()
+    .FirstOrDefaultAsync(x => x.Id == tenantId, cancellationToken);
+  }
 }

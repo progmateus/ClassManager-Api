@@ -5,5 +5,5 @@ public interface IClassRepository : IRepository<Class>
 {
   Task<bool> NameAlreadyExists(string name, CancellationToken cancellationToken);
   Task<Class> GetByIdAndTenantId(Guid tenantId, Guid planId, CancellationToken cancellationToken);
-  List<Class> ListByTenantId(Guid tenantId, CancellationToken cancellationToken);
+  Task<List<Class>> ListByTenantId(Guid tenantId, CancellationToken cancellationToken);
 }
