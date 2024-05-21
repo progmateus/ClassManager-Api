@@ -10,7 +10,7 @@ public class RoleRepository : Repository<Role>, IRoleRepository
 {
   public RoleRepository(AppDbContext context) : base(context) { }
 
-  public async Task<Role> GetByNameAsync(string name, CancellationToken cancellationToken)
+  public async Task<Role?> GetByNameAsync(string name, CancellationToken cancellationToken)
   {
     return await DbSet.AsNoTracking().FirstOrDefaultAsync(x => x.Name == name, cancellationToken);
   }

@@ -109,5 +109,10 @@ namespace ClassManager.Tests.Mocks
     {
       throw new NotImplementedException();
     }
+
+    Task<List<Tenant>> IRepository<Tenant>.GetByIdsAsync(List<Guid> ids, CancellationToken cancellationToken)
+    {
+      throw new NotImplementedException();
+    }
   }
 }

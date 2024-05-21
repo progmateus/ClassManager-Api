@@ -12,7 +12,7 @@ public interface IRepository<TEntity> where TEntity : Entity
   Task<int> SaveChangesAsync(CancellationToken cancellationToken);
   Task DeleteAsync(Guid id, CancellationToken cancellationToken);
   Task<bool> IdExistsAsync(Guid id, CancellationToken cancellationToken);
-  List<TEntity> GetByIdsAsync(List<Guid> ids, CancellationToken cancellationToken);
+  Task<List<TEntity>> GetByIdsAsync(List<Guid> ids, CancellationToken cancellationToken);
   Task CreateRangeAsync(List<TEntity> entities, CancellationToken cancellationToken);
   Task DeleteRangeAsync(List<TEntity> entities, CancellationToken cancellationToken);
 }

@@ -16,9 +16,9 @@ public class UsersRolesRepository : Repository<UsersRoles>, IUsersRolesRepositor
     await SaveChangesAsync(cancellationToken);
   }
 
-  public List<UsersRoles> ListUsersRolesByUserIdAndTenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken)
+  public async Task<List<UsersRoles>> ListUsersRolesByUserIdAndTenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken)
   {
-    return DbSet.Where(x => x.UserId == userId && x.TenantId == tenantId).ToList();
+    return await DbSet.Where(x => x.UserId == userId && x.TenantId == tenantId).ToListAsync();
   }
 
   public async Task<bool> VerifyRoleExistsAsync(Guid userId, Guid tenantId, Guid roleId, CancellationToken cancellationToken)

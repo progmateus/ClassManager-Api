@@ -34,7 +34,7 @@ public class UpdateUsersRolesHandler : Notifiable,
       return new CommandResult(false, "ERR_USER_ROLE_NOT_ADDED", null, command.Notifications);
     }
 
-    var roleExists = _roleRpository.GetByIdsAsync(command.RolesIds, new CancellationToken());
+    var roleExists = await _roleRpository.GetByIdsAsync(command.RolesIds, new CancellationToken());
 
     if (roleExists.Count != command.RolesIds.Count)
     {

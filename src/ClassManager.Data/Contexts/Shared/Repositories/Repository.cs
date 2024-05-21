@@ -62,9 +62,9 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
     return await DbSet.AsNoTracking().AnyAsync(x => x.Id == id, cancellationToken);
   }
 
-  public List<TEntity> GetByIdsAsync(List<Guid> ids, CancellationToken cancellationToken)
+  public async Task<List<TEntity>> GetByIdsAsync(List<Guid> ids, CancellationToken cancellationToken)
   {
-    return DbSet.Where(x => ids.Contains(x.Id)).ToList();
+    return await DbSet.Where(x => ids.Contains(x.Id)).ToListAsync();
   }
 
   public async Task CreateRangeAsync(List<TEntity> entities, CancellationToken cancellationToken)
