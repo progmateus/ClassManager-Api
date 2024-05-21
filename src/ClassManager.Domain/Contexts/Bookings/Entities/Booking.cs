@@ -14,6 +14,6 @@ public class Booking : Entity
 
   public Guid UserId { get; private set; }
   public Guid ClassDayId { get; private set; }
-  public IList<User> User { get; private set; } = [];
-  public IList<ClassDay> ClassDay { get; private set; } = [];
+  public User User { get; private set; }
+  public ClassDay ClassDay { get; private set; }
 }
