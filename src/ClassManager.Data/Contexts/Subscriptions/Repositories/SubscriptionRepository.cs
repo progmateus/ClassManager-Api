@@ -14,4 +14,9 @@ public class SubscriptionRepository : Repository<Subscription>, ISubscriptionRep
   {
     return await DbSet.Where(x => x.TenantPlan.TenantId == tenantId).ToListAsync();
   }
+
+  public async Task<Subscription> GetByUserIdAndTenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken)
+  {
+    return await DbSet.Include(x => x.TenantPlan).FirstAsync(x => x.UserId == userId && x.TenantPlan.TenantId == tenantId);
+  }
 }

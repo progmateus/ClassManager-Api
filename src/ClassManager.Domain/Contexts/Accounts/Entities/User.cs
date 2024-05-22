@@ -39,13 +39,13 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     public EUserType Type { get; private set; } = EUserType.NORMAL;
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
-    public ICollection<Role> Roles { get; } = [];
-    public ICollection<UsersRoles> UsersRoles { get; } = [];
-    public ICollection<Class> Classes { get; }
-    public ICollection<TeachersClasses> TeachersClasses { get; } = [];
-    public ICollection<StudentsClasses> StudentsClasses { get; } = [];
-    public ICollection<Subscription> Subscriptions { get; } = [];
-    public ICollection<Booking> Bookings { get; private set; } = [];
+    public IList<Role> Roles { get; } = [];
+    public IList<UsersRoles> UsersRoles { get; } = [];
+    public IList<Class> Classes { get; }
+    public IList<TeachersClasses> TeachersClasses { get; } = [];
+    public IList<StudentsClasses> StudentsClasses { get; } = [];
+    public IList<Subscription> Subscriptions { get; } = [];
+    public IList<Booking> Bookings { get; private set; } = [];
 
     public void ChangeUser(Name name, Email email, Document document)
     {

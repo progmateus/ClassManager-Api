@@ -27,10 +27,10 @@ public class UserRepository : Repository<User>, IUserRepository
         .FirstOrDefaultAsync(x => x.Email.Address == email, cancellationToken);
   }
 
-  public async Task<User?> GetRolesByIdAsync(Guid userId, CancellationToken cancellationToken)
+  public async Task<User?> VerifyUserRoleAsync(Guid userId, Guid tenantId, string roleName, CancellationToken cancellationToken)
   {
     return await DbSet
-    .Include(u => u.UsersRoles)
+    .Include(u => u.UsersRoles.Where(ur => ur.Role.Name == roleName && ur.TenantId == tenantId))
     .AsNoTracking()
     .FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
   }

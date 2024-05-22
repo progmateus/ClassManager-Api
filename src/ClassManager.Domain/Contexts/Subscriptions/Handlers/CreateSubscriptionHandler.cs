@@ -40,7 +40,7 @@ public class CreateSubscriptionHandler : Notifiable,
       return new CommandResult(false, "ERR_ROLE_NOT_FOUND", null, null, 404);
     }
 
-    var userRole = await _usersRolesRepository.VerifyRoleExistsAsync(command.UserId, tenantId, role.Id, new CancellationToken());
+    var userRole = await _usersRolesRepository.VerifyRoleExistsAsync(command.UserId, tenantId, "student", new CancellationToken());
 
     if (!userRole)
     {
