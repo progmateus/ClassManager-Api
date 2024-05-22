@@ -15,12 +15,30 @@ public class BookingController : MainController
   [HttpPost()]
   public async Task<IResult> Create(
     [FromRoute] Guid tenantId,
-    [FromRoute] Guid classDayId,
     [FromBody] CreateBookingCommand command,
     [FromServices] CreateBookingHandler handler
   )
   {
     var result = await handler.Handle(tenantId, command);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
+
+  [HttpDelete("{bookingId}")]
+  public async Task<IResult> Create(
+    [FromRoute] Guid tenantId,
+    [FromRoute] Guid bookingId,
+    [FromBody] CreateBookingCommand command,
+    [FromServices] DeleteBookingHandler handler
+  )
+  {
+    var result = await handler.Handle(tenantId, bookingId, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 

@@ -209,5 +209,6 @@ public static class BuilderExtension
     builder.Services.AddTransient<UpdateClassDayHandler>();
 
     builder.Services.AddTransient<CreateBookingHandler>();
+    builder.Services.AddTransient<DeleteBookingHandler>();
   }
 }

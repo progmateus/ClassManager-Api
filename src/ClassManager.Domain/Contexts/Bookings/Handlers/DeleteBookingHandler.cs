@@ -14,7 +14,7 @@ using Flunt.Notifications;
 
 namespace ClasManager.Domain.Contexts.Bookings.Handlers;
 
-public class DeleteBookingHandler : Notifiable, ITenantHandler<CreateBookingCommand>
+public class DeleteBookingHandler : Notifiable, ITenantActionHandler<CreateBookingCommand>
 {
   private ITenantRepository _tenantRepository;
   private IBookingRepository _bookingRepository;
@@ -31,7 +31,7 @@ public class DeleteBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
     _usersRolesRepository = usersRolesRepository;
     _subscriptionRepository = subscriptionRepository;
   }
-  public async Task<ICommandResult> Handle(Guid tenantId, CreateBookingCommand command)
+  public async Task<ICommandResult> Handle(Guid tenantId, Guid bookingId, CreateBookingCommand command)
   {
 
     command.Validate();
@@ -51,13 +51,6 @@ public class DeleteBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
     if (tenant.Status != ETenantStatus.ACTIVE)
     {
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
-    }
-
-    var classDays = await _classDayRepository.GetAsync(x => x.Id == command.ClassDayId && x.Class.TenantId == tenantId, new CancellationToken());
-
-    if (classDays.Count() == 0)
-    {
-      return new CommandResult(false, "ERR_CLASS_DAY_NOT_FOUND", null, null);
     }
 
     var user = await _userRepository.IdExistsAsync(command.UserId, new CancellationToken());
@@ -86,7 +79,7 @@ public class DeleteBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_ACTIVE", null, 403);
     }
 
-    var booking = await _bookingRepository.GetByUserIdAndClassDayId(command.UserId, command.ClassDayId);
+    var booking = await _bookingRepository.GetWithInclude(command.UserId, bookingId);
 
     if (booking is null)
     {
@@ -98,7 +91,7 @@ public class DeleteBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
       return new CommandResult(false, "ERR_CLASS_DAY_ALREADY_CONCLUDED", null, 403);
     }
 
-    await _bookingRepository.UpdateAsync(booking, new CancellationToken());
+    await _bookingRepository.DeleteAsync(booking.Id, new CancellationToken());
 
     return new CommandResult(true, "BOOKING_DELETED", "", null, 201);
   }

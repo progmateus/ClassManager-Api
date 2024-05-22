@@ -53,11 +53,16 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
     }
 
-    var classDay = await _classDayRepository.IdExistsAsync(command.ClassDayId, new CancellationToken());
+    var classDay = await _classDayRepository.GetByIdAsync(command.ClassDayId, new CancellationToken());
 
-    if (!classDay)
+    if (classDay is null)
     {
-      return new CommandResult(false, "ERR_CLASS_DAY_NOT_FOUND", null, null);
+      return new CommandResult(false, "ERR_CLASS_DAY_NOT_FOUND", null, null, 404);
+    }
+
+    if (classDay.Status != EClassDayStatus.PENDING)
+    {
+      return new CommandResult(false, "ERR_CLASS_NOT_PENDING", null, null, 403);
     }
 
     var user = await _userRepository.IdExistsAsync(command.UserId, new CancellationToken());
