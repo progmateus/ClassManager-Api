@@ -95,7 +95,7 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
     var sunday = DateTime.Now.FirstDayOfWeek();
     var monday = DateTime.Now.LastDayOfWeek();
 
-    var weekBookings = await _bookingRepository.GetAsync(x => x.UserId == command.UserId && x.ClassDay.Class.TenantId == tenantId && x.ClassDay.Date > sunday && x.ClassDay.Date < monday, new CancellationToken());
+    var weekBookings = await _bookingRepository.GetAsync(x => x.UserId == command.UserId && x.ClassDay.Class.TenantId == tenantId && x.ClassDay.Date > sunday && x.ClassDay.Date < monday && x.ClassDay.Status != EClassDayStatus.CANCELED, new CancellationToken());
 
     if (weekBookings.Count() >= subscription.TenantPlan.TimesOfweek)
     {
