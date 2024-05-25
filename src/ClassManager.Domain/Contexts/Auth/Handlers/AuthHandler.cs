@@ -1,6 +1,8 @@
 using ClassManager.Domain.Contexts.Accounts.Entities;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Auth.Commands;
+using ClassManager.Domain.Contexts.Auth.Services;
+using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;
 using ClassManager.Shared.Contracts;
@@ -32,7 +34,7 @@ public class AuthHandler :
       if (command.Invalid)
       {
         AddNotifications(command);
-        return new CommandResult(false, "User not Created", null, command.Notifications);
+        return new CommandResult(false, "ERR_INVALID_CREDENTIALS", null, command.Notifications);
       }
     }
     catch
@@ -49,7 +51,7 @@ public class AuthHandler :
     {
       user = await _userReporitory.GetByEmailAsync(command.Email, default);
       if (user is null)
-        return new CommandResult(false, "Invalid Credentials", null, null, 401);
+        return new CommandResult(false, "ERR_INVALID_CREDENTIALS", null, null, 401);
     }
     catch (Exception)
     {
@@ -61,7 +63,7 @@ public class AuthHandler :
     #region 03. Checa se a senha é válida
 
     if (!user.Password.Challenge(command.Password))
-      return new CommandResult(false, "Invalid Credentials", null, null, 401);
+      return new CommandResult(false, "ERR_INVALID_CREDENTIALS", null, null, 401);
 
     #endregion
 
@@ -69,8 +71,8 @@ public class AuthHandler :
 
     try
     {
-      if (!user.Email.Verification.IsActive)
-        return new CommandResult(false, "User inactive", null, null, 401);
+      if (user.Status != EUserStatus.ACTIVE)
+        return new CommandResult(false, "ERR_USER_INACTIVE", null, null, 401);
     }
     catch
     {
@@ -80,7 +82,7 @@ public class AuthHandler :
     #endregion
 
     #region 05. Retorna os dados
-
+    var tokenService = new TokenService();
     var data = new AuthData
     {
       Id = user.Id.ToString(),
@@ -88,11 +90,10 @@ public class AuthHandler :
       Email = user.Email,
       Roles = Array.Empty<string>(),
       Avatar = user.Avatar,
-      Token = ""
-      /* Roles = user.Roles.Select(x => x.Name).ToArray() */
     };
-    var result = new CommandResult(false, "Success", data, null, 500);
-    result.SetTokenData(data);
+    data.Token = tokenService.Create(data);
+
+    var result = new CommandResult(true, "Success", data, null, 200);
     return result;
 
     #endregion

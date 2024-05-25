@@ -7,7 +7,6 @@ namespace ClassManager.Shared.Commands
     public bool IsSuccess { get; set; }
     public string Message { get; set; }
     public object? Data { get; set; }
-    public AuthData? AuthData { get; }
     public object? Errors { get; set; }
     public int? Status { get; set; }
   }

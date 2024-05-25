@@ -156,6 +156,8 @@ public static class BuilderExtension
 
     builder.Services.AddTransient<TokenService>();
 
+    builder.Services.AddTransient<AuthHandler>();
+
     builder.Services.AddTransient<CreateUserHandler>();
     builder.Services.AddTransient<ListUsersHandler>();
     builder.Services.AddTransient<UpdateUserHandler>();

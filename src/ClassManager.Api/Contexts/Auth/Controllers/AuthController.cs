@@ -10,7 +10,7 @@ namespace ClassManager.Api.Contexts.Auth.Controllers;
 [Route("/auth")]
 public class AuthController : ControllerBase
 {
-  [HttpGet]
+  [HttpPost("login")]
   public async Task<IResult> Create(
       [FromBody] AuthCommand command,
       [FromServices] TokenService tokenService,
@@ -21,10 +21,6 @@ public class AuthController : ControllerBase
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
-    if (result.AuthData is null)
-      return Results.Json(result, statusCode: 500);
-
-    result.AuthData.Token = tokenService.Create(result.AuthData);
     return Results.Ok(result);
   }
 }
