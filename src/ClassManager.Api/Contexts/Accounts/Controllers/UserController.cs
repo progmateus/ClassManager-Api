@@ -2,6 +2,7 @@ using ClassManager.Api.Contexts.Shared.Controllers;
 using ClassManager.Domain.Contexts.Accounts.Commands;
 using ClassManager.Domain.Contexts.Accounts.Entities;
 using ClassManager.Domain.Contexts.Accounts.Handlers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClassManager.Api.Contexts.Accounts.Controllers;
@@ -39,16 +40,14 @@ public class UserController : MainController
 
     return Results.Ok(result);
   }
-
+  [Authorize]
   [HttpPut]
-  [Route("{id}")]
   public async Task<IResult> Update(
-    [FromRoute] Guid id,
     [FromBody] UpdateUserCommand command,
     [FromServices] UpdateUserHandler handler
   )
   {
-    var result = await handler.Handle(id, command);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
