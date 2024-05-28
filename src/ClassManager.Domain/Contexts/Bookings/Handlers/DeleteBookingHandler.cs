@@ -11,6 +11,7 @@ using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
+using Microsoft.AspNetCore.Http;
 
 namespace ClasManager.Domain.Contexts.Bookings.Handlers;
 
@@ -22,7 +23,8 @@ public class DeleteBookingHandler : Notifiable, ITenantActionHandler<CreateBooki
   private IUserRepository _userRepository;
   private IUsersRolesRepository _usersRolesRepository;
   private ISubscriptionRepository _subscriptionRepository;
-  public DeleteBookingHandler(ITenantRepository tenantRepository, IBookingRepository bookingRepository, IClassDayRepository classDayRepository, IUserRepository userRepository, IUsersRolesRepository usersRolesRepository, ISubscriptionRepository subscriptionRepository)
+  private IHttpContextAccessor _httpContextAccessor;
+  public DeleteBookingHandler(ITenantRepository tenantRepository, IBookingRepository bookingRepository, IClassDayRepository classDayRepository, IUserRepository userRepository, IUsersRolesRepository usersRolesRepository, ISubscriptionRepository subscriptionRepository, IHttpContextAccessor httpContextAccessor)
   {
     _tenantRepository = tenantRepository;
     _bookingRepository = bookingRepository;
@@ -30,6 +32,7 @@ public class DeleteBookingHandler : Notifiable, ITenantActionHandler<CreateBooki
     _userRepository = userRepository;
     _usersRolesRepository = usersRolesRepository;
     _subscriptionRepository = subscriptionRepository;
+    _httpContextAccessor = httpContextAccessor;
   }
   public async Task<ICommandResult> Handle(Guid tenantId, Guid bookingId, CreateBookingCommand command)
   {
@@ -40,6 +43,8 @@ public class DeleteBookingHandler : Notifiable, ITenantActionHandler<CreateBooki
     {
       return new CommandResult(false, "ERR_BOOKING_NOT_DELETED", null, command.Notifications);
     }
+
+    var userId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("Id").Value);
 
     var tenant = await _tenantRepository.GetByIdAndIncludePlanAsync(tenantId, new CancellationToken());
 
@@ -53,21 +58,21 @@ public class DeleteBookingHandler : Notifiable, ITenantActionHandler<CreateBooki
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
     }
 
-    var user = await _userRepository.IdExistsAsync(command.UserId, new CancellationToken());
+    var user = await _userRepository.IdExistsAsync(userId, new CancellationToken());
 
     if (!user)
     {
       return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null);
     }
 
-    var userRole = await _usersRolesRepository.VerifyRoleExistsAsync(command.UserId, tenantId, "student", new CancellationToken());
+    var userRole = await _usersRolesRepository.VerifyRoleExistsAsync(userId, tenantId, "student", new CancellationToken());
 
     if (!userRole)
     {
       return new CommandResult(false, "ERR_STUDENT_ROLE_NOT_FOUND", null, 404);
     }
 
-    var subscription = await _subscriptionRepository.GetByUserIdAndTenantId(command.UserId, tenantId, new CancellationToken());
+    var subscription = await _subscriptionRepository.GetByUserIdAndTenantId(userId, tenantId, new CancellationToken());
 
     if (subscription is null)
     {
@@ -79,7 +84,7 @@ public class DeleteBookingHandler : Notifiable, ITenantActionHandler<CreateBooki
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_ACTIVE", null, 403);
     }
 
-    var booking = await _bookingRepository.GetWithInclude(command.UserId, bookingId);
+    var booking = await _bookingRepository.GetWithInclude(userId, bookingId);
 
     if (booking is null)
     {

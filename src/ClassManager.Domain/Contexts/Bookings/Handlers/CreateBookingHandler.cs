@@ -11,6 +11,7 @@ using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
+using Microsoft.AspNetCore.Http;
 
 namespace ClasManager.Domain.Contexts.Bookings.Handlers;
 
@@ -22,7 +23,8 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
   private IUserRepository _userRepository;
   private IUsersRolesRepository _usersRolesRepository;
   private ISubscriptionRepository _subscriptionRepository;
-  public CreateBookingHandler(ITenantRepository tenantRepository, IBookingRepository bookingRepository, IClassDayRepository classDayRepository, IUserRepository userRepository, IUsersRolesRepository usersRolesRepository, ISubscriptionRepository subscriptionRepository)
+  private IHttpContextAccessor _httpContextAccessor;
+  public CreateBookingHandler(ITenantRepository tenantRepository, IBookingRepository bookingRepository, IClassDayRepository classDayRepository, IUserRepository userRepository, IUsersRolesRepository usersRolesRepository, ISubscriptionRepository subscriptionRepository, IHttpContextAccessor httpContextAccessor)
   {
     _tenantRepository = tenantRepository;
     _bookingRepository = bookingRepository;
@@ -30,6 +32,7 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
     _userRepository = userRepository;
     _usersRolesRepository = usersRolesRepository;
     _subscriptionRepository = subscriptionRepository;
+    _httpContextAccessor = httpContextAccessor;
   }
   public async Task<ICommandResult> Handle(Guid tenantId, CreateBookingCommand command)
   {
@@ -40,6 +43,8 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
     {
       return new CommandResult(false, "ERR_BOOKING_NOT_CREATED", null, command.Notifications);
     }
+
+    var userId = new Guid(_httpContextAccessor.HttpContext.User.FindFirst("Id").Value);
 
     var tenant = await _tenantRepository.GetByIdAndIncludePlanAsync(tenantId, new CancellationToken());
 
@@ -65,7 +70,7 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
       return new CommandResult(false, "ERR_CLASS_NOT_PENDING", null, null, 403);
     }
 
-    var user = await _userRepository.IdExistsAsync(command.UserId, new CancellationToken());
+    var user = await _userRepository.IdExistsAsync(userId, new CancellationToken());
 
 
     if (!user)
@@ -73,14 +78,14 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
       return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null);
     }
 
-    var userRole = await _usersRolesRepository.VerifyRoleExistsAsync(command.UserId, tenantId, "student", new CancellationToken());
+    var userRole = await _usersRolesRepository.VerifyRoleExistsAsync(userId, tenantId, "student", new CancellationToken());
 
     if (!userRole)
     {
       return new CommandResult(false, "ERR_STUDENT_ROLE_NOT_FOUND", null, 404);
     }
 
-    var subscription = await _subscriptionRepository.GetByUserIdAndTenantId(command.UserId, tenantId, new CancellationToken());
+    var subscription = await _subscriptionRepository.GetByUserIdAndTenantId(userId, tenantId, new CancellationToken());
 
     if (subscription is null)
     {
@@ -95,21 +100,21 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
     var sunday = DateTime.Now.FirstDayOfWeek();
     var monday = DateTime.Now.LastDayOfWeek();
 
-    var weekBookings = await _bookingRepository.GetAsync(x => x.UserId == command.UserId && x.ClassDay.Class.TenantId == tenantId && x.ClassDay.Date > sunday && x.ClassDay.Date < monday && x.ClassDay.Status != EClassDayStatus.CANCELED, new CancellationToken());
+    var weekBookings = await _bookingRepository.GetAsync(x => x.UserId == userId && x.ClassDay.Class.TenantId == tenantId && x.ClassDay.Date > sunday && x.ClassDay.Date < monday && x.ClassDay.Status != EClassDayStatus.CANCELED, new CancellationToken());
 
     if (weekBookings.Count() >= subscription.TenantPlan.TimesOfweek)
     {
       return new CommandResult(false, "ERR_WEEK_TIMES_EXCEEDED", null, 400);
     }
 
-    var bookingAlreadyExists = await _bookingRepository.GetAsync(x => x.UserId == command.UserId && x.ClassDayId == command.ClassDayId, new CancellationToken());
+    var bookingAlreadyExists = await _bookingRepository.GetAsync(x => x.UserId == userId && x.ClassDayId == command.ClassDayId, new CancellationToken());
 
     if (bookingAlreadyExists.Count() > 0)
     {
       return new CommandResult(false, "ERR_BOOKING_ALREADY_EXISTS", null, 409);
     }
 
-    var booking = new Booking(command.UserId, command.ClassDayId);
+    var booking = new Booking(userId, command.ClassDayId);
 
     await _bookingRepository.CreateAsync(booking, new CancellationToken());
 

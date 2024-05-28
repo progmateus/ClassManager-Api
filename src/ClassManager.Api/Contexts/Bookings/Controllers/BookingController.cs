@@ -5,6 +5,7 @@ using ClassManager.Data.Migrations;
 using ClassManager.Domain.Contexts.Accounts.Commands;
 using ClassManager.Domain.Contexts.Tenants.Commands;
 using ClassManager.Domain.Contexts.Tenants.Handlers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClassManager.Api.Contexts.Tenants.Controllers;
@@ -12,6 +13,7 @@ namespace ClassManager.Api.Contexts.Tenants.Controllers;
 [Route("{tenantId}/bookings")]
 public class BookingController : MainController
 {
+  [Authorize]
   [HttpPost()]
   public async Task<IResult> Create(
     [FromRoute] Guid tenantId,
@@ -29,14 +31,14 @@ public class BookingController : MainController
     return Results.Ok(result);
   }
 
-
+  [Authorize]
   [HttpDelete("{bookingId}")]
   public async Task<IResult> Create(
-    [FromRoute] Guid tenantId,
-    [FromRoute] Guid bookingId,
-    [FromBody] CreateBookingCommand command,
-    [FromServices] DeleteBookingHandler handler
-  )
+      [FromRoute] Guid tenantId,
+      [FromRoute] Guid bookingId,
+      [FromBody] CreateBookingCommand command,
+      [FromServices] DeleteBookingHandler handler
+    )
   {
     var result = await handler.Handle(tenantId, bookingId, command);
     if (!result.IsSuccess)

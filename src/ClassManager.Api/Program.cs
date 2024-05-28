@@ -7,6 +7,7 @@ builder.AddServices();
 builder.AddControllers();
 builder.AddDatabase();
 builder.AddJwtAuthentication();
+builder.Services.AddHttpContextAccessor();
 
 builder.AddMediator();
 
