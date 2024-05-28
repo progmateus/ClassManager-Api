@@ -24,20 +24,20 @@ public class UpdatePlandHandler : Notifiable, IActionHandler<PlanCommand>
     if (command.Invalid)
     {
       AddNotifications(command);
-      return new CommandResult(false, "Plan not Created", null, command.Notifications);
+      return new CommandResult(false, "PLAN_NOT_UPDATED", null, command.Notifications);
     }
 
     var plan = await _repository.GetByIdAsync(id, new CancellationToken());
 
     if (plan is null)
     {
-      return new CommandResult(false, "Plan not found", null, null, 404);
+      return new CommandResult(false, "PLAN_NOT_FOUND", null, null, 404);
     }
 
     plan.ChangePlan(command.Name, command.Description, command.StudentsLimit, command.ClassesLimit, command.Price);
 
     await _repository.UpdateAsync(plan, new CancellationToken());
 
-    return new CommandResult(true, "Plan updated", plan, null, 200);
+    return new CommandResult(true, "PLAN_UPDATED", plan, null, 200);
   }
 }

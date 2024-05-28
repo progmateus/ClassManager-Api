@@ -20,12 +20,12 @@ public class DeletePlanHandler
 
     if (await _repository.GetByIdAsync(id, default) == null)
     {
-      return new CommandResult(false, "Plan not found", null, null, 404);
+      return new CommandResult(false, "PLAN_NOT_FOUND", null, null, 404);
     }
 
 
     await _repository.DeleteAsync(id, default);
 
-    return new CommandResult(true, "Plan deleted", null, null, 204);
+    return new CommandResult(true, "PLAN_DELETED", null, null, 204);
   }
 }

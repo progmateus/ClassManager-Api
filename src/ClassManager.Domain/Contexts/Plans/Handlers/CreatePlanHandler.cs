@@ -23,13 +23,13 @@ public class CreatePlandHandler : Notifiable, IHandler<PlanCommand>
     if (command.Invalid)
     {
       AddNotifications(command);
-      return new CommandResult(false, "Plan not Created", null, command.Notifications);
+      return new CommandResult(false, "ERR_PLAN_NOT_CREATED", null, command.Notifications);
     }
 
     var plan = new Plan(command.Name, command.Description, command.StudentsLimit, command.ClassesLimit, command.Price);
 
     await _repository.CreateAsync(plan, new CancellationToken());
 
-    return new CommandResult(true, "Plan created", plan, null, 201);
+    return new CommandResult(true, "PLAN_CREATED", plan, null, 201);
   }
 }

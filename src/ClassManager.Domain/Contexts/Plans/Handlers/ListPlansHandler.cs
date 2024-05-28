@@ -20,6 +20,6 @@ public class ListPlansHandler
 
     var plans = await _repository.GetAllAsync(new CancellationToken());
 
-    return new CommandResult(true, "Plans listed", plans, null, 204);
+    return new CommandResult(true, "PLANS_LISTED", plans, null, 204);
   }
 }
