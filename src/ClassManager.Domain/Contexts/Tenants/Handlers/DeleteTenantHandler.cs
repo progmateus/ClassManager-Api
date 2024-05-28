@@ -21,12 +21,12 @@ public class DeleteTenantHandler : Notifiable
     if (await _repository.GetByIdAsync(id, default) == null)
     {
       AddNotification("DeleteTenantHandler", "Tenant not found");
-      return new CommandResult(false, "Tenant not deleted", null, Notifications, 404);
+      return new CommandResult(false, "ERR_TENANT_NOT_DELETED", null, Notifications, 404);
     }
 
 
     await _repository.DeleteAsync(id, default);
 
-    return new CommandResult(true, "Tenant deleted", null, null, 204);
+    return new CommandResult(true, "TENANT_DELETED", null, null, 204);
   }
 }

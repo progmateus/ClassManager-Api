@@ -27,14 +27,14 @@ public class UpdateTenantHandler :
     if (command.Invalid)
     {
       AddNotifications(command);
-      return new CommandResult(false, "Tenant not Updated", null, command.Notifications);
+      return new CommandResult(false, "ERR_TENANT_NOT_UPDATED", null, command.Notifications);
     }
 
     var tenant = await _repository.GetByIdAsync(id, default);
 
     if (tenant is null)
     {
-      return new CommandResult(false, "Tenant not found", null, command.Notifications, 404);
+      return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, command.Notifications, 404);
     }
 
 
@@ -60,11 +60,11 @@ public class UpdateTenantHandler :
 
     if (Invalid)
     {
-      return new CommandResult(false, "Tenant not created", null, Notifications);
+      return new CommandResult(false, "ERR_TENANT_NOT_CREATED", null, Notifications);
     }
 
     await _repository.UpdateAsync(tenant, default);
 
-    return new CommandResult(true, "Tenant created", tenant, null, 200);
+    return new CommandResult(true, "TENANT_CREATED", tenant, null, 200);
   }
 }

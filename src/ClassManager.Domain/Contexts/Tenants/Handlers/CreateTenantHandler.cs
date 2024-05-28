@@ -29,12 +29,12 @@ public class CreateTenantHandler :
     if (command.Invalid)
     {
       AddNotifications(command);
-      return new CommandResult(false, "Tenant not Created", null, command.Notifications);
+      return new CommandResult(false, "ERR_TENANT_NOT_CREATED", null, command.Notifications);
     }
 
     if (await _repository.DocumentAlreadyExistsAsync(command.Document, new CancellationToken()))
     {
-      AddNotification("Document", "Docuemnt already exists");
+      AddNotification("Document", "Document already exists");
     }
 
     if (await _repository.EmailAlreadyExtstsAsync(command.Email, new CancellationToken()))
@@ -52,12 +52,12 @@ public class CreateTenantHandler :
 
     if (Invalid)
     {
-      return new CommandResult(false, "Tenant not created", null, Notifications);
+      return new CommandResult(false, "ERR_TENANT_NOT_CREATED", null, Notifications);
     }
 
 
     await _repository.CreateAsync(tenant, new CancellationToken());
 
-    return new CommandResult(true, "User created", tenant, null, 201);
+    return new CommandResult(true, "TENANT_CREATED", tenant, null, 201);
   }
 }

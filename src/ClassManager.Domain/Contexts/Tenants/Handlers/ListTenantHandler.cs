@@ -17,6 +17,6 @@ public class ListTenantsHandler
   {
     var tenants = await _repository.GetAllAsync(default);
 
-    return new CommandResult(true, "Tenants listed", tenants, null, 201);
+    return new CommandResult(true, "TENANTS_LISTED", tenants, null, 201);
   }
 }
