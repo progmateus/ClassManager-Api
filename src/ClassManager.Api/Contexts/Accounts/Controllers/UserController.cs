@@ -26,6 +26,7 @@ public class UserController : MainController
     return Results.Ok(result);
   }
 
+  [Authorize]
   [HttpGet]
   public async Task<IResult> List(
     [FromServices] ListUsersHandler handler
@@ -57,15 +58,14 @@ public class UserController : MainController
     return Results.Ok(result);
   }
 
-
+  [Authorize]
   [HttpDelete]
-  [Route("{id}")]
   public async Task<IResult> Delete(
     [FromRoute] Guid id,
     [FromServices] DeleteUserHandler handler
   )
   {
-    var result = await handler.Handle(id);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value));
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 

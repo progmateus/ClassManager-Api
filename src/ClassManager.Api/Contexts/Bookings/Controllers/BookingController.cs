@@ -21,6 +21,7 @@ public class BookingController : MainController
     [FromServices] CreateBookingHandler handler
   )
   {
+    command.UserId = new Guid(User.FindFirst("Id")?.Value);
     var result = await handler.Handle(tenantId, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
@@ -33,13 +34,14 @@ public class BookingController : MainController
 
   [Authorize]
   [HttpDelete("{bookingId}")]
-  public async Task<IResult> Create(
+  public async Task<IResult> Delete(
       [FromRoute] Guid tenantId,
       [FromRoute] Guid bookingId,
       [FromBody] CreateBookingCommand command,
       [FromServices] DeleteBookingHandler handler
     )
   {
+    command.UserId = new Guid(User.FindFirst("Id")?.Value);
     var result = await handler.Handle(tenantId, bookingId, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
