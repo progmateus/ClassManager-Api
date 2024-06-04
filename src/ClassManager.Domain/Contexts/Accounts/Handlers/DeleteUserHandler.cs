@@ -17,14 +17,17 @@ public class DeleteUserHandler
   public async Task<ICommandResult> Handle(Guid id)
   {
 
-    if (await _userReporitory.GetByIdAsync(id, default) == null)
+    var user = await _userReporitory.GetByIdAsync(id, new CancellationToken());
+
+    if (user == null)
     {
-      return new CommandResult(false, "User not found", null, null, 404);
+      return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null, 404);
     }
 
+    user.Delete();
 
-    await _userReporitory.DeleteAsync(id, default);
+    await _userReporitory.UpdateAsync(user, new CancellationToken());
 
-    return new CommandResult(true, "User deleted", null, null, 204);
+    return new CommandResult(true, "ERR_DELETED", null, null, 204);
   }
 }

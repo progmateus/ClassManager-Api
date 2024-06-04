@@ -4,10 +4,12 @@ using ClassManager.Domain.Contexts.Roles.Commands;
 using ClassManager.Domain.Contexts.Subscriptions.Handlers;
 using ClassManager.Domain.Contexts.Tenants.Commands;
 using ClassManager.Domain.Contexts.Tenants.Handlers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClassManager.Api.Contexts.Subscriptions.Controllers;
 
+[Authorize]
 [Route("{tenantId}/subscriptions")]
 public class TenantController : MainController
 {

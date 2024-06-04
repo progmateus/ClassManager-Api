@@ -74,5 +74,10 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
       var password = new Password(plainTextPassword);
       Password = password;
     }
+
+    public void Delete()
+    {
+      Status = EUserStatus.DELETED;
+    }
   }
 }

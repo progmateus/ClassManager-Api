@@ -2,14 +2,15 @@ using ClassManager.Api.Contexts.Shared.Controllers;
 using ClassManager.Domain.Contexts.Classes.Commands;
 using ClassManager.Domain.Contexts.Classes.Handlers;
 using ClassManager.Domain.Contexts.Tenants.Handlers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClassManager.Api.Contexts.Classes.Controllers;
 
+[Authorize]
 [Route("{tenantId}/students")]
 public class StudentsClasses : MainController
 {
-
   [HttpPost]
   public async Task<IResult> AddTeacher(
   [FromRoute] Guid tenantId,
