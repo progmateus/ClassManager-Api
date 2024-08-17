@@ -14,7 +14,7 @@ namespace ClassManager.Api.Contexts.Tenants.Controllers;
 public class BookingController : MainController
 {
   [Authorize]
-  [HttpPost()]
+  [HttpPost]
   public async Task<IResult> Create(
     [FromRoute] Guid tenantId,
     [FromBody] CreateBookingCommand command,
