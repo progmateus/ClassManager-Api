@@ -37,6 +37,12 @@ public class CreateTenantHandler :
       AddNotification("Document", "Document already exists");
     }
 
+
+    if (await _repository.UsernameAlreadyExistsAsync(command.Username, new CancellationToken()))
+    {
+      AddNotification("Username", "Username already exists");
+    }
+
     if (await _repository.EmailAlreadyExtstsAsync(command.Email, new CancellationToken()))
     {
       AddNotification("Email", "E-mail already exists");

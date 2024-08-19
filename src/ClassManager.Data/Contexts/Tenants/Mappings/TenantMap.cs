@@ -61,5 +61,11 @@ public class TenantMap : IEntityTypeConfiguration<Tenant>
 
         builder.Property(x => x.ExpiresDate)
             .HasColumnName("ExpiresDate");
+
+        builder.Property(x => x.Username)
+            .HasColumnName("Username")
+            .HasColumnType("VARCHAR")
+            .HasMaxLength(30)
+            .IsRequired();
     }
 }

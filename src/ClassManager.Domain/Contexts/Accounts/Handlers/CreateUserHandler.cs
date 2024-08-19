@@ -33,21 +33,21 @@ public class CreateUserHandler :
     if (command.Invalid)
     {
       AddNotifications(command);
-      return new CommandResult(false, "User not Created", null, command.Notifications);
+      return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
 
     // verificar se doc existe
 
     if (await _userReporitory.DocumentAlreadyExistsAsync(command.Document, new CancellationToken()))
     {
-      AddNotification("Document", "Docuemnt already exists");
+      AddNotification("Document", "ERR_DOCUMENT_ALREADY_EXISTS");
     }
 
     // verificar se email existe
 
     if (await _userReporitory.EmailAlreadyExtstsAsync(command.Email, new CancellationToken()))
     {
-      AddNotification("Email", "E-mail already exists");
+      AddNotification("Email", "ERR_EMAIL_ALREADY_EXISTS");
     }
 
     // gerar vOS
@@ -65,7 +65,7 @@ public class CreateUserHandler :
 
     if (Invalid)
     {
-      return new CommandResult(false, "User not created", null, Notifications);
+      return new CommandResult(false, "ERR_USER_NOT_CREATED", null, Notifications);
     }
 
     // salvar as informações
@@ -76,6 +76,6 @@ public class CreateUserHandler :
     await _emailService.SendVerificationEmailAsync(user, new CancellationToken());
     // retornar infos
 
-    return new CommandResult(true, "User created", user, null, 201);
+    return new CommandResult(true, "USER_CREATED", user, null, 201);
   }
 }

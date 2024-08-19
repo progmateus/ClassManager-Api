@@ -24,6 +24,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     }
 
     public string Name { get; private set; } = null!;
+    public string Username { get; private set; }
     public Document Document { get; private set; }
     public Email Email { get; private set; }
     public string? Avatar { get; private set; } = string.Empty;

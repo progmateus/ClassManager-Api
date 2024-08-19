@@ -34,4 +34,9 @@ public class TenantRepository : Repository<Tenant>, ITenantRepository
     .AsNoTracking()
     .FirstOrDefaultAsync(x => x.Id == tenantId, cancellationToken);
   }
+
+  public async Task<bool> UsernameAlreadyExistsAsync(string username, CancellationToken cancellationToken)
+  {
+    return await DbSet.AsNoTracking().AnyAsync(x => x.Username == username, cancellationToken);
+  }
 }
