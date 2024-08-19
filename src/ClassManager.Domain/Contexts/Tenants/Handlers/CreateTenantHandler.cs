@@ -36,7 +36,8 @@ public class CreateTenantHandler :
     {
       AddNotification("Document", "Document already exists");
     }
-
+    Console.WriteLine("=================================================");
+    Console.WriteLine(command.Username);
 
     if (await _repository.UsernameAlreadyExistsAsync(command.Username, new CancellationToken()))
     {
@@ -51,7 +52,7 @@ public class CreateTenantHandler :
     var document = new Document(command.Document, EDocumentType.CNPJ);
     var email = new Email(command.Email);
 
-    var tenant = new Tenant(command.Name, document, email);
+    var tenant = new Tenant(command.Name, document, command.Username, email);
 
 
     AddNotifications(document, email);
@@ -60,7 +61,6 @@ public class CreateTenantHandler :
     {
       return new CommandResult(false, "ERR_TENANT_NOT_CREATED", null, Notifications);
     }
-
 
     await _repository.CreateAsync(tenant, new CancellationToken());
 

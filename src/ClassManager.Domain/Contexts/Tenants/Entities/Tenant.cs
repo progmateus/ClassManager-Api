@@ -14,10 +14,11 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     {
 
     }
-    public Tenant(string name, Document document, Email email)
+    public Tenant(string name, Document document, string username, Email email)
     {
       Name = name;
       Document = document;
+      Username = username;
       Email = email;
       CreatedAt = DateTime.UtcNow;
       UpdatedAt = DateTime.UtcNow;
