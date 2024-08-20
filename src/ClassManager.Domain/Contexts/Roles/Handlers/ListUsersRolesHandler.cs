@@ -46,7 +46,7 @@ public class ListUsersRolesHandler : Notifiable,
       return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null, 404);
     }
 
-    var usersRoles = _usersRolesRepository.ListUsersRolesByUserIdAndTenantId(command.UserId, command.TenantId, new CancellationToken());
+    var usersRoles = await _usersRolesRepository.ListUsersRolesByUserIdAndTenantId(command.UserId, command.TenantId, new CancellationToken());
 
     return new CommandResult(false, "USER_ROLES_LISTED", usersRoles, null, 200);
   }

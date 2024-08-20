@@ -18,11 +18,11 @@ public class UsersRolesRepository : Repository<UsersRoles>, IUsersRolesRepositor
 
   public async Task<List<UsersRoles>> ListUsersRolesByUserIdAndTenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken)
   {
-    return await DbSet.Where(x => x.UserId == userId && x.TenantId == tenantId).ToListAsync();
+    return await DbSet.Where(x => x.UserId == userId && x.TenantId == tenantId).ToListAsync(cancellationToken);
   }
 
   public async Task<bool> VerifyRoleExistsAsync(Guid userId, Guid tenantId, string roleName, CancellationToken cancellationToken)
   {
-    return await DbSet.AnyAsync(x => x.UserId == userId && x.TenantId == tenantId && x.Role.Name == roleName);
+    return await DbSet.AnyAsync(x => x.UserId == userId && x.TenantId == tenantId && x.Role.Name == roleName, cancellationToken);
   }
 }
