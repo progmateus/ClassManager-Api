@@ -15,8 +15,12 @@ public class GetClassByIdHandler
   }
   public async Task<ICommandResult> Handle(Guid tenantId, Guid classId)
   {
+    Console.WriteLine("=====================");
+    Console.WriteLine("=====================");
+    Console.WriteLine("=====================");
+    Console.WriteLine("ClassId: ", classId);
     var classFound = await _classRepository.GetByIdAndTenantId(tenantId, classId, new CancellationToken());
 
-    return new CommandResult(true, "CLASS_LISTED", classFound, null, 200);
+    return new CommandResult(true, "CLASS_GOTTEN", classFound, null, 200);
   }
 }

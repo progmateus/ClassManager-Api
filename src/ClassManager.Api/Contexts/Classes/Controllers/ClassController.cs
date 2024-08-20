@@ -47,7 +47,7 @@ public class ClassController : MainController
   public async Task<IResult> GetById(
     [FromRoute] Guid tenantId,
     [FromRoute] Guid id,
-    [FromServices] GetTenantPlanByIdHandler handler
+    [FromServices] GetClassByIdHandler handler
   )
   {
     var result = await handler.Handle(tenantId, id);
