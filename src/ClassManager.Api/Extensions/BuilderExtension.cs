@@ -168,6 +168,7 @@ public static class BuilderExtension
     builder.Services.AddTransient<ListTenantsHandler>();
     builder.Services.AddTransient<UpdateTenantHandler>();
     builder.Services.AddTransient<DeleteTenantHandler>();
+    builder.Services.AddTransient<GetTenantHandler>();
 
 
     builder.Services.AddTransient<CreatePlandHandler>();

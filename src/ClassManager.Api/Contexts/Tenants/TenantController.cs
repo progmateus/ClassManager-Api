@@ -26,6 +26,24 @@ public class TenantController : MainController
     return Results.Ok(result);
   }
 
+
+  [HttpGet]
+  [Route("{id}")]
+  public async Task<IResult> Get(
+      [FromRoute] Guid id,
+      [FromServices] GetTenantHandler handler
+  )
+  {
+    var result = await handler.Handle(id);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
   [HttpGet]
   public async Task<IResult> List(
     [FromServices] ListTenantsHandler handler,
@@ -33,11 +51,6 @@ public class TenantController : MainController
   )
   {
     var result = await handler.Handle(search);
-    Console.WriteLine("=================================================");
-    Console.WriteLine("=================================================");
-    Console.WriteLine("=================================================");
-    Console.WriteLine("=================================================");
-    Console.WriteLine(search);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
