@@ -17,7 +17,7 @@ public class ClassRepository : Repository<Class>, IClassRepository
 
   public async Task<List<Class>> ListByTenantId(Guid tenantId, CancellationToken cancellationToken)
   {
-    return await DbSet.Where((x) => x.TenantId == tenantId).ToListAsync();
+    return await DbSet.Where((x) => x.TenantId == tenantId).ToListAsync(cancellationToken);
   }
 
   public async Task<bool> NameAlreadyExists(string name, CancellationToken cancellationToken)

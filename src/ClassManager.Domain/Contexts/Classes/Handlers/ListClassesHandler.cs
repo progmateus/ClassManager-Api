@@ -14,10 +14,14 @@ public class ListClassesHandler
   {
     _classRepository = classRepository;
   }
-  public ICommandResult Handle(Guid tenantId)
+  public async Task<ICommandResult> Handle(Guid tenantId)
   {
-    var tenantPlans = _classRepository.ListByTenantId(tenantId, new CancellationToken());
+    Console.WriteLine("=========");
+    Console.WriteLine("=========");
+    Console.WriteLine("=========");
+    Console.WriteLine(tenantId);
+    var classes = await _classRepository.ListByTenantId(tenantId, new CancellationToken());
 
-    return new CommandResult(true, "CLASSES_LISTED", tenantPlans, null, 200);
+    return new CommandResult(true, "CLASSES_LISTED", classes, null, 200);
   }
 }
