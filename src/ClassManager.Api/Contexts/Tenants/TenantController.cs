@@ -28,10 +28,16 @@ public class TenantController : MainController
 
   [HttpGet]
   public async Task<IResult> List(
-    [FromServices] ListTenantsHandler handler
+    [FromServices] ListTenantsHandler handler,
+    [FromQuery] string? search
   )
   {
-    var result = await handler.Handle();
+    var result = await handler.Handle(search);
+    Console.WriteLine("=================================================");
+    Console.WriteLine("=================================================");
+    Console.WriteLine("=================================================");
+    Console.WriteLine("=================================================");
+    Console.WriteLine(search);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 

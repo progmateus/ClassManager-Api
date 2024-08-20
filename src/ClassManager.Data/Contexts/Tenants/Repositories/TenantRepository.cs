@@ -35,6 +35,14 @@ public class TenantRepository : Repository<Tenant>, ITenantRepository
     .FirstOrDefaultAsync(x => x.Id == tenantId, cancellationToken);
   }
 
+  public async Task<List<Tenant>> SearchAsync(string search = "")
+  {
+    return await DbSet
+    .AsNoTracking()
+    .Where(x => string.IsNullOrEmpty(search) || x.Name.Contains(search) || x.Username.Contains(search))
+    .ToListAsync();
+  }
+
   public async Task<bool> UsernameAlreadyExistsAsync(string username, CancellationToken cancellationToken)
   {
     return await DbSet.AsNoTracking().AnyAsync(x => x.Username == username, cancellationToken);

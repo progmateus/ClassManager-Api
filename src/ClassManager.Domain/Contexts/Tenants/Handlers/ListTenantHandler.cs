@@ -13,9 +13,9 @@ public class ListTenantsHandler
   {
     _repository = tenantRepository;
   }
-  public async Task<ICommandResult> Handle()
+  public async Task<ICommandResult> Handle(string search = "")
   {
-    var tenants = await _repository.GetAllAsync(default);
+    var tenants = await _repository.SearchAsync(search);
 
     return new CommandResult(true, "TENANTS_LISTED", tenants, null, 201);
   }
