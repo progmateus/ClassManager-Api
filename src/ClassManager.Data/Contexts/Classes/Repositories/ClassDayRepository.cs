@@ -10,8 +10,8 @@ public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
 {
   public ClassDayRepository(AppDbContext context) : base(context) { }
 
-  public async Task<ClassDay> GetByTenantIdAndClassId(Guid tenantId, Guid classId)
+  public async Task<ClassDay> GetByIdAndTenantIdAsync(Guid tenantId, Guid id)
   {
-    return await DbSet.FirstAsync((x) => x.Class.TenantId == tenantId && x.ClassId == classId);
+    return await DbSet.FirstAsync((x) => x.Class.TenantId == tenantId && x.Id == id);
   }
 }

@@ -5,10 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ClassManager.Api.Contexts.Classes.Controllers;
 
-[Route("class-days")]
 public class ClassDayController : MainController
 {
-  [HttpPost]
+  [HttpPost("class-days")]
   public async Task<IResult> Create(
     [FromBody] CreateClassDayCommand command,
     [FromServices] CreateClassDayHandler handler
@@ -24,8 +23,25 @@ public class ClassDayController : MainController
     return Results.Ok(result);
   }
 
+  [HttpGet("{tenantId}/class-days/{classDayId}")]
+  public async Task<IResult> Get(
+    [FromRoute] Guid classDayId,
+    [FromRoute] Guid tenantId,
+    [FromServices] GetClassDayByIdHandler handler
+  )
+  {
+    var result = await handler.Handle(tenantId, classDayId);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
 
-  [HttpPut("{classDayId}")]
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
+
+  [HttpPut("class-days/{classDayId}")]
   public async Task<IResult> Update(
     [FromRoute] Guid classDayId,
     [FromBody] UpdateClassDayCommand command,
