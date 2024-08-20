@@ -9,6 +9,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Commands
     public string Name { get; set; } = null!;
     public string Email { get; set; } = null!;
     public string Username { get; set; } = null!;
+    public string Description { get; set; } = null!;
     public string Document { get; set; } = null!;
     public string Number { get; set; } = null!;
 
@@ -20,6 +21,8 @@ namespace ClassManager.Domain.Contexts.Tenants.Commands
       .HasMaxLen(Name, 40, "CreateTenantCommand.Name", "Name max 40 characters")
       .HasMinLen(Username, 3, "CreateTenantCommand.Username", "Username min 3 characters")
       .HasMaxLen(Username, 40, "CreateTenantCommand.Username", "Username max 40 characters")
+      .HasMinLen(Description, 3, "CreateTenantCommand.Description", "Description min 3 characters")
+      .HasMaxLen(Description, 200, "CreateTenantCommand.Description", "Description max 200 characters")
       .IsEmail(Email, "CreateTenantCommand.Email", "Invalid email")
     );
     }

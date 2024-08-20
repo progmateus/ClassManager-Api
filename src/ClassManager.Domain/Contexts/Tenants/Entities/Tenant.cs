@@ -14,11 +14,12 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     {
 
     }
-    public Tenant(string name, Document document, string username, Email email)
+    public Tenant(string name, Document document, string username, string description, Email email)
     {
       Name = name;
       Document = document;
       Username = username;
+      Description = description;
       Email = email;
       CreatedAt = DateTime.UtcNow;
       UpdatedAt = DateTime.UtcNow;
@@ -26,6 +27,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
 
     public string Name { get; private set; } = null!;
     public string Username { get; private set; }
+    public string Description { get; private set; }
     public Document Document { get; private set; }
     public Email Email { get; private set; }
     public string? Avatar { get; private set; } = string.Empty;

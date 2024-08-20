@@ -52,9 +52,9 @@ public class CreateTenantHandler :
     var document = new Document(command.Document, EDocumentType.CNPJ);
     var email = new Email(command.Email);
 
-    var tenant = new Tenant(command.Name, document, command.Username, email);
+    var tenant = new Tenant(command.Name, document, command.Username, command.Description, email);
 
-
+    Console.WriteLine(command.Description);
     AddNotifications(document, email);
 
     if (Invalid)
