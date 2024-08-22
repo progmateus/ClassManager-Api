@@ -18,6 +18,6 @@ public class BookingRepository : Repository<Booking>, IBookingRepository
 
   public async Task<Booking?> GetWithInclude(Guid userId, Guid bookingId)
   {
-    return await DbSet.Include(x => x.ClassDay).FirstOrDefaultAsync(x => x.UserId == userId && x.Id == bookingId);
+    return await DbSet.Include(x => x.ClassDay).Include(x => x.User).FirstOrDefaultAsync(x => x.UserId == userId && x.Id == bookingId);
   }
 }

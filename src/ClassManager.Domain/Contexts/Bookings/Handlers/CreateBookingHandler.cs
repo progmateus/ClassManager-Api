@@ -114,6 +114,8 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
 
     await _bookingRepository.CreateAsync(booking, new CancellationToken());
 
-    return new CommandResult(true, "BOOKING_CREATED", booking, null, 201);
+    var bookingFound = await _bookingRepository.GetWithInclude(command.UserId, booking.Id);
+
+    return new CommandResult(true, "BOOKING_CREATED", bookingFound, null, 201);
   }
 }
