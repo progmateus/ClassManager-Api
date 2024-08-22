@@ -28,12 +28,12 @@ public class TenantPlanController : MainController
   }
 
   [HttpGet]
-  public IResult List(
+  public async Task<IResult> List(
     [FromRoute] Guid tenantId,
     [FromServices] ListTenantPlansHandler handler
   )
   {
-    var result = handler.Handle(tenantId);
+    var result = await handler.Handle(tenantId);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 

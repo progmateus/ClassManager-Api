@@ -13,9 +13,9 @@ public class ListTenantPlansHandler
   {
     _repository = tenantRepository;
   }
-  public ICommandResult Handle(Guid tenantId)
+  public async Task<ICommandResult> Handle(Guid tenantId)
   {
-    var tenantPlans = _repository.ListByTenantId(tenantId, new CancellationToken());
+    var tenantPlans = await _repository.ListByTenantId(tenantId, new CancellationToken());
 
     return new CommandResult(true, "PLANS_LISTED", tenantPlans, null, 200);
   }
