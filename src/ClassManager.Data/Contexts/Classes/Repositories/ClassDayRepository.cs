@@ -12,6 +12,10 @@ public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
 
   public async Task<ClassDay> GetByIdAndTenantIdAsync(Guid tenantId, Guid id)
   {
-    return await DbSet.Include((x) => x.Bookings).FirstAsync((x) => x.Class.TenantId == tenantId && x.Id == id);
+    return await DbSet
+    .AsNoTracking()
+    .Include((x) => x.Bookings)
+    .ThenInclude((b) => b.User)
+    .FirstAsync((x) => x.Class.TenantId == tenantId && x.Id == id);
   }
 }
