@@ -2,8 +2,8 @@ namespace ClassManager.Domain.Contexts.Shared.Enums
 {
   public enum ETenantStatus
   {
-    ACTIVE = 1,
-    INACTIVE = 2,
-    DELETED = 3,
+    INACTIVE = 1,
+    DELETED = 2,
+    ACTIVE = 3,
   }
 }

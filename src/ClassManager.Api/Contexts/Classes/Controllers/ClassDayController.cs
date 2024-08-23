@@ -41,7 +41,7 @@ public class ClassDayController : MainController
   }
 
 
-  [HttpPut("class-days/{classDayId}")]
+  [HttpPut("{tenantId}/class-days/{classDayId}")]
   public async Task<IResult> Update(
     [FromRoute] Guid classDayId,
     [FromBody] UpdateClassDayCommand command,

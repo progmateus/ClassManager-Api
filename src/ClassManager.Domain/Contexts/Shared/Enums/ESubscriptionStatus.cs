@@ -2,9 +2,8 @@ namespace ClassManager.Domain.Contexts.Shared.Enums
 {
   public enum ESubscriptionStatus
   {
-    ACTIVE = 1,
-    INACTIVE = 2,
-    PAUSED = 3,
-    CANCELED = 4,
+    INACTIVE = 1,
+    CANCELED = 2,
+    ACTIVE = 3,
   }
 }

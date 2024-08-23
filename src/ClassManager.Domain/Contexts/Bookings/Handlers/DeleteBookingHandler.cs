@@ -15,7 +15,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace ClasManager.Domain.Contexts.Bookings.Handlers;
 
-public class DeleteBookingHandler : Notifiable, ITenantActionHandler<CreateBookingCommand>
+public class DeleteBookingHandler : Notifiable
 {
   private ITenantRepository _tenantRepository;
   private IBookingRepository _bookingRepository;
@@ -32,21 +32,14 @@ public class DeleteBookingHandler : Notifiable, ITenantActionHandler<CreateBooki
     _usersRolesRepository = usersRolesRepository;
     _subscriptionRepository = subscriptionRepository;
   }
-  public async Task<ICommandResult> Handle(Guid tenantId, Guid bookingId, CreateBookingCommand command)
+  public async Task<ICommandResult> Handle(Guid tenantId, Guid bookingId, Guid userId)
   {
-
-    command.Validate();
-
-    if (!command.Valid)
-    {
-      return new CommandResult(false, "ERR_BOOKING_NOT_DELETED", null, command.Notifications);
-    }
 
     var tenant = await _tenantRepository.GetByIdAndIncludePlanAsync(tenantId, new CancellationToken());
 
     if (tenant is null)
     {
-      return new CommandResult(false, "ERR_TENANT_DAY_NOT_FOUND", null, null);
+      return new CommandResult(false, "ERR_TENANT_DAY_NOT_FOUND", null, 404);
     }
 
     if (tenant.Status != ETenantStatus.ACTIVE)
@@ -54,42 +47,42 @@ public class DeleteBookingHandler : Notifiable, ITenantActionHandler<CreateBooki
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
     }
 
-    var user = await _userRepository.IdExistsAsync(command.UserId, new CancellationToken());
+    var user = await _userRepository.IdExistsAsync(userId, new CancellationToken());
 
     if (!user)
     {
       return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null);
     }
 
-    var userRole = await _usersRolesRepository.VerifyRoleExistsAsync(command.UserId, tenantId, "student", new CancellationToken());
+    var userRole = await _usersRolesRepository.VerifyRoleExistsAsync(userId, tenantId, "student", new CancellationToken());
 
     if (!userRole)
     {
       return new CommandResult(false, "ERR_STUDENT_ROLE_NOT_FOUND", null, 404);
     }
 
-    var subscription = await _subscriptionRepository.GetByUserIdAndTenantId(command.UserId, tenantId, new CancellationToken());
+    var subscription = await _subscriptionRepository.GetByUserIdAndTenantId(userId, tenantId, new CancellationToken());
 
     if (subscription is null)
     {
-      return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, 404);
+      return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, null, 404);
     }
 
     if (subscription.Status != ESubscriptionStatus.ACTIVE)
     {
-      return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_ACTIVE", null, 403);
+      return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_ACTIVE", null, null, 403);
     }
 
-    var booking = await _bookingRepository.GetWithInclude(command.UserId, bookingId);
+    var booking = await _bookingRepository.GetWithInclude(userId, bookingId);
 
     if (booking is null)
     {
-      return new CommandResult(false, "ERR_BOOKING_NOT_FOUND", null, 404);
+      return new CommandResult(false, "ERR_BOOKING_NOT_FOUND", null, null, 404);
     }
 
     if (booking.ClassDay.Status == EClassDayStatus.CONCLUDED)
     {
-      return new CommandResult(false, "ERR_CLASS_DAY_ALREADY_CONCLUDED", null, 403);
+      return new CommandResult(false, "ERR_CLASS_DAY_ALREADY_CONCLUDED", null, null, 403);
     }
 
     await _bookingRepository.DeleteAsync(booking.Id, new CancellationToken());
