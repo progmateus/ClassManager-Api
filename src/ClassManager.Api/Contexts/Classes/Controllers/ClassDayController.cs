@@ -7,7 +7,7 @@ namespace ClassManager.Api.Contexts.Classes.Controllers;
 
 public class ClassDayController : MainController
 {
-  [HttpPost("class-days")]
+  [HttpPost("{tenantId}/class-days")]
   public async Task<IResult> Create(
     [FromBody] CreateClassDayCommand command,
     [FromServices] CreateClassDayHandler handler

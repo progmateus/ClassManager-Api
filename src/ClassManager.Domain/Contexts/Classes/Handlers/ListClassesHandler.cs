@@ -16,10 +16,6 @@ public class ListClassesHandler
   }
   public async Task<ICommandResult> Handle(Guid tenantId)
   {
-    Console.WriteLine("=========");
-    Console.WriteLine("=========");
-    Console.WriteLine("=========");
-    Console.WriteLine(tenantId);
     var classes = await _classRepository.ListByTenantId(tenantId, new CancellationToken());
 
     return new CommandResult(true, "CLASSES_LISTED", classes, null, 200);
