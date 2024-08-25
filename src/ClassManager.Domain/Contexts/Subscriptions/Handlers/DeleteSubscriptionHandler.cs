@@ -33,7 +33,7 @@ public class DeleteSubscriptionHandler : Notifiable
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, null, 404);
     }
 
-    if (subscription.Status == ESubscriptionStatus.ACTIVE)
+    if (subscription.Status != ESubscriptionStatus.ACTIVE)
     {
       return new CommandResult(false, "ERR_SUBSCRIPTION_INACTIVE", null, null, 409);
     }
@@ -42,13 +42,13 @@ public class DeleteSubscriptionHandler : Notifiable
 
     var userRoles = await _usersRolesrepository.GetStudentsRolesByUserIdAndTenantId(tenantId, userId, new CancellationToken());
 
-    await _studentsClassesRepository.DeleteRangeAsync(usersClassesFound, new CancellationToken());
-
-    await _usersRolesrepository.DeleteRangeAsync(userRoles, new CancellationToken());
-
     subscription.ChangeStatus(ESubscriptionStatus.CANCELED);
 
     await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
+
+    await _studentsClassesRepository.DeleteRangeAsync(usersClassesFound, new CancellationToken());
+
+    await _usersRolesrepository.DeleteRangeAsync(userRoles, new CancellationToken());
 
     return new CommandResult(true, "SUBSCRIPTION_CANCELED", subscription, null, 204);
   }
