@@ -14,4 +14,9 @@ public class StudentsClassesRepository : Repository<StudentsClasses>, IStudentsC
   {
     return await DbSet.FirstOrDefaultAsync((tc) => tc.ClassId == classId && tc.UserId == userId);
   }
+
+  public async Task<List<StudentsClasses>> GetByUserIdAndTenantId(Guid tenantId, Guid userId)
+  {
+    return await DbSet.Include(x => x.Class).Where((sc) => sc.Class.TenantId == tenantId && sc.UserId == userId).ToListAsync();
+  }
 }
