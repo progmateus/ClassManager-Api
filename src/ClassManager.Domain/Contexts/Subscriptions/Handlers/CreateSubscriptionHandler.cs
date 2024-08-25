@@ -40,12 +40,6 @@ public class CreateSubscriptionHandler : Notifiable,
       return new CommandResult(false, "ERR_ROLE_NOT_FOUND", null, null, 404);
     }
 
-    var userRole = await _usersRolesRepository.VerifyRoleExistsAsync(command.UserId, tenantId, "student", new CancellationToken());
-
-    if (!userRole)
-    {
-      return new CommandResult(false, "ERR_STUDENT_NOT_ASSOCIATED_WITH_TENANT", null, null, 404);
-    }
 
     var subscriptionAlreadyActive = await _subscriptionRepository.HasActiveSubscription(command.UserId, tenantId, new CancellationToken());
 
@@ -54,10 +48,18 @@ public class CreateSubscriptionHandler : Notifiable,
       return new CommandResult(false, "ACTIVE_SUBSCRIPTION_ALREADY_EXISTS", null, null, 409);
     }
 
+    var userRoleAlreadyExists = await _usersRolesRepository.VerifyRoleExistsAsync(command.UserId, tenantId, "student", new CancellationToken());
+
+    if (!userRoleAlreadyExists)
+    {
+      var userRole = new UsersRoles(command.UserId, role.Id, tenantId);
+
+      await _usersRolesRepository.CreateAsync(userRole, new CancellationToken());
+    }
+
     DateTime lastDayOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month));
 
     var subscription = new Subscription(command.UserId, command.TenantPlanId, lastDayOfMonth);
-
 
     await _subscriptionRepository.CreateAsync(subscription, new CancellationToken());
 
