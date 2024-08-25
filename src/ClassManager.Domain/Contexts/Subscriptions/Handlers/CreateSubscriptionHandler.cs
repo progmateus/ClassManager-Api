@@ -45,7 +45,7 @@ public class CreateSubscriptionHandler : Notifiable,
       return new CommandResult(false, "ERR_ROLE_NOT_FOUND", null, null, 404);
     }
 
-    var classExists = await _classRepository.GetByIdAsync(command.ClassId, new CancellationToken());
+    var classExists = await _classRepository.GetByIdAndTenantId(tenantId, command.ClassId, new CancellationToken());
 
     if (classExists is null)
     {
