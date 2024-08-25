@@ -11,6 +11,7 @@ public class Subscription : Entity
   {
     UserId = userId;
     TenantPlanId = planId;
+    TenantId = tenantId;
     Status = ESubscriptionStatus.ACTIVE;
     ExpiresDate = expiresDate;
   }
