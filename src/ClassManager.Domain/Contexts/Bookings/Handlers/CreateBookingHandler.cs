@@ -23,7 +23,8 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
   private IUserRepository _userRepository;
   private IUsersRolesRepository _usersRolesRepository;
   private ISubscriptionRepository _subscriptionRepository;
-  public CreateBookingHandler(ITenantRepository tenantRepository, IBookingRepository bookingRepository, IClassDayRepository classDayRepository, IUserRepository userRepository, IUsersRolesRepository usersRolesRepository, ISubscriptionRepository subscriptionRepository)
+  private IStudentsClassesRepository _studentsClassesrepository;
+  public CreateBookingHandler(ITenantRepository tenantRepository, IBookingRepository bookingRepository, IClassDayRepository classDayRepository, IUserRepository userRepository, IUsersRolesRepository usersRolesRepository, ISubscriptionRepository subscriptionRepository, IStudentsClassesRepository studentsClassesRepository)
   {
     _tenantRepository = tenantRepository;
     _bookingRepository = bookingRepository;
@@ -31,6 +32,7 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
     _userRepository = userRepository;
     _usersRolesRepository = usersRolesRepository;
     _subscriptionRepository = subscriptionRepository;
+    _studentsClassesrepository = studentsClassesRepository;
   }
   public async Task<ICommandResult> Handle(Guid tenantId, CreateBookingCommand command)
   {
@@ -68,7 +70,6 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
 
     var user = await _userRepository.IdExistsAsync(command.UserId, new CancellationToken());
 
-
     if (!user)
     {
       return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null);
@@ -91,6 +92,13 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
     if (subscription.Status != ESubscriptionStatus.ACTIVE)
     {
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_ACTIVE", null, 403);
+    }
+
+    var isClassStudent = await _studentsClassesrepository.GetByUserIdAndClassId(classDay.ClassId, command.UserId);
+
+    if (isClassStudent is null)
+    {
+      return new CommandResult(false, "ERR_NOT_CLASS_STUDENT", null, 404);
     }
 
     var sunday = DateTime.Now.FirstDayOfWeek();
