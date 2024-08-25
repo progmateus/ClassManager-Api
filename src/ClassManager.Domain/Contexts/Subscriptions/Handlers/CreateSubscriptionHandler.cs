@@ -1,3 +1,4 @@
+using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Roles.Commands;
 using ClassManager.Domain.Contexts.Roles.Entities;
@@ -17,11 +18,15 @@ public class CreateSubscriptionHandler : Notifiable,
   private ISubscriptionRepository _subscriptionRepository;
   private IUsersRolesRepository _usersRolesRepository;
   private IRoleRepository _roleRepository;
-  public CreateSubscriptionHandler(ISubscriptionRepository subscriptionRepository, IUsersRolesRepository usersRolesRepository, IRoleRepository roleRepository)
+  private IStudentsClassesRepository _studentsClassesRepository;
+  private IClassRepository _classRepository;
+  public CreateSubscriptionHandler(ISubscriptionRepository subscriptionRepository, IUsersRolesRepository usersRolesRepository, IRoleRepository roleRepository, IStudentsClassesRepository studentsClassesRepository, IClassRepository classRepository)
   {
     _subscriptionRepository = subscriptionRepository;
     _usersRolesRepository = usersRolesRepository;
     _roleRepository = roleRepository;
+    _studentsClassesRepository = studentsClassesRepository;
+    _classRepository = classRepository;
   }
   public async Task<ICommandResult> Handle(Guid tenantId, CreateSubscriptionCommand command)
   {
@@ -40,6 +45,12 @@ public class CreateSubscriptionHandler : Notifiable,
       return new CommandResult(false, "ERR_ROLE_NOT_FOUND", null, null, 404);
     }
 
+    var classExists = await _classRepository.GetByIdAsync(command.ClassId, new CancellationToken());
+
+    if (classExists is null)
+    {
+      return new CommandResult(false, "CLASS_NOT_FOUND", null, null, 404);
+    }
 
     var subscriptionAlreadyActive = await _subscriptionRepository.HasActiveSubscription(command.UserId, tenantId, new CancellationToken());
 
@@ -62,6 +73,10 @@ public class CreateSubscriptionHandler : Notifiable,
     var subscription = new Subscription(command.UserId, command.TenantPlanId, lastDayOfMonth);
 
     await _subscriptionRepository.CreateAsync(subscription, new CancellationToken());
+
+    var studentclass = new StudentsClasses(command.UserId, command.ClassId);
+
+    await _studentsClassesRepository.CreateAsync(studentclass, new CancellationToken());
 
     return new CommandResult(true, "SUBSCRIPTION_CREATED", subscription, null, 201);
   }
