@@ -1,5 +1,6 @@
 using ClassManager.Data.Contexts.shared.Repositories;
 using ClassManager.Data.Data;
+using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Entities;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
@@ -19,4 +20,10 @@ public class SubscriptionRepository : Repository<Subscription>, ISubscriptionRep
   {
     return await DbSet.Include(x => x.TenantPlan).FirstAsync(x => x.UserId == userId && x.TenantPlan.TenantId == tenantId);
   }
+
+  public async Task<bool> HasActiveSubscription(Guid userId, Guid tenantId, CancellationToken cancellationToken)
+  {
+    return await DbSet.Include(x => x.TenantPlan).AsNoTracking().AnyAsync(x => x.TenantPlan.TenantId == tenantId && x.UserId == userId && x.Status == ESubscriptionStatus.ACTIVE, cancellationToken);
+  }
+
 }
