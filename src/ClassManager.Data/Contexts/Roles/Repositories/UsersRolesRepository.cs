@@ -9,8 +9,7 @@ namespace classManager.Data.Contexts.Roles.Repositories;
 public class UsersRolesRepository : Repository<UsersRoles>, IUsersRolesRepository
 {
   public UsersRolesRepository(AppDbContext context) : base(context) { }
-
-  public async Task DeleteUsersRolesByUserIdAndTenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken)
+  public async Task DeleteByUserIdAndtenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken)
   {
     DbSet.RemoveRange(DbSet.Where(x => x.UserId == userId && x.TenantId == tenantId));
     await SaveChangesAsync(cancellationToken);

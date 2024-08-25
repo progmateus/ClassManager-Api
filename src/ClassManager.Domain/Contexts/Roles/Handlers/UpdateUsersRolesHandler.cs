@@ -61,7 +61,7 @@ public class UpdateUsersRolesHandler : Notifiable,
       var userRole = new UsersRoles(command.UserId, roleId, command.TenantId);
       usersRoles.Add(userRole);
     }
-    await _usersRolesRepository.DeleteUsersRolesByUserIdAndTenantId(command.UserId, command.TenantId, new CancellationToken());
+    await _usersRolesRepository.DeleteByUserIdAndtenantId(command.UserId, command.TenantId, new CancellationToken());
 
     await _usersRolesRepository.CreateRangeAsync(usersRoles, new CancellationToken());
 

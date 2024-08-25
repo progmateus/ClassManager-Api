@@ -10,6 +10,12 @@ public class StudentsClassesRepository : Repository<StudentsClasses>, IStudentsC
 {
   public StudentsClassesRepository(AppDbContext context) : base(context) { }
 
+  public async Task DeleteByUserIdAndtenantId(Guid tenantId, Guid userId, CancellationToken cancellationToken)
+  {
+    DbSet.RemoveRange(DbSet.Where((sc) => sc.Class.TenantId == tenantId && sc.UserId == userId));
+    await SaveChangesAsync(cancellationToken);
+  }
+
   public async Task<StudentsClasses> GetByUserIdAndClassId(Guid classId, Guid userId)
   {
     return await DbSet.FirstOrDefaultAsync((tc) => tc.ClassId == classId && tc.UserId == userId);
