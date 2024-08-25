@@ -7,7 +7,7 @@ namespace ClassManager.Domain.Contexts.Subscriptions.Entities;
 public class Subscription : Entity
 {
   protected Subscription() { }
-  public Subscription(Guid userId, Guid planId, DateTime expiresDate)
+  public Subscription(Guid userId, Guid planId, Guid tenantId, DateTime expiresDate)
   {
     UserId = userId;
     TenantPlanId = planId;
@@ -17,9 +17,11 @@ public class Subscription : Entity
 
   public Guid UserId { get; set; }
   public Guid TenantPlanId { get; set; }
+  public Guid TenantId { get; set; }
   public ESubscriptionStatus Status { get; set; }
   public User User { get; set; }
   public TenantPlan TenantPlan { get; set; }
+  public Tenant Tenant { get; set; }
   public DateTime ExpiresDate { get; set; }
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }

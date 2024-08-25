@@ -28,5 +28,10 @@ public class SubscriptionMap : IEntityTypeConfiguration<Subscription>
       .HasColumnType("TINYINT")
       .IsRequired(true)
       .HasDefaultValue(ESubscriptionStatus.INACTIVE);
+
+    builder.HasOne(e => e.Tenant)
+    .WithMany(t => t.Subscriptions)
+    .HasForeignKey("TenantId")
+    .HasPrincipalKey(t => t.Id);
   }
 }

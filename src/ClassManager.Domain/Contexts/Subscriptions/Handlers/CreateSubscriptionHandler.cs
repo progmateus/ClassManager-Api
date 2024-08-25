@@ -63,9 +63,9 @@ public class CreateSubscriptionHandler : Notifiable,
       return new CommandResult(false, "ACTIVE_SUBSCRIPTION_ALREADY_EXISTS", null, null, 409);
     }
 
-    var tenantPlanExists = await _tenantPlanRepository.IdExistsAsync(command.TenantPlanId, new CancellationToken());
+    var tenantPlan = await _tenantPlanRepository.IdExistsAsync(command.TenantPlanId, new CancellationToken());
 
-    if (!tenantPlanExists)
+    if (!tenantPlan)
     {
       return new CommandResult(false, "ERR_PLAN_NOT_FOUND", null, null, 404);
     }
@@ -81,7 +81,7 @@ public class CreateSubscriptionHandler : Notifiable,
 
     DateTime lastDayOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month));
 
-    var subscription = new Subscription(command.UserId, command.TenantPlanId, lastDayOfMonth);
+    var subscription = new Subscription(command.UserId, command.TenantPlanId, classFound.TenantId, lastDayOfMonth);
 
     await _subscriptionRepository.CreateAsync(subscription, new CancellationToken());
 
