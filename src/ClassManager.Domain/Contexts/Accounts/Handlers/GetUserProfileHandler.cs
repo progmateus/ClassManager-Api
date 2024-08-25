@@ -1,0 +1,29 @@
+using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
+using ClassManager.Domain.Services;
+using ClassManager.Domain.Shared.Commands;
+using ClassManager.Shared.Commands;
+namespace ClassManager.Domain.Contexts.Accounts.Handlers;
+
+public class GetUserProfileHandler
+{
+  private readonly IUserRepository _userReporitory;
+  public GetUserProfileHandler(
+    IUserRepository userRepository
+    )
+  {
+    _userReporitory = userRepository;
+  }
+
+  public async Task<ICommandResult> Handle(Guid id)
+  {
+
+    var user = await _userReporitory.GetByIdWithIncludeAsync(id, new CancellationToken());
+
+    if (user == null)
+    {
+      return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null, 404);
+    }
+
+    return new CommandResult(true, "USER_GOTTEN", user, null, 200);
+  }
+}

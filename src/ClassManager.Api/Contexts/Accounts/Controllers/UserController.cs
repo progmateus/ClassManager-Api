@@ -74,4 +74,21 @@ public class UserController : MainController
 
     return Results.Ok(result);
   }
+
+
+  [Authorize]
+  [HttpGet("profile")]
+  public async Task<IResult> Profile(
+    [FromServices] GetUserProfileHandler handler
+  )
+  {
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value));
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
 }

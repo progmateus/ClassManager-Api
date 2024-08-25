@@ -27,6 +27,14 @@ public class UserRepository : Repository<User>, IUserRepository
         .FirstOrDefaultAsync(x => x.Email.Address == email, cancellationToken);
   }
 
+  public async Task<User?> GetByIdWithIncludeAsync(Guid userId, CancellationToken cancellationToken)
+  {
+    return await DbSet
+    .Include(x => x.Subscriptions)
+    .AsNoTracking()
+    .FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
+  }
+
   public async Task<User?> VerifyUserRoleAsync(Guid userId, Guid tenantId, string roleName, CancellationToken cancellationToken)
   {
     return await DbSet
