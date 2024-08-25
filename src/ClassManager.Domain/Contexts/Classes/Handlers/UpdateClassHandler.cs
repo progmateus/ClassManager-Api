@@ -21,7 +21,7 @@ public class UpdateClassHandler :
   {
     _classRepository = classRepository;
   }
-  public async Task<ICommandResult> Handle(Guid tenantId, Guid planId, ClassCommand command)
+  public async Task<ICommandResult> Handle(Guid tenantId, Guid classId, ClassCommand command)
   {
     command.Validate();
     if (command.Invalid)
@@ -29,7 +29,7 @@ public class UpdateClassHandler :
       AddNotifications(command);
       return new CommandResult(false, "ERR_CLASS_NOT_UPDATED", null, command.Notifications);
     }
-    var classFound = await _classRepository.GetByIdAndTenantId(tenantId, planId, new CancellationToken());
+    var classFound = await _classRepository.GetByIdAndTenantId(tenantId, classId, new CancellationToken());
 
     if (classFound is null)
     {

@@ -5,6 +5,7 @@ using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Subscriptions.Entities;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
@@ -20,13 +21,16 @@ public class CreateSubscriptionHandler : Notifiable,
   private IRoleRepository _roleRepository;
   private IStudentsClassesRepository _studentsClassesRepository;
   private IClassRepository _classRepository;
-  public CreateSubscriptionHandler(ISubscriptionRepository subscriptionRepository, IUsersRolesRepository usersRolesRepository, IRoleRepository roleRepository, IStudentsClassesRepository studentsClassesRepository, IClassRepository classRepository)
+
+  private ITenantPlanRepository _tenantPlanRepository;
+  public CreateSubscriptionHandler(ISubscriptionRepository subscriptionRepository, IUsersRolesRepository usersRolesRepository, IRoleRepository roleRepository, IStudentsClassesRepository studentsClassesRepository, IClassRepository classRepository, ITenantPlanRepository tenantPlanrepository)
   {
     _subscriptionRepository = subscriptionRepository;
     _usersRolesRepository = usersRolesRepository;
     _roleRepository = roleRepository;
     _studentsClassesRepository = studentsClassesRepository;
     _classRepository = classRepository;
+    _tenantPlanRepository = tenantPlanrepository;
   }
   public async Task<ICommandResult> Handle(Guid tenantId, CreateSubscriptionCommand command)
   {
@@ -45,11 +49,11 @@ public class CreateSubscriptionHandler : Notifiable,
       return new CommandResult(false, "ERR_ROLE_NOT_FOUND", null, null, 404);
     }
 
-    var classExists = await _classRepository.GetByIdAndTenantId(tenantId, command.ClassId, new CancellationToken());
+    var classFound = await _classRepository.GetByIdAndTenantId(tenantId, command.ClassId, new CancellationToken());
 
-    if (classExists is null)
+    if (classFound is null)
     {
-      return new CommandResult(false, "CLASS_NOT_FOUND", null, null, 404);
+      return new CommandResult(false, "ERR_CLASS_NOT_FOUND", null, null, 404);
     }
 
     var subscriptionAlreadyActive = await _subscriptionRepository.HasActiveSubscription(command.UserId, tenantId, new CancellationToken());
@@ -57,6 +61,13 @@ public class CreateSubscriptionHandler : Notifiable,
     if (subscriptionAlreadyActive)
     {
       return new CommandResult(false, "ACTIVE_SUBSCRIPTION_ALREADY_EXISTS", null, null, 409);
+    }
+
+    var tenantPlanExists = await _tenantPlanRepository.IdExistsAsync(command.TenantPlanId, new CancellationToken());
+
+    if (!tenantPlanExists)
+    {
+      return new CommandResult(false, "ERR_PLAN_NOT_FOUND", null, null, 404);
     }
 
     var userRoleAlreadyExists = await _usersRolesRepository.VerifyRoleExistsAsync(command.UserId, tenantId, "student", new CancellationToken());
