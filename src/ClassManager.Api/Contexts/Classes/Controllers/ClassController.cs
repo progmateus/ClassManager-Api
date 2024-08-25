@@ -60,6 +60,23 @@ public class ClassController : MainController
     return Results.Ok(result);
   }
 
+  [HttpGet("{id}/profile")]
+  public async Task<IResult> Profile(
+    [FromRoute] Guid tenantId,
+    [FromRoute] Guid id,
+    [FromServices] GetClassProfileHandler handler
+  )
+  {
+    var result = await handler.Handle(tenantId, id);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
   [HttpPut]
   [Route("{id}")]
   public async Task<IResult> Update(

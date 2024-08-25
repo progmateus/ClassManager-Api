@@ -29,7 +29,7 @@ public class UpdateClassHandler :
       AddNotifications(command);
       return new CommandResult(false, "ERR_CLASS_NOT_UPDATED", null, command.Notifications);
     }
-    var classFound = await _classRepository.GetByIdAndTenantId(tenantId, classId, new CancellationToken());
+    var classFound = await _classRepository.GetByIdAndTenantIdAsync(tenantId, classId, new CancellationToken());
 
     if (classFound is null)
     {

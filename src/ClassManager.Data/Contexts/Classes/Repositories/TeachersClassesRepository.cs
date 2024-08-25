@@ -10,6 +10,11 @@ public class TeachersClassesRepository : Repository<TeachersClasses>, ITeacherCl
 {
   public TeachersClassesRepository(AppDbContext context) : base(context) { }
 
+  public int CountByClassId(Guid classId)
+  {
+    return DbSet.Count(x => x.ClassId == classId);
+  }
+
   public async Task<TeachersClasses> GetByUserIdAndClassId(Guid classId, Guid userId)
   {
     return await DbSet.FirstOrDefaultAsync((tc) => tc.ClassId == classId && tc.UserId == userId);

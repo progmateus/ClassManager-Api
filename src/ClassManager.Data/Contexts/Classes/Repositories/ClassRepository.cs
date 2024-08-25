@@ -10,7 +10,7 @@ public class ClassRepository : Repository<Class>, IClassRepository
 {
   public ClassRepository(AppDbContext context) : base(context) { }
 
-  public async Task<Class?> GetByIdAndTenantId(Guid tenantId, Guid classId, CancellationToken cancellationToken)
+  public async Task<Class?> GetByIdAndTenantIdAsync(Guid tenantId, Guid classId, CancellationToken cancellationToken)
   {
     return await DbSet.Include((x) => x.StudentsClasses).FirstOrDefaultAsync((x) => x.TenantId == tenantId && x.Id == classId, cancellationToken);
   }

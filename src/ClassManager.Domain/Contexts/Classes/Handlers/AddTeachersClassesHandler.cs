@@ -25,7 +25,7 @@ public class AddTeachersClassesandle
   }
   public async Task<ICommandResult> Handle(Guid tenantId, CreateUserClassCommand command)
   {
-    var classFound = await _classRepository.GetByIdAndTenantId(tenantId, command.ClassId, new CancellationToken());
+    var classFound = await _classRepository.GetByIdAndTenantIdAsync(tenantId, command.ClassId, new CancellationToken());
     if (classFound is null)
     {
       return new CommandResult(false, "ERR_CLASS_NOT_FOUND", null, null, 404);

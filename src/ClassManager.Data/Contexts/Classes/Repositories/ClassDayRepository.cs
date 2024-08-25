@@ -10,6 +10,14 @@ public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
 {
   public ClassDayRepository(AppDbContext context) : base(context) { }
 
+  public object CountByClassId(Guid classId)
+  {
+    return DbSet
+      .Where(x => x.ClassId == classId)
+      .GroupBy(x => x.Status)
+      .Select(g => new { status = g.Key, count = g.Count() });
+  }
+
   public async Task<ClassDay> GetByIdAndTenantIdAsync(Guid tenantId, Guid id)
   {
     return await DbSet

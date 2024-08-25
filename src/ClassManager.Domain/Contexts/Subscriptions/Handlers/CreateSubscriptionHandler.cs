@@ -49,7 +49,7 @@ public class CreateSubscriptionHandler : Notifiable,
       return new CommandResult(false, "ERR_ROLE_NOT_FOUND", null, null, 404);
     }
 
-    var classFound = await _classRepository.GetByIdAndTenantId(tenantId, command.ClassId, new CancellationToken());
+    var classFound = await _classRepository.GetByIdAndTenantIdAsync(tenantId, command.ClassId, new CancellationToken());
 
     if (classFound is null)
     {

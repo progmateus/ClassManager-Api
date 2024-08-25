@@ -17,7 +17,7 @@ public class DeleteClassHandler
 
   public async Task<ICommandResult> Handle(Guid tenantId, Guid id)
   {
-    if (await _classRepository.GetByIdAndTenantId(tenantId, id, new CancellationToken()) == null)
+    if (await _classRepository.GetByIdAndTenantIdAsync(tenantId, id, new CancellationToken()) == null)
     {
       return new CommandResult(false, "ERR_CLASS_NOT_FOUND", null, null, 404);
     }

@@ -10,6 +10,11 @@ public class StudentsClassesRepository : Repository<StudentsClasses>, IStudentsC
 {
   public StudentsClassesRepository(AppDbContext context) : base(context) { }
 
+  public int CountByClassId(Guid classId)
+  {
+    return DbSet.Count(x => x.ClassId == classId);
+  }
+
   public async Task DeleteByUserIdAndtenantId(Guid tenantId, Guid userId, CancellationToken cancellationToken)
   {
     DbSet.RemoveRange(DbSet.Where((sc) => sc.Class.TenantId == tenantId && sc.UserId == userId));
