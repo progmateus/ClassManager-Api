@@ -29,7 +29,7 @@ public class GetClassProfileHandler
 
     if (classFound is null)
     {
-      return new CommandResult(false, "ERR_CLASS_NOOT_FOUND", null, null, 404);
+      return new CommandResult(false, "ERR_CLASS_NOT_FOUND", null, null, 404);
     }
 
     DateTime firstDayOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
