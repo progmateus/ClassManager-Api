@@ -32,19 +32,22 @@ public class GetClassProfileHandler
       return new CommandResult(false, "ERR_CLASS_NOOT_FOUND", null, null, 404);
     }
 
+    DateTime firstDayOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, 1);
+    DateTime lastDayOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month));
+
     var studentscount = _studentsClassesRepository.CountByClassId(classFound.Id);
-    var teahcersCount = _teacherClassesRepository.CountByClassId(classFound.Id);
+    var teachersCount = _teacherClassesRepository.CountByClassId(classFound.Id);
 
-    var classesDays = _classDayRepository.CountByClassId(classFound.Id);
+    var classesDaysOfTheMonth = _classDayRepository.CountByClassId(classFound.Id, firstDayOfMonth, lastDayOfMonth);
 
-    var teste = new
+    var response = new
     {
       classFound,
-      teahcersCount,
+      teachersCount,
       studentscount,
-      classesDays
+      classesDaysOfTheMonth
     };
 
-    return new CommandResult(true, "CLASS_DAY_GOTTEN", teste, null, 200);
+    return new CommandResult(true, "CLASS_PROFILE_GOTTEN", response, null, 200);
   }
 }

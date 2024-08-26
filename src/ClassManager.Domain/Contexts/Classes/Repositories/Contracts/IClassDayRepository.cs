@@ -4,5 +4,6 @@ namespace ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 public interface IClassDayRepository : IRepository<ClassDay>
 {
   Task<ClassDay> GetByIdAndTenantIdAsync(Guid tenantId, Guid classDayId);
-  object CountByClassId(Guid classId);
+  object CountByClassId(Guid classId, DateTime initiDate, DateTime endDate);
+
 }
