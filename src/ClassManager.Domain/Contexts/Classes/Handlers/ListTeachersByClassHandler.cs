@@ -27,6 +27,6 @@ public class ListTeachersByClassHandler
 
     var teachers = await _teachersClassesRepository.ListByClassId(classId);
 
-    return new CommandResult(true, "CLASSES_LISTED", teachers, null, 200);
+    return new CommandResult(true, "TEACHERS_LISTED", teachers, null, 200);
   }
 }

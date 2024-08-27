@@ -19,4 +19,12 @@ public class TeachersClassesRepository : Repository<TeachersClasses>, ITeacherCl
   {
     return await DbSet.FirstOrDefaultAsync((tc) => tc.ClassId == classId && tc.UserId == userId);
   }
+
+  public async Task<List<TeachersClasses>> ListByClassId(Guid classId)
+  {
+    return await DbSet.Include(x => x.User).Where((tc) => tc.ClassId == classId).ToListAsync();
+  }
+
+
+
 }

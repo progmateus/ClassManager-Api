@@ -199,6 +199,8 @@ public static class BuilderExtension
     builder.Services.AddTransient<GetClassByIdHandler>();
     builder.Services.AddTransient<DeleteClassHandler>();
     builder.Services.AddTransient<GetClassProfileHandler>();
+    builder.Services.AddTransient<ListStudentsByClassHandler>();
+    builder.Services.AddTransient<ListTeachersByClassHandler>();
 
     builder.Services.AddTransient<AddTeachersClassesandle>();
     builder.Services.AddTransient<RemoveTeachersClassesHandler>();

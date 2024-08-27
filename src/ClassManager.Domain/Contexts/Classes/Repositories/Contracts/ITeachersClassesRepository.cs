@@ -4,6 +4,6 @@ namespace ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 public interface ITeacherClassesRepository : IRepository<TeachersClasses>
 {
   Task<TeachersClasses> GetByUserIdAndClassId(Guid classId, Guid userId);
-  Task<TeachersClasses> ListByClassId(Guid classId);
+  Task<List<TeachersClasses>> ListByClassId(Guid classId);
   int CountByClassId(Guid classId);
 }

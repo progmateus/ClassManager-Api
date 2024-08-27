@@ -4,11 +4,11 @@ using ClassManager.Shared.Commands;
 
 namespace ClassManager.Domain.Contexts.Classes.Handlers;
 
-public class ListStudentsByClass
+public class ListStudentsByClassHandler
 {
   private readonly IClassRepository _classRepository;
   private readonly IStudentsClassesRepository _studentsClassesRepository;
-  public ListStudentsByClass(
+  public ListStudentsByClassHandler(
     IClassRepository classRepository,
     IStudentsClassesRepository studentsClassesRepository
     )
@@ -27,6 +27,6 @@ public class ListStudentsByClass
 
     var students = await _studentsClassesRepository.ListByClassId(classId);
 
-    return new CommandResult(true, "CLASSES_LISTED", students, null, 200);
+    return new CommandResult(true, "STUDENTS_LISTED", students, null, 200);
   }
 }

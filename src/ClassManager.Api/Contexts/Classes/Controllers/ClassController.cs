@@ -77,6 +77,40 @@ public class ClassController : MainController
     return Results.Ok(result);
   }
 
+  [HttpGet("{id}/students")]
+  public async Task<IResult> ListStudents(
+    [FromRoute] Guid tenantId,
+    [FromRoute] Guid id,
+    [FromServices] ListStudentsByClassHandler handler
+  )
+  {
+    var result = await handler.Handle(tenantId, id);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
+  [HttpGet("{id}/teachers")]
+  public async Task<IResult> ListTeachers(
+    [FromRoute] Guid tenantId,
+    [FromRoute] Guid id,
+    [FromServices] ListTeachersByClassHandler handler
+  )
+  {
+    var result = await handler.Handle(tenantId, id);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
   [HttpPut]
   [Route("{id}")]
   public async Task<IResult> Update(
