@@ -40,7 +40,7 @@ public class AddTeachersClassesandle
 
     var teacherclassalreadyExists = await _teachersClassesRepository.GetByUserIdAndClassId(command.ClassId, command.UserId);
 
-    if (!(teacherclassalreadyExists is null))
+    if (teacherclassalreadyExists is not null)
     {
       return new CommandResult(false, "TEACHER_ALREADY_ADDED", null, null, 409);
     }

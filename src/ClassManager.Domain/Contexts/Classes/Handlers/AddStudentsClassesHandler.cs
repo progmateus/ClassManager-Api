@@ -38,9 +38,9 @@ public class AddStudentsClassesHandler
       return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null, 404);
     }
 
-    var teacherclassalreadyExists = await _studentsClassesRepository.GetByUserIdAndClassId(command.ClassId, command.UserId);
+    var student_class = await _studentsClassesRepository.GetByUserIdAndClassId(command.ClassId, command.UserId);
 
-    if (!(teacherclassalreadyExists is null))
+    if (student_class is not null)
     {
       return new CommandResult(false, "STUDENT_ALREADY_ADDED", null, null, 409);
     }
