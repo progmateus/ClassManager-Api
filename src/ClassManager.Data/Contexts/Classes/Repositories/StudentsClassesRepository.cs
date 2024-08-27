@@ -31,8 +31,13 @@ public class StudentsClassesRepository : Repository<StudentsClasses>, IStudentsC
     return await DbSet.Include(x => x.Class).Where((sc) => sc.Class.TenantId == tenantId && sc.UserId == userId).ToListAsync();
   }
 
-  public async Task<List<StudentsClasses>> ListByClassId(Guid classId)
+  public async Task<List<StudentsClasses>> ListByClassId(Guid classId, Guid tenantId)
   {
-    return await DbSet.Include(x => x.User).Where((sc) => sc.ClassId == classId).ToListAsync();
+    return await DbSet
+    .Include(x => x.User)
+    .ThenInclude(
+      u => u.Subscriptions.Where(s => s.TenantId == tenantId)
+    )
+    .Where((sc) => sc.ClassId == classId).ToListAsync();
   }
 }

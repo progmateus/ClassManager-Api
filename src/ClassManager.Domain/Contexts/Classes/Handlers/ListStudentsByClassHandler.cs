@@ -25,7 +25,7 @@ public class ListStudentsByClassHandler
       return new CommandResult(false, "ERR_CLASS_NOT_FOUND", null, null, 404);
     }
 
-    var students = await _studentsClassesRepository.ListByClassId(classId);
+    var students = await _studentsClassesRepository.ListByClassId(classId, tenantId);
 
     return new CommandResult(true, "STUDENTS_LISTED", students, null, 200);
   }

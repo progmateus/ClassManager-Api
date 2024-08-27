@@ -25,7 +25,7 @@ public class ListTeachersByClassHandler
       return new CommandResult(false, "ERR_CLASS_NOT_FOUND", null, null, 404);
     }
 
-    var teachers = await _teachersClassesRepository.ListByClassId(classId);
+    var teachers = await _teachersClassesRepository.ListByClassId(classId, tenantId);
 
     return new CommandResult(true, "TEACHERS_LISTED", teachers, null, 200);
   }

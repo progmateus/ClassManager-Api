@@ -20,9 +20,13 @@ public class TeachersClassesRepository : Repository<TeachersClasses>, ITeacherCl
     return await DbSet.FirstOrDefaultAsync((tc) => tc.ClassId == classId && tc.UserId == userId);
   }
 
-  public async Task<List<TeachersClasses>> ListByClassId(Guid classId)
+  public async Task<List<TeachersClasses>> ListByClassId(Guid classId, Guid tenantId)
   {
-    return await DbSet.Include(x => x.User).Where((tc) => tc.ClassId == classId).ToListAsync();
+    return await DbSet.
+    Include(x => x.User)
+    .ThenInclude(
+      u => u.Subscriptions.Where(s => s.TenantId == tenantId)
+    ).Where((tc) => tc.ClassId == classId).ToListAsync();
   }
 
 

@@ -5,7 +5,7 @@ public interface IStudentsClassesRepository : IRepository<StudentsClasses>
 {
   Task<StudentsClasses> GetByUserIdAndClassId(Guid classId, Guid userId);
   Task<List<StudentsClasses>> GetByUserIdAndTenantId(Guid tenantId, Guid userId);
-  Task<List<StudentsClasses>> ListByClassId(Guid classId);
+  Task<List<StudentsClasses>> ListByClassId(Guid classId, Guid tenantId);
   int CountByClassId(Guid classId);
   Task DeleteByUserIdAndtenantId(Guid tenantId, Guid userId, CancellationToken cancellationToken);
 }
