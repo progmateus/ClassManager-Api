@@ -9,5 +9,5 @@ public interface IUsersRolesRepository : IRepository<UsersRoles>
   Task<List<UsersRoles>> ListUsersRolesByUserIdAndTenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken);
   Task<List<UsersRoles>> GetStudentsRolesByUserIdAndTenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken);
   Task<bool> VerifyRoleExistsAsync(Guid userId, Guid tenantId, string roleName, CancellationToken cancellationToken);
-  Task<List<UsersRoles>> ListByRoleAsync(Guid tenantId, string roleName);
+  Task<List<UsersRoles>> ListByRoleAsync(Guid tenantId, List<string> rolesNames, List<Guid> usersIds);
 }

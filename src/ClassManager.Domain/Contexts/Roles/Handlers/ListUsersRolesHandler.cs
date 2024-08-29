@@ -10,13 +10,13 @@ using Flunt.Notifications;
 
 namespace ClassManager.Domain.Contexts.Roles.Handlers;
 
-public class ListUsersRolesHandler : Notifiable,
+public class GetUserRolesHandler : Notifiable,
   IHandler<UsersRolesCommand>
 {
   private IUserRepository _userRepository;
   private ITenantRepository _tenantRepository;
   private IUsersRolesRepository _usersRolesRepository;
-  public ListUsersRolesHandler(IUserRepository userRepository, ITenantRepository tenantRepository, IUsersRolesRepository usersRolesRepository)
+  public GetUserRolesHandler(IUserRepository userRepository, ITenantRepository tenantRepository, IUsersRolesRepository usersRolesRepository)
   {
     _userRepository = userRepository;
     _tenantRepository = tenantRepository;

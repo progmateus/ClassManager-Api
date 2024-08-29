@@ -5,18 +5,18 @@ using ClassManager.Shared.Commands;
 
 namespace ClassManager.Domain.Contexts.Accounts.Handlers;
 
-public class ListUsersByRoleHandler
+public class ListUsersRolesHandler
 {
   private readonly IUsersRolesRepository _usersRolesRepository;
-  public ListUsersByRoleHandler(
+  public ListUsersRolesHandler(
     IUsersRolesRepository userRepository
     )
   {
     _usersRolesRepository = userRepository;
   }
-  public async Task<ICommandResult> Handle(Guid tenantId, string roleName)
+  public async Task<ICommandResult> Handle(Guid tenantId, List<string> rolesNames, List<Guid> usersIds)
   {
-    var users = await _usersRolesRepository.ListByRoleAsync(tenantId, roleName);
+    var users = await _usersRolesRepository.ListByRoleAsync(tenantId, rolesNames, usersIds);
 
     return new CommandResult(true, "USERS_ROLES_LISTED", users, null, 200);
   }

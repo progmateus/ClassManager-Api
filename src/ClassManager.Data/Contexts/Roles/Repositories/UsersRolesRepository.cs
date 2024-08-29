@@ -3,6 +3,7 @@ using ClassManager.Data.Data;
 using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace classManager.Data.Contexts.Roles.Repositories;
 
@@ -20,9 +21,9 @@ public class UsersRolesRepository : Repository<UsersRoles>, IUsersRolesRepositor
     return await DbSet.Include(x => x.Role).Where(x => x.UserId == userId && x.TenantId == tenantId && x.Role.Name == "student").ToListAsync(cancellationToken);
   }
 
-  public async Task<List<UsersRoles>> ListByRoleAsync(Guid tenantId, string roleName)
+  public async Task<List<UsersRoles>> ListByRoleAsync(Guid tenantId, List<string> rolesNames, List<Guid> usersIds)
   {
-    return await DbSet.Include(x => x.User).Where(x => x.Role.Name == roleName && x.TenantId == tenantId).ToListAsync();
+    return await DbSet.Include(x => x.User).Where(x => x.TenantId == tenantId && (rolesNames.IsNullOrEmpty() || rolesNames.Contains(x.Role.Name) && (usersIds.IsNullOrEmpty() || usersIds.Contains(x.UserId)))).ToListAsync();
   }
 
   public async Task<List<UsersRoles>> ListUsersRolesByUserIdAndTenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken)

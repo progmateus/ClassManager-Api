@@ -27,10 +27,10 @@ public class UsersrolesController : MainController
   }
 
 
-  [HttpGet("users-roles")]
-  public async Task<IResult> List(
+  /* [HttpGet("users-roles")]
+  public async Task<IResult> GetUserRoles(
       [FromQuery] UsersRolesCommand command,
-      [FromServices] ListUsersRolesHandler handler
+      [FromServices] GetUserRolesHandler handler
   )
   {
     var result = await handler.Handle(command);
@@ -41,17 +41,18 @@ public class UsersrolesController : MainController
       return Results.Json(result, statusCode: 500);
 
     return Results.Ok(result);
-  }
+  } */
 
 
-  [HttpGet("{tenantId}/users-roles/users")]
-  public async Task<IResult> ListUsers(
+  [HttpGet("{tenantId}/users-roles")]
+  public async Task<IResult> ListUsersRoles(
       [FromRoute] Guid tenantId,
-      [FromQuery] string roleName,
-      [FromServices] ListUsersByRoleHandler handler
+      [FromQuery] List<string> rolesNames,
+      [FromQuery] List<Guid> usersIds,
+      [FromServices] ListUsersRolesHandler handler
   )
   {
-    var result = await handler.Handle(tenantId, roleName);
+    var result = await handler.Handle(tenantId, rolesNames, usersIds);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
