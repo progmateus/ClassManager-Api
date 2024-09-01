@@ -3,7 +3,7 @@ using ClassManager.Domain.Contexts.Roles.Entities;
 namespace ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 
 
-public interface IUsersRolesRepository : IRepository<UsersRoles>
+public interface IUsersRolesRepository : ITRepository<UsersRoles>
 {
   Task DeleteByUserIdAndtenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken);
   Task<List<UsersRoles>> ListUsersRolesByUserIdAndTenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken);

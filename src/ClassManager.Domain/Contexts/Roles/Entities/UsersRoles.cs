@@ -4,7 +4,7 @@ using ClassManager.Domain.Shared.Entities;
 
 namespace ClassManager.Domain.Contexts.Roles.Entities;
 
-public class UsersRoles : Entity
+public class UsersRoles : TenantEntity
 {
   protected UsersRoles() { }
 
@@ -17,7 +17,6 @@ public class UsersRoles : Entity
 
   public Guid UserId { get; private set; }
   public Guid RoleId { get; private set; }
-  public Guid TenantId { get; private set; }
   public User User { get; private set; }
   public Role Role { get; private set; }
   public Tenant Tenant { get; private set; }

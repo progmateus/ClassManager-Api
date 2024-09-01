@@ -7,7 +7,7 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace classManager.Data.Contexts.Roles.Repositories;
 
-public class UsersRolesRepository : Repository<UsersRoles>, IUsersRolesRepository
+public class UsersRolesRepository : TRepository<UsersRoles>, IUsersRolesRepository
 {
   public UsersRolesRepository(AppDbContext context) : base(context) { }
   public async Task DeleteByUserIdAndtenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken)

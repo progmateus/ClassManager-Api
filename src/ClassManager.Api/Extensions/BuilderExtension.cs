@@ -186,6 +186,7 @@ public static class BuilderExtension
     builder.Services.AddTransient<UpdateUsersRolesHandler>();
     builder.Services.AddTransient<GetUserRolesHandler>();
     builder.Services.AddTransient<ListUsersRolesHandler>();
+    builder.Services.AddTransient<DeleteUserRoleHandler>();
 
 
     builder.Services.AddTransient<CreateTenantPlanHandler>();

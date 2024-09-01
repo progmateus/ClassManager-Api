@@ -1,0 +1,81 @@
+using System.Linq.Expressions;
+using ClassManager.Domain.Shared.Entities;
+using Microsoft.EntityFrameworkCore;
+
+namespace ClassManager.Data.Contexts.shared.Repositories;
+
+public abstract class TRepository<TEntity> : ITRepository<TEntity> where TEntity : TenantEntity
+{
+
+  protected readonly DbContext DbContext;
+  protected readonly DbSet<TEntity> DbSet;
+
+  protected TRepository(DbContext dbContext)
+  {
+    DbContext = dbContext;
+    DbSet = DbContext.Set<TEntity>();
+  }
+  public async virtual Task CreateAsync(TEntity entity, CancellationToken cancellationToken)
+  {
+    DbSet.Add(entity);
+    await SaveChangesAsync(cancellationToken);
+  }
+
+  public async virtual Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken)
+  {
+    return await DbSet.ToListAsync(cancellationToken);
+  }
+
+  public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken)
+  {
+    return await DbSet.AsNoTracking().Where(predicate).ToListAsync(cancellationToken);
+  }
+
+  public async Task<TEntity?> GetByIdAsync(Guid id, Guid tenantId, CancellationToken cancellationToken)
+  {
+    return await DbSet.FirstOrDefaultAsync(x => x.Id == id && x.TenantId == tenantId, cancellationToken);
+  }
+
+  public async virtual Task UpdateAsync(TEntity entity, CancellationToken cancellationToken)
+  {
+    DbSet.Update(entity);
+    await SaveChangesAsync(cancellationToken);
+  }
+
+  public virtual async Task DeleteAsync(Guid id, Guid tenantId, CancellationToken cancellationToken)
+  {
+    var user = await DbSet.FirstOrDefaultAsync(x => x.Id == id && x.TenantId == tenantId, cancellationToken);
+    if (user != null)
+    {
+      DbSet.Remove(user);
+      await SaveChangesAsync(cancellationToken);
+    }
+  }
+
+  public async Task<int> SaveChangesAsync(CancellationToken cancellationToken)
+  {
+    return await DbContext.SaveChangesAsync(cancellationToken);
+  }
+
+  public async Task<bool> IdExistsAsync(Guid id, Guid tenantId, CancellationToken cancellationToken)
+  {
+    return await DbSet.AsNoTracking().AnyAsync(x => x.Id == id && x.TenantId == tenantId, cancellationToken);
+  }
+
+  public async Task<List<TEntity>> GetByIdsAsync(List<Guid> ids, Guid tenantId, CancellationToken cancellationToken)
+  {
+    return await DbSet.Where(x => ids.Contains(x.Id) && x.TenantId == tenantId).ToListAsync(cancellationToken);
+  }
+
+  public async Task CreateRangeAsync(List<TEntity> entities, CancellationToken cancellationToken)
+  {
+    DbSet.AddRange(entities);
+    await SaveChangesAsync(cancellationToken);
+  }
+
+  public async Task DeleteRangeAsync(List<TEntity> entities, CancellationToken cancellationToken)
+  {
+    DbSet.RemoveRange(entities);
+    await SaveChangesAsync(cancellationToken);
+  }
+}

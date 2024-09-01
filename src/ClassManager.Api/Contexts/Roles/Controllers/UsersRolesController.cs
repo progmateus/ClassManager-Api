@@ -27,23 +27,6 @@ public class UsersrolesController : MainController
   }
 
 
-  /* [HttpGet("users-roles")]
-  public async Task<IResult> GetUserRoles(
-      [FromQuery] UsersRolesCommand command,
-      [FromServices] GetUserRolesHandler handler
-  )
-  {
-    var result = await handler.Handle(command);
-    if (!result.IsSuccess)
-      return Results.Json(result, statusCode: result.Status);
-
-    if (result.Data is null)
-      return Results.Json(result, statusCode: 500);
-
-    return Results.Ok(result);
-  } */
-
-
   [HttpGet("{tenantId}/users-roles")]
   public async Task<IResult> ListUsersRoles(
       [FromRoute] Guid tenantId,
@@ -53,6 +36,24 @@ public class UsersrolesController : MainController
   )
   {
     var result = await handler.Handle(tenantId, rolesNames, usersIds);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
+
+  [HttpDelete("{tenantId}/users-roles/{id}")]
+  public async Task<IResult> Delete(
+      [FromRoute] Guid tenantId,
+      [FromRoute] Guid id,
+      [FromServices] DeleteUserRoleHandler handler
+  )
+  {
+    var result = await handler.Handle(tenantId, id);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
