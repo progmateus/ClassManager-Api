@@ -91,4 +91,21 @@ public class UserController : MainController
 
     return Results.Ok(result);
   }
+
+  [Authorize]
+  [HttpGet("username")]
+  public async Task<IResult> GetByUsername(
+    [FromServices] GetUserByUsernameHandler handler,
+    [FromQuery] string username
+  )
+  {
+    var result = await handler.Handle(username);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    /* if (result.Data is null)
+      return Results.Json(result, statusCode: 500); */
+
+    return Results.Ok(result);
+  }
 }
