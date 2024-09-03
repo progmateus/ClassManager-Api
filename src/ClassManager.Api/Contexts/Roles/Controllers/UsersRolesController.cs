@@ -10,8 +10,27 @@ namespace ClassManager.Api.Contexts.Roles.Controllers;
 [Authorize]
 public class UsersrolesController : MainController
 {
-  [HttpPost("users-roles")]
+
+  [HttpPost("{tenantId}/users-roles")]
   public async Task<IResult> Create(
+    [FromRoute] Guid tenantId,
+    [FromBody] Guid userId,
+    [FromBody] string roleName,
+    [FromServices] CreateUserRoleHandler handler
+)
+  {
+    var result = await handler.Handle(tenantId, userId, roleName);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
+  [HttpPut("users-roles")]
+  public async Task<IResult> Update(
       [FromBody] UsersRolesCommand command,
       [FromServices] UpdateUsersRolesHandler handler
   )
