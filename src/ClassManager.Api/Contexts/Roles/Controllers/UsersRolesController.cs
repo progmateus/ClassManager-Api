@@ -15,7 +15,6 @@ public class UsersrolesController : MainController
   public async Task<IResult> Create(
     [FromRoute] Guid tenantId,
     [FromBody] CreateUserRoleCommand command,
-    [FromBody] string roleName,
     [FromServices] CreateUserRoleHandler handler
 )
   {
