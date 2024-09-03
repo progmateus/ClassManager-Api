@@ -14,12 +14,12 @@ public class UsersrolesController : MainController
   [HttpPost("{tenantId}/users-roles")]
   public async Task<IResult> Create(
     [FromRoute] Guid tenantId,
-    [FromBody] Guid userId,
+    [FromBody] CreateUserRoleCommand command,
     [FromBody] string roleName,
     [FromServices] CreateUserRoleHandler handler
 )
   {
-    var result = await handler.Handle(tenantId, userId, roleName);
+    var result = await handler.Handle(command, tenantId);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 

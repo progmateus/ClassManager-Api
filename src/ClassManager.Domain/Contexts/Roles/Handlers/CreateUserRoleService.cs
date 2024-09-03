@@ -5,11 +5,13 @@ using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;
+using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
 
 namespace ClassManager.Domain.Contexts.Roles.Handlers;
 
-public class CreateUserRoleHandler : Notifiable
+public class CreateUserRoleHandler : Notifiable,
+  ITenantHandler<CreateUserRoleCommand>
 {
   private IRoleRepository _roleRepository;
   private IUserRepository _userRepository;
@@ -22,9 +24,9 @@ public class CreateUserRoleHandler : Notifiable
     _tenantRepository = tenantRepository;
     _usersRolesRepository = usersRolesRepository;
   }
-  public async Task<ICommandResult> Handle(Guid tenantId, Guid userId, string roleName)
+  public async Task<ICommandResult> Handle(Guid tenantId, CreateUserRoleCommand command)
   {
-    var roleFound = await _roleRepository.GetByNameAsync(roleName, new CancellationToken());
+    var roleFound = await _roleRepository.GetByNameAsync(command.RoleName, new CancellationToken());
 
     if (roleFound is null)
     {
@@ -38,14 +40,14 @@ public class CreateUserRoleHandler : Notifiable
       return new CommandResult(false, "ERR_TENANT_NOT_EXISTS", null, null, 404);
     }
 
-    var userExists = await _userRepository.IdExistsAsync(userId, new CancellationToken());
+    var userExists = await _userRepository.IdExistsAsync(command.UserId, new CancellationToken());
 
     if (!userExists)
     {
       return new CommandResult(false, "ERR_USER_NOT_EXISTS", null, null, 404);
     }
 
-    var userRoleAlreadyExists = await _usersRolesRepository.VerifyRoleExistsAsync(userId, tenantId, roleName, new CancellationToken());
+    var userRoleAlreadyExists = await _usersRolesRepository.VerifyRoleExistsAsync(command.UserId, tenantId, command.RoleName, new CancellationToken());
 
 
     if (userRoleAlreadyExists)
@@ -53,7 +55,7 @@ public class CreateUserRoleHandler : Notifiable
       return new CommandResult(false, "ERR_USER_ROLE_ALREADY_EXISTS", null, null, 404);
     }
 
-    var userRole = new UsersRoles(userId, roleFound.Id, tenantId);
+    var userRole = new UsersRoles(command.UserId, roleFound.Id, tenantId);
 
     await _usersRolesRepository.CreateAsync(userRole, new CancellationToken());
 
