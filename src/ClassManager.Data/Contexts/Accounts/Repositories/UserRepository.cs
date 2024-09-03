@@ -35,11 +35,24 @@ public class UserRepository : Repository<User>, IUserRepository
     .FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
   }
 
-  public async Task<User?> GetByUsername(string username, CancellationToken cancellationToken)
+  public async Task<User?> GetByUsernameAsync(string username, CancellationToken cancellationToken)
   {
     return await DbSet
     .AsNoTracking()
-    .FirstOrDefaultAsync(x => x.Email.Address.Contains(username), cancellationToken);
+    .FirstOrDefaultAsync(x => x.Username == username, cancellationToken);
+  }
+
+  public async Task<List<User>> GetLikeAsync(string search, CancellationToken cancellationToken)
+  {
+    return await DbSet
+    .AsNoTracking()
+    .Where(x => x.Username.Contains(search) || x.Name.FirstName.Contains(search) || x.Name.LastName.Contains(search))
+    .ToListAsync(cancellationToken);
+  }
+
+  public async Task<bool> UsernameAlreadyExistsAsync(string username, CancellationToken cancellationToken)
+  {
+    return await DbSet.AsNoTracking().AnyAsync(x => x.Username == username.ToLower(), cancellationToken);
   }
 
   public async Task<User?> VerifyUserRoleAsync(Guid userId, Guid tenantId, string roleName, CancellationToken cancellationToken)

@@ -50,6 +50,13 @@ public class CreateUserHandler :
       AddNotification("Email", "ERR_EMAIL_ALREADY_EXISTS");
     }
 
+    // verificar se o nome de usuário existe
+
+    if (await _userReporitory.UsernameAlreadyExistsAsync(command.Username, new CancellationToken()))
+    {
+      AddNotification("Email", "ERR_USERNAME_ALREADY_EXISTS");
+    }
+
     // gerar vOS
     var name = new Name(command.FirstName, command.LastName);
     var document = new Document(command.Document, EDocumentType.CPF);
@@ -57,7 +64,7 @@ public class CreateUserHandler :
     var password = new Password(command.Password);
 
     // gerar as entidades
-    var user = new User(name, document, email, password, command.Avatar);
+    var user = new User(name, document, email, password, command.Username, command.Avatar);
 
     // agrupar validações
 

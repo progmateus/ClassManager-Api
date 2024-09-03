@@ -9,6 +9,8 @@ namespace ClassManager.Domain.Contexts.Accounts.Repositories.Contracts
     Task<User?> GetByEmailAsync(string email, CancellationToken cancellationToken);
     Task<User?> VerifyUserRoleAsync(Guid userId, Guid tenantId, string roleName, CancellationToken cancellationToken);
     Task<User?> GetByIdWithIncludeAsync(Guid userId, CancellationToken cancellationToken);
-    Task<User?> GetByUsername(string username, CancellationToken cancellationToken);
+    Task<User?> GetByUsernameAsync(string username, CancellationToken cancellationToken);
+    Task<bool> UsernameAlreadyExistsAsync(string username, CancellationToken cancellationToken);
+    Task<List<User>> GetLikeAsync(string search, CancellationToken cancellationToken);
   }
 }

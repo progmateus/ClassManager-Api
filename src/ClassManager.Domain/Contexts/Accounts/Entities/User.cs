@@ -17,12 +17,13 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
 
     }
 
-    public User(Name name, Document document, Email email, Password password, string? avatar = null)
+    public User(Name name, Document document, Email email, Password password, string username, string? avatar = null)
     {
       Name = name;
       Document = document;
       Email = email;
       Password = password;
+      Username = username;
       Avatar = avatar;
       CreatedAt = DateTime.UtcNow;
       UpdatedAt = DateTime.UtcNow;
@@ -34,6 +35,7 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     public Document Document { get; private set; }
     public Password Password { get; private set; }
     public Email Email { get; private set; }
+    public string Username { get; private set; }
     public string? Avatar { get; private set; } = string.Empty;
     public EUserStatus Status { get; private set; } = EUserStatus.ACTIVE;
     public EUserType Type { get; private set; } = EUserType.NORMAL;

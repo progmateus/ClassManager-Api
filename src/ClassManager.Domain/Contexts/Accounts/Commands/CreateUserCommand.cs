@@ -9,6 +9,7 @@ namespace ClassManager.Domain.Contexts.Accounts.Commands
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
     public string Document { get; set; } = null!;
+    public string Username { get; set; } = null!;
     public string Email { get; set; } = null!;
     public string Password { get; set; } = null!;
     public string? Avatar { get; set; }
@@ -19,6 +20,7 @@ namespace ClassManager.Domain.Contexts.Accounts.Commands
       .Requires()
       .HasMinLen(FirstName, 3, "CreateUserCommand.FirstName", "FirstName min 3 characters")
       .HasMaxLen(FirstName, 40, "CreateUserCommand.FirstName", "FirstName max 40 characters")
+      .Matchs(Username, "^(?!.*\\.\\.)(?!.*\\.$)[^\\W][\\w.]{0,29}$", "CreateUserCommand.Username", "Invalid username")
     );
     }
   }
