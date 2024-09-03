@@ -35,6 +35,13 @@ public class UserRepository : Repository<User>, IUserRepository
     .FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
   }
 
+  public async Task<User?> GetByUsername(string username, CancellationToken cancellationToken)
+  {
+    return await DbSet
+    .AsNoTracking()
+    .FirstOrDefaultAsync(x => x.Email.Address.Contains(username), cancellationToken);
+  }
+
   public async Task<User?> VerifyUserRoleAsync(Guid userId, Guid tenantId, string roleName, CancellationToken cancellationToken)
   {
     return await DbSet
