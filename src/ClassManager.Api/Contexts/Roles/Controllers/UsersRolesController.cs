@@ -19,7 +19,7 @@ public class UsersrolesController : MainController
     [FromServices] CreateUserRoleHandler handler
 )
   {
-    var result = await handler.Handle(command, tenantId);
+    var result = await handler.Handle(tenantId, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
