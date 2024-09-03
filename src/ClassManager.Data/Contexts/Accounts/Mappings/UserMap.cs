@@ -94,5 +94,11 @@ public class UserMap : IEntityTypeConfiguration<User>
             .Property(x => x.ResetCode)
             .HasColumnName("PasswordResetCode")
             .IsRequired();
+
+        builder.Property(x => x.Username)
+        .HasColumnName("Username")
+        .HasColumnType("VARCHAR")
+        .HasMaxLength(29)
+        .IsRequired();
     }
 }
