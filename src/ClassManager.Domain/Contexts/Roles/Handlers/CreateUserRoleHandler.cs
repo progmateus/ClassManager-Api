@@ -59,6 +59,8 @@ public class CreateUserRoleHandler : Notifiable,
 
     await _usersRolesRepository.CreateAsync(userRole, new CancellationToken());
 
-    return new CommandResult(false, "ROLE_CREATED", null, null, 201);
+    var userRoleCreated = await _usersRolesRepository.FindByIdWithInclude(userRole.Id, tenantId);
+
+    return new CommandResult(false, "ROLE_CREATED", userRoleCreated, null, 201);
   }
 }

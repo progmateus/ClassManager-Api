@@ -16,6 +16,11 @@ public class UsersRolesRepository : TRepository<UsersRoles>, IUsersRolesReposito
     await SaveChangesAsync(cancellationToken);
   }
 
+  public async Task<UsersRoles?> FindByIdWithInclude(Guid id, Guid tenantId)
+  {
+    return await DbSet.Include(x => x.Role).Include(x => x.User).FirstOrDefaultAsync(x => x.Id == id && x.TenantId == tenantId);
+  }
+
   public async Task<List<UsersRoles>> GetStudentsRolesByUserIdAndTenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken)
   {
     return await DbSet.Include(x => x.Role).Where(x => x.UserId == userId && x.TenantId == tenantId && x.Role.Name == "student").ToListAsync(cancellationToken);

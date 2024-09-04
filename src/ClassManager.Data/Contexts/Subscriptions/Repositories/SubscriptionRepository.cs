@@ -11,9 +11,15 @@ public class SubscriptionRepository : Repository<Subscription>, ISubscriptionRep
 {
   public SubscriptionRepository(AppDbContext context) : base(context) { }
 
-  public async Task<List<Subscription>> ListByTenantIdAsync(Guid tenantId, CancellationToken cancellationToken)
+  public Task<List<IGrouping<Guid, Subscription>>> ListByTenantIdAsync(Guid tenantId, CancellationToken cancellationToken)
   {
-    return await DbSet.Where(x => x.TenantPlan.TenantId == tenantId).ToListAsync();
+
+    return DbSet
+    .Where(x => x.TenantId == tenantId)
+    .OrderBy(x => x.CreatedAt)
+    .GroupBy(x => x.UserId)
+    .ToListAsync();
+    ;
   }
 
   public async Task<Subscription> GetByUserIdAndTenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken)
