@@ -7,13 +7,13 @@ using ClassManager.Shared.Commands;
 
 namespace ClassManager.Domain.Contexts.Classes.Handlers;
 
-public class AddStudentsClassesHandler
+public class UpdateStudentClassHandler
 {
   private readonly IClassRepository _classRepository;
   private readonly IUserRepository _userRepository;
   private readonly IStudentsClassesRepository _studentsClassesRepository;
 
-  public AddStudentsClassesHandler(
+  public UpdateStudentClassHandler(
     IClassRepository classRepository,
     IUserRepository userRepository,
     IStudentsClassesRepository studentsClassesRepository
@@ -44,6 +44,10 @@ public class AddStudentsClassesHandler
     {
       return new CommandResult(false, "STUDENT_ALREADY_ADDED", null, null, 409);
     }
+
+    var userAlreadyOnClass = await _studentsClassesRepository.GetByUserIdAndTenantId(tenantId, command.UserId);
+
+    await _studentsClassesRepository.DeleteRangeAsync(userAlreadyOnClass, new CancellationToken());
 
     var studentClass = new StudentsClasses(command.UserId, command.ClassId);
 

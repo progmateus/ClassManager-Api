@@ -10,11 +10,11 @@ namespace ClassManager.Api.Contexts.Classes.Controllers;
 public class TeachersClassesController : MainController
 {
 
-  [HttpPost]
+  [HttpPut]
   public async Task<IResult> AddTeacher(
   [FromRoute] Guid tenantId,
   [FromBody] CreateUserClassCommand command,
-  [FromServices] AddTeachersClassesandle handler
+  [FromServices] UpdateTeacherClassHandler handler
 )
   {
     var result = await handler.Handle(tenantId, command);
