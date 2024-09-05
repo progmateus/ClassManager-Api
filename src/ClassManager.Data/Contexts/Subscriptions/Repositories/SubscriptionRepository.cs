@@ -16,6 +16,7 @@ public class SubscriptionRepository : Repository<Subscription>, ISubscriptionRep
 
     return await DbSet
     .Include(x => x.User)
+    .Include(x => x.TenantPlan)
     .Include(x => x.Tenant)
     .Where(x => x.TenantId == tenantId)
     .GroupBy(x => x.UserId)
