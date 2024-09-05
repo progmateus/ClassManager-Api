@@ -28,7 +28,7 @@ public class UpdateSubscriptionHandler : Notifiable,
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_CREATED", null, command.Notifications);
     }
 
-    var subscription = await _subscriptionRepository.GetByIdAsync(subscriptionId, new CancellationToken());
+    var subscription = await _subscriptionRepository.GetByIdAsync(subscriptionId, tenantId, new CancellationToken());
 
     if (subscription is null)
     {

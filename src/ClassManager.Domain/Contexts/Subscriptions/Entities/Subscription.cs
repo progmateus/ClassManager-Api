@@ -4,7 +4,7 @@ using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Shared.Entities;
 
 namespace ClassManager.Domain.Contexts.Subscriptions.Entities;
-public class Subscription : Entity
+public class Subscription : TenantEntity
 {
   protected Subscription() { }
   public Subscription(Guid userId, Guid planId, Guid tenantId, DateTime expiresDate)

@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace classManager.Data.Contexts.Subscriptions.Repositories;
 
-public class SubscriptionRepository : Repository<Subscription>, ISubscriptionRepository
+public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRepository
 {
   public SubscriptionRepository(AppDbContext context) : base(context) { }
 
@@ -17,7 +17,6 @@ public class SubscriptionRepository : Repository<Subscription>, ISubscriptionRep
     return await DbSet
     .Include(x => x.User)
     .Include(x => x.TenantPlan)
-    .Include(x => x.Tenant)
     .Where(x => x.TenantId == tenantId)
     .GroupBy(x => x.UserId)
     .Select(x => new
@@ -36,4 +35,14 @@ public class SubscriptionRepository : Repository<Subscription>, ISubscriptionRep
     return await DbSet.Include(x => x.TenantPlan).AsNoTracking().AnyAsync(x => x.TenantPlan.TenantId == tenantId && x.UserId == userId && x.Status == ESubscriptionStatus.ACTIVE, cancellationToken);
   }
 
+  public async Task<Subscription?> GetSubscriptionProfileAsync(Guid id, Guid tenantId, CancellationToken cancellationToken)
+  {
+    return await DbSet
+    .Include(x => x.TenantPlan)
+    .Include(x => x.Tenant)
+    .Include(x => x.User)
+    .ThenInclude(u => u.Classes.Where(x => x.TenantId == tenantId))
+    .AsNoTracking()
+    .FirstOrDefaultAsync(x => x.Id == id && x.TenantId == tenantId);
+  }
 }
