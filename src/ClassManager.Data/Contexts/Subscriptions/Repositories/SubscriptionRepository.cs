@@ -41,7 +41,8 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     .Include(x => x.TenantPlan)
     .Include(x => x.Tenant)
     .Include(x => x.User)
-    .ThenInclude(u => u.Classes.Where(x => x.TenantId == tenantId))
+    .ThenInclude(u => u.StudentsClasses.Where(sc => sc.Class.TenantId == tenantId))
+    .ThenInclude(sc => sc.Class)
     .AsNoTracking()
     .FirstOrDefaultAsync(x => x.Id == id && x.TenantId == tenantId);
   }
