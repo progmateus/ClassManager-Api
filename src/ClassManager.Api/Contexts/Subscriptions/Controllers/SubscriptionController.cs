@@ -47,7 +47,7 @@ public class TenantController : MainController
     return Results.Ok(result);
   }
 
-  [HttpGet("${id}")]
+  [HttpGet("{id}")]
   public async Task<IResult> List(
     [FromRoute] Guid tenantId,
     [FromRoute] Guid id,

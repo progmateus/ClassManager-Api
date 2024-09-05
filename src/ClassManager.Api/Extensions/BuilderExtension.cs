@@ -217,6 +217,7 @@ public static class BuilderExtension
     builder.Services.AddTransient<UpdateSubscriptionHandler>();
     builder.Services.AddTransient<ListSubscriptionsHandler>();
     builder.Services.AddTransient<DeleteSubscriptionHandler>();
+    builder.Services.AddTransient<GetSubscriptionhandler>();
 
 
     builder.Services.AddTransient<CreateClassDayHandler>();
