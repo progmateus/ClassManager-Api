@@ -61,7 +61,7 @@ public class DeleteBookingHandler : Notifiable
       return new CommandResult(false, "ERR_STUDENT_ROLE_NOT_FOUND", null, 404);
     }
 
-    var subscription = await _subscriptionRepository.GetByUserIdAndTenantId(userId, tenantId, new CancellationToken());
+    var subscription = await _subscriptionRepository.GetLatestSubscription(tenantId, userId, new CancellationToken());
 
     if (subscription is null)
     {

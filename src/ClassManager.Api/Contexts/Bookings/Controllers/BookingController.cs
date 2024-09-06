@@ -55,12 +55,12 @@ public class BookingController : MainController
   public async Task<IResult> Delete(
       [FromRoute] Guid tenantId,
       [FromRoute] Guid bookingId,
-      [FromBody] Guid userId,
+      [FromBody] DeleteBookingCommand command,
       [FromServices] DeleteBookingHandler handler
     )
   {
-    userId = new Guid(User.FindFirst("Id")?.Value);
-    var result = await handler.Handle(tenantId, bookingId, userId);
+    command.UserId = new Guid(User.FindFirst("Id")?.Value);
+    var result = await handler.Handle(tenantId, bookingId, command.UserId);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
