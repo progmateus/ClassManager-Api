@@ -39,7 +39,7 @@ public class DeleteBookingHandler : Notifiable
 
     if (tenant is null)
     {
-      return new CommandResult(false, "ERR_TENANT_DAY_NOT_FOUND", null, 404);
+      return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, 404);
     }
 
     if (tenant.Status != ETenantStatus.ACTIVE)
@@ -85,7 +85,7 @@ public class DeleteBookingHandler : Notifiable
       return new CommandResult(false, "ERR_CLASS_DAY_ALREADY_CONCLUDED", null, null, 403);
     }
 
-    await _bookingRepository.DeleteAsync(booking.Id, new CancellationToken());
+    await _bookingRepository.DeleteAsync(booking.Id, tenantId, new CancellationToken());
 
     return new CommandResult(true, "BOOKING_DELETED", "", null, 201);
   }

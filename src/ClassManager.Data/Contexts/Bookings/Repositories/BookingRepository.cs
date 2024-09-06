@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ClassManager.Data.Contexts.Bookings.Repositories;
 
 
-public class BookingRepository : Repository<Booking>, IBookingRepository
+public class BookingRepository : TRepository<Booking>, IBookingRepository
 {
   public BookingRepository(AppDbContext dbContext) : base(dbContext) { }
 
@@ -19,5 +19,14 @@ public class BookingRepository : Repository<Booking>, IBookingRepository
   public async Task<Booking?> GetWithInclude(Guid userId, Guid bookingId)
   {
     return await DbSet.Include(x => x.ClassDay).Include(x => x.User).FirstOrDefaultAsync(x => x.UserId == userId && x.Id == bookingId);
+  }
+
+  public async Task<List<Booking>> ListByUserIdAndTenantId(Guid tenantId, Guid userId)
+  {
+    return await DbSet
+    .Include(x => x.ClassDay)
+    .ThenInclude(x => x.Class)
+    .Where(x => x.UserId == userId && x.TenantId == tenantId)
+    .ToListAsync();
   }
 }
