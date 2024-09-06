@@ -46,4 +46,14 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     .AsNoTracking()
     .FirstOrDefaultAsync(x => x.Id == id && x.TenantId == tenantId);
   }
+
+  public async Task<Subscription?> GetLatestSubscription(Guid tenantId, Guid userId, CancellationToken cancellationToken)
+  {
+    return await DbSet
+  .Include(x => x.TenantPlan)
+  .AsNoTracking()
+  .Where(x => x.UserId == userId && x.TenantId == tenantId)
+  .OrderByDescending(x => x.CreatedAt)
+  .FirstAsync();
+  }
 }

@@ -10,4 +10,5 @@ public interface ISubscriptionRepository : ITRepository<Subscription>
   Task<Subscription> GetByUserIdAndTenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken);
   Task<bool> HasActiveSubscription(Guid userId, Guid tenantId, CancellationToken cancellationToken);
   Task<Subscription?> GetSubscriptionProfileAsync(Guid id, Guid tenantId, CancellationToken cancellationToken);
+  Task<Subscription?> GetLatestSubscription(Guid tenantId, Guid userId, CancellationToken cancellationToken);
 }
