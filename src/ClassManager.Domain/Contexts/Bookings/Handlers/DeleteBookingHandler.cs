@@ -85,7 +85,7 @@ public class DeleteBookingHandler : Notifiable
       return new CommandResult(false, "ERR_CLASS_DAY_ALREADY_CONCLUDED", null, null, 403);
     }
 
-    await _bookingRepository.DeleteAsync(booking.Id, tenantId, new CancellationToken());
+    await _bookingRepository.DeleteAsync(booking.Id, new CancellationToken());
 
     return new CommandResult(true, "BOOKING_DELETED", "", null, 201);
   }

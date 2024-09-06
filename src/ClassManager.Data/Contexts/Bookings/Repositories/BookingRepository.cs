@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 namespace ClassManager.Data.Contexts.Bookings.Repositories;
 
 
-public class BookingRepository : TRepository<Booking>, IBookingRepository
+public class BookingRepository : Repository<Booking>, IBookingRepository
 {
   public BookingRepository(AppDbContext dbContext) : base(dbContext) { }
 
@@ -26,7 +26,7 @@ public class BookingRepository : TRepository<Booking>, IBookingRepository
     return await DbSet
     .Include(x => x.ClassDay)
     .ThenInclude(x => x.Class)
-    .Where(x => x.UserId == userId && x.TenantId == tenantId)
+    .Where(x => x.UserId == userId && x.ClassDay.Class.TenantId == tenantId)
     .ToListAsync();
   }
 }

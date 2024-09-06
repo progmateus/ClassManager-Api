@@ -4,7 +4,7 @@ using ClassManager.Domain.Shared.Entities;
 
 namespace ClasManager.Domain.Contexts.Bookings.Entities;
 
-public class Booking : TenantEntity
+public class Booking : Entity
 {
   public Booking(Guid userId, Guid classDayId)
   {
