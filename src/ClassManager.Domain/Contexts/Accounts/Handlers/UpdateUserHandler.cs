@@ -30,14 +30,14 @@ public class UpdateUserHandler :
     if (command.Invalid)
     {
       AddNotifications(command);
-      return new CommandResult(false, "User not Updated", null, command.Notifications);
+      return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
 
     var user = await _userReporitory.GetByIdAsync(id, default);
 
     if (user is null)
     {
-      return new CommandResult(false, "User not found", null, command.Notifications, 404);
+      return new CommandResult(false, "ERR_USER_NOT_FOUND", null, command.Notifications, 404);
     }
 
     // verificar se doc existe
@@ -68,7 +68,7 @@ public class UpdateUserHandler :
 
     if (Invalid)
     {
-      return new CommandResult(false, "User not created", null, Notifications);
+      return new CommandResult(false, "ERR_VALIDATION", null, Notifications);
     }
 
     // salvar as informações
@@ -77,6 +77,6 @@ public class UpdateUserHandler :
 
     // retornar infos
 
-    return new CommandResult(true, "User created", user, null, 201);
+    return new CommandResult(true, "USER_UPDATED", user, null, 201);
   }
 }

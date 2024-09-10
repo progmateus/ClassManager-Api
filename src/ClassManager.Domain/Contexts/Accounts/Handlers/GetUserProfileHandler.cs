@@ -1,6 +1,7 @@
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Services;
 using ClassManager.Domain.Shared.Commands;
+using ClassManager.Domain.Shared.ViewModels;
 using ClassManager.Shared.Commands;
 namespace ClassManager.Domain.Contexts.Accounts.Handlers;
 
@@ -24,6 +25,21 @@ public class GetUserProfileHandler
       return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null, 404);
     }
 
-    return new CommandResult(true, "USER_GOTTEN", user, null, 200);
+    var userModel = new UserViewModel
+    {
+      Name = user.Name.ToString(),
+      FirstName = user.Name.FirstName,
+      LastName = user.Name.LastName,
+      Email = user.Email.ToString(),
+      Document = user.Document.ToString(),
+      Avatar = user.Avatar,
+      Username = user.Username,
+      Status = user.Status,
+      Type = user.Type,
+      CreatedAt = user.CreatedAt,
+      UpdatedAt = user.UpdatedAt,
+    };
+
+    return new CommandResult(true, "USER_GOTTEN", userModel, null, 200);
   }
 }

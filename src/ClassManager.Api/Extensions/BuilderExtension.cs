@@ -25,6 +25,7 @@ using ClassManager.Domain.Contexts.Subscriptions.Handlers;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.Handlers;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Usernames.Handlers;
 using ClassManager.Domain.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
@@ -219,7 +220,6 @@ public static class BuilderExtension
     builder.Services.AddTransient<DeleteSubscriptionHandler>();
     builder.Services.AddTransient<GetSubscriptionhandler>();
 
-
     builder.Services.AddTransient<CreateClassDayHandler>();
     builder.Services.AddTransient<UpdateClassDayHandler>();
     builder.Services.AddTransient<GetClassDayByIdHandler>();
@@ -227,5 +227,8 @@ public static class BuilderExtension
     builder.Services.AddTransient<CreateBookingHandler>();
     builder.Services.AddTransient<ListBookingsHandler>();
     builder.Services.AddTransient<DeleteBookingHandler>();
+
+
+    builder.Services.AddTransient<VerifyUsernameHandler>();
   }
 }

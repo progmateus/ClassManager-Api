@@ -87,13 +87,16 @@ public class AuthHandler :
     {
       Id = user.Id.ToString(),
       Name = user.Name.ToString(),
+      FirstName = user.Name.FirstName,
+      LastName = user.Name.LastName,
+      Document = user.Document.ToString(),
       Email = user.Email,
       Roles = Array.Empty<string>(),
       Avatar = user.Avatar,
     };
     data.Token = tokenService.Create(data);
 
-    var result = new CommandResult(true, "Success", data, null, 200);
+    var result = new CommandResult(true, "USER_GOTTEN", data, null, 200);
     return result;
 
     #endregion
