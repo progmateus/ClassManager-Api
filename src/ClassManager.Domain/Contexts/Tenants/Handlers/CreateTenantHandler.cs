@@ -1,3 +1,4 @@
+using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Shared.ValueObjects;
 using ClassManager.Domain.Contexts.Tenants.Commands;
@@ -15,12 +16,15 @@ public class CreateTenantHandler :
   IHandler<CreateTenantCommand>
 {
   private readonly ITenantRepository _repository;
+  private readonly IUserRepository _usersRepository;
 
   public CreateTenantHandler(
-    ITenantRepository tenantRepository
+    ITenantRepository tenantRepository,
+    IUserRepository usersRepository
     )
   {
     _repository = tenantRepository;
+    _usersRepository = usersRepository;
   }
   public async Task<ICommandResult> Handle(CreateTenantCommand command)
   {
@@ -38,6 +42,11 @@ public class CreateTenantHandler :
     }
 
     if (await _repository.UsernameAlreadyExistsAsync(command.Username, new CancellationToken()))
+    {
+      AddNotification("Username", "Username already exists");
+    }
+
+    if (await _usersRepository.UsernameAlreadyExistsAsync(command.Username, new CancellationToken()))
     {
       AddNotification("Username", "Username already exists");
     }

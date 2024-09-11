@@ -89,6 +89,7 @@ public class AuthHandler :
       Name = user.Name.ToString(),
       FirstName = user.Name.FirstName,
       LastName = user.Name.LastName,
+      Username = user.Username,
       Document = user.Document.ToString(),
       Email = user.Email,
       Roles = Array.Empty<string>(),
