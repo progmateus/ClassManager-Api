@@ -21,12 +21,12 @@ public class BookingRepository : Repository<Booking>, IBookingRepository
     return await DbSet.Include(x => x.ClassDay).Include(x => x.User).FirstOrDefaultAsync(x => x.UserId == userId && x.Id == bookingId);
   }
 
-  public async Task<List<Booking>> ListByUserIdAndTenantId(Guid tenantId, Guid userId)
+  public async Task<List<Booking>> ListByUserIdAndTenantId(Guid? tenantId, Guid userId)
   {
     return await DbSet
     .Include(x => x.ClassDay)
     .ThenInclude(x => x.Class)
-    .Where(x => x.UserId == userId && x.ClassDay.Class.TenantId == tenantId)
+    .Where(x => x.UserId == userId && (!tenantId.HasValue || x.ClassDay.Class.TenantId == tenantId.Value))
     .ToListAsync();
   }
 }

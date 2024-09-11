@@ -6,5 +6,5 @@ public interface IBookingRepository : IRepository<Booking>
 {
   Task<Booking?> GetByUserIdAndClassDayId(Guid userId, Guid classDayId);
   Task<Booking?> GetWithInclude(Guid userId, Guid bookingId);
-  Task<List<Booking>> ListByUserIdAndTenantId(Guid tenantId, Guid userId);
+  Task<List<Booking>> ListByUserIdAndTenantId(Guid? tenantId, Guid userId);
 }

@@ -33,9 +33,9 @@ public class BookingController : MainController
   }
 
   [Authorize]
-  [HttpGet]
+  [HttpGet("/bookings")]
   public async Task<IResult> List(
-    [FromRoute] Guid tenantId,
+    [FromQuery] Guid? tenantId,
     [FromQuery] Guid userId,
     [FromServices] ListBookingsHandler handler
   )

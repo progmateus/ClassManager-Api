@@ -21,20 +21,23 @@ public class ListBookingsHandler : Notifiable
     _usersRolesRepository = usersRolesRepository;
     _subscriptionRepository = subscriptionRepository;
   }
-  public async Task<ICommandResult> Handle(Guid tenantId, Guid userId)
+  public async Task<ICommandResult> Handle(Guid? tenantId, Guid userId)
   {
-    var studentRole = await _usersRolesRepository.VerifyRoleExistsAsync(userId, tenantId, "student", new CancellationToken());
-
-    if (!studentRole)
+    if (tenantId.HasValue && tenantId != Guid.Empty)
     {
-      return new CommandResult(false, "ERR_STUDENT_ROLE_NOT_FOUND", null, 404);
-    }
+      var studentRole = await _usersRolesRepository.VerifyRoleExistsAsync(userId, tenantId.Value, "student", new CancellationToken());
 
-    var subscription = await _subscriptionRepository.GetByUserIdAndTenantId(userId, tenantId, new CancellationToken());
+      if (!studentRole)
+      {
+        return new CommandResult(false, "ERR_STUDENT_ROLE_NOT_FOUND", null, 404);
+      }
 
-    if (subscription is null)
-    {
-      return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, null, 404);
+      var subscription = await _subscriptionRepository.GetByUserIdAndTenantId(userId, tenantId.Value, new CancellationToken());
+
+      if (subscription is null)
+      {
+        return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, null, 404);
+      }
     }
 
     var bookings = await _bookingRepository.ListByUserIdAndTenantId(tenantId, userId);
