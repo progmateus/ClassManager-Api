@@ -6,6 +6,7 @@ using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Subscriptions.Entities;
 using ClasManager.Domain.Contexts.Bookings.Entities;
+using ClassManager.Domain.Contexts.Tenants.Entities;
 
 namespace ClassManager.Domain.Contexts.Accounts.Entities
 {
@@ -47,7 +48,8 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     public IList<TeachersClasses> TeachersClasses { get; } = [];
     public IList<StudentsClasses> StudentsClasses { get; } = [];
     public IList<Subscription> Subscriptions { get; } = [];
-    public IList<Booking> Bookings { get; private set; } = [];
+    public IList<Booking> Bookings { get; } = [];
+    public IList<Tenant> Tenants { get; } = [];
 
     public void ChangeUser(Name name, Email email, Document document)
     {

@@ -16,6 +16,7 @@ public class TenantController : MainController
       [FromServices] CreateTenantHandler handler
   )
   {
+    command.UserId = new Guid(User.FindFirst("Id")?.Value);
     var result = await handler.Handle(command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);

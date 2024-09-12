@@ -6,6 +6,7 @@ using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Plans.Entities;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Subscriptions.Entities;
+using ClassManager.Domain.Contexts.Accounts.Entities;
 
 namespace ClassManager.Domain.Contexts.Tenants.Entities
 {
@@ -15,13 +16,14 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     {
 
     }
-    public Tenant(string name, Document document, string username, string description, Email email)
+    public Tenant(string name, Document document, string username, string description, Email email, Guid userId)
     {
       Name = name;
       Document = document;
       Username = username;
       Description = description;
       Email = email;
+      UserId = userId;
       CreatedAt = DateTime.UtcNow;
       UpdatedAt = DateTime.UtcNow;
     }
@@ -33,9 +35,11 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public Email Email { get; private set; }
     public string? Avatar { get; private set; } = string.Empty;
     public ETenantStatus Status { get; private set; } = ETenantStatus.ACTIVE;
+    public Guid? UserId { get; private set; }
     public Guid? PlanId { get; private set; }
     public DateTime? ExpiresDate { get; private set; }
     public Plan? Plan { get; private set; }
+    public User? User { get; private set; }
     public List<Role> Roles { get; private set; }
     public List<UsersRoles> UsersRoles { get; }
     public List<TenantPlan> TenantPlans { get; }

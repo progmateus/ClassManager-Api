@@ -73,5 +73,11 @@ public class TenantMap : IEntityTypeConfiguration<Tenant>
         .HasColumnType("VARCHAR")
         .HasMaxLength(200)
         .IsRequired(false);
+
+
+        builder.HasOne(x => x.User)
+            .WithMany(u => u.Tenants)
+            .HasForeignKey(x => x.UserId)
+            .IsRequired(false);
     }
 }
