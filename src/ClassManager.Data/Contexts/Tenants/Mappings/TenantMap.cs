@@ -78,6 +78,6 @@ public class TenantMap : IEntityTypeConfiguration<Tenant>
         builder.HasOne(x => x.User)
             .WithMany(u => u.Tenants)
             .HasForeignKey(x => x.UserId)
-            .IsRequired(false);
+            .IsRequired(true);
     }
 }
