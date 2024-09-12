@@ -1,4 +1,6 @@
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Roles.Entities;
+using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Shared.ValueObjects;
 using ClassManager.Domain.Contexts.Tenants.Commands;
@@ -17,14 +19,21 @@ public class CreateTenantHandler :
 {
   private readonly ITenantRepository _repository;
   private readonly IUserRepository _usersRepository;
+  private readonly IRoleRepository _roleRepository;
+  private readonly IUsersRolesRepository _usersRolesRepository;
 
   public CreateTenantHandler(
     ITenantRepository tenantRepository,
-    IUserRepository usersRepository
+    IUserRepository usersRepository,
+    IRoleRepository roleRepository,
+    IUsersRolesRepository usersRolesRepository
+
     )
   {
     _repository = tenantRepository;
     _usersRepository = usersRepository;
+    _roleRepository = roleRepository;
+    _usersRolesRepository = usersRolesRepository;
   }
   public async Task<ICommandResult> Handle(CreateTenantCommand command)
   {
@@ -33,7 +42,7 @@ public class CreateTenantHandler :
     if (command.Invalid)
     {
       AddNotifications(command);
-      return new CommandResult(false, "ERR_TENANT_NOT_CREATED", null, command.Notifications);
+      return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
 
     if (await _repository.DocumentAlreadyExistsAsync(command.Document, new CancellationToken()))
@@ -65,10 +74,21 @@ public class CreateTenantHandler :
 
     if (Invalid)
     {
-      return new CommandResult(false, "ERR_TENANT_NOT_CREATED", null, Notifications);
+      return new CommandResult(false, "ERR_VALIDATION", null, Notifications);
+    }
+
+    var role = await _roleRepository.GetByNameAsync("admin", new CancellationToken());
+
+    if (role is null)
+    {
+      return new CommandResult(false, "ERR_ROLE_NOT_FOUND", null, null, 404);
     }
 
     await _repository.CreateAsync(tenant, new CancellationToken());
+
+    var userRole = new UsersRoles(command.UserId, role.Id, tenant.Id);
+
+    await _usersRolesRepository.CreateAsync(userRole, new CancellationToken());
 
     return new CommandResult(true, "TENANT_CREATED", tenant, null, 201);
   }
