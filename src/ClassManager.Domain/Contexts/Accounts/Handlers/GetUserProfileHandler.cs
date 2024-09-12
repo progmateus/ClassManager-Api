@@ -27,6 +27,7 @@ public class GetUserProfileHandler
 
     var userModel = new UserViewModel
     {
+      Id = user.Id,
       Name = user.Name.ToString(),
       FirstName = user.Name.FirstName,
       LastName = user.Name.LastName,
