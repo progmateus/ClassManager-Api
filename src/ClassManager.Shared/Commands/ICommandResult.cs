@@ -1,5 +1,3 @@
-using ClassManager.Shared.Contracts;
-
 namespace ClassManager.Shared.Commands
 {
   public interface ICommandResult

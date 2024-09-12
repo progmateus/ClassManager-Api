@@ -1,5 +1,4 @@
 using ClassManager.Shared.Commands;
-using ClassManager.Shared.Contracts;
 
 namespace ClassManager.Domain.Shared.Commands
 {

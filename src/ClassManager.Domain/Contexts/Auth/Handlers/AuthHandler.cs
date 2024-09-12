@@ -4,11 +4,10 @@ using ClassManager.Domain.Contexts.Auth.Commands;
 using ClassManager.Domain.Contexts.Auth.Services;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Shared.Commands;
+using ClassManager.Domain.Shared.Contracts;
 using ClassManager.Shared.Commands;
-using ClassManager.Shared.Contracts;
 using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
-using Microsoft.AspNetCore.Mvc;
 
 namespace ClassManager.Domain.Contexts.Accounts.Handlers;
 
@@ -79,6 +78,13 @@ public class AuthHandler :
       return new CommandResult(false, "Internal server error", null, null, 500);
     }
 
+    var userWithInclude = await _userReporitory.GetByIdWithIncludeAsync(user.Id, new CancellationToken());
+
+    if (userWithInclude is null)
+    {
+      return new CommandResult(false, "ERR_INVALID_CREDENTIALS", null, null, 401);
+    }
+
     #endregion
 
     #region 05. Retorna os dados
@@ -92,7 +98,8 @@ public class AuthHandler :
       Username = user.Username,
       Document = user.Document.ToString(),
       Email = user.Email,
-      Roles = Array.Empty<string>(),
+      Subscriptions = userWithInclude.Subscriptions,
+      UsersRoles = userWithInclude.UsersRoles,
       Avatar = user.Avatar,
     };
     data.Token = tokenService.Create(data);

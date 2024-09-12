@@ -31,6 +31,8 @@ public class UserRepository : Repository<User>, IUserRepository
   {
     return await DbSet
     .Include(x => x.Subscriptions)
+    .Include(x => x.UsersRoles)
+    .ThenInclude(ur => ur.Tenant)
     .AsNoTracking()
     .FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
   }

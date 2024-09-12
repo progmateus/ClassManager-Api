@@ -2,7 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using ClassManager.Shared.Contracts;
+using ClassManager.Domain.Shared.Contracts;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ClassManager.Domain.Contexts.Auth.Services

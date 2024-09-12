@@ -36,6 +36,8 @@ public class GetUserProfileHandler
       Username = user.Username,
       Status = user.Status,
       Type = user.Type,
+      Subscriptions = user.Subscriptions,
+      UsersRoles = user.UsersRoles,
       CreatedAt = user.CreatedAt,
       UpdatedAt = user.UpdatedAt,
     };
