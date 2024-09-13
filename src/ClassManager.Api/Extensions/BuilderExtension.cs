@@ -92,8 +92,14 @@ public static class BuilderExtension
 
   public static void AddControllers(this WebApplicationBuilder builder)
   {
-    builder.Services.AddControllers();
-
+    builder.Services.AddControllers().ConfigureApiBehaviorOptions(options =>
+    {
+      options.SuppressModelStateInvalidFilter = true;
+    }).AddJsonOptions(x =>
+    {
+      x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
+      x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault;
+    });
   }
 
   public static void AddServices(this WebApplicationBuilder builder)

@@ -56,4 +56,16 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
   .OrderByDescending(x => x.CreatedAt)
   .FirstAsync();
   }
+
+  public async Task<List<Subscription>> ListSubscriptions(Guid? userId, Guid? tenantId)
+  {
+    return await DbSet
+    .Include(x => x.User)
+    .Include(x => x.TenantPlan)
+    .Where(x => !userId.HasValue || x.UserId == userId.Value)
+    .Where(x => !tenantId.HasValue || x.TenantId == tenantId.Value)
+    .GroupBy(x => new { x.TenantId, x.UserId })
+    .Select(x => x.OrderByDescending(x => x.CreatedAt).Select(x => x).First()).ToListAsync();
+  }
+
 }

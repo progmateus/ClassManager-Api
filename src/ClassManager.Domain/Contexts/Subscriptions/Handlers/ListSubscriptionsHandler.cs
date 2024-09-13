@@ -31,7 +31,7 @@ public class ListSubscriptionsHandler : Notifiable,
       return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, null, 404);
     }
 
-    var subscriptions = await _subscriptionRepository.ListByTenantIdAsync(tenantId, new CancellationToken());
+    var subscriptions = await _subscriptionRepository.ListSubscriptions(null, tenantId);
 
     return new CommandResult(false, "SUBSCRIPTIONS_LISTED", subscriptions, null, 200);
   }

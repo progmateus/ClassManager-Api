@@ -81,7 +81,7 @@ public class CreateSubscriptionHandler : Notifiable,
 
     DateTime lastDayOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month));
 
-    var subscription = new Subscription(command.UserId, command.TenantPlanId, classFound.TenantId, lastDayOfMonth);
+    var subscription = new Subscription(command.UserId, command.TenantPlanId, lastDayOfMonth);
 
     await _subscriptionRepository.CreateAsync(subscription, new CancellationToken());
 

@@ -42,14 +42,14 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     public EUserType Type { get; private set; } = EUserType.NORMAL;
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
-    public IList<Role> Roles { get; } = [];
-    public IList<UsersRoles> UsersRoles { get; } = [];
-    public IList<Class> Classes { get; }
-    public IList<TeachersClasses> TeachersClasses { get; } = [];
-    public IList<StudentsClasses> StudentsClasses { get; } = [];
-    public IList<Subscription> Subscriptions { get; } = [];
-    public IList<Booking> Bookings { get; } = [];
-    public IList<Tenant> Tenants { get; } = [];
+    public IList<Role> Roles { get; private set; }
+    public IList<UsersRoles> UsersRoles { get; private set; }
+    public IList<Class> Classes { get; private set; }
+    public IList<TeachersClasses> TeachersClasses { get; private set; }
+    public IList<StudentsClasses> StudentsClasses { get; private set; }
+    public IList<Subscription> Subscriptions { get; private set; }
+    public IList<Booking> Bookings { get; private set; }
+    public IList<Tenant> Tenants { get; private set; }
 
     public void ChangeUser(Name name, Email email, Document document)
     {

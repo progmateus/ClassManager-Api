@@ -20,7 +20,7 @@ public class UserViewModel
   public IList<UsersRoles> UsersRoles { get; set; } = [];
   public IList<TeachersClasses> TeachersClasses { get; set; } = [];
   public IList<StudentsClasses> StudentsClasses { get; set; } = [];
-  public IList<Subscription> Subscriptions { get; set; } = [];
+  public object Subscriptions { get; set; }
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }
 }

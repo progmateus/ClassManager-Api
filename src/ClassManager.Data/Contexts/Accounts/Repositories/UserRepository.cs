@@ -30,10 +30,12 @@ public class UserRepository : Repository<User>, IUserRepository
   public async Task<User?> GetByIdWithIncludeAsync(Guid userId, CancellationToken cancellationToken)
   {
     return await DbSet
+    .AsNoTracking()
+    .Include(x => x.UsersRoles)
+    .ThenInclude(x => x.Tenant)
     .Include(x => x.Subscriptions)
     .Include(x => x.UsersRoles)
-    .ThenInclude(ur => ur.Tenant)
-    .AsNoTracking()
+    .ThenInclude(x => x.Role)
     .FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
   }
 
