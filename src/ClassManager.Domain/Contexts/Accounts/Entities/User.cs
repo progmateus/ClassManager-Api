@@ -7,6 +7,7 @@ using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Subscriptions.Entities;
 using ClasManager.Domain.Contexts.Bookings.Entities;
 using ClassManager.Domain.Contexts.Tenants.Entities;
+using System.Text.Json.Serialization;
 
 namespace ClassManager.Domain.Contexts.Accounts.Entities
 {
@@ -33,8 +34,11 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     }
 
     public Name Name { get; private set; }
+    [JsonIgnore]
     public Document Document { get; private set; }
+    [JsonIgnore]
     public Password Password { get; private set; }
+    [JsonIgnore]
     public Email Email { get; private set; }
     public string Username { get; private set; }
     public string? Avatar { get; private set; } = string.Empty;

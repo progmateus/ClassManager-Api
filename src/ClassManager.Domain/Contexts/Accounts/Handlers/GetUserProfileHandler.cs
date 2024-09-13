@@ -27,7 +27,7 @@ public class GetUserProfileHandler
   public async Task<ICommandResult> Handle(Guid id)
   {
 
-    var user = await _userReporitory.GetByIdWithIncludeAsync(id, new CancellationToken());
+    var user = await _userReporitory.GetByIdAsync(id, new CancellationToken());
 
     if (user == null)
     {
@@ -55,6 +55,6 @@ public class GetUserProfileHandler
       UpdatedAt = user.UpdatedAt,
     };
 
-    return new CommandResult(true, "USER_GOTTEN", subscriptions, null, 200);
+    return new CommandResult(true, "USER_GOTTEN", userModel, null, 200);
   }
 }

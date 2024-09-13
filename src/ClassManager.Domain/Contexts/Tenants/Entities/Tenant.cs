@@ -7,6 +7,7 @@ using ClassManager.Domain.Contexts.Plans.Entities;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Subscriptions.Entities;
 using ClassManager.Domain.Contexts.Accounts.Entities;
+using System.Text.Json.Serialization;
 
 namespace ClassManager.Domain.Contexts.Tenants.Entities
 {
@@ -31,7 +32,9 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public string Name { get; private set; } = null!;
     public string Username { get; private set; }
     public string Description { get; private set; }
+    [JsonIgnore]
     public Document Document { get; private set; }
+    [JsonIgnore]
     public Email Email { get; private set; }
     public string? Avatar { get; private set; } = string.Empty;
     public ETenantStatus Status { get; private set; } = ETenantStatus.ACTIVE;
