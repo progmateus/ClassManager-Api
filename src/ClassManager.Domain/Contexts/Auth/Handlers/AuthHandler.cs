@@ -2,7 +2,9 @@ using ClassManager.Domain.Contexts.Accounts.Entities;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Auth.Commands;
 using ClassManager.Domain.Contexts.Auth.Services;
+using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Shared.Enums;
+using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Contracts;
 using ClassManager.Shared.Commands;
@@ -16,11 +18,17 @@ public class AuthHandler :
   IHandler<AuthCommand>
 {
   private readonly IUserRepository _userReporitory;
+  private readonly IUsersRolesRepository _usersRolesRepository;
+  private readonly ISubscriptionRepository _subscriptionsrepository;
   public AuthHandler(
-    IUserRepository userRepository
-    )
+    IUserRepository userRepository,
+    IUsersRolesRepository usersRolesRepository,
+    ISubscriptionRepository subscriptionsrepository
+  )
   {
     _userReporitory = userRepository;
+    _usersRolesRepository = usersRolesRepository;
+    _subscriptionsrepository = subscriptionsrepository;
   }
   public async Task<ICommandResult> Handle(AuthCommand command)
   {
@@ -78,12 +86,8 @@ public class AuthHandler :
       return new CommandResult(false, "Internal server error", null, null, 500);
     }
 
-    var userWithInclude = await _userReporitory.GetByIdWithIncludeAsync(user.Id, new CancellationToken());
-
-    if (userWithInclude is null)
-    {
-      return new CommandResult(false, "ERR_INVALID_CREDENTIALS", null, null, 401);
-    }
+    var userRoles = await _usersRolesRepository.FindByUserId(user.Id);
+    var userSubscriptions = await _subscriptionsrepository.ListSubscriptions(user.Id, null);
 
     #endregion
 
@@ -98,8 +102,8 @@ public class AuthHandler :
       Username = user.Username,
       Document = user.Document.ToString(),
       Email = user.Email,
-      Subscriptions = userWithInclude.Subscriptions,
-      UsersRoles = userWithInclude.UsersRoles,
+      Subscriptions = userSubscriptions,
+      UsersRoles = userRoles,
       Avatar = user.Avatar,
     };
     data.Token = tokenService.Create(data);
