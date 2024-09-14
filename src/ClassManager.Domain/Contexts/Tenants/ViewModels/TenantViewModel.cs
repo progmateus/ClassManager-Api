@@ -1,8 +1,9 @@
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Roles.Entities;
-using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Entities;
 using ClassManager.Domain.Contexts.Tenants.Entities;
+
+namespace ClassManager.Domain.Contexts.tenants.ViewModels;
 
 public class TenantViewModel
 {

@@ -1,4 +1,7 @@
-namespace ClassManager.Domain.Contexts.Plan.ViewModels;
+
+using ClassManager.Domain.Contexts.tenants.ViewModels;
+
+namespace ClassManager.Domain.Contexts.Plans.ViewModels;
 
 public class PlanViewModel
 {
