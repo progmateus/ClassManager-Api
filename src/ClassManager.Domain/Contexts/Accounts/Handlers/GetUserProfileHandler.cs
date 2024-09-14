@@ -37,24 +37,23 @@ public class GetUserProfileHandler
     var userRoles = await _usersRolesRepository.FindByUserId(user.Id);
     var subscriptions = await _subscriptionsrepository.ListSubscriptions(user.Id, null);
 
-    var userModel = new UserViewModel
-    {
-      Id = user.Id,
-      Name = user.Name.ToString(),
-      FirstName = user.Name.FirstName,
-      LastName = user.Name.LastName,
-      Email = user.Email.ToString(),
-      Document = user.Document.ToString(),
-      Avatar = user.Avatar,
-      Username = user.Username,
-      Status = user.Status,
-      Type = user.Type,
-      Subscriptions = subscriptions,
-      UsersRoles = userRoles ?? [],
-      CreatedAt = user.CreatedAt,
-      UpdatedAt = user.UpdatedAt,
-    };
+    /*     var userModel = new UserViewModel
+        {
+          Id = user.Id,
+          FirstName = user.Name.FirstName,
+          LastName = user.Name.LastName,
+          Email = user.Email.ToString(),
+          Document = user.Document.ToString(),
+          Avatar = user.Avatar,
+          Username = user.Username,
+          Status = user.Status,
+          Type = user.Type,
+          Subscriptions = subscriptions,
+          UsersRoles = userRoles ?? [],
+          CreatedAt = user.CreatedAt,
+          UpdatedAt = user.UpdatedAt,
+        }; */
 
-    return new CommandResult(true, "USER_GOTTEN", userModel, null, 200);
+    return new CommandResult(true, "USER_GOTTEN", user, null, 200);
   }
 }

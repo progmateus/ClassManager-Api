@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using ClassManager.Domain.Shared.ValueObjects;
 using Flunt.Validations;
 
@@ -18,6 +19,8 @@ namespace ClassManager.Domain.Contexts.Shared.ValueObjects
     }
 
     public string Address { get; }
+
+    [JsonIgnore]
     public Verification Verification { get; private set; } = new();
 
     public void ResendVerification()

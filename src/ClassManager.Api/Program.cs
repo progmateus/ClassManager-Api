@@ -8,6 +8,7 @@ builder.AddControllers();
 builder.AddDatabase();
 builder.AddJwtAuthentication();
 builder.Services.AddHttpContextAccessor();
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 
 builder.AddMediator();
 

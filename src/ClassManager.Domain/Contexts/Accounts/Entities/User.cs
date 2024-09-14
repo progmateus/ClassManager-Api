@@ -34,11 +34,9 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     }
 
     public Name Name { get; private set; }
-    [JsonIgnore]
     public Document Document { get; private set; }
     [JsonIgnore]
     public Password Password { get; private set; }
-    [JsonIgnore]
     public Email Email { get; private set; }
     public string Username { get; private set; }
     public string? Avatar { get; private set; } = string.Empty;
