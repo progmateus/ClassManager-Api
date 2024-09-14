@@ -1,6 +1,7 @@
 
 using ClassManager.Domain.Contexts.tenants.ViewModels;
 using ClassManager.Domain.Contexts.Tenants.Entities;
+using ClassManager.Domain.Contexts.Tenants.ViewModels;
 
 namespace ClassManager.Domain.Contexts.Subscriptions.ViewModels;
 
@@ -11,7 +12,7 @@ public class SubscriptionViewModel
   public Guid TenantPlanId { get; set; }
   public int Status { get; set; }
   public UserViewModel? User { get; set; }
-  public TenantPlan? TenantPlan { get; set; }
+  public TenantPlanViewModel? TenantPlan { get; set; }
   public TenantViewModel? Tenant { get; set; }
   public DateTime ExpiresDate { get; set; }
   public DateTime CreatedAt { get; set; }
