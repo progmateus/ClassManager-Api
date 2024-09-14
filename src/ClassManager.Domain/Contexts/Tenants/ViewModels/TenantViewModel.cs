@@ -1,7 +1,12 @@
 using ClassManager.Domain.Contexts.Classes.Entities;
+using ClassManager.Domain.Contexts.Classes.ViewModels;
+using ClassManager.Domain.Contexts.Plans.ViewModels;
 using ClassManager.Domain.Contexts.Roles.Entities;
+using ClassManager.Domain.Contexts.Roles.ViewModels;
 using ClassManager.Domain.Contexts.Subscriptions.Entities;
+using ClassManager.Domain.Contexts.Subscriptions.ViewModels;
 using ClassManager.Domain.Contexts.Tenants.Entities;
+using ClassManager.Domain.Contexts.Tenants.ViewModels;
 
 namespace ClassManager.Domain.Contexts.tenants.ViewModels;
 
@@ -19,13 +24,13 @@ public class TenantViewModel
   public Guid UserId { get; set; }
   public Guid PlanId { get; set; }
   public DateTime ExpiresDate { get; set; }
-  public object? Plan { get; set; }
+  public PlanViewModel? Plan { get; set; }
   public UserViewModel? User { get; set; }
-  public List<Role> Roles { get; set; } = [];
-  public List<UsersRoles> UsersRoles { get; } = [];
-  public List<TenantPlan> TenantPlans { get; } = [];
-  public List<Subscription> Subscriptions { get; } = [];
-  public List<Class> Classes { get; } = [];
+  public List<RoleViewModel> Roles { get; set; } = [];
+  public List<UsersRolesViewModel> UsersRoles { get; set; } = [];
+  public List<TenantPlanViewModel> TenantPlans { get; set; } = [];
+  public List<SubscriptionViewModel> Subscriptions { get; set; } = [];
+  public List<ClassViewModel> Classes { get; set; } = [];
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }
 }
