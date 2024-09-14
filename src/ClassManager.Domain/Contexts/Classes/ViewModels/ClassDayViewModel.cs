@@ -1,6 +1,6 @@
 using ClasManager.Domain.Contexts.Bookings.Entities;
 
-namespace ClassManager.Domain.Contexts.Classes.Entities
+namespace ClassManager.Domain.Contexts.Classes.ViewModels
 {
   public class ClassDayViewModel
   {
@@ -12,7 +12,7 @@ namespace ClassManager.Domain.Contexts.Classes.Entities
     public Guid ClassId { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
-    public ClassDayViewModel Class { get; private set; } = null!;
+    public ClassViewModel Class { get; private set; } = null!;
     public List<Booking> Bookings { get; private set; } = [];
   }
 }

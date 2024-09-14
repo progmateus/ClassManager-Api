@@ -1,9 +1,6 @@
-using System;
-using ClassManager.Domain.Shared.Entities;
-using ClassManager.Domain.Contexts.Tenants.Entities;
-using ClassManager.Domain.Contexts.Accounts.Entities;
+using ClassManager.Domain.Contexts.Classes.Entities;
 
-namespace ClassManager.Domain.Contexts.Classes.Entities
+namespace ClassManager.Domain.Contexts.Classes.ViewModels
 {
   public class ClassViewModel
   {
