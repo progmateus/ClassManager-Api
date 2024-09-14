@@ -1,5 +1,6 @@
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.tenants.ViewModels;
+using ClassManager.Domain.Contexts.Users.ViewModels;
 
 namespace ClassManager.Domain.Contexts.Classes.ViewModels
 {

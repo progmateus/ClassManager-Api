@@ -1,5 +1,6 @@
 using AutoMapper;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Users.ViewModels;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;
 
