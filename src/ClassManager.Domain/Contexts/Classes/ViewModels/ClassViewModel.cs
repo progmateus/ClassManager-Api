@@ -1,17 +1,18 @@
-using ClassManager.Domain.Contexts.Classes.Entities;
+using ClasManager.Domain.Contexts.Bookings.Entities;
 
-public class ClassViewModel
+namespace ClassManager.Domain.Contexts.Classes.Entities
 {
-  public Guid Id { get; set; }
-  public string? Name { get; set; }
-  public Guid TenantId { get; private set; }
-  public string? Description { get; private set; } = null!;
-  public string BusinessHour { get; private set; } = null!;
-  public TenantViewModel Tenant { get; set; } = null!;
-  public List<UserViewModel> Users { get; set; } = [];
-  public List<TeachersClasses> TeachersClasses { get; set; } = [];
-  public List<StudentsClasses> StudentsClasses { get; set; } = [];
-  public List<ClassDay> ClassDays { get; } = [];
-  public DateTime CreatedAt { get; set; }
-  public DateTime UpdatedAt { get; set; }
+  public class ClassDayViewModel
+  {
+    public DateTime Date { get; private set; }
+    public string? HourStart { get; private set; }
+    public string? HourEnd { get; private set; }
+    public int Status { get; private set; }
+    public string? Observation { get; private set; }
+    public Guid ClassId { get; private set; }
+    public DateTime CreatedAt { get; private set; }
+    public DateTime UpdatedAt { get; private set; }
+    public ClassDayViewModel Class { get; private set; } = null!;
+    public List<Booking> Bookings { get; private set; } = [];
+  }
 }
