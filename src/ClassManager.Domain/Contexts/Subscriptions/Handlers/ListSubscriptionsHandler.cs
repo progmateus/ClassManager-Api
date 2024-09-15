@@ -1,8 +1,10 @@
+using AutoMapper;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Roles.Commands;
 using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Subscriptions.ViewModels;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;
@@ -16,10 +18,12 @@ public class ListSubscriptionsHandler : Notifiable,
 {
   private ITenantRepository _tenantRepository;
   private ISubscriptionRepository _subscriptionRepository;
-  public ListSubscriptionsHandler(ISubscriptionRepository subscriptionRepository, ITenantRepository tenantRepository, IUsersRolesRepository usersRolesRepository)
+  private IMapper _mapper;
+  public ListSubscriptionsHandler(ISubscriptionRepository subscriptionRepository, ITenantRepository tenantRepository, IMapper mapper)
   {
     _tenantRepository = tenantRepository;
     _subscriptionRepository = subscriptionRepository;
+    _mapper = mapper;
   }
   public async Task<ICommandResult> Handle(Guid tenantId)
   {
@@ -31,7 +35,7 @@ public class ListSubscriptionsHandler : Notifiable,
       return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, null, 404);
     }
 
-    var subscriptions = await _subscriptionRepository.ListSubscriptions(null, tenantId);
+    var subscriptions = _mapper.Map<List<SubscriptionViewModel>>(await _subscriptionRepository.ListSubscriptions(null, tenantId));
 
     return new CommandResult(false, "SUBSCRIPTIONS_LISTED", subscriptions, null, 200);
   }
