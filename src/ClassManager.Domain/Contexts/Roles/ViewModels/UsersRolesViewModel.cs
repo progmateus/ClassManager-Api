@@ -5,6 +5,7 @@ namespace ClassManager.Domain.Contexts.Roles.ViewModels;
 
 public class UsersRolesViewModel
 {
+  public Guid Id { get; set; }
   public Guid UserId { get; set; }
   public Guid TenantId { get; set; }
   public Guid RoleId { get; set; }

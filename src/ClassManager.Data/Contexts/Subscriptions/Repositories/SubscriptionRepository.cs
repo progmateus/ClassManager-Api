@@ -62,6 +62,7 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     return await DbSet
     .Include(x => x.User)
     .Include(x => x.TenantPlan)
+    .Include(x => x.Tenant)
     .Where(x => !userId.HasValue || x.UserId == userId.Value)
     .Where(x => !tenantId.HasValue || x.TenantId == tenantId.Value)
     .GroupBy(x => new { x.TenantId, x.UserId })

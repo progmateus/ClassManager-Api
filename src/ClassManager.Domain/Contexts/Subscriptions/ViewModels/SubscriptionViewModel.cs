@@ -11,6 +11,7 @@ public class SubscriptionViewModel
   public Guid Id { get; set; }
   public Guid UserId { get; set; }
   public Guid TenantPlanId { get; set; }
+  public Guid TenantId { get; set; }
   public int Status { get; set; }
   public UserViewModel? User { get; set; }
   public TenantPlanViewModel? TenantPlan { get; set; }

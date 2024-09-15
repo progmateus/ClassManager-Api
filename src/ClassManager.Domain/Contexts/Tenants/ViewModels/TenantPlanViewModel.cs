@@ -5,7 +5,7 @@ namespace ClassManager.Domain.Contexts.Tenants.ViewModels
 {
   public class TenantPlanViewModel
   {
-
+    public Guid Id { get; set; }
     public string Name { get; set; } = null!;
     public string? Description { get; set; }
     public int TimesOfweek { get; set; }
