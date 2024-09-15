@@ -51,7 +51,7 @@ public class TenantController : MainController
   public async Task<IResult> List(
     [FromRoute] Guid tenantId,
     [FromRoute] Guid id,
-    [FromServices] GetSubscriptionhandler handler
+    [FromServices] GetSubscriptionProfileHandler handler
   )
   {
     var result = await handler.Handle(tenantId, id);
