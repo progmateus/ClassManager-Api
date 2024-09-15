@@ -1,10 +1,14 @@
+using AutoMapper;
 using ClassManager.Domain.Contexts.Accounts.Entities;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Auth.Commands;
 using ClassManager.Domain.Contexts.Auth.Services;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Roles.ViewModels;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Subscriptions.ViewModels;
+using ClassManager.Domain.Contexts.Users.ViewModels;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Contracts;
 using ClassManager.Shared.Commands;
@@ -20,15 +24,18 @@ public class AuthHandler :
   private readonly IUserRepository _userReporitory;
   private readonly IUsersRolesRepository _usersRolesRepository;
   private readonly ISubscriptionRepository _subscriptionsrepository;
+  private IMapper _mapper;
   public AuthHandler(
     IUserRepository userRepository,
     IUsersRolesRepository usersRolesRepository,
-    ISubscriptionRepository subscriptionsrepository
+    ISubscriptionRepository subscriptionsrepository,
+    IMapper mapper
   )
   {
     _userReporitory = userRepository;
     _usersRolesRepository = usersRolesRepository;
     _subscriptionsrepository = subscriptionsrepository;
+    _mapper = mapper;
   }
   public async Task<ICommandResult> Handle(AuthCommand command)
   {
@@ -86,8 +93,8 @@ public class AuthHandler :
       return new CommandResult(false, "Internal server error", null, null, 500);
     }
 
-    var userRoles = await _usersRolesRepository.FindByUserId(user.Id);
-    var userSubscriptions = await _subscriptionsrepository.ListSubscriptions(user.Id, null);
+    var userRoles = _mapper.Map<List<UsersRolesViewModel>>(await _usersRolesRepository.FindByUserId(user.Id));
+    var userSubscriptions = _mapper.Map<List<SubscriptionViewModel>>(await _subscriptionsrepository.ListSubscriptions(user.Id, null));
 
     #endregion
 
@@ -96,17 +103,11 @@ public class AuthHandler :
     var data = new AuthData
     {
       Id = user.Id.ToString(),
-      Name = user.Name.ToString(),
-      FirstName = user.Name.FirstName,
-      LastName = user.Name.LastName,
-      Username = user.Username,
-      Document = user.Document.ToString(),
-      Email = user.Email,
-      Subscriptions = userSubscriptions,
-      UsersRoles = userRoles,
-      Avatar = user.Avatar,
+      User = _mapper.Map<UserViewModel>(user),
     };
     data.Token = tokenService.Create(data);
+    data.User.Subscriptions = userSubscriptions;
+    data.User.UsersRoles = userRoles;
 
     var result = new CommandResult(true, "USER_GOTTEN", data, null, 200);
     return result;

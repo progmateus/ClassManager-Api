@@ -2,6 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using ClassManager.Domain.Contexts.Users.ViewModels;
 using ClassManager.Domain.Shared.Contracts;
 using Microsoft.IdentityModel.Tokens;
 
@@ -24,24 +25,23 @@ namespace ClassManager.Domain.Contexts.Auth.Services
       {
         SigningCredentials = credentials,
         Expires = DateTime.UtcNow.AddHours(2),
-        Subject = GenerateClaims(data)
+        Subject = GenerateClaims(data.User)
       };
       var token = handler.CreateToken(tokenDescription);
       return handler.WriteToken(token);
     }
 
-    private ClaimsIdentity GenerateClaims(AuthData user)
+    private ClaimsIdentity GenerateClaims(UserViewModel user)
     {
       var ci = new ClaimsIdentity();
 
       ci.AddClaim(new Claim("id", user.Id.ToString()));
-      ci.AddClaim(new Claim(ClaimTypes.Name, user.Email));
-      ci.AddClaim(new Claim(ClaimTypes.GivenName, user.Name));
-      ci.AddClaim(new Claim(ClaimTypes.Email, user.Email));
+      ci.AddClaim(new Claim(ClaimTypes.Name, user.Username ?? ""));
+      ci.AddClaim(new Claim(ClaimTypes.GivenName, user.Name ?? ""));
+      ci.AddClaim(new Claim(ClaimTypes.Email, user.Email ?? ""));
       ci.AddClaim(new Claim("avatar", user.Avatar ?? ""));
-
-      foreach (var role in user.Roles)
-        ci.AddClaim(new Claim(ClaimTypes.Role, role));
+      foreach (var userRole in user.UsersRoles)
+        ci.AddClaim(new Claim(ClaimTypes.Role, $"@{userRole.TenantId} @{userRole.Role?.Name ?? ""}"));
 
       return ci;
     }

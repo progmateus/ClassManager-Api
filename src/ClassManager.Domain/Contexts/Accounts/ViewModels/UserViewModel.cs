@@ -10,11 +10,12 @@ namespace ClassManager.Domain.Contexts.Users.ViewModels;
 public class UserViewModel
 {
   public Guid Id { get; set; }
-  public string? FirstName { get; set; }
-  public string? LastName { get; set; }
-  public string? Email { get; set; }
-  public string? Username { get; set; }
-  public string? Avatar { get; set; }
+  public string? Name { get => $"{FirstName} {LastName}"; }
+  public string? FirstName { get; set; } = String.Empty;
+  public string? LastName { get; set; } = String.Empty;
+  public string? Email { get; set; } = String.Empty;
+  public string? Username { get; set; } = String.Empty;
+  public string? Avatar { get; set; } = String.Empty;
   public int? Status { get; set; }
   public int? Type { get; set; }
   public IList<RoleViewModel> Roles { get; set; } = [];
