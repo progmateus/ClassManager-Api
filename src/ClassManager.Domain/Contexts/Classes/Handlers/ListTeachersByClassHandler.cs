@@ -1,4 +1,6 @@
+using AutoMapper;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Classes.ViewModels;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;
 
@@ -8,13 +10,16 @@ public class ListTeachersByClassHandler
 {
   private readonly IClassRepository _classRepository;
   private readonly ITeacherClassesRepository _teachersClassesRepository;
+  private readonly IMapper _mapper;
   public ListTeachersByClassHandler(
     IClassRepository classRepository,
-    ITeacherClassesRepository teachersClassesRepository
+    ITeacherClassesRepository teachersClassesRepository,
+    IMapper mapper
     )
   {
     _classRepository = classRepository;
     _teachersClassesRepository = teachersClassesRepository;
+    _mapper = mapper;
   }
   public async Task<ICommandResult> Handle(Guid tenantId, Guid classId)
   {
@@ -24,8 +29,7 @@ public class ListTeachersByClassHandler
     {
       return new CommandResult(false, "ERR_CLASS_NOT_FOUND", null, null, 404);
     }
-
-    var teachers = await _teachersClassesRepository.ListByClassId(classId, tenantId);
+    var teachers = _mapper.Map<TeachersClassesViewModel>(await _teachersClassesRepository.ListByClassId(classId, tenantId));
 
     return new CommandResult(true, "TEACHERS_LISTED", teachers, null, 200);
   }
