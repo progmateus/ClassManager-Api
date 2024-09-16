@@ -18,7 +18,7 @@ public class GetSubscriptionProfileHandler : Notifiable
   }
   public async Task<ICommandResult> Handle(Guid tenantId, Guid subscriptionId)
   {
-    var subscription = _mapper.Map<SubscriptionPreviewViewModel>(await _subscriptionRepository.GetSubscriptionProfileAsync(subscriptionId, tenantId, new CancellationToken()));
+    var subscription = _mapper.Map<SubscriptionProfileViewModel>(await _subscriptionRepository.GetSubscriptionProfileAsync(subscriptionId, tenantId, new CancellationToken()));
 
     if (subscription is null)
     {

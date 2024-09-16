@@ -26,6 +26,13 @@ public class AutoMapperConfig : Profile
     .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Name.LastName))
     .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address));
 
+    CreateMap<User, UserProfileViewModel>()
+    .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Name.FirstName))
+    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.Name.FirstName} {src.Name.LastName}"))
+    .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Name.LastName))
+    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address))
+    .ForMember(dest => dest.Document, opt => opt.MapFrom(src => src.Document.Number));
+
     CreateMap<Booking, BookingViewModel>();
 
     CreateMap<Class, ClassViewModel>();
@@ -39,6 +46,7 @@ public class AutoMapperConfig : Profile
     CreateMap<UsersRoles, UsersRolesViewModel>();
 
     CreateMap<Subscription, SubscriptionPreviewViewModel>();
+    CreateMap<Subscription, SubscriptionProfileViewModel>();
 
     CreateMap<Tenant, TenantViewModel>()
   .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address));
