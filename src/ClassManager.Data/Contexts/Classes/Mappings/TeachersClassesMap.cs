@@ -14,7 +14,7 @@ public class TeachersClassesMap : IEntityTypeConfiguration<TeachersClasses>
 
     builder.HasOne(e => e.User)
       .WithMany(u => u.TeachersClasses)
-      .HasForeignKey("TeacherId")
+      .HasForeignKey("UserId")
       .HasPrincipalKey(u => u.Id);
 
     builder.HasOne(e => e.Class)
