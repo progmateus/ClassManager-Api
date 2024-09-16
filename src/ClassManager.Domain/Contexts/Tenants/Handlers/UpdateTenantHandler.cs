@@ -11,7 +11,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Handlers;
 
 public class UpdateTenantHandler :
   Notifiable,
-  IActionHandler<CreateTenantCommand>
+  IActionHandler<UpdateTenantCommand>
 {
   private readonly ITenantRepository _repository;
 
@@ -21,13 +21,13 @@ public class UpdateTenantHandler :
   {
     _repository = tenantRepository;
   }
-  public async Task<ICommandResult> Handle(Guid id, CreateTenantCommand command)
+  public async Task<ICommandResult> Handle(Guid id, UpdateTenantCommand command)
   {
     command.Validate();
     if (command.Invalid)
     {
       AddNotifications(command);
-      return new CommandResult(false, "ERR_TENANT_NOT_UPDATED", null, command.Notifications);
+      return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
 
     var tenant = await _repository.GetByIdAsync(id, default);
@@ -52,7 +52,7 @@ public class UpdateTenantHandler :
     var document = new Document(command.Document, EDocumentType.CPF);
     var email = new Email(command.Email);
 
-    tenant.ChangeTenant(command.Name, email, document);
+    tenant.Update(command.Name, email, document, command.Description);
 
     // agrupar validações
 
@@ -60,11 +60,11 @@ public class UpdateTenantHandler :
 
     if (Invalid)
     {
-      return new CommandResult(false, "ERR_TENANT_NOT_CREATED", null, Notifications);
+      return new CommandResult(false, "ERR_VALIDATION", null, Notifications);
     }
 
     await _repository.UpdateAsync(tenant, default);
 
-    return new CommandResult(true, "TENANT_CREATED", tenant, null, 200);
+    return new CommandResult(true, "TENANT_UPDATED", tenant, null, 200);
   }
 }

@@ -31,7 +31,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
 
     public string Name { get; private set; } = null!;
     public string Username { get; private set; }
-    public string Description { get; private set; }
+    public string? Description { get; private set; }
     public Document Document { get; private set; }
     public Email Email { get; private set; }
     public string? Avatar { get; private set; } = string.Empty;
@@ -49,12 +49,13 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
-    public void ChangeTenant(string name, Email email, Document document)
+    public void Update(string name, Email email, Document document, string? description)
     {
       AddNotifications(email, document);
       Name = name;
       Email = email;
       Document = document;
+      Description = description;
     }
   }
 }

@@ -1,5 +1,4 @@
 using ClassManager.Api.Contexts.Shared.Controllers;
-using ClassManager.Domain.Contexts.Accounts.Commands;
 using ClassManager.Domain.Contexts.Tenants.Commands;
 using ClassManager.Domain.Contexts.Tenants.Handlers;
 using Microsoft.AspNetCore.Authorization;
@@ -65,7 +64,7 @@ public class TenantController : MainController
   [Route("{id}")]
   public async Task<IResult> Update(
     [FromRoute] Guid id,
-    [FromBody] CreateTenantCommand command,
+    [FromBody] UpdateTenantCommand command,
     [FromServices] UpdateTenantHandler handler
   )
   {
