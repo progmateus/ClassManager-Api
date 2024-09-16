@@ -35,7 +35,7 @@ public class GetUserProfileHandler
   public async Task<ICommandResult> Handle(Guid id)
   {
 
-    var user = _mapper.Map<UserViewModel>(await _userReporitory.GetByIdAsync(id, new CancellationToken()));
+    var user = _mapper.Map<UserProfileViewModel>(await _userReporitory.GetByIdAsync(id, new CancellationToken()));
 
     if (user == null)
     {
