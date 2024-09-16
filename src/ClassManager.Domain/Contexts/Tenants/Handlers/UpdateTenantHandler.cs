@@ -40,7 +40,7 @@ public class UpdateTenantHandler :
 
     if ((tenant.Document.Number != command.Document) && await _repository.DocumentAlreadyExistsAsync(command.Document, new CancellationToken()))
     {
-      AddNotification("Document", "Docuemnt already exists");
+      AddNotification("Document", "Document already exists");
     }
 
 

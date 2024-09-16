@@ -44,7 +44,7 @@ public class UpdateUserHandler :
 
     if ((user.Document.Number != command.Document) && await _userReporitory.DocumentAlreadyExistsAsync(command.Document, new CancellationToken()))
     {
-      AddNotification("Document", "Docuemnt already exists");
+      AddNotification("Document", "Document already exists");
     }
 
     // verificar se email existe
