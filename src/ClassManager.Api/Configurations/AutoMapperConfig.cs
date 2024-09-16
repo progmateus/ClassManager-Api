@@ -38,7 +38,7 @@ public class AutoMapperConfig : Profile
     CreateMap<Role, RoleViewModel>();
     CreateMap<UsersRoles, UsersRolesViewModel>();
 
-    CreateMap<Subscription, SubscriptionViewModel>();
+    CreateMap<Subscription, SubscriptionPreviewViewModel>();
 
     CreateMap<Tenant, TenantViewModel>()
   .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address));

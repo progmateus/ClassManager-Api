@@ -30,7 +30,7 @@ public class TenantViewModel
   public List<RoleViewModel> Roles { get; set; } = [];
   public List<UsersRolesViewModel> UsersRoles { get; set; } = [];
   public List<TenantPlanViewModel> TenantPlans { get; set; } = [];
-  public List<SubscriptionViewModel> Subscriptions { get; set; } = [];
+  public List<SubscriptionPreviewViewModel> Subscriptions { get; set; } = [];
   public List<ClassViewModel> Classes { get; set; } = [];
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }

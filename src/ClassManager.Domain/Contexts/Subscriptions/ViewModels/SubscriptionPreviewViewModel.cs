@@ -6,7 +6,7 @@ using ClassManager.Domain.Contexts.Users.ViewModels;
 
 namespace ClassManager.Domain.Contexts.Subscriptions.ViewModels;
 
-public class SubscriptionViewModel
+public class SubscriptionPreviewViewModel
 {
   public Guid Id { get; set; }
   public Guid UserId { get; set; }

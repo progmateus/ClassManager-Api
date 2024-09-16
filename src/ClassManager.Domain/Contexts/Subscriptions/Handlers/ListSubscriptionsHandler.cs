@@ -35,7 +35,7 @@ public class ListSubscriptionsHandler : Notifiable,
       return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, null, 404);
     }
 
-    var subscriptions = _mapper.Map<List<SubscriptionViewModel>>(await _subscriptionRepository.ListSubscriptions(null, tenantId));
+    var subscriptions = _mapper.Map<List<SubscriptionPreviewViewModel>>(await _subscriptionRepository.ListSubscriptions(null, tenantId));
 
     return new CommandResult(false, "SUBSCRIPTIONS_LISTED", subscriptions, null, 200);
   }

@@ -12,7 +12,7 @@ namespace ClassManager.Domain.Contexts.Tenants.ViewModels
     public decimal Price { get; set; }
     public Guid TenantId { get; set; }
     public TenantViewModel? Tenant { get; set; }
-    public ICollection<SubscriptionViewModel> Subscriptions { get; set; } = [];
+    public ICollection<SubscriptionPreviewViewModel> Subscriptions { get; set; } = [];
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
   }

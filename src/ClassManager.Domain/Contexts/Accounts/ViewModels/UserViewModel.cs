@@ -23,7 +23,7 @@ public class UserViewModel
   public IList<ClassViewModel> Classes { get; set; } = [];
   public IList<TeachersClassesViewModel> TeachersClasses { get; set; } = [];
   public IList<StudentsClassesViewModel> StudentsClasses { get; set; } = [];
-  public IList<SubscriptionViewModel> Subscriptions { get; set; } = [];
+  public IList<SubscriptionPreviewViewModel> Subscriptions { get; set; } = [];
   public IList<BookingViewModel> Bookings { get; set; } = [];
   public IList<TenantViewModel> Tenants { get; set; } = [];
   public DateTime CreatedAt { get; set; }
