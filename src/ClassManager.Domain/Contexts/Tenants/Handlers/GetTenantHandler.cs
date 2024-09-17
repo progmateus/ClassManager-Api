@@ -22,6 +22,11 @@ public class GetTenantHandler
   {
     var tenant = _mapper.Map<TenantViewModel>(await _repository.GetByIdAsync(id, new CancellationToken()));
 
+    if (tenant is null)
+    {
+      return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, null, 404);
+    }
+
     return new CommandResult(true, "TENANT_GOTTEN", tenant, null, 201);
   }
 }
