@@ -2,8 +2,9 @@ using System;
 using ClassManager.Domain.Shared.Entities;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClasManager.Domain.Contexts.Bookings.Entities;
+using ClassManager.Domain.Contexts.Classes.Entities;
 
-namespace ClassManager.Domain.Contexts.Classes.Entities
+namespace ClassManager.Domain.Contexts.ClassDays.Entities
 {
   public class ClassDay : Entity
   {

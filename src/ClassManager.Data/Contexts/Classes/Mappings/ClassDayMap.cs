@@ -1,3 +1,4 @@
+using ClassManager.Domain.Contexts.ClassDays.Entities;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using Microsoft.EntityFrameworkCore;

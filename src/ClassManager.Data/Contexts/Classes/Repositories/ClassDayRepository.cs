@@ -1,5 +1,7 @@
 using ClassManager.Data.Contexts.shared.Repositories;
 using ClassManager.Data.Data;
+using ClassManager.Domain.Contexts.ClassDays.Entities;
+using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;

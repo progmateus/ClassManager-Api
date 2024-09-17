@@ -1,13 +1,13 @@
-using ClassManager.Domain.Contexts.Classes.Commands;
-using ClassManager.Domain.Contexts.Classes.Entities;
+using ClassManager.Domain.Contexts.ClassDays.Commands;
+using ClassManager.Domain.Contexts.ClassDays.Entities;
+using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
-using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
 
-namespace ClassManager.Domain.Contexts.Classes.Handlers;
+namespace ClassManager.Domain.Contexts.ClassDays.Handlers;
 
 public class CreateClassDayHandler :
   Notifiable,

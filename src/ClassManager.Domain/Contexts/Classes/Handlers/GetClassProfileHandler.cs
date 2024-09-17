@@ -1,3 +1,4 @@
+using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;

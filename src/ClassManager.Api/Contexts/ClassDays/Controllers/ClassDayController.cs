@@ -1,9 +1,11 @@
 using ClassManager.Api.Contexts.Shared.Controllers;
+using ClassManager.Domain.Contexts.ClassDays.Commands;
+using ClassManager.Domain.Contexts.ClassDays.Handlers;
 using ClassManager.Domain.Contexts.Classes.Commands;
 using ClassManager.Domain.Contexts.Classes.Handlers;
 using Microsoft.AspNetCore.Mvc;
 
-namespace ClassManager.Api.Contexts.Classes.Controllers;
+namespace ClassManager.Api.Contexts.ClassDays.Controllers;
 
 public class ClassDayController : MainController
 {

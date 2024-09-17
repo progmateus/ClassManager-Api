@@ -5,6 +5,7 @@ using ClassManager.Data.Contexts.Classes.Mappings;
 using ClassManager.Data.Contexts.Plans.Mappings;
 using ClassManager.Data.Contexts.Tenants.Mappings;
 using ClassManager.Domain.Contexts.Accounts.Entities;
+using ClassManager.Domain.Contexts.ClassDays.Entities;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Plans.Entities;
 using ClassManager.Domain.Contexts.Roles.Entities;

@@ -1,4 +1,5 @@
 using ClassManager.Domain.Contexts.Accounts.Entities;
+using ClassManager.Domain.Contexts.ClassDays.Entities;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Shared.Entities;
 

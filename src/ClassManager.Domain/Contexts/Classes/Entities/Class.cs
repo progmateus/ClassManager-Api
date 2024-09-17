@@ -2,6 +2,7 @@ using System;
 using ClassManager.Domain.Shared.Entities;
 using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Contexts.Accounts.Entities;
+using ClassManager.Domain.Contexts.ClassDays.Entities;
 
 namespace ClassManager.Domain.Contexts.Classes.Entities
 {

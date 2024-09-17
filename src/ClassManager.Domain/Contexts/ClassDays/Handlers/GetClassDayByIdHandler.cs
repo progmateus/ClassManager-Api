@@ -1,8 +1,8 @@
-using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
+using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;
 
-namespace ClassManager.Domain.Contexts.Classes.Handlers;
+namespace ClassManager.Domain.Contexts.ClassDays.Handlers;
 
 public class GetClassDayByIdHandler
 {

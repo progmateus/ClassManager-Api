@@ -1,6 +1,7 @@
 using ClasManager.Domain.Contexts.Bookings.Entities;
+using ClassManager.Domain.Contexts.Classes.ViewModels;
 
-namespace ClassManager.Domain.Contexts.Classes.ViewModels
+namespace ClassManager.Domain.Contexts.ClassDays.ViewModels
 {
   public class ClassDayViewModel
   {

@@ -1,3 +1,4 @@
+using ClassManager.Domain.Contexts.ClassDays.ViewModels;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.tenants.ViewModels;
 using ClassManager.Domain.Contexts.Users.ViewModels;

@@ -2,6 +2,8 @@ using AutoMapper;
 using ClasManager.Domain.Contexts.Bookings.Entities;
 using ClassManager.Domain.Contexts.Accounts.Entities;
 using ClassManager.Domain.Contexts.Bookings.ViewModels;
+using ClassManager.Domain.Contexts.ClassDays.Entities;
+using ClassManager.Domain.Contexts.ClassDays.ViewModels;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Classes.ViewModels;
 using ClassManager.Domain.Contexts.Plans.Entities;

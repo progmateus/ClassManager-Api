@@ -2,6 +2,7 @@ using ClasManager.Domain.Contexts.Bookings.Commands;
 using ClasManager.Domain.Contexts.Bookings.Entities;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Bookings.Repositories.Contracts;
+using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Shared.Enums;

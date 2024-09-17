@@ -14,6 +14,8 @@ using ClassManager.Domain.Contexts.Accounts.Handlers;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Auth.Services;
 using ClassManager.Domain.Contexts.Bookings.Repositories.Contracts;
+using ClassManager.Domain.Contexts.ClassDays.Handlers;
+using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Classes.Handlers;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Plans.Handlers;

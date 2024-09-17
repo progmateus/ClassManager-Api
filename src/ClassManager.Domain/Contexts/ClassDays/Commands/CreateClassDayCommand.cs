@@ -2,7 +2,7 @@ using ClassManager.Domain.Shared.Commands;
 using Flunt.Notifications;
 using Flunt.Validations;
 
-namespace ClassManager.Domain.Contexts.Classes.Commands
+namespace ClassManager.Domain.Contexts.ClassDays.Commands
 {
   public class CreateClassDayCommand : Notifiable, ICommand
   {
