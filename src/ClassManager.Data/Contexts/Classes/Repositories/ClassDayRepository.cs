@@ -15,9 +15,23 @@ public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
   public object CountByClassId(Guid classId, DateTime initiDate, DateTime endDate)
   {
     return DbSet
-              .Where(x => x.ClassId == classId && x.Date >= initiDate && x.Date <= endDate)
-              .GroupBy(x => x.Status)
-              .Select(g => new { status = g.Key, count = g.Count() });
+      .Where(x => x.ClassId == classId && x.Date >= initiDate && x.Date <= endDate)
+      .GroupBy(x => x.Status)
+      .Select(g => new { status = g.Key, count = g.Count() });
+  }
+
+  public async Task<List<ClassDay>> ListByTenantOrClassAndDate(List<Guid>? tenantIds, List<Guid>? classesIds, DateTime date)
+  {
+    var zeroTime = date.Date;
+    var finalTime = date.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
+
+    return await DbSet
+    .AsNoTracking()
+    .Include((x) => x.Bookings)
+    .Where(x => tenantIds == null || tenantIds.Contains(x.Class.TenantId))
+    .Where(x => classesIds == null || classesIds.Contains(x.ClassId))
+    .Where(x => x.Date >= zeroTime && x.Date <= finalTime)
+    .ToListAsync();
   }
 
   public async Task<ClassDay> GetByIdAndTenantIdAsync(Guid tenantId, Guid id)
@@ -27,5 +41,12 @@ public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
     .Include((x) => x.Bookings)
     .ThenInclude((b) => b.User)
     .FirstAsync((x) => x.Class.TenantId == tenantId && x.Id == id);
+  }
+
+  public async Task<List<ClassDay>> ListByTenantId(Guid tenantId)
+  {
+    return await DbSet
+      .Where(x => x.Class.TenantId == tenantId)
+      .ToListAsync();
   }
 }

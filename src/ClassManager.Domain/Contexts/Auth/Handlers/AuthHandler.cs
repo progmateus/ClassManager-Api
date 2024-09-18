@@ -94,7 +94,7 @@ public class AuthHandler :
     }
 
     var userRoles = _mapper.Map<List<UsersRolesViewModel>>(await _usersRolesRepository.FindByUserId(user.Id));
-    var userSubscriptions = _mapper.Map<List<SubscriptionPreviewViewModel>>(await _subscriptionsrepository.ListSubscriptions(user.Id, null));
+    var userSubscriptions = _mapper.Map<List<SubscriptionPreviewViewModel>>(await _subscriptionsrepository.ListSubscriptions([user.Id], null));
 
     #endregion
 

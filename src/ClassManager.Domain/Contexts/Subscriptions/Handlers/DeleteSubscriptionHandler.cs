@@ -38,7 +38,7 @@ public class DeleteSubscriptionHandler : Notifiable
       return new CommandResult(false, "ERR_SUBSCRIPTION_INACTIVE", null, null, 409);
     }
 
-    var usersClassesFound = await _studentsClassesRepository.GetByUserIdAndTenantId(tenantId, userId);
+    var usersClassesFound = await _studentsClassesRepository.ListByUserOrClassOrTenantAsync([userId], [tenantId], null);
 
     var userRoles = await _usersRolesrepository.GetStudentsRolesByUserIdAndTenantId(tenantId, userId, new CancellationToken());
 

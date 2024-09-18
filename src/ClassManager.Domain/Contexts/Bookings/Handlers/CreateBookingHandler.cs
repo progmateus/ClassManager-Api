@@ -95,7 +95,7 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_ACTIVE", null, 403);
     }
 
-    var isClassStudent = await _studentsClassesrepository.GetByUserIdAndClassId(classDay.ClassId, command.UserId);
+    var isClassStudent = await _studentsClassesrepository.FindByUserIdAndClassId(classDay.ClassId, command.UserId);
 
     if (isClassStudent is null)
     {

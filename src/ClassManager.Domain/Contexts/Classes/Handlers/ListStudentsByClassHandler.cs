@@ -30,7 +30,7 @@ public class ListStudentsByClassHandler
       return new CommandResult(false, "ERR_CLASS_NOT_FOUND", null, null, 404);
     }
 
-    var students = _mapper.Map<StudentsClassesViewModel>(await _studentsClassesRepository.ListByClassId(classId, tenantId));
+    var students = _mapper.Map<StudentsClassesViewModel>(await _studentsClassesRepository.ListByUserOrClassOrTenantAsync(null, [tenantId], [classId]));
 
     return new CommandResult(true, "STUDENTS_LISTED", students, null, 200);
   }

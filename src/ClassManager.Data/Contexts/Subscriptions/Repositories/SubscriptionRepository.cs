@@ -57,16 +57,15 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
   .FirstAsync();
   }
 
-  public async Task<List<Subscription>> ListSubscriptions(Guid? userId, Guid? tenantId)
+  public async Task<List<Subscription>> ListSubscriptions(List<Guid>? usersIds, List<Guid>? tenantsIds)
   {
     return await DbSet
     .Include(x => x.User)
     .Include(x => x.TenantPlan)
     .Include(x => x.Tenant)
-    .Where(x => !userId.HasValue || x.UserId == userId.Value)
-    .Where(x => !tenantId.HasValue || x.TenantId == tenantId.Value)
+    .Where(x => usersIds == null || usersIds.Contains(x.UserId))
+    .Where(x => tenantsIds == null || tenantsIds.Contains(x.TenantId))
     .GroupBy(x => new { x.TenantId, x.UserId })
     .Select(x => x.OrderByDescending(x => x.CreatedAt).Select(x => x).First()).ToListAsync();
   }
-
 }

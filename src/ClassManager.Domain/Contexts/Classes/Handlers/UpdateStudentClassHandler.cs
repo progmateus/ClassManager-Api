@@ -38,14 +38,14 @@ public class UpdateStudentClassHandler
       return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null, 404);
     }
 
-    var student_class = await _studentsClassesRepository.GetByUserIdAndClassId(command.ClassId, command.UserId);
+    var student_class = await _studentsClassesRepository.FindByUserIdAndClassId(command.ClassId, command.UserId);
 
     if (student_class is not null)
     {
       return new CommandResult(false, "STUDENT_ALREADY_ADDED", null, null, 409);
     }
 
-    var userAlreadyOnClass = await _studentsClassesRepository.GetByUserIdAndTenantId(tenantId, command.UserId);
+    var userAlreadyOnClass = await _studentsClassesRepository.ListByUserOrClassOrTenantAsync([command.UserId], [tenantId], null);
 
     await _studentsClassesRepository.DeleteRangeAsync(userAlreadyOnClass, new CancellationToken());
 

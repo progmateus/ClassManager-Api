@@ -21,16 +21,12 @@ public class StudentsClassesRepository : Repository<StudentsClasses>, IStudentsC
     return DbSet.Count(x => x.ClassId == classId);
   }
 
-  public async Task<StudentsClasses> GetByUserIdAndClassId(Guid classId, Guid userId)
+  public async Task<StudentsClasses?> FindByUserIdAndClassId(Guid classId, Guid userId)
   {
-    return await DbSet.FirstOrDefaultAsync((tc) => tc.ClassId == classId && tc.UserId == userId);
+    return await
+    DbSet
+    .FirstOrDefaultAsync((tc) => tc.ClassId == classId && tc.UserId == userId);
   }
-
-  public async Task<List<StudentsClasses>> GetByUserIdAndTenantId(Guid tenantId, Guid userId)
-  {
-    return await DbSet.Include(x => x.Class).Where((sc) => sc.Class.TenantId == tenantId && sc.UserId == userId).ToListAsync();
-  }
-
   public async Task<List<StudentsClasses>> ListByClassId(Guid classId, Guid tenantId)
   {
     return await DbSet
@@ -39,5 +35,15 @@ public class StudentsClassesRepository : Repository<StudentsClasses>, IStudentsC
       u => u.Subscriptions.Where(s => s.TenantId == tenantId)
     )
     .Where((sc) => sc.ClassId == classId).ToListAsync();
+  }
+
+  public async Task<List<StudentsClasses>> ListByUserOrClassOrTenantAsync(List<Guid>? usersIds, List<Guid>? classesIds, List<Guid>? tenantsIds)
+  {
+    return await DbSet
+    .Include(x => x.Class)
+    .Where(x => tenantsIds == null || tenantsIds.Contains(x.Class.TenantId))
+    .Where(x => classesIds == null || classesIds.Contains(x.ClassId))
+    .Where(x => usersIds == null || usersIds.Contains(x.UserId))
+    .ToListAsync();
   }
 }
