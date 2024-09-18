@@ -3,6 +3,7 @@ using ClassManager.Data.Data;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ClassManager.Data.Contexts.Plans.Repositories;
 
@@ -41,9 +42,9 @@ public class StudentsClassesRepository : Repository<StudentsClasses>, IStudentsC
   {
     return await DbSet
     .Include(x => x.Class)
-    .Where(x => tenantsIds == null || tenantsIds.Contains(x.Class.TenantId))
-    .Where(x => classesIds == null || classesIds.Contains(x.ClassId))
-    .Where(x => usersIds == null || usersIds.Contains(x.UserId))
+    .Where(x => tenantsIds.IsNullOrEmpty() || tenantsIds.Contains(x.Class.TenantId))
+    .Where(x => classesIds.IsNullOrEmpty() || classesIds.Contains(x.ClassId))
+    .Where(x => usersIds.IsNullOrEmpty() || usersIds.Contains(x.UserId))
     .ToListAsync();
   }
 }

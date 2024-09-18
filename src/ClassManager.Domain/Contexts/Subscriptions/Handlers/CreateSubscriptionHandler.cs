@@ -81,11 +81,13 @@ public class CreateSubscriptionHandler : Notifiable,
 
     DateTime lastDayOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month));
 
-    var subscription = new Subscription(command.UserId, command.TenantPlanId, lastDayOfMonth);
+    var subscription = new Subscription(command.UserId, command.TenantPlanId, tenantId, lastDayOfMonth);
 
     await _subscriptionRepository.CreateAsync(subscription, new CancellationToken());
 
     var studentclass = new StudentsClasses(command.UserId, command.ClassId);
+
+    await _studentsClassesRepository.DeleteByUserIdAndtenantId(tenantId, command.UserId, new CancellationToken());
 
     await _studentsClassesRepository.CreateAsync(studentclass, new CancellationToken());
 

@@ -4,6 +4,7 @@ using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Entities;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace classManager.Data.Contexts.Subscriptions.Repositories;
 
@@ -63,8 +64,8 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     .Include(x => x.User)
     .Include(x => x.TenantPlan)
     .Include(x => x.Tenant)
-    .Where(x => usersIds == null || usersIds.Contains(x.UserId))
-    .Where(x => tenantsIds == null || tenantsIds.Contains(x.TenantId))
+    .Where(x => usersIds.IsNullOrEmpty() || usersIds.Contains(x.UserId))
+    .Where(x => tenantsIds.IsNullOrEmpty() || tenantsIds.Contains(x.TenantId))
     .GroupBy(x => new { x.TenantId, x.UserId })
     .Select(x => x.OrderByDescending(x => x.CreatedAt).Select(x => x).First()).ToListAsync();
   }

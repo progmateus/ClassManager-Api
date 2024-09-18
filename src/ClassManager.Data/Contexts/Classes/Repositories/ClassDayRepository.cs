@@ -5,6 +5,7 @@ using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ClassManager.Data.Contexts.Plans.Repositories;
 
@@ -28,8 +29,8 @@ public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
     return await DbSet
     .AsNoTracking()
     .Include((x) => x.Bookings)
-    .Where(x => tenantIds == null || tenantIds.Contains(x.Class.TenantId))
-    .Where(x => classesIds == null || classesIds.Contains(x.ClassId))
+    .Where(x => tenantIds.IsNullOrEmpty() || tenantIds.Contains(x.Class.TenantId))
+    .Where(x => classesIds.IsNullOrEmpty() || classesIds.Contains(x.ClassId))
     .Where(x => x.Date >= zeroTime && x.Date <= finalTime)
     .ToListAsync();
   }

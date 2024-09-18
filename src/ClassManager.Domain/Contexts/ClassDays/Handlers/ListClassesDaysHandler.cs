@@ -29,12 +29,11 @@ public class ListClassesDaysHandler
   public async Task<ICommandResult> Handle(List<Guid>? usersIds, Guid? tenantId, DateTime date)
   {
 
-    if (!tenantId.HasValue)
+    if (tenantId.HasValue)
     {
       var classesDaysFound = _classDayRepository.ListByTenantId(tenantId.Value);
       return new CommandResult(true, "CLASSES_DAYS_LISTED", classesDaysFound, null, 200);
     }
-
     var usersubscriptions = await _subscriptionsRepository.ListSubscriptions(usersIds, []);
 
     var activesubscriptions = usersubscriptions.Where(x => x.Status == ESubscriptionStatus.ACTIVE).ToList();
@@ -45,7 +44,7 @@ public class ListClassesDaysHandler
 
     var classesIds = userClasses.Select(o => o.ClassId).ToList();
 
-    var classesDays = _classDayRepository.ListByTenantOrClassAndDate(null, classesIds, date);
+    var classesDays = await _classDayRepository.ListByTenantOrClassAndDate(null, classesIds, date);
 
     return new CommandResult(true, "CLASSES_DAYS_LISTED", classesDays, null, 200);
   }
