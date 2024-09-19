@@ -12,7 +12,7 @@ namespace ClassManager.Domain.Contexts.ClassDays.Commands
     public string HourStart { get; set; } = string.Empty;
     public string HourEnd { get; set; } = string.Empty;
   }
-  public class CreateClassHourCommand
+  public class UpdateClassHourCommand
   {
     public List<CreateClassHourParams> ClassesHours { get; set; } = [];
   }
