@@ -15,4 +15,5 @@ public interface ITRepository<TEntity> where TEntity : TenantEntity
   Task<List<TEntity>> GetByIdsAsync(List<Guid> ids, Guid tenantId, CancellationToken cancellationToken);
   Task CreateRangeAsync(List<TEntity> entities, CancellationToken cancellationToken);
   Task DeleteRangeAsync(List<TEntity> entities, CancellationToken cancellationToken);
+  Task DeleteAllByTenantIdAsync(Guid tenantId, CancellationToken cancellationToken);
 }

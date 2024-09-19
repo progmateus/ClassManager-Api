@@ -39,7 +39,7 @@ public class UpdateClassHourHandler :
       classesHoursEntities.Add(classHourEntity);
     }
 
-    await _classHourRepository.DeleteAllByTenantId(tenantId);
+    await _classHourRepository.DeleteAllByTenantIdAsync(tenantId, new CancellationToken());
 
     await _classHourRepository.CreateRangeAsync(classesHoursEntities, new CancellationToken());
 

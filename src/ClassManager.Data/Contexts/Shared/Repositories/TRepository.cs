@@ -78,4 +78,10 @@ public abstract class TRepository<TEntity> : ITRepository<TEntity> where TEntity
     DbSet.RemoveRange(entities);
     await SaveChangesAsync(cancellationToken);
   }
+
+  public async Task DeleteAllByTenantIdAsync(Guid tenantId, CancellationToken cancellationToken)
+  {
+    DbSet.RemoveRange(DbSet.Where(x => x.TenantId == tenantId));
+    await SaveChangesAsync(cancellationToken);
+  }
 }
