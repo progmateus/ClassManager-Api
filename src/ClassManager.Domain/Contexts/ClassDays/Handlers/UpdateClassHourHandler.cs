@@ -8,12 +8,12 @@ using Microsoft.IdentityModel.Tokens;
 
 namespace ClassManager.Domain.Contexts.ClassDays.Handlers;
 
-public class GenerateClassHourHandler :
+public class UpdateClassHourHandler :
   Notifiable
 {
   private readonly IClassHourRepository _classHourRepository;
 
-  public GenerateClassHourHandler(
+  public UpdateClassHourHandler(
     IClassHourRepository classHourRepository
     )
   {
