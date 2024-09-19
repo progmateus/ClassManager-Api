@@ -1,4 +1,5 @@
 using ClasManager.Domain.Contexts.Bookings.Entities;
+using ClassManager.Domain.Contexts.Bookings.ViewModels;
 using ClassManager.Domain.Contexts.Classes.ViewModels;
 
 namespace ClassManager.Domain.Contexts.ClassDays.ViewModels
@@ -14,7 +15,7 @@ namespace ClassManager.Domain.Contexts.ClassDays.ViewModels
     public Guid ClassId { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
-    public ClassViewModel Class { get; private set; } = null!;
-    public List<Booking> Bookings { get; private set; } = [];
+    public ClassViewModel? Class { get; private set; }
+    public List<BookingViewModel> Bookings { get; private set; } = [];
   }
 }

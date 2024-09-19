@@ -37,6 +37,7 @@ public class AutoMapperConfig : Profile
 
     CreateMap<Booking, BookingViewModel>();
 
+
     CreateMap<Class, ClassViewModel>();
     CreateMap<ClassDay, ClassDayViewModel>();
     CreateMap<StudentsClasses, StudentsClassesViewModel>();

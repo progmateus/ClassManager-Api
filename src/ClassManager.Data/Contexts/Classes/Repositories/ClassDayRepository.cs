@@ -29,6 +29,9 @@ public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
     return await DbSet
     .AsNoTracking()
     .Include((x) => x.Bookings)
+    .ThenInclude((b) => b.User)
+    .Include((x) => x.Class)
+    .ThenInclude((c) => c.Tenant)
     .Where(x => tenantIds.IsNullOrEmpty() || tenantIds.Contains(x.Class.TenantId))
     .Where(x => classesIds.IsNullOrEmpty() || classesIds.Contains(x.ClassId))
     .Where(x => x.Date >= zeroTime && x.Date <= finalTime)

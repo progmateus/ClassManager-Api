@@ -1,4 +1,6 @@
+using AutoMapper;
 using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
+using ClassManager.Domain.Contexts.ClassDays.ViewModels;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Shared.Enums;
@@ -14,17 +16,20 @@ public class ListClassesDaysHandler
   private readonly IUsersRolesRepository _usersRolesRepository;
   private readonly IStudentsClassesRepository _studentsClassesRepository;
   private readonly ISubscriptionRepository _subscriptionsRepository;
+  private readonly IMapper _mapper;
   public ListClassesDaysHandler(
     IClassDayRepository classRepository,
     IUsersRolesRepository usersRolesRepository,
     IStudentsClassesRepository studentsClassesRepository,
-    ISubscriptionRepository subscriptionsRepository
+    ISubscriptionRepository subscriptionsRepository,
+    IMapper mapper
     )
   {
     _classDayRepository = classRepository;
     _usersRolesRepository = usersRolesRepository;
     _studentsClassesRepository = studentsClassesRepository;
     _subscriptionsRepository = subscriptionsRepository;
+    _mapper = mapper;
   }
   public async Task<ICommandResult> Handle(List<Guid>? usersIds, Guid? tenantId, DateTime date)
   {
@@ -44,7 +49,7 @@ public class ListClassesDaysHandler
 
     var classesIds = userClasses.Select(o => o.ClassId).ToList();
 
-    var classesDays = await _classDayRepository.ListByTenantOrClassAndDate(null, classesIds, date);
+    var classesDays = _mapper.Map<List<ClassDayViewModel>>(await _classDayRepository.ListByTenantOrClassAndDate(null, classesIds, date));
 
     return new CommandResult(true, "CLASSES_DAYS_LISTED", classesDays, null, 200);
   }
