@@ -19,7 +19,7 @@ public class UpdateClassHourHandler :
   {
     _classHourRepository = classHourRepository;
   }
-  public async Task<ICommandResult> Handle(CreateClassHourCommand command, Guid tenantId)
+  public async Task<ICommandResult> Handle(UpdateClassHourCommand command, Guid tenantId)
   {
     if (command.ClassesHours.IsNullOrEmpty())
     {

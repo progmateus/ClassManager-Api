@@ -12,7 +12,7 @@ public class ClassHourController : MainController
   [HttpPost("{tenantId}/classes-hours")]
   public async Task<IResult> Update(
     [FromRoute] Guid tenantId,
-    [FromBody] CreateClassHourCommand command,
+    [FromBody] UpdateClassHourCommand command,
     [FromServices] UpdateClassHourHandler handler
   )
   {
