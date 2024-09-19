@@ -35,6 +35,7 @@ public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
     .Where(x => tenantIds.IsNullOrEmpty() || tenantIds.Contains(x.Class.TenantId))
     .Where(x => classesIds.IsNullOrEmpty() || classesIds.Contains(x.ClassId))
     .Where(x => x.Date >= zeroTime && x.Date <= finalTime)
+    .OrderBy(x => x.Date)
     .ToListAsync();
   }
 
