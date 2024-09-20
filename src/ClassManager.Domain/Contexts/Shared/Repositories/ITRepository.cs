@@ -4,8 +4,8 @@ using ClassManager.Domain.Shared.Entities;
 
 public interface ITRepository<TEntity> where TEntity : TenantEntity
 {
-  Task<TEntity?> GetByIdAsync(Guid id, Guid tenantId, CancellationToken cancellationToken);
-  Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken);
+  Task<TEntity?> FindByIdAsync(Guid id, Guid tenantId, CancellationToken cancellationToken);
+  Task<List<TEntity>> ListByTenantId(Guid tenantId, CancellationToken cancellationToken);
   Task CreateAsync(TEntity entity, CancellationToken cancellationToken);
   Task UpdateAsync(TEntity entity, CancellationToken cancellationToken);
   Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken);

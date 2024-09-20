@@ -21,7 +21,7 @@ public class DeleteSubscriptionHandler : Notifiable
   }
   public async Task<ICommandResult> Handle(Guid tenantId, Guid subscriptionId, Guid userId)
   {
-    var subscription = await _subscriptionRepository.GetByIdAsync(subscriptionId, tenantId, new CancellationToken());
+    var subscription = await _subscriptionRepository.FindByIdAsync(subscriptionId, tenantId, new CancellationToken());
 
     if (subscription is null)
     {

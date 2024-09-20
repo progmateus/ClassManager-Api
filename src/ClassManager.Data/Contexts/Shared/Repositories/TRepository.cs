@@ -21,17 +21,12 @@ public abstract class TRepository<TEntity> : ITRepository<TEntity> where TEntity
     await SaveChangesAsync(cancellationToken);
   }
 
-  public async virtual Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken)
-  {
-    return await DbSet.ToListAsync(cancellationToken);
-  }
-
   public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken)
   {
     return await DbSet.AsNoTracking().Where(predicate).ToListAsync(cancellationToken);
   }
 
-  public async Task<TEntity?> GetByIdAsync(Guid id, Guid tenantId, CancellationToken cancellationToken)
+  public async Task<TEntity?> FindByIdAsync(Guid id, Guid tenantId, CancellationToken cancellationToken)
   {
     return await DbSet.FirstOrDefaultAsync(x => x.Id == id && x.TenantId == tenantId, cancellationToken);
   }
@@ -85,9 +80,8 @@ public abstract class TRepository<TEntity> : ITRepository<TEntity> where TEntity
     await SaveChangesAsync(cancellationToken);
   }
 
-
-  public async Task ListByTenantId(Guid tenantId, CancellationToken cancellationToken)
+  public async Task<List<TEntity>> ListByTenantId(Guid tenantId, CancellationToken cancellationToken)
   {
-    await DbSet.Where(x => x.TenantId == tenantId).ToListAsync(cancellationToken);
+    return await DbSet.Where(x => x.TenantId == tenantId).ToListAsync(cancellationToken);
   }
 }

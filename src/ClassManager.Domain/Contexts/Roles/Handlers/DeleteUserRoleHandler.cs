@@ -17,7 +17,7 @@ public class DeleteUserRoleHandler : Notifiable
   }
   public async Task<ICommandResult> Handle(Guid tenantId, Guid id)
   {
-    var userRole = await _usersRolesRepository.GetByIdAsync(id, tenantId, new CancellationToken());
+    var userRole = await _usersRolesRepository.FindByIdAsync(id, tenantId, new CancellationToken());
 
     if (userRole is null)
     {
