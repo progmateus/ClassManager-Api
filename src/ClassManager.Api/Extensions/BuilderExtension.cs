@@ -27,6 +27,7 @@ using ClassManager.Domain.Contexts.Subscriptions.Handlers;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.Handlers;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
+using ClassManager.Domain.Contexts.TimeTables.Handlers;
 using ClassManager.Domain.Contexts.Usernames.Handlers;
 using ClassManager.Domain.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -163,6 +164,14 @@ public static class BuilderExtension
     IBookingRepository,
     BookingRepository>();
 
+    builder.Services.AddTransient<
+    ITimeTableRepository,
+    TimeTableRepository>();
+
+    builder.Services.AddTransient<
+    IScheduleDayRepository,
+    ScheduleDayRepository>();
+
     builder.Services.AddTransient<TokenService>();
 
     builder.Services.AddTransient<AuthHandler>();
@@ -239,5 +248,8 @@ public static class BuilderExtension
 
 
     builder.Services.AddTransient<VerifyUsernameHandler>();
+
+    builder.Services.AddTransient<CreateTimeTableHandler>();
+    builder.Services.AddTransient<UpdateTimetableHandler>();
   }
 }

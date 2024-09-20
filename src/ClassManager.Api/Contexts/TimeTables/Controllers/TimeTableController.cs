@@ -8,9 +8,10 @@ using Microsoft.AspNetCore.Mvc;
 namespace ClassManager.Api.Contexts.ClassDays.Controllers;
 
 [Authorize]
+[Route("{tenantId}/time-tables")]
 public class TimeTableController : MainController
 {
-  [HttpPost("{tenantId}/time-tables/")]
+  [HttpPost]
   public async Task<IResult> Create(
     [FromRoute] Guid tenantId,
     [FromBody] CreateTimeTableCommand command,
@@ -27,7 +28,7 @@ public class TimeTableController : MainController
     return Results.Ok(result);
   }
 
-  [HttpPost("{tenantId}/time-tables/{timeTableId}")]
+  [HttpPut("{timeTableId}")]
   public async Task<IResult> Update(
     [FromRoute] Guid tenantId,
     [FromRoute] Guid timeTableId,

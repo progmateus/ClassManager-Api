@@ -84,4 +84,10 @@ public abstract class TRepository<TEntity> : ITRepository<TEntity> where TEntity
     DbSet.RemoveRange(DbSet.Where(x => x.TenantId == tenantId));
     await SaveChangesAsync(cancellationToken);
   }
+
+
+  public async Task ListByTenantId(Guid tenantId, CancellationToken cancellationToken)
+  {
+    await DbSet.Where(x => x.TenantId == tenantId).ToListAsync(cancellationToken);
+  }
 }
