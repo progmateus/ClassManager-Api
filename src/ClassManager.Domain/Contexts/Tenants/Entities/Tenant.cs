@@ -8,6 +8,7 @@ using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Subscriptions.Entities;
 using ClassManager.Domain.Contexts.Accounts.Entities;
 using System.Text.Json.Serialization;
+using ClassManager.Domain.Contexts.ClassDays.Entities;
 
 namespace ClassManager.Domain.Contexts.Tenants.Entities
 {
@@ -41,11 +42,12 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public DateTime? ExpiresDate { get; private set; }
     public Plan? Plan { get; private set; }
     public User? User { get; private set; }
-    public List<Role> Roles { get; private set; }
-    public List<UsersRoles> UsersRoles { get; }
-    public List<TenantPlan> TenantPlans { get; }
-    public List<Subscription> Subscriptions { get; }
-    public List<Class> Classes { get; }
+    public List<Role> Roles { get; private set; } = [];
+    public List<UsersRoles> UsersRoles { get; private set; } = [];
+    public List<TenantPlan> TenantPlans { get; private set; } = [];
+    public List<Subscription> Subscriptions { get; private set; } = [];
+    public List<TimeTable> TimesTables { get; private set; } = [];
+    public List<Class> Classes { get; private set; } = [];
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 

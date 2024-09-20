@@ -4,6 +4,7 @@ using ClassManager.Data.Contexts.Bookings.Mappings;
 using ClassManager.Data.Contexts.Classes.Mappings;
 using ClassManager.Data.Contexts.Plans.Mappings;
 using ClassManager.Data.Contexts.Tenants.Mappings;
+using ClassManager.Data.Contexts.TimeTables.Mappings;
 using ClassManager.Domain.Contexts.Accounts.Entities;
 using ClassManager.Domain.Contexts.ClassDays.Entities;
 using ClassManager.Domain.Contexts.Classes.Entities;
@@ -66,6 +67,7 @@ public class AppDbContext : DbContext
     modelBuilder.ApplyConfiguration(new SubscriptionMap());
     modelBuilder.ApplyConfiguration(new ClassDayMap());
     modelBuilder.ApplyConfiguration(new BookingMap());
+    modelBuilder.ApplyConfiguration(new TimeTableMap());
 
     base.OnModelCreating(modelBuilder);
   }
