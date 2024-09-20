@@ -34,6 +34,6 @@ public class CreateTimeTableHandler :
 
     await _timeTableRepository.CreateAsync(timeTable, new CancellationToken());
 
-    return new CommandResult(true, "TIME_TABLE_CREATED", "", null, 201);
+    return new CommandResult(true, "TIME_TABLE_CREATED", timeTable, null, 201);
   }
 }
