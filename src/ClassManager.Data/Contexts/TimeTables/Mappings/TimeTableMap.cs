@@ -17,5 +17,11 @@ public class TimeTableMap : IEntityTypeConfiguration<TimeTable>
       .WithMany(p => p.TimesTables)
       .HasForeignKey(x => x.TenantId)
       .IsRequired(true);
+
+    builder.Property(x => x.Name)
+      .HasColumnName("Name")
+      .HasColumnType("VARCHAR")
+      .HasMaxLength(80)
+      .IsRequired(true);
   }
 }
