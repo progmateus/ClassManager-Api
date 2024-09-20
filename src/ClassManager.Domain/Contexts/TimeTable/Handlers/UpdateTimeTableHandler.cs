@@ -12,15 +12,15 @@ public class UpdateTimetableHandler :
   Notifiable
 {
   private readonly ITimeTableRepository _timeTableRepository;
-  private readonly IScheduleRepository _scheduleRepository;
+  private readonly IScheduleDayRepository _scheduleDayRepository;
 
   public UpdateTimetableHandler(
     ITimeTableRepository classHourRepository,
-    IScheduleRepository scheduleRepository
+    IScheduleDayRepository scheduleDayRepository
     )
   {
     _timeTableRepository = classHourRepository;
-    _scheduleRepository = scheduleRepository;
+    _scheduleDayRepository = scheduleDayRepository;
   }
   public async Task<ICommandResult> Handle(Guid timeTableId, UpdateTimeTableCommand command, Guid tenantId)
   {
@@ -40,17 +40,17 @@ public class UpdateTimetableHandler :
     .Select(grp => grp.ToList())
     .ToList();
 
-    List<ScheduleDay> classesHoursEntities = [];
+    List<ScheduleDay> schedulesDaysEntities = [];
 
     foreach (var classHour in command.ScheduleDays)
     {
       var classHourEntity = new ScheduleDay(timeTableId, classHour.WeekDay, classHour.HourStart, classHour.HourEnd, tenantId);
-      classesHoursEntities.Add(classHourEntity);
+      schedulesDaysEntities.Add(classHourEntity);
     }
 
-    await _scheduleRepository.DeleteAllByTenantIdAsync(tenantId, new CancellationToken());
+    await _scheduleDayRepository.DeleteAllByTenantIdAsync(tenantId, new CancellationToken());
 
-    await _scheduleRepository.CreateRangeAsync(classesHoursEntities, new CancellationToken());
+    await _scheduleDayRepository.CreateRangeAsync(schedulesDaysEntities, new CancellationToken());
 
     return new CommandResult(true, "CLASS_HOUR_CREATED", "", null, 201);
   }
