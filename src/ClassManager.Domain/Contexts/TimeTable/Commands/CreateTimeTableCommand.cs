@@ -11,8 +11,8 @@ public class CreateTimeTableCommand : Notifiable, ICommand
   {
     AddNotifications(new Contract()
     .Requires()
-    .HasMinLen(Name, 3, "CreateTimeTableCommand.FirstName", "FirstName min 3 characters")
-    .HasMaxLen(Name, 40, "CreateTimeTableCommand.FirstName", "FirstName max 40 characters")
+    .HasMinLen(Name, 3, "CreateTimeTableCommand.Name", "FirstName min 3 characters")
+    .HasMaxLen(Name, 40, "CreateTimeTableCommand.Name", "FirstName max 40 characters")
     );
   }
 }
