@@ -1,22 +1,23 @@
 using ClassManager.Api.Contexts.Shared.Controllers;
-using ClassManager.Domain.Contexts.ClassDays.Commands;
-using ClassManager.Domain.Contexts.ClassDays.Handlers;
+using ClassManager.Domain.Contexts.TimeTables.Commands;
+using ClassManager.Domain.Contexts.TimeTables.Handlers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClassManager.Api.Contexts.ClassDays.Controllers;
 
 [Authorize]
-public class ClassHourController : MainController
+public class TimeTableController : MainController
 {
-  [HttpPost("{tenantId}/classes-hours")]
+  [HttpPost("{tenantId}/time-tables/{timeTableId}")]
   public async Task<IResult> Update(
     [FromRoute] Guid tenantId,
-    [FromBody] UpdateClassHourCommand command,
-    [FromServices] UpdateClassHourHandler handler
+    [FromRoute] Guid timeTableId,
+    [FromBody] UpdateTimeTableCommand command,
+    [FromServices] UpdateTimetableHandler handler
   )
   {
-    var result = await handler.Handle(command, tenantId);
+    var result = await handler.Handle(timeTableId, command, tenantId);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 

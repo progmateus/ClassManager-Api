@@ -3,9 +3,9 @@ using ClassManager.Domain.Shared.Entities;
 
 namespace ClassManager.Domain.Contexts.ClassDays.Entities
 {
-  public class ClassHour : TenantEntity
+  public class TimeTable : TenantEntity
   {
-    public ClassHour(EWeekDay weekDay, string? hourStart, string? hourEnd, Guid tenantId)
+    public TimeTable(EWeekDay weekDay, string? hourStart, string? hourEnd, Guid tenantId)
     {
       WeekDay = weekDay;
       HourStart = hourStart;
@@ -13,7 +13,7 @@ namespace ClassManager.Domain.Contexts.ClassDays.Entities
       TenantId = tenantId;
     }
 
-    protected ClassHour()
+    protected TimeTable()
     {
 
     }
