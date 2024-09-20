@@ -1,4 +1,5 @@
 using ClassManager.Api.Contexts.Shared.Controllers;
+using ClassManager.Domain.Contexts.Roles.Commands;
 using ClassManager.Domain.Contexts.TimeTables.Commands;
 using ClassManager.Domain.Contexts.TimeTables.Handlers;
 using Microsoft.AspNetCore.Authorization;
@@ -9,6 +10,23 @@ namespace ClassManager.Api.Contexts.ClassDays.Controllers;
 [Authorize]
 public class TimeTableController : MainController
 {
+  [HttpPost("{tenantId}/time-tables/")]
+  public async Task<IResult> Create(
+    [FromRoute] Guid tenantId,
+    [FromBody] CreateTimeTableCommand command,
+    [FromServices] CreateTimeTableHandler handler
+  )
+  {
+    var result = await handler.Handle(tenantId, command);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
   [HttpPost("{tenantId}/time-tables/{timeTableId}")]
   public async Task<IResult> Update(
     [FromRoute] Guid tenantId,
