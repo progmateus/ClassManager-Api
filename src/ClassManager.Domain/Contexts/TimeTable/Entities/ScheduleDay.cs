@@ -22,6 +22,7 @@ namespace ClassManager.Domain.Contexts.ClassDays.Entities
     public EWeekDay WeekDay { get; private set; }
     public string? HourStart { get; private set; }
     public string? HourEnd { get; private set; }
+    public TimeTable? TimeTable { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
   }

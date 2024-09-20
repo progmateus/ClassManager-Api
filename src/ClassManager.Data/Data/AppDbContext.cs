@@ -68,6 +68,7 @@ public class AppDbContext : DbContext
     modelBuilder.ApplyConfiguration(new ClassDayMap());
     modelBuilder.ApplyConfiguration(new BookingMap());
     modelBuilder.ApplyConfiguration(new TimeTableMap());
+    modelBuilder.ApplyConfiguration(new ScheduleDayMap());
 
     base.OnModelCreating(modelBuilder);
   }

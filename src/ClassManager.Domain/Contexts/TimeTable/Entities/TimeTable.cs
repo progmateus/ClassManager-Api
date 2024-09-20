@@ -6,7 +6,7 @@ namespace ClassManager.Domain.Contexts.ClassDays.Entities
 {
   public class TimeTable : TenantEntity
   {
-    public List<Guid>? Schedules { get; private set; } = [];
+    public List<ScheduleDay>? SchedulesDays { get; set; } = [];
     public Tenant? Tenant { get; private set; }
 
     public TimeTable(Guid tenantId)
