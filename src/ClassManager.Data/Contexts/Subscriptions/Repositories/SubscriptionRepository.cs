@@ -48,7 +48,7 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     .FirstOrDefaultAsync(x => x.Id == id && x.TenantId == tenantId);
   }
 
-  public async Task<Subscription?> GetLatestSubscription(Guid tenantId, Guid userId, CancellationToken cancellationToken)
+  public async Task<Subscription?> FindUserLatestSubscription(Guid tenantId, Guid userId, CancellationToken cancellationToken)
   {
     return await DbSet
   .Include(x => x.TenantPlan)

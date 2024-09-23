@@ -42,7 +42,7 @@ public class AccesControlService : IAccessControlService
 
   public async Task<bool> IsUserActiveSubscription(Guid userId, Guid tenantId)
   {
-    var subscription = await _subscriptionRepository.GetLatestSubscription(tenantId, userId, default);
+    var subscription = await _subscriptionRepository.FindUserLatestSubscription(tenantId, userId, default);
     if (subscription is null)
     {
       return false;
