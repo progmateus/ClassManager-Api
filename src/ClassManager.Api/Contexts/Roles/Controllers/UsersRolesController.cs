@@ -28,13 +28,14 @@ public class UsersrolesController : MainController
     return Results.Ok(result);
   }
 
-  [HttpPut("users-roles")]
+  [HttpPut("{tenantId}/users-roles")]
   public async Task<IResult> Update(
+    [FromRoute] Guid tenantId,
       [FromBody] UsersRolesCommand command,
       [FromServices] UpdateUsersRolesHandler handler
   )
   {
-    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), command);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
