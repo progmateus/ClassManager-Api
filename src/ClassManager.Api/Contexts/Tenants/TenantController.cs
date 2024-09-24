@@ -68,7 +68,7 @@ public class TenantController : MainController
     [FromServices] UpdateTenantHandler handler
   )
   {
-    var result = await handler.Handle(id, command);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), id, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
@@ -86,7 +86,7 @@ public class TenantController : MainController
     [FromServices] DeleteTenantHandler handler
   )
   {
-    var result = await handler.Handle(id);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), id);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
