@@ -3,7 +3,7 @@ namespace ClassManager.Domain.Shared.Services.AccessControlService;
 
 public interface IAccessControlService
 {
-  Task<bool> IsTenantSubscriptionActive(Guid tenantId);
-  Task<bool> HasUserPermission(Guid userId, Guid tenantId, string roleName);
-  Task<bool> IsUserActiveSubscription(Guid userId, Guid tenantId);
+  Task<bool> IsTenantSubscriptionActiveAsync(Guid tenantId);
+  Task<bool> HasUserRoleAsync(Guid userId, Guid tenantId, string roleName);
+  Task<bool> IsUserActiveSubscriptionAsync(Guid userId, Guid tenantId);
 }

@@ -9,6 +9,7 @@ using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
+using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
@@ -25,7 +26,17 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
   private IUsersRolesRepository _usersRolesRepository;
   private ISubscriptionRepository _subscriptionRepository;
   private IStudentsClassesRepository _studentsClassesrepository;
-  public CreateBookingHandler(ITenantRepository tenantRepository, IBookingRepository bookingRepository, IClassDayRepository classDayRepository, IUserRepository userRepository, IUsersRolesRepository usersRolesRepository, ISubscriptionRepository subscriptionRepository, IStudentsClassesRepository studentsClassesRepository)
+  private IAccessControlService _accessControlService;
+  public CreateBookingHandler(
+    ITenantRepository tenantRepository,
+    IBookingRepository bookingRepository,
+    IClassDayRepository classDayRepository,
+    IUserRepository userRepository,
+    IUsersRolesRepository usersRolesRepository,
+    ISubscriptionRepository subscriptionRepository,
+    IStudentsClassesRepository studentsClassesRepository,
+    IAccessControlService accessControlService
+  )
   {
     _tenantRepository = tenantRepository;
     _bookingRepository = bookingRepository;
@@ -34,8 +45,9 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
     _usersRolesRepository = usersRolesRepository;
     _subscriptionRepository = subscriptionRepository;
     _studentsClassesrepository = studentsClassesRepository;
+    _accessControlService = accessControlService;
   }
-  public async Task<ICommandResult> Handle(Guid tenantId, CreateBookingCommand command)
+  public async Task<ICommandResult> Handle(Guid tenantId, Guid loggedUserId, CreateBookingCommand command)
   {
 
     command.Validate();
@@ -45,14 +57,7 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
       return new CommandResult(false, "ERR_BOOKING_NOT_CREATED", null, command.Notifications);
     }
 
-    var tenant = await _tenantRepository.GetByIdAndIncludePlanAsync(tenantId, new CancellationToken());
-
-    if (tenant is null)
-    {
-      return new CommandResult(false, "ERR_TENANT_DAY_NOT_FOUND", null, null);
-    }
-
-    if (tenant.Status != ETenantStatus.ACTIVE)
+    if (await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
     {
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
     }
@@ -68,6 +73,21 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
     {
       return new CommandResult(false, "ERR_CLASS_NOT_PENDING", null, null, 403);
     }
+
+    if (!loggedUserId.Equals(command.UserId))
+    {
+      if (await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId, "admin"))
+      {
+        return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
+      }
+    }
+
+    if (await _accessControlService.HasUserRoleAsync(command.UserId, tenantId, "student"))
+    {
+      return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
+    }
+
+
 
     var user = await _userRepository.IdExistsAsync(command.UserId, new CancellationToken());
 

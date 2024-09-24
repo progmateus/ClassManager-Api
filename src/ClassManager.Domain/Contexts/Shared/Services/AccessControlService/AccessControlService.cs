@@ -25,12 +25,12 @@ public class AccesControlService : IAccessControlService
     _tenantRepository = tenantRepository;
     _subscriptionRepository = subscriptionRepository;
   }
-  public async Task<bool> HasUserPermission(Guid userId, Guid tenantId, string roleName)
+  public async Task<bool> HasUserRoleAsync(Guid userId, Guid tenantId, string roleName)
   {
     return await _usersRolesRepository.VerifyRoleExistsAsync(userId, tenantId, roleName, new CancellationToken());
   }
 
-  public async Task<bool> IsTenantSubscriptionActive(Guid tenantId)
+  public async Task<bool> IsTenantSubscriptionActiveAsync(Guid tenantId)
   {
     var tenant = await _tenantRepository.GetByIdAsync(tenantId, new CancellationToken());
     if (tenant is null)
@@ -40,7 +40,7 @@ public class AccesControlService : IAccessControlService
     return tenant.Status == ETenantStatus.ACTIVE;
   }
 
-  public async Task<bool> IsUserActiveSubscription(Guid userId, Guid tenantId)
+  public async Task<bool> IsUserActiveSubscriptionAsync(Guid userId, Guid tenantId)
   {
     var subscription = await _subscriptionRepository.FindUserLatestSubscription(tenantId, userId, default);
     if (subscription is null)
