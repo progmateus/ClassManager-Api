@@ -3,24 +3,42 @@ using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
+using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
+using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
 
 namespace ClassManager.Domain.Contexts.Subscriptions.Handlers;
 
-public class DeleteSubscriptionHandler : Notifiable
+public class DeleteSubscriptionHandler : Notifiable, ITenantDeleteAction
 {
   private ISubscriptionRepository _subscriptionRepository;
   private IStudentsClassesRepository _studentsClassesRepository;
   private IUsersRolesRepository _usersRolesrepository;
-  public DeleteSubscriptionHandler(ISubscriptionRepository subscriptionRepository, IUsersRolesRepository usersRolesrepository, IStudentsClassesRepository studentsClassesRepository)
+  private readonly IAccessControlService _accessControlService;
+
+  public DeleteSubscriptionHandler(ISubscriptionRepository subscriptionRepository,
+  IUsersRolesRepository usersRolesrepository,
+  IStudentsClassesRepository studentsClassesRepository,
+  IAccessControlService accessControlService
+
+  )
   {
     _subscriptionRepository = subscriptionRepository;
     _usersRolesrepository = usersRolesrepository;
     _studentsClassesRepository = studentsClassesRepository;
+    _accessControlService = accessControlService;
+
   }
-  public async Task<ICommandResult> Handle(Guid tenantId, Guid subscriptionId, Guid userId)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid subscriptionId)
   {
+
+
+    if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
+    {
+      return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
+    }
+
     var subscription = await _subscriptionRepository.FindByIdAsync(subscriptionId, tenantId, new CancellationToken());
 
     if (subscription is null)
@@ -28,7 +46,7 @@ public class DeleteSubscriptionHandler : Notifiable
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, null, 404);
     }
 
-    if (subscription.TenantId != tenantId || subscription.UserId != userId)
+    if (subscription.UserId != loggedUserId)
     {
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, null, 404);
     }
@@ -38,9 +56,9 @@ public class DeleteSubscriptionHandler : Notifiable
       return new CommandResult(false, "ERR_SUBSCRIPTION_INACTIVE", null, null, 409);
     }
 
-    var usersClassesFound = await _studentsClassesRepository.ListByUserOrClassOrTenantAsync([userId], [tenantId], null);
+    var usersClassesFound = await _studentsClassesRepository.ListByUserOrClassOrTenantAsync([loggedUserId], [tenantId], null);
 
-    var userRoles = await _usersRolesrepository.GetStudentsRolesByUserIdAndTenantId(tenantId, userId, new CancellationToken());
+    var userRoles = await _usersRolesrepository.GetStudentsRolesByUserIdAndTenantId(tenantId, loggedUserId, new CancellationToken());
 
     subscription.ChangeStatus(ESubscriptionStatus.CANCELED);
 
