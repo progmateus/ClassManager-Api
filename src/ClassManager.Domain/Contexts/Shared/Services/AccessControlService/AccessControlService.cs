@@ -3,6 +3,7 @@ using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
+using ClassManager.Shared.Services;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ClassManager.Domain.Shared.Services.AccessControlService;
@@ -37,7 +38,7 @@ public class AccesControlService : IAccessControlService
     {
       return false;
     }
-    return tenant.Status == ETenantStatus.ACTIVE;
+    return tenant.Status != ETenantStatus.ACTIVE;
   }
 
   public async Task<bool> IsUserActiveSubscriptionAsync(Guid userId, Guid tenantId)

@@ -1,4 +1,3 @@
-
 namespace ClassManager.Domain.Shared.Services.AccessControlService;
 
 public interface IAccessControlService
