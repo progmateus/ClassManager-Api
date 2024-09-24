@@ -2,6 +2,7 @@ using ClassManager.Domain.Contexts.ClassDays.Entities;
 using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Roles.Commands;
 using ClassManager.Domain.Shared.Commands;
+using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
@@ -12,14 +13,17 @@ public class CreateTimeTableHandler :
   Notifiable, ITenantHandler<CreateTimeTableCommand>
 {
   private readonly ITimeTableRepository _timeTableRepository;
+  private IAccessControlService _accessControlService;
 
   public CreateTimeTableHandler(
-    ITimeTableRepository classHourRepository
+    ITimeTableRepository classHourRepository,
+    IAccessControlService accessControlService
     )
   {
     _timeTableRepository = classHourRepository;
+    _accessControlService = accessControlService;
   }
-  public async Task<ICommandResult> Handle(Guid tenantId, CreateTimeTableCommand command)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, CreateTimeTableCommand command)
   {
 
     command.Validate();
@@ -27,6 +31,16 @@ public class CreateTimeTableHandler :
     {
       AddNotifications(command);
       return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
+    }
+
+    if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
+    {
+      return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
+    }
+
+    if (await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId, "admin"))
+    {
+      return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
     TimeTable timeTable = new TimeTable(tenantId, command.Name);

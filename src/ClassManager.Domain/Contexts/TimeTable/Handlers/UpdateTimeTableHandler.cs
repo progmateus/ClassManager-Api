@@ -2,6 +2,7 @@ using ClassManager.Domain.Contexts.ClassDays.Entities;
 using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
 using ClassManager.Domain.Contexts.TimeTables.Commands;
 using ClassManager.Domain.Shared.Commands;
+using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
 using Flunt.Notifications;
 using Microsoft.IdentityModel.Tokens;
@@ -13,20 +14,33 @@ public class UpdateTimetableHandler :
 {
   private readonly ITimeTableRepository _timeTableRepository;
   private readonly IScheduleDayRepository _scheduleDayRepository;
+  private IAccessControlService _accessControlService;
 
   public UpdateTimetableHandler(
     ITimeTableRepository classHourRepository,
-    IScheduleDayRepository scheduleDayRepository
+    IScheduleDayRepository scheduleDayRepository,
+    IAccessControlService accessControlService
     )
   {
     _timeTableRepository = classHourRepository;
     _scheduleDayRepository = scheduleDayRepository;
+    _accessControlService = accessControlService;
   }
-  public async Task<ICommandResult> Handle(Guid timeTableId, UpdateTimeTableCommand command, Guid tenantId)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid timeTableId, UpdateTimeTableCommand command)
   {
     if (command.ScheduleDays.IsNullOrEmpty())
     {
       return new CommandResult(false, "ERR_INVALID_CLASS_HOUR", null, null, 400);
+    }
+
+    if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
+    {
+      return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
+    }
+
+    if (await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId, "admin"))
+    {
+      return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
 
