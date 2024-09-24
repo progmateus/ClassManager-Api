@@ -17,6 +17,7 @@ public class UpdateUsersRolesHandler : Notifiable,
   private IUserRepository _userRepository;
   private ITenantRepository _tenantRepository;
   private IUsersRolesRepository _usersRolesRepository;
+
   public UpdateUsersRolesHandler(IRoleRepository roleRepository, IUserRepository userRepository, ITenantRepository tenantRepository, IUsersRolesRepository usersRolesRepository)
   {
     _roleRpository = roleRepository;

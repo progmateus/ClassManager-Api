@@ -2,6 +2,7 @@ using ClassManager.Domain.Contexts.Roles.Commands;
 using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
+using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
@@ -11,12 +12,25 @@ namespace ClassManager.Domain.Contexts.Roles.Handlers;
 public class DeleteUserRoleHandler : Notifiable
 {
   private IUsersRolesRepository _usersRolesRepository;
-  public DeleteUserRoleHandler(IUsersRolesRepository usersRolesRepository)
+  private IAccessControlService _accessControlService;
+  public DeleteUserRoleHandler(IUsersRolesRepository usersRolesRepository, IAccessControlService accessControlService)
   {
     _usersRolesRepository = usersRolesRepository;
+    _accessControlService = accessControlService;
   }
-  public async Task<ICommandResult> Handle(Guid tenantId, Guid id)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid id)
   {
+
+    if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
+    {
+      return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
+    }
+
+    if (await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId, "admin"))
+    {
+      return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
+    }
+
     var userRole = await _usersRolesRepository.FindByIdAsync(id, tenantId, new CancellationToken());
 
     if (userRole is null)
