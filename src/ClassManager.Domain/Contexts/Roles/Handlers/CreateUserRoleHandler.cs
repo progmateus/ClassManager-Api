@@ -4,6 +4,7 @@ using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
+using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
@@ -15,17 +16,28 @@ public class CreateUserRoleHandler : Notifiable,
 {
   private IRoleRepository _roleRepository;
   private IUserRepository _userRepository;
-  private ITenantRepository _tenantRepository;
   private IUsersRolesRepository _usersRolesRepository;
-  public CreateUserRoleHandler(IRoleRepository roleRepository, IUserRepository userRepository, ITenantRepository tenantRepository, IUsersRolesRepository usersRolesRepository)
+  private IAccessControlService _accessControlService;
+  public CreateUserRoleHandler(IRoleRepository roleRepository, IUserRepository userRepository, IUsersRolesRepository usersRolesRepository, IAccessControlService accessControlService)
   {
     _roleRepository = roleRepository;
     _userRepository = userRepository;
-    _tenantRepository = tenantRepository;
     _usersRolesRepository = usersRolesRepository;
+    _accessControlService = accessControlService;
   }
-  public async Task<ICommandResult> Handle(Guid tenantId, CreateUserRoleCommand command)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, CreateUserRoleCommand command)
   {
+
+    if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
+    {
+      return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
+    }
+
+    if (await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId, "admin"))
+    {
+      return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
+    }
+
     var roleFound = await _roleRepository.GetByNameAsync(command.RoleName, new CancellationToken());
 
     if (roleFound is null)
@@ -33,22 +45,12 @@ public class CreateUserRoleHandler : Notifiable,
       return new CommandResult(false, "ERR_ROLE_NOT_EXISTS", null, null, 404);
     }
 
-    var tenantExists = await _tenantRepository.IdExistsAsync(tenantId, new CancellationToken());
-
-    if (!tenantExists)
+    if (!await _userRepository.IdExistsAsync(command.UserId, new CancellationToken()))
     {
-      return new CommandResult(false, "ERR_TENANT_NOT_EXISTS", null, null, 404);
-    }
-
-    var userExists = await _userRepository.IdExistsAsync(command.UserId, new CancellationToken());
-
-    if (!userExists)
-    {
-      return new CommandResult(false, "ERR_USER_NOT_EXISTS", null, null, 404);
+      return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null, 404);
     }
 
     var userRoleAlreadyExists = await _usersRolesRepository.VerifyRoleExistsAsync(command.UserId, tenantId, command.RoleName, new CancellationToken());
-
 
     if (userRoleAlreadyExists)
     {

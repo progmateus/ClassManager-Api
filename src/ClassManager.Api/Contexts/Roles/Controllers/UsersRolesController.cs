@@ -18,7 +18,7 @@ public class UsersrolesController : MainController
     [FromServices] CreateUserRoleHandler handler
 )
   {
-    var result = await handler.Handle(tenantId, command);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
@@ -34,7 +34,7 @@ public class UsersrolesController : MainController
       [FromServices] UpdateUsersRolesHandler handler
   )
   {
-    var result = await handler.Handle(command);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
@@ -53,7 +53,7 @@ public class UsersrolesController : MainController
       [FromServices] ListUsersRolesHandler handler
   )
   {
-    var result = await handler.Handle(tenantId, rolesNames, usersIds);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, rolesNames, usersIds);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
@@ -71,7 +71,7 @@ public class UsersrolesController : MainController
       [FromServices] DeleteUserRoleHandler handler
   )
   {
-    var result = await handler.Handle(tenantId, id);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, id);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
