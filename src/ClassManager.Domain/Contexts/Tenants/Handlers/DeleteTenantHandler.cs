@@ -1,31 +1,48 @@
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
+using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
+using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
 
 namespace ClassManager.Domain.Contexts.Tenants.Handlers;
 
 public class DeleteTenantHandler : Notifiable
 {
-  private readonly ITenantRepository _repository;
+  private readonly ITenantRepository _tenantRepository;
+  private readonly IAccessControlService _accessControlService;
+
   public DeleteTenantHandler(
-    ITenantRepository tenantRepository
+    ITenantRepository tenantRepository,
+    IAccessControlService accessControlService
+
     )
   {
-    _repository = tenantRepository;
+    _tenantRepository = tenantRepository;
+    _accessControlService = accessControlService;
+
   }
 
-  public async Task<ICommandResult> Handle(Guid id)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId)
   {
 
-    if (await _repository.GetByIdAsync(id, default) == null)
+    if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
+    {
+      return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
+    }
+
+    if (await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId, "admin"))
+    {
+      return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
+    }
+
+    if (await _tenantRepository.GetByIdAsync(tenantId, default) == null)
     {
       AddNotification("DeleteTenantHandler", "Tenant not found");
       return new CommandResult(false, "ERR_TENANT_NOT_DELETED", null, Notifications, 404);
     }
 
-
-    await _repository.DeleteAsync(id, default);
+    await _tenantRepository.DeleteAsync(tenantId, default);
 
     return new CommandResult(true, "TENANT_DELETED", null, null, 204);
   }
