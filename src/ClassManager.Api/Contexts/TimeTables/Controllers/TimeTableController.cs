@@ -18,7 +18,7 @@ public class TimeTableController : MainController
     [FromServices] CreateTimeTableHandler handler
   )
   {
-    var result = await handler.Handle(tenantId, command);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
@@ -36,7 +36,7 @@ public class TimeTableController : MainController
     [FromServices] UpdateTimetableHandler handler
   )
   {
-    var result = await handler.Handle(timeTableId, command, tenantId);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, timeTableId, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
