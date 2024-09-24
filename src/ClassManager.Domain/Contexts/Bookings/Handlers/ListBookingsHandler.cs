@@ -36,7 +36,7 @@ public class ListBookingsHandler : Notifiable
     {
       if (!await _accessControlService.HasUserRoleAsync(userId, tenantId.Value, "admin"))
       {
-        return new CommandResult(false, "ERR_STUDENT_ROLE_NOT_FOUND", null, 404);
+        return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, 404);
       }
 
       var subscription = await _subscriptionRepository.GetByUserIdAndTenantId(userId, tenantId.Value, new CancellationToken());
