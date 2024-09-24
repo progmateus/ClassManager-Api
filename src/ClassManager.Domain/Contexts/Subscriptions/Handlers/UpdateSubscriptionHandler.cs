@@ -1,7 +1,9 @@
 using ClassManager.Domain.Contexts.Roles.Commands;
+using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
+using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
@@ -12,24 +14,43 @@ public class UpdateSubscriptionHandler : Notifiable
 {
   private ISubscriptionRepository _subscriptionRepository;
   private ITenantPlanRepository _tenantPlanrepository;
-  public UpdateSubscriptionHandler(ISubscriptionRepository subscriptionRepository, ITenantPlanRepository tenantPlanrepository)
+  private readonly IAccessControlService _accessControlService;
+
+  public UpdateSubscriptionHandler(ISubscriptionRepository subscriptionRepository,
+  ITenantPlanRepository tenantPlanrepository,
+  IAccessControlService accessControlService
+
+  )
   {
     _subscriptionRepository = subscriptionRepository;
     _tenantPlanrepository = tenantPlanrepository;
+    _accessControlService = accessControlService;
+
   }
-  public async Task<ICommandResult> Handle(Guid tenantId, Guid subscriptionId, UpdateSubscriptionCommand command)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid subscriptionId, UpdateSubscriptionCommand command)
   {
+
+
+    if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
+    {
+      return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
+    }
+
     var subscription = await _subscriptionRepository.FindByIdAsync(subscriptionId, tenantId, new CancellationToken());
 
-    if (subscription is null)
+    if (subscription is null || !subscription.UserId.Equals(loggedUserId))
     {
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, null, 404);
     }
 
     if (command.Status.HasValue)
     {
-      subscription.ChangeStatus(command.Status.Value);
 
+      if (subscription.Status == ESubscriptionStatus.CANCELED)
+      {
+        return new CommandResult(false, "ERR_SUBSCRIPTION_INACTIVE", null, null, 400);
+      }
+      subscription.ChangeStatus(command.Status.Value);
     }
 
     if (command.TenantPlanId.HasValue)

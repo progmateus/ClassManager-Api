@@ -46,7 +46,7 @@ public class DeleteSubscriptionHandler : Notifiable, ITenantDeleteAction
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, null, 404);
     }
 
-    if (subscription.UserId != loggedUserId)
+    if (!subscription.UserId.Equals(loggedUserId))
     {
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, null, 404);
     }
