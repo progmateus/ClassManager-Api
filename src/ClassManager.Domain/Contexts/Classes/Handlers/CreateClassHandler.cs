@@ -15,17 +15,14 @@ public class CreateClassHandler :
   ITenantHandler<ClassCommand>
 {
   private readonly IClassRepository _classRepository;
-  private readonly ITenantRepository _tenantRepository;
   private readonly IAccessControlService _accessControlService;
 
   public CreateClassHandler(
     IClassRepository classRepository,
-    ITenantRepository tenantRepository,
     IAccessControlService accessControlService
     )
   {
     _classRepository = classRepository;
-    _tenantRepository = tenantRepository;
     _accessControlService = accessControlService;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, ClassCommand command)
