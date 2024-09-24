@@ -9,6 +9,7 @@ using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
+using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
@@ -24,7 +25,16 @@ public class DeleteBookingHandler : Notifiable
   private IUserRepository _userRepository;
   private IUsersRolesRepository _usersRolesRepository;
   private ISubscriptionRepository _subscriptionRepository;
-  public DeleteBookingHandler(ITenantRepository tenantRepository, IBookingRepository bookingRepository, IClassDayRepository classDayRepository, IUserRepository userRepository, IUsersRolesRepository usersRolesRepository, ISubscriptionRepository subscriptionRepository)
+  private IAccessControlService _accessControlService;
+  public DeleteBookingHandler(
+    ITenantRepository tenantRepository,
+    IBookingRepository bookingRepository,
+    IClassDayRepository classDayRepository,
+    IUserRepository userRepository,
+    IUsersRolesRepository usersRolesRepository,
+    ISubscriptionRepository subscriptionRepository,
+    IAccessControlService accessControlService
+  )
   {
     _tenantRepository = tenantRepository;
     _bookingRepository = bookingRepository;
@@ -32,49 +42,27 @@ public class DeleteBookingHandler : Notifiable
     _userRepository = userRepository;
     _usersRolesRepository = usersRolesRepository;
     _subscriptionRepository = subscriptionRepository;
+    _accessControlService = accessControlService;
   }
-  public async Task<ICommandResult> Handle(Guid tenantId, Guid bookingId, Guid userId)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid bookingId)
   {
 
-    var tenant = await _tenantRepository.GetByIdAndIncludePlanAsync(tenantId, new CancellationToken());
-
-    if (tenant is null)
-    {
-      return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, 404);
-    }
-
-    if (tenant.Status != ETenantStatus.ACTIVE)
+    if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
     {
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
     }
 
-    var user = await _userRepository.IdExistsAsync(userId, new CancellationToken());
-
-    if (!user)
+    if (!await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId, "student"))
     {
-      return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null);
+      return new CommandResult(false, "ERR_USER_ROLE_NOT_FOUND", null, null, 403);
     }
 
-    var userRole = await _usersRolesRepository.VerifyRoleExistsAsync(userId, tenantId, "student", new CancellationToken());
-
-    if (!userRole)
-    {
-      return new CommandResult(false, "ERR_STUDENT_ROLE_NOT_FOUND", null, 404);
-    }
-
-    var subscription = await _subscriptionRepository.FindUserLatestSubscription(tenantId, userId, new CancellationToken());
-
-    if (subscription is null)
-    {
-      return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, null, 404);
-    }
-
-    if (subscription.Status != ESubscriptionStatus.ACTIVE)
+    if (!await _accessControlService.IsUserActiveSubscriptionAsync(loggedUserId, tenantId))
     {
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_ACTIVE", null, null, 403);
     }
 
-    var booking = await _bookingRepository.GetWithInclude(userId, bookingId);
+    var booking = await _bookingRepository.GetWithInclude(loggedUserId, bookingId);
 
     if (booking is null)
     {
