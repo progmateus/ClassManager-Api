@@ -45,7 +45,6 @@ public class UpdateTenantPlanHandler :
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
-
     var tenantPlan = await _tenantPlanRepository.GetByIdAndTenantId(tenantId, planId, new CancellationToken());
 
     if (tenantPlan is null)

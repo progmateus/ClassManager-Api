@@ -3,6 +3,7 @@ using ClassManager.Domain.Contexts.Shared.ValueObjects;
 using ClassManager.Domain.Contexts.Tenants.Commands;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
+using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
@@ -11,17 +12,23 @@ namespace ClassManager.Domain.Contexts.Tenants.Handlers;
 
 public class UpdateTenantHandler :
   Notifiable,
-  IActionHandler<UpdateTenantCommand>
+  ITenantHandler<UpdateTenantCommand>
 {
   private readonly ITenantRepository _repository;
+  private readonly IAccessControlService _accessControlService;
+
 
   public UpdateTenantHandler(
-    ITenantRepository tenantRepository
+    ITenantRepository tenantRepository,
+    IAccessControlService accessControlService
+
     )
   {
     _repository = tenantRepository;
+    _accessControlService = accessControlService;
+
   }
-  public async Task<ICommandResult> Handle(Guid id, UpdateTenantCommand command)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, UpdateTenantCommand command)
   {
     command.Validate();
     if (command.Invalid)
@@ -30,13 +37,22 @@ public class UpdateTenantHandler :
       return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
 
-    var tenant = await _repository.GetByIdAsync(id, default);
+    if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
+    {
+      return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
+    }
+
+    if (await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId, "admin"))
+    {
+      return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
+    }
+
+    var tenant = await _repository.GetByIdAsync(tenantId, default);
 
     if (tenant is null)
     {
       return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, command.Notifications, 404);
     }
-
 
     if ((tenant.Document.Number != command.Document) && await _repository.DocumentAlreadyExistsAsync(command.Document, new CancellationToken()))
     {
@@ -44,7 +60,7 @@ public class UpdateTenantHandler :
     }
 
 
-    if ((tenant.Email.Address != command.Email.ToLower()) && await _repository.EmailAlreadyExtstsAsync(command.Email, new CancellationToken()))
+    if ((tenant.Email.Address.ToLower() != command.Email.ToLower()) && await _repository.EmailAlreadyExtstsAsync(command.Email, new CancellationToken()))
     {
       AddNotification("Email", "E-mail already exists");
     }
