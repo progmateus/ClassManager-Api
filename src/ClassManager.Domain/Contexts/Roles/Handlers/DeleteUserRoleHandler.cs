@@ -18,7 +18,7 @@ public class DeleteUserRoleHandler : Notifiable
     _usersRolesRepository = usersRolesRepository;
     _accessControlService = accessControlService;
   }
-  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid id)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid userRoleId)
   {
 
     if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
@@ -31,7 +31,7 @@ public class DeleteUserRoleHandler : Notifiable
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
-    var userRole = await _usersRolesRepository.FindByIdAsync(id, tenantId, new CancellationToken());
+    var userRole = await _usersRolesRepository.FindByIdAsync(userRoleId, tenantId, new CancellationToken());
 
     if (userRole is null)
     {

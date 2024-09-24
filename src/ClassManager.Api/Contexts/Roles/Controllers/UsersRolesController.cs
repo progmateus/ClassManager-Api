@@ -8,10 +8,11 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ClassManager.Api.Contexts.Roles.Controllers;
 [Authorize]
+[Route("{tenantId}")]
 public class UsersrolesController : MainController
 {
 
-  [HttpPost("{tenantId}/users-roles")]
+  [HttpPost("users-roles")]
   public async Task<IResult> Create(
     [FromRoute] Guid tenantId,
     [FromBody] CreateUserRoleCommand command,
@@ -28,7 +29,7 @@ public class UsersrolesController : MainController
     return Results.Ok(result);
   }
 
-  [HttpPut("{tenantId}/users-roles")]
+  [HttpPut("users-roles")]
   public async Task<IResult> Update(
     [FromRoute] Guid tenantId,
       [FromBody] UsersRolesCommand command,
@@ -46,7 +47,7 @@ public class UsersrolesController : MainController
   }
 
 
-  [HttpGet("{tenantId}/users-roles")]
+  [HttpGet("users-roles")]
   public async Task<IResult> ListUsersRoles(
       [FromRoute] Guid tenantId,
       [FromQuery] List<string> rolesNames,
@@ -65,7 +66,7 @@ public class UsersrolesController : MainController
   }
 
 
-  [HttpDelete("{tenantId}/users-roles/{id}")]
+  [HttpDelete("users-roles/{id}")]
   public async Task<IResult> Delete(
       [FromRoute] Guid tenantId,
       [FromRoute] Guid id,

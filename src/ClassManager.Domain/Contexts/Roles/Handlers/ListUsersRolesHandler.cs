@@ -1,53 +1,41 @@
+using AutoMapper;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
-using ClassManager.Domain.Contexts.Roles.Commands;
-using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
-using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Roles.ViewModels;
 using ClassManager.Domain.Shared.Commands;
+using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
-using ClassManager.Shared.Handlers;
-using Flunt.Notifications;
 
-namespace ClassManager.Domain.Contexts.Roles.Handlers;
+namespace ClassManager.Domain.Contexts.Accounts.Handlers;
 
-public class GetUserRolesHandler : Notifiable,
-  IHandler<UsersRolesCommand>
+public class ListUsersRolesHandler
 {
-  private IUserRepository _userRepository;
-  private ITenantRepository _tenantRepository;
-  private IUsersRolesRepository _usersRolesRepository;
-  public GetUserRolesHandler(IUserRepository userRepository, ITenantRepository tenantRepository, IUsersRolesRepository usersRolesRepository)
+  private readonly IUsersRolesRepository _usersRolesRepository;
+  private readonly IMapper _mapper;
+  private IAccessControlService _accessControlService;
+  public ListUsersRolesHandler(
+    IUsersRolesRepository userRepository,
+    IMapper mapper,
+    IAccessControlService accessControlService
+    )
   {
-    _userRepository = userRepository;
-    _tenantRepository = tenantRepository;
-    _usersRolesRepository = usersRolesRepository;
+    _usersRolesRepository = userRepository;
+    _mapper = mapper;
+    _accessControlService = accessControlService;
   }
-  public async Task<ICommandResult> Handle(UsersRolesCommand command)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, List<string> rolesNames, List<Guid> usersIds)
   {
-    command.Validate();
-
-    if (command.Invalid)
+    if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
     {
-      AddNotifications(command);
-      return new CommandResult(false, "ERR_USER_ROLE_NOT_LISTED", null, command.Notifications);
+      return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
     }
 
-    var tenantExists = await _tenantRepository.IdExistsAsync(command.TenantId, new CancellationToken());
-
-    if (!tenantExists)
+    if (await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId, "admin"))
     {
-      return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, null, 404);
+      return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
+    var usersRoles = _mapper.Map<UsersRolesViewModel>(await _usersRolesRepository.ListByRoleAsync(tenantId, rolesNames, usersIds));
 
-    var userExists = await _userRepository.IdExistsAsync(command.UserId, new CancellationToken());
-
-    if (!userExists)
-    {
-      return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null, 404);
-    }
-
-    var usersRoles = await _usersRolesRepository.ListUsersRolesByUserIdAndTenantId(command.UserId, command.TenantId, new CancellationToken());
-
-    return new CommandResult(false, "USER_ROLES_LISTED", usersRoles, null, 200);
+    return new CommandResult(true, "USERS_ROLES_LISTED", usersRoles, null, 200);
   }
 }
