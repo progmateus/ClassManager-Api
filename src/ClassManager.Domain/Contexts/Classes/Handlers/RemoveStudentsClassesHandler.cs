@@ -1,32 +1,50 @@
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
+using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
+using ClassManager.Shared.Handlers;
 
 namespace ClassManager.Domain.Contexts.Classes.Handlers;
 
-public class RemoveStudentsClassesHandler
+public class RemoveStudentsClassesHandler : ITenantDeleteActionHandler
 {
   private readonly ITenantRepository _tenantRepository;
   private readonly IStudentsClassesRepository _studentsClassesRepository;
+  private readonly IAccessControlService _accessControlService;
+
 
   public RemoveStudentsClassesHandler(
     ITenantRepository tenantRepository,
-    IStudentsClassesRepository teachersClassesRepository
+    IStudentsClassesRepository teachersClassesRepository,
+    IAccessControlService accessControlService
+
     )
   {
     _tenantRepository = tenantRepository;
     _studentsClassesRepository = teachersClassesRepository;
+    _accessControlService = accessControlService;
+
   }
-  public async Task<ICommandResult> Handle(Guid tenantId, Guid teacherClassId)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid studentClassId)
   {
+
+    if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
+    {
+      return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
+    }
+
+    if (await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId, "admin"))
+    {
+      return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
+    }
     var tenant = await _tenantRepository.IdExistsAsync(tenantId, new CancellationToken());
     if (!tenant)
     {
       return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, null, 404);
     }
 
-    var studentClass = await _studentsClassesRepository.GetByIdAsync(teacherClassId, new CancellationToken());
+    var studentClass = await _studentsClassesRepository.GetByIdAsync(studentClassId, new CancellationToken());
 
     if (studentClass is null)
     {
