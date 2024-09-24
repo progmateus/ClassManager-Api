@@ -5,6 +5,6 @@ namespace ClassManager.Shared.Handlers
 {
   public interface ITenantActionHandler<T> where T : ICommand
   {
-    Task<ICommandResult> Handle(Guid tenantId, Guid id, T comamnd);
+    Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid id, T comamnd);
   }
 }

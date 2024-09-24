@@ -30,6 +30,7 @@ using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Contexts.TimeTables.Handlers;
 using ClassManager.Domain.Contexts.Usernames.Handlers;
 using ClassManager.Domain.Services;
+using ClassManager.Domain.Shared.Services.AccessControlService;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -171,6 +172,10 @@ public static class BuilderExtension
     builder.Services.AddTransient<
     IScheduleDayRepository,
     ScheduleDayRepository>();
+
+    builder.Services.AddTransient<
+    IAccessControlService,
+    AccesControlService>();
 
     builder.Services.AddTransient<TokenService>();
 

@@ -21,7 +21,7 @@ public class UpdateClassHandler :
   {
     _classRepository = classRepository;
   }
-  public async Task<ICommandResult> Handle(Guid tenantId, Guid classId, ClassCommand command)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid classId, ClassCommand command)
   {
     command.Validate();
     if (command.Invalid)
