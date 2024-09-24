@@ -17,7 +17,7 @@ public class ClassController : MainController
     [FromServices] CreateClassHandler handler
   )
   {
-    var result = await handler.Handle(tenantId, command);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
@@ -120,7 +120,7 @@ public class ClassController : MainController
     [FromServices] UpdateClassHandler handler
   )
   {
-    var result = await handler.Handle(tenantId, id, command);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, id, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
@@ -139,7 +139,7 @@ public class ClassController : MainController
     [FromServices] DeleteClassHandler handler
   )
   {
-    var result = await handler.Handle(tenantId, id);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, id);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
