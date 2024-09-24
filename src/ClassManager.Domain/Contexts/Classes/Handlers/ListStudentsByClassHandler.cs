@@ -14,7 +14,7 @@ public class ListStudentsByClassHandler
   public ListStudentsByClassHandler(
     IClassRepository classRepository,
     IStudentsClassesRepository studentsClassesRepository,
-     IMapper mapper
+    IMapper mapper
     )
   {
     _classRepository = classRepository;

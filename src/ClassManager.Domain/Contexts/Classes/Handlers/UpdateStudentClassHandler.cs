@@ -3,6 +3,7 @@ using ClassManager.Domain.Contexts.Classes.Commands;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
+using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
 
 namespace ClassManager.Domain.Contexts.Classes.Handlers;
@@ -12,19 +13,36 @@ public class UpdateStudentClassHandler
   private readonly IClassRepository _classRepository;
   private readonly IUserRepository _userRepository;
   private readonly IStudentsClassesRepository _studentsClassesRepository;
+  private readonly IAccessControlService _accessControlService;
 
   public UpdateStudentClassHandler(
     IClassRepository classRepository,
     IUserRepository userRepository,
-    IStudentsClassesRepository studentsClassesRepository
+    IStudentsClassesRepository studentsClassesRepository,
+    IAccessControlService accessControlService
+
+
     )
   {
     _classRepository = classRepository;
     _userRepository = userRepository;
     _studentsClassesRepository = studentsClassesRepository;
+    _accessControlService = accessControlService;
+
   }
-  public async Task<ICommandResult> Handle(Guid tenantId, CreateUserClassCommand command)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, CreateUserClassCommand command)
   {
+
+    if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
+    {
+      return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
+    }
+
+    if (await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId, "admin"))
+    {
+      return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
+    }
+
     var classFound = await _classRepository.GetByIdAndTenantIdAsync(tenantId, command.ClassId, new CancellationToken());
     if (classFound is null)
     {
