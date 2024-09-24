@@ -117,7 +117,7 @@ public class UserController : MainController
     [FromServices] ListBookingsHandler handler
   )
   {
-    var result = await handler.Handle(null, new Guid(User.FindFirst("Id")?.Value));
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), null, Guid.Empty);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 

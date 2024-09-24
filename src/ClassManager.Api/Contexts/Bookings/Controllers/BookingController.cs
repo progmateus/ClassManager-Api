@@ -1,10 +1,6 @@
 using ClasManager.Domain.Contexts.Bookings.Commands;
 using ClasManager.Domain.Contexts.Bookings.Handlers;
 using ClassManager.Api.Contexts.Shared.Controllers;
-using ClassManager.Data.Migrations;
-using ClassManager.Domain.Contexts.Accounts.Commands;
-using ClassManager.Domain.Contexts.Tenants.Commands;
-using ClassManager.Domain.Contexts.Tenants.Handlers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -35,11 +31,11 @@ public class BookingController : MainController
   [HttpGet("/bookings")]
   public async Task<IResult> List(
     [FromQuery] Guid? tenantId,
-    [FromQuery] Guid userId,
+    [FromQuery] Guid? userId,
     [FromServices] ListBookingsHandler handler
   )
   {
-    var result = await handler.Handle(tenantId, userId);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, userId);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 

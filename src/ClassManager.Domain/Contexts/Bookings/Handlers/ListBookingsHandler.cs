@@ -12,34 +12,38 @@ namespace ClasManager.Domain.Contexts.Bookings.Handlers;
 public class ListBookingsHandler : Notifiable
 {
   private IBookingRepository _bookingRepository;
-  private IUserRepository _userRepository;
-  private IUsersRolesRepository _usersRolesRepository;
   private ISubscriptionRepository _subscriptionRepository;
   private IAccessControlService _accessControlService;
   public ListBookingsHandler(
     IBookingRepository bookingRepository,
-    IUserRepository userRepository,
-    IUsersRolesRepository usersRolesRepository,
     ISubscriptionRepository subscriptionRepository,
     IAccessControlService accessControlService
     )
   {
     _bookingRepository = bookingRepository;
-    _userRepository = userRepository;
-    _usersRolesRepository = usersRolesRepository;
     _subscriptionRepository = subscriptionRepository;
     _accessControlService = accessControlService;
   }
-  public async Task<ICommandResult> Handle(Guid? tenantId, Guid userId)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid? tenantId, Guid? userId)
   {
+
+    var userIdNotEmpty = loggedUserId;
+
     if (tenantId.HasValue && tenantId != Guid.Empty)
     {
-      if (!await _accessControlService.HasUserRoleAsync(userId, tenantId.Value, "admin"))
+      if (await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId.Value, "admin"))
+      {
+        if (userId.HasValue && userId != Guid.Empty)
+        {
+          userIdNotEmpty = userId.Value;
+        }
+      }
+      else
       {
         return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, 404);
       }
 
-      var subscription = await _subscriptionRepository.GetByUserIdAndTenantId(userId, tenantId.Value, new CancellationToken());
+      var subscription = await _subscriptionRepository.GetByUserIdAndTenantId(userIdNotEmpty, tenantId.Value, new CancellationToken());
 
       if (subscription is null)
       {
@@ -47,7 +51,7 @@ public class ListBookingsHandler : Notifiable
       }
     }
 
-    var bookings = await _bookingRepository.ListByUserIdAndTenantId(tenantId, userId);
+    var bookings = await _bookingRepository.ListByUserIdAndTenantId(tenantId, userIdNotEmpty);
 
     return new CommandResult(true, "BOOKINGS_LISTED", bookings, null, 200);
   }
