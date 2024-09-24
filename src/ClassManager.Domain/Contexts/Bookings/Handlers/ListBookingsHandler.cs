@@ -3,6 +3,7 @@ using ClassManager.Domain.Contexts.Bookings.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
+using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
 using Flunt.Notifications;
 
@@ -14,20 +15,26 @@ public class ListBookingsHandler : Notifiable
   private IUserRepository _userRepository;
   private IUsersRolesRepository _usersRolesRepository;
   private ISubscriptionRepository _subscriptionRepository;
-  public ListBookingsHandler(IBookingRepository bookingRepository, IUserRepository userRepository, IUsersRolesRepository usersRolesRepository, ISubscriptionRepository subscriptionRepository)
+  private IAccessControlService _accessControlService;
+  public ListBookingsHandler(
+    IBookingRepository bookingRepository,
+    IUserRepository userRepository,
+    IUsersRolesRepository usersRolesRepository,
+    ISubscriptionRepository subscriptionRepository,
+    IAccessControlService accessControlService
+    )
   {
     _bookingRepository = bookingRepository;
     _userRepository = userRepository;
     _usersRolesRepository = usersRolesRepository;
     _subscriptionRepository = subscriptionRepository;
+    _accessControlService = accessControlService;
   }
   public async Task<ICommandResult> Handle(Guid? tenantId, Guid userId)
   {
     if (tenantId.HasValue && tenantId != Guid.Empty)
     {
-      var studentRole = await _usersRolesRepository.VerifyRoleExistsAsync(userId, tenantId.Value, "student", new CancellationToken());
-
-      if (!studentRole)
+      if (!await _accessControlService.HasUserRoleAsync(userId, tenantId.Value, "admin"))
       {
         return new CommandResult(false, "ERR_STUDENT_ROLE_NOT_FOUND", null, 404);
       }
