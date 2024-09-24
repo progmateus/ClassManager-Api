@@ -29,7 +29,7 @@ public class DeleteClassHandler : ITenantDeleteActionHandler
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
     }
 
-    if (await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId, "admin"))
+    if (!await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId, "admin"))
     {
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }

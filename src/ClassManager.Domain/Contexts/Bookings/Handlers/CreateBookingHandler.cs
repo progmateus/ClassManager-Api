@@ -44,7 +44,7 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
       return new CommandResult(false, "ERR_BOOKING_NOT_CREATED", null, command.Notifications);
     }
 
-    if (await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
+    if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
     {
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
     }
@@ -63,13 +63,13 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
 
     if (!loggedUserId.Equals(command.UserId))
     {
-      if (await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId, "admin"))
+      if (!await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId, "admin"))
       {
         return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
       }
     }
 
-    if (await _accessControlService.HasUserRoleAsync(command.UserId, tenantId, "student"))
+    if (!await _accessControlService.HasUserRoleAsync(command.UserId, tenantId, "student"))
     {
       return new CommandResult(false, "ERR_STUDENT_ROLE_NOT_FOUND", null, null, 403);
     }
