@@ -12,11 +12,12 @@ public class ClassDayController : MainController
 {
   [HttpPost("{tenantId}/class-days")]
   public async Task<IResult> Create(
+    [FromRoute] Guid tenantId,
     [FromBody] CreateClassDayCommand command,
     [FromServices] CreateClassDayHandler handler
   )
   {
-    var result = await handler.Handle(command);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
@@ -51,7 +52,7 @@ public class ClassDayController : MainController
     [FromServices] ListClassesDaysHandler handler
   )
   {
-    var result = await handler.Handle([new Guid(User.FindFirst("Id")?.Value)], tenantId, date);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, date);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
