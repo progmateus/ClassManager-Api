@@ -7,6 +7,7 @@ using ClassManager.Domain.Contexts.Subscriptions.Entities;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
+using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
@@ -14,7 +15,7 @@ using Flunt.Notifications;
 namespace ClassManager.Domain.Contexts.Subscriptions.Handlers;
 
 public class CreateSubscriptionHandler : Notifiable,
-  IActionHandler<CreateSubscriptionCommand>
+  ITenantHandler<CreateSubscriptionCommand>
 {
   private ISubscriptionRepository _subscriptionRepository;
   private IUsersRolesRepository _usersRolesRepository;
@@ -23,7 +24,18 @@ public class CreateSubscriptionHandler : Notifiable,
   private IClassRepository _classRepository;
 
   private ITenantPlanRepository _tenantPlanRepository;
-  public CreateSubscriptionHandler(ISubscriptionRepository subscriptionRepository, IUsersRolesRepository usersRolesRepository, IRoleRepository roleRepository, IStudentsClassesRepository studentsClassesRepository, IClassRepository classRepository, ITenantPlanRepository tenantPlanrepository)
+  private readonly IAccessControlService _accessControlService;
+
+  public CreateSubscriptionHandler(
+    ISubscriptionRepository subscriptionRepository,
+    IUsersRolesRepository usersRolesRepository,
+    IRoleRepository roleRepository,
+    IStudentsClassesRepository studentsClassesRepository,
+    IClassRepository classRepository,
+    ITenantPlanRepository tenantPlanrepository,
+    IAccessControlService accessControlService
+
+  )
   {
     _subscriptionRepository = subscriptionRepository;
     _usersRolesRepository = usersRolesRepository;
@@ -31,8 +43,10 @@ public class CreateSubscriptionHandler : Notifiable,
     _studentsClassesRepository = studentsClassesRepository;
     _classRepository = classRepository;
     _tenantPlanRepository = tenantPlanrepository;
+    _accessControlService = accessControlService;
+
   }
-  public async Task<ICommandResult> Handle(Guid tenantId, CreateSubscriptionCommand command)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, CreateSubscriptionCommand command)
   {
     command.Validate();
 
@@ -40,6 +54,25 @@ public class CreateSubscriptionHandler : Notifiable,
     {
       AddNotifications(command);
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_CREATED", null, command.Notifications);
+    }
+
+    if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
+    {
+      return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
+    }
+
+    Guid userId = loggedUserId;
+
+    if (await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId, "admin"))
+    {
+      userId = command.UserId;
+    }
+
+    var subscriptionAlreadyActive = await _subscriptionRepository.HasActiveSubscription(userId, tenantId, new CancellationToken());
+
+    if (subscriptionAlreadyActive)
+    {
+      return new CommandResult(false, "ACTIVE_SUBSCRIPTION_ALREADY_EXISTS", null, null, 409);
     }
 
     var role = await _roleRepository.GetByNameAsync("student", new CancellationToken());
@@ -56,13 +89,6 @@ public class CreateSubscriptionHandler : Notifiable,
       return new CommandResult(false, "ERR_CLASS_NOT_FOUND", null, null, 404);
     }
 
-    var subscriptionAlreadyActive = await _subscriptionRepository.HasActiveSubscription(command.UserId, tenantId, new CancellationToken());
-
-    if (subscriptionAlreadyActive)
-    {
-      return new CommandResult(false, "ACTIVE_SUBSCRIPTION_ALREADY_EXISTS", null, null, 409);
-    }
-
     var tenantPlan = await _tenantPlanRepository.IdExistsAsync(command.TenantPlanId, new CancellationToken());
 
     if (!tenantPlan)
@@ -70,24 +96,24 @@ public class CreateSubscriptionHandler : Notifiable,
       return new CommandResult(false, "ERR_PLAN_NOT_FOUND", null, null, 404);
     }
 
-    var userRoleAlreadyExists = await _usersRolesRepository.VerifyRoleExistsAsync(command.UserId, tenantId, "student", new CancellationToken());
+    var userRoleAlreadyExists = await _usersRolesRepository.VerifyRoleExistsAsync(userId, tenantId, "student", new CancellationToken());
 
     if (!userRoleAlreadyExists)
     {
-      var userRole = new UsersRoles(command.UserId, role.Id, tenantId);
+      var userRole = new UsersRoles(userId, role.Id, tenantId);
 
       await _usersRolesRepository.CreateAsync(userRole, new CancellationToken());
     }
 
     DateTime lastDayOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month));
 
-    var subscription = new Subscription(command.UserId, command.TenantPlanId, tenantId, lastDayOfMonth);
+    var subscription = new Subscription(userId, command.TenantPlanId, tenantId, lastDayOfMonth);
 
     await _subscriptionRepository.CreateAsync(subscription, new CancellationToken());
 
-    var studentclass = new StudentsClasses(command.UserId, command.ClassId);
+    var studentclass = new StudentsClasses(userId, command.ClassId);
 
-    await _studentsClassesRepository.DeleteByUserIdAndtenantId(tenantId, command.UserId, new CancellationToken());
+    await _studentsClassesRepository.DeleteByUserIdAndtenantId(tenantId, userId, new CancellationToken());
 
     await _studentsClassesRepository.CreateAsync(studentclass, new CancellationToken());
 
