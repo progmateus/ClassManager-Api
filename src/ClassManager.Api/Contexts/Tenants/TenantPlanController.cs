@@ -17,7 +17,7 @@ public class TenantPlanController : MainController
     [FromServices] CreateTenantPlanHandler handler
   )
   {
-    var result = await handler.Handle(tenantId, command);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
@@ -69,7 +69,7 @@ public class TenantPlanController : MainController
     [FromServices] UpdateTenantPlanHandler handler
   )
   {
-    var result = await handler.Handle(tenantId, id, command);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, id, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
@@ -88,7 +88,7 @@ public class TenantPlanController : MainController
     [FromServices] DeleteTenantPlanHandler handler
   )
   {
-    var result = await handler.Handle(tenantId, id);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, id);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
