@@ -66,11 +66,30 @@ public class ClassDayController : MainController
   [HttpPut("{tenantId}/class-days/{classDayId}")]
   public async Task<IResult> Update(
     [FromRoute] Guid classDayId,
+    [FromRoute] Guid tenantId,
     [FromBody] UpdateClassDayCommand command,
     [FromServices] UpdateClassDayHandler handler
   )
   {
-    var result = await handler.Handle(classDayId, command);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, classDayId, command);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
+
+  [HttpDelete("{tenantId}/class-days/{classDayId}")]
+  public async Task<IResult> Delete(
+    [FromRoute] Guid classDayId,
+    [FromRoute] Guid tenantId,
+    [FromServices] DeleteClassDayHandler handler
+  )
+  {
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, classDayId);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
