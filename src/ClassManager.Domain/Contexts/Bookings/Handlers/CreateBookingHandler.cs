@@ -34,7 +34,7 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
     _studentsClassesrepository = studentsClassesRepository;
     _accessControlService = accessControlService;
   }
-  public async Task<ICommandResult> Handle(Guid tenantId, Guid loggedUserId, CreateBookingCommand command)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, CreateBookingCommand command)
   {
 
     command.Validate();
