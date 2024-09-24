@@ -6,7 +6,7 @@ using ClassManager.Shared.Handlers;
 
 namespace ClassManager.Domain.Contexts.Tenants.Handlers;
 
-public class DeleteTenantPlanHandler : ITenantDeleteActionHandler
+public class DeleteTenantPlanHandler : ITenantDeleteAction
 {
   private readonly ITenantPlanRepository _tenantPlansRepository;
   private readonly IAccessControlService _accessControlService;

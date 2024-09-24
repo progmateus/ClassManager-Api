@@ -3,7 +3,7 @@ using ClassManager.Shared.Commands;
 
 namespace ClassManager.Shared.Handlers
 {
-  public interface ITenantDeleteActionHandler
+  public interface ITenantDeleteAction
   {
     Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid entityId);
   }

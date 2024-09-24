@@ -7,7 +7,7 @@ using ClassManager.Shared.Handlers;
 
 namespace ClassManager.Domain.Contexts.Classes.Handlers;
 
-public class DeleteClassHandler : ITenantDeleteActionHandler
+public class DeleteClassHandler : ITenantDeleteAction
 {
   private readonly IClassRepository _classRepository;
   private readonly IAccessControlService _accessControlService;
