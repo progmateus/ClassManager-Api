@@ -231,10 +231,10 @@ public static class BuilderExtension
     builder.Services.AddTransient<ListTeachersByClassHandler>();
 
     builder.Services.AddTransient<UpdateTeacherClassHandler>();
-    builder.Services.AddTransient<RemoveTeachersClassesHandler>();
+    builder.Services.AddTransient<RemoveTeacherFromClassHandler>();
 
     builder.Services.AddTransient<UpdateStudentClassHandler>();
-    builder.Services.AddTransient<RemoveStudentsClassesHandler>();
+    builder.Services.AddTransient<RemoveStudentFromClassHandler>();
 
     builder.Services.AddTransient<CreateSubscriptionHandler>();
     builder.Services.AddTransient<UpdateSubscriptionHandler>();
