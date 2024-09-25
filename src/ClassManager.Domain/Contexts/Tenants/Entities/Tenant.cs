@@ -59,5 +59,10 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
       Document = document;
       Description = description;
     }
+
+    public void UpdateStatus(ETenantStatus status)
+    {
+      Status = status;
+    }
   }
 }

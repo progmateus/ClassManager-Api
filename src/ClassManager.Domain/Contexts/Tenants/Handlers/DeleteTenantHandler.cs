@@ -1,3 +1,4 @@
+using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
@@ -36,13 +37,16 @@ public class DeleteTenantHandler : Notifiable
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
-    if (await _tenantRepository.GetByIdAsync(tenantId, default) == null)
+    var tenant = await _tenantRepository.GetByIdAsync(tenantId, new CancellationToken());
+
+    if (tenant is null)
     {
-      AddNotification("DeleteTenantHandler", "Tenant not found");
-      return new CommandResult(false, "ERR_TENANT_NOT_DELETED", null, Notifications, 404);
+      return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, null, 404);
     }
 
-    await _tenantRepository.DeleteAsync(tenantId, default);
+    tenant.UpdateStatus(ETenantStatus.DELETED);
+
+    await _tenantRepository.UpdateAsync(tenant, default);
 
     return new CommandResult(true, "TENANT_DELETED", null, null, 204);
   }
