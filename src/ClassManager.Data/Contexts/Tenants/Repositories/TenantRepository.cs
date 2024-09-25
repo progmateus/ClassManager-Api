@@ -1,5 +1,6 @@
 using ClassManager.Data.Contexts.shared.Repositories;
 using ClassManager.Data.Data;
+using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
@@ -40,6 +41,7 @@ public class TenantRepository : Repository<Tenant>, ITenantRepository
     return await DbSet
     .AsNoTracking()
     .Where(x => string.IsNullOrEmpty(search) || x.Name.Contains(search) || x.Username.Contains(search))
+    .Where(x => x.Status != ETenantStatus.DELETED)
     .ToListAsync();
   }
 
