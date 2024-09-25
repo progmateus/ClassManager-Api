@@ -14,14 +14,12 @@ namespace ClassManager.Domain.Contexts.ClassDays.Handlers;
 public class ListClassesDaysHandler
 {
   private readonly IClassDayRepository _classDayRepository;
-  private readonly IUsersRolesRepository _usersRolesRepository;
   private readonly IStudentsClassesRepository _studentsClassesRepository;
   private readonly ISubscriptionRepository _subscriptionsRepository;
   private readonly IMapper _mapper;
   private readonly IAccessControlService _accessControlService;
   public ListClassesDaysHandler(
     IClassDayRepository classRepository,
-    IUsersRolesRepository usersRolesRepository,
     IStudentsClassesRepository studentsClassesRepository,
     ISubscriptionRepository subscriptionsRepository,
     IMapper mapper,
@@ -29,7 +27,6 @@ public class ListClassesDaysHandler
     )
   {
     _classDayRepository = classRepository;
-    _usersRolesRepository = usersRolesRepository;
     _studentsClassesRepository = studentsClassesRepository;
     _subscriptionsRepository = subscriptionsRepository;
     _mapper = mapper;

@@ -36,11 +36,18 @@ public class UpdateSubscriptionHandler : Notifiable
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
     }
 
+    var istenantAdmin = await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId, "admin");
+
     var subscription = await _subscriptionRepository.FindByIdAsync(subscriptionId, tenantId, new CancellationToken());
 
-    if (subscription is null || !subscription.UserId.Equals(loggedUserId))
+    if (subscription is null)
     {
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, null, 404);
+    }
+
+    if (!subscription.UserId.Equals(loggedUserId) && !istenantAdmin)
+    {
+      return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 404);
     }
 
     if (command.Status.HasValue)
@@ -53,7 +60,7 @@ public class UpdateSubscriptionHandler : Notifiable
       subscription.ChangeStatus(command.Status.Value);
     }
 
-    if (command.TenantPlanId.HasValue)
+    if (command.TenantPlanId.HasValue && istenantAdmin)
     {
       var tenantPlan = await _tenantPlanrepository.GetByIdAsync(command.TenantPlanId.Value, new CancellationToken());
 
