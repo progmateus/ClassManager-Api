@@ -1,5 +1,6 @@
 {
-  "editor.formatOnSave": true,
   "files.autoSaveWorkspaceFilesOnly": true,
-  "editor.defaultFormatter": "ms-dotnettools.csdevkit"
+  "editor.defaultFormatter": null,
+  "editor.formatOnSave": true,
+  "editor.formatOnPaste": true
 }

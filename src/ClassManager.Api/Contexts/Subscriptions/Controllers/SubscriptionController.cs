@@ -36,7 +36,7 @@ public class TenantController : MainController
     [FromServices] ListSubscriptionsHandler handler
   )
   {
-    var result = await handler.Handle(tenantId);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
@@ -53,7 +53,7 @@ public class TenantController : MainController
     [FromServices] GetSubscriptionProfileHandler handler
   )
   {
-    var result = await handler.Handle(tenantId, id);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, id);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
