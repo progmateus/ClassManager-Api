@@ -1,7 +1,6 @@
 using ClassManager.Api.Contexts.Shared.Controllers;
 using ClassManager.Domain.Contexts.Classes.Commands;
 using ClassManager.Domain.Contexts.Classes.Handlers;
-using ClassManager.Domain.Contexts.Tenants.Handlers;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClassManager.Api.Contexts.Classes.Controllers;
@@ -84,7 +83,7 @@ public class ClassController : MainController
     [FromServices] ListStudentsByClassHandler handler
   )
   {
-    var result = await handler.Handle(tenantId, id);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, id);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
@@ -101,7 +100,7 @@ public class ClassController : MainController
     [FromServices] ListTeachersByClassHandler handler
   )
   {
-    var result = await handler.Handle(tenantId, id);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, id);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 

@@ -35,12 +35,16 @@ public class GetUserProfileHandler
   public async Task<ICommandResult> Handle(Guid id)
   {
 
-    var user = _mapper.Map<UserProfileViewModel>(await _userReporitory.GetByIdAsync(id, new CancellationToken()));
+    /* var user = _mapper.Map<UserProfileViewModel>(await _userReporitory.GetByIdAsync(id, new CancellationToken())); */
 
-    if (user == null)
+    var users = _mapper.Map<IEnumerable<UserProfileViewModel>>(await _userReporitory.GetAsync(x => x.Id == id, [x => x.StudentsClasses]));
+
+    if (!users.Any())
     {
       return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null, 404);
     }
+
+    var user = users.First();
 
     var userRoles = _mapper.Map<List<UsersRolesViewModel>>(await _usersRolesRepository.FindByUserId(user.Id));
     var subscriptions = _mapper.Map<List<SubscriptionPreviewViewModel>>(await _subscriptionsrepository.ListSubscriptions([user.Id], null));

@@ -103,7 +103,7 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
 
     if (loggedUserId.Equals(command.UserId))
     {
-      var weekBookings = await _bookingRepository.GetAsync(x => x.UserId == command.UserId && x.ClassDay.Class.TenantId == tenantId && x.ClassDay.Date > sunday && x.ClassDay.Date < monday && x.ClassDay.Status != EClassDayStatus.CANCELED, new CancellationToken());
+      var weekBookings = await _bookingRepository.GetAsync(x => x.UserId == command.UserId && x.ClassDay.Class.TenantId == tenantId && x.ClassDay.Date > sunday && x.ClassDay.Date < monday && x.ClassDay.Status != EClassDayStatus.CANCELED, []);
 
       if (weekBookings.Count() >= subscription.TenantPlan.TimesOfweek)
       {
@@ -111,7 +111,7 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
       }
     }
 
-    var bookingAlreadyExists = await _bookingRepository.GetAsync(x => x.UserId == command.UserId && x.ClassDayId == command.ClassDayId, new CancellationToken());
+    var bookingAlreadyExists = await _bookingRepository.GetAsync(x => x.UserId == command.UserId && x.ClassDayId == command.ClassDayId, []);
 
     if (bookingAlreadyExists.Count() > 0)
     {

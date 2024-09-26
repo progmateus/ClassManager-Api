@@ -26,11 +26,6 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
     return await DbSet.ToListAsync(cancellationToken);
   }
 
-  public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken)
-  {
-    return await DbSet.AsNoTracking().Where(predicate).ToListAsync(cancellationToken);
-  }
-
   public async Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
   {
     return await DbSet.FindAsync(id, cancellationToken);
@@ -77,5 +72,12 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
   {
     DbSet.RemoveRange(entities);
     await SaveChangesAsync(cancellationToken);
+  }
+
+  public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
+  {
+    var query = DbSet.AsNoTracking().Where(predicate);
+
+    return await includes.Aggregate(query, (current, includeProperty) => current.Include(includeProperty)).ToListAsync();
   }
 }

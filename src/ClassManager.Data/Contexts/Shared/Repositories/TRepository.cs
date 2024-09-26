@@ -21,11 +21,6 @@ public abstract class TRepository<TEntity> : ITRepository<TEntity> where TEntity
     await SaveChangesAsync(cancellationToken);
   }
 
-  public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, CancellationToken cancellationToken)
-  {
-    return await DbSet.AsNoTracking().Where(predicate).ToListAsync(cancellationToken);
-  }
-
   public async Task<TEntity?> FindByIdAsync(Guid id, Guid tenantId, CancellationToken cancellationToken)
   {
     return await DbSet.FirstOrDefaultAsync(x => x.Id == id && x.TenantId == tenantId, cancellationToken);
@@ -83,5 +78,12 @@ public abstract class TRepository<TEntity> : ITRepository<TEntity> where TEntity
   public async Task<List<TEntity>> ListByTenantId(Guid tenantId, CancellationToken cancellationToken)
   {
     return await DbSet.Where(x => x.TenantId == tenantId).ToListAsync(cancellationToken);
+  }
+
+  public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
+  {
+    var query = DbSet.AsNoTracking().Where(predicate);
+
+    return await includes.Aggregate(query, (current, includeProperty) => current.Include(includeProperty)).ToListAsync();
   }
 }
