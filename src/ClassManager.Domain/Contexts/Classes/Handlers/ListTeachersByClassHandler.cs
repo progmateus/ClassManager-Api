@@ -24,7 +24,7 @@ public class ListTeachersByClassHandler
     _classRepository = classRepository;
     _teachersClassesRepository = teachersClassesRepository;
     _mapper = mapper;
-  _accessControlService = accessControlService;
+    _accessControlService = accessControlService;
 
   }
   public async Task<ICommandResult> Handle(Guid tenantId, Guid classId)
