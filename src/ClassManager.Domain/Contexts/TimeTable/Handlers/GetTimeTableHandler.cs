@@ -34,17 +34,17 @@ public class GetTimeTableHandler
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
-    var timeTable = _mapper.Map<TimeTableViewModel>(await _timeTableRepository.FindByIdAndTenantIdAsync(entityId, tenantId, new CancellationToken()));
+    var timeTable = _mapper.Map<TimeTableViewModel>(await _timeTableRepository.FindAsync(x => x.TenantId == tenantId && x.Id == entityId, [x => x.SchedulesDays]));
 
     if (timeTable is null)
     {
       return new CommandResult(false, "ERR_TIME_TABLE_NOT_FOUND", null, null, 404);
     }
 
-    var shchedulesDays = _mapper.Map<List<ScheduleDayViwModel>>(await _scheduleDayRepository.GroupByWeekDay(entityId)); ;
+    /*     var shchedulesDays = _mapper.Map<List<ScheduleDayViwModel>>(await _scheduleDayRepository.GroupByWeekDay(entityId)); ;
+      timeTable.SchedulesDays = shchedulesDays;
+    */
 
-    timeTable.SchedulesDays = shchedulesDays;
-
-    return new CommandResult(true, "TIME_TABLE_GOTTENNN", shchedulesDays, null, 200);
+    return new CommandResult(true, "TIME_TABLE_GOTTENNN", timeTable, null, 200);
   }
 }
