@@ -26,9 +26,15 @@ public class AccesControlService : IAccessControlService
     _tenantRepository = tenantRepository;
     _subscriptionRepository = subscriptionRepository;
   }
-  public async Task<bool> HasUserRoleAsync(Guid userId, Guid tenantId, string roleName)
+
+  public async Task<bool> HasUserAnyRoleAsync(Guid userId, Guid tenantId, List<string> rolesNames)
   {
-    return await _usersRolesRepository.VerifyRoleExistsAsync(userId, tenantId, roleName, new CancellationToken());
+    return await _usersRolesRepository.HasAnyRoleAsync(userId, tenantId, rolesNames, new CancellationToken());
+  }
+
+  public Task<bool> HasAnyRoleAsync(Guid userId, Guid tenantId, string roleName)
+  {
+    throw new NotImplementedException();
   }
 
   public async Task<bool> IsTenantSubscriptionActiveAsync(Guid tenantId)

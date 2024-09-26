@@ -31,7 +31,7 @@ public class ListBookingsHandler : Notifiable
 
     if (tenantId.HasValue && tenantId != Guid.Empty)
     {
-      if (await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId.Value, "admin"))
+      if (await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId.Value, ["admin"]))
       {
         if (userId.HasValue && userId != Guid.Empty)
         {

@@ -33,7 +33,7 @@ public class CreateUserRoleHandler : Notifiable,
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
     }
 
-    if (!await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId, "admin"))
+    if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
     {
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
@@ -50,7 +50,7 @@ public class CreateUserRoleHandler : Notifiable,
       return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null, 404);
     }
 
-    var userRoleAlreadyExists = await _usersRolesRepository.VerifyRoleExistsAsync(command.UserId, tenantId, command.RoleName, new CancellationToken());
+    var userRoleAlreadyExists = await _usersRolesRepository.HasAnyRoleAsync(command.UserId, tenantId, [command.RoleName], new CancellationToken());
 
     if (userRoleAlreadyExists)
     {

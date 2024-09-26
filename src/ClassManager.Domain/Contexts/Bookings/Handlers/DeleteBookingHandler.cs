@@ -52,7 +52,7 @@ public class DeleteBookingHandler : Notifiable
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
     }
 
-    if (!await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId, "student"))
+    if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["student"]))
     {
       return new CommandResult(false, "ERR_USER_ROLE_NOT_FOUND", null, null, 403);
     }

@@ -10,6 +10,13 @@ namespace classManager.Data.Contexts.Roles.Repositories;
 public class UsersRolesRepository : TRepository<UsersRoles>, IUsersRolesRepository
 {
   public UsersRolesRepository(AppDbContext context) : base(context) { }
+
+  public async Task<bool> HasAnyRoleAsync(Guid userId, Guid tenantId, List<string> rolesNames, CancellationToken cancellationToken)
+  {
+    return await DbSet
+    .AnyAsync(x => x.UserId == userId && x.TenantId == tenantId && rolesNames.Contains(x.Role.Name), cancellationToken);
+  }
+
   public async Task DeleteByUserIdAndtenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken)
   {
     DbSet.RemoveRange(DbSet.Where(x => x.UserId == userId && x.TenantId == tenantId));
@@ -43,10 +50,5 @@ public class UsersRolesRepository : TRepository<UsersRoles>, IUsersRolesReposito
   public async Task<List<UsersRoles>> ListUsersRolesByUserIdAndTenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken)
   {
     return await DbSet.Where(x => x.UserId == userId && x.TenantId == tenantId).ToListAsync(cancellationToken);
-  }
-
-  public async Task<bool> VerifyRoleExistsAsync(Guid userId, Guid tenantId, string roleName, CancellationToken cancellationToken)
-  {
-    return await DbSet.AnyAsync(x => x.UserId == userId && x.TenantId == tenantId && x.Role.Name == roleName, cancellationToken);
   }
 }

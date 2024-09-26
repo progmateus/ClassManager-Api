@@ -63,7 +63,7 @@ public class CreateSubscriptionHandler : Notifiable,
 
     Guid userId = loggedUserId;
 
-    if (await _accessControlService.HasUserRoleAsync(loggedUserId, tenantId, "admin"))
+    if (await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
     {
       userId = command.UserId;
     }
@@ -96,7 +96,7 @@ public class CreateSubscriptionHandler : Notifiable,
       return new CommandResult(false, "ERR_PLAN_NOT_FOUND", null, null, 404);
     }
 
-    var userRoleAlreadyExists = await _usersRolesRepository.VerifyRoleExistsAsync(userId, tenantId, "student", new CancellationToken());
+    var userRoleAlreadyExists = await _usersRolesRepository.HasAnyRoleAsync(userId, tenantId, ["student"], new CancellationToken());
 
     if (!userRoleAlreadyExists)
     {
