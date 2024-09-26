@@ -1,5 +1,6 @@
 using ClassManager.Domain.Contexts.ClassDays.Entities;
 using ClassManager.Domain.Contexts.Shared.Enums;
+using ClassManager.Domain.Contexts.TimesTables.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 

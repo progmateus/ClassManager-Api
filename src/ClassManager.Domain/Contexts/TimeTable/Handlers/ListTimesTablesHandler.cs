@@ -7,7 +7,7 @@ using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
 
-namespace ClassManager.Domain.Contexts.TimeTables.Handlers;
+namespace ClassManager.Domain.Contexts.TimesTabless.Handlers;
 
 public class ListTimesTablesHandler
 {

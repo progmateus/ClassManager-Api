@@ -4,7 +4,7 @@ using ClassManager.Data.Contexts.Bookings.Mappings;
 using ClassManager.Data.Contexts.Classes.Mappings;
 using ClassManager.Data.Contexts.Plans.Mappings;
 using ClassManager.Data.Contexts.Tenants.Mappings;
-using ClassManager.Data.Contexts.TimeTables.Mappings;
+using ClassManager.Data.Contexts.TimesTabless.Mappings;
 using ClassManager.Domain.Contexts.Accounts.Entities;
 using ClassManager.Domain.Contexts.ClassDays.Entities;
 using ClassManager.Domain.Contexts.Classes.Entities;

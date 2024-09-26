@@ -1,6 +1,7 @@
-using ClassManager.Domain.Contexts.ClassDays.Entities;
+using ClassManager.Domain.Contexts.TimesTables.Entities;
 
 namespace ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
 public interface IScheduleDayRepository : ITRepository<ScheduleDay>
 {
+  Task<object> GroupByWeekDay(Guid timeTableId);
 }

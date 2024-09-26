@@ -1,4 +1,3 @@
-using System;
 using ClassManager.Domain.Shared.Entities;
 using ClassManager.Domain.Contexts.Shared.ValueObjects;
 using ClassManager.Domain.Contexts.Shared.Enums;
@@ -7,8 +6,7 @@ using ClassManager.Domain.Contexts.Plans.Entities;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Subscriptions.Entities;
 using ClassManager.Domain.Contexts.Accounts.Entities;
-using System.Text.Json.Serialization;
-using ClassManager.Domain.Contexts.ClassDays.Entities;
+using ClassManager.Domain.Contexts.TimesTables.Entities;
 
 namespace ClassManager.Domain.Contexts.Tenants.Entities
 {

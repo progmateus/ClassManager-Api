@@ -1,13 +1,13 @@
-using ClassManager.Domain.Contexts.ClassDays.Entities;
 using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
-using ClassManager.Domain.Contexts.Roles.Commands;
+using ClassManager.Domain.Contexts.TimesTables.Commands;
+using ClassManager.Domain.Contexts.TimesTables.Entities;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
 
-namespace ClassManager.Domain.Contexts.TimeTables.Handlers;
+namespace ClassManager.Domain.Contexts.TimesTables.Handlers;
 
 public class CreateTimeTableHandler :
   Notifiable, ITenantHandler<CreateTimeTableCommand>
@@ -43,7 +43,7 @@ public class CreateTimeTableHandler :
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
-    TimeTable timeTable = new TimeTable(tenantId, command.Name);
+    var timeTable = new TimeTable(tenantId, command.Name);
 
 
     await _timeTableRepository.CreateAsync(timeTable, new CancellationToken());

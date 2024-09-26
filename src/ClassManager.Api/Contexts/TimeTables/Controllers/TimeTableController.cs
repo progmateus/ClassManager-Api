@@ -1,14 +1,14 @@
 using ClassManager.Api.Contexts.Shared.Controllers;
-using ClassManager.Domain.Contexts.Roles.Commands;
-using ClassManager.Domain.Contexts.TimeTables.Commands;
-using ClassManager.Domain.Contexts.TimeTables.Handlers;
+using ClassManager.Domain.Contexts.TimesTables.Commands;
+using ClassManager.Domain.Contexts.TimesTables.Handlers;
+using ClassManager.Domain.Contexts.TimesTabless.Handlers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClassManager.Api.Contexts.ClassDays.Controllers;
 
 [Authorize]
-[Route("{tenantId}/time-tables")]
+[Route("{tenantId}/times-tables")]
 public class TimeTableController : MainController
 {
   [HttpPost]

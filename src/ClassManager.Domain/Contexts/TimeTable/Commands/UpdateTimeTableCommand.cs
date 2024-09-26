@@ -1,6 +1,6 @@
 using ClassManager.Domain.Contexts.Shared.Enums;
 
-namespace ClassManager.Domain.Contexts.TimeTables.Commands
+namespace ClassManager.Domain.Contexts.TimesTables.Commands
 {
 
   public class CreateScheduleParams

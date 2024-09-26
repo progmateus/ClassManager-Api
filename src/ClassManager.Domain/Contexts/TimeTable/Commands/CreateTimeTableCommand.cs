@@ -2,7 +2,7 @@ using ClassManager.Domain.Shared.Commands;
 using Flunt.Notifications;
 using Flunt.Validations;
 
-namespace ClassManager.Domain.Contexts.Roles.Commands;
+namespace ClassManager.Domain.Contexts.TimesTables.Commands;
 
 public class CreateTimeTableCommand : Notifiable, ICommand
 {

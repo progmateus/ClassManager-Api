@@ -1,13 +1,13 @@
-using ClassManager.Domain.Contexts.ClassDays.Entities;
 using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
-using ClassManager.Domain.Contexts.TimeTables.Commands;
+using ClassManager.Domain.Contexts.TimesTables.Commands;
+using ClassManager.Domain.Contexts.TimesTables.Entities;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
 using Flunt.Notifications;
 using Microsoft.IdentityModel.Tokens;
 
-namespace ClassManager.Domain.Contexts.TimeTables.Handlers;
+namespace ClassManager.Domain.Contexts.TimesTabless.Handlers;
 
 public class UpdateTimetableHandler :
   Notifiable
@@ -30,7 +30,7 @@ public class UpdateTimetableHandler :
   {
     if (command.ScheduleDays.IsNullOrEmpty())
     {
-      return new CommandResult(false, "ERR_INVALID_CLASS_HOUR", null, null, 400);
+      return new CommandResult(false, "ERR_VALIDATION", null, null, 400);
     }
 
     if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
@@ -49,11 +49,6 @@ public class UpdateTimetableHandler :
       return new CommandResult(false, "ERR_TIME_TABLE_NOT_FOUND", null, null, 404);
     }
 
-    var grouped = command.ScheduleDays
-    .GroupBy(ch => ch.WeekDay)
-    .Select(grp => grp.ToList())
-    .ToList();
-
     List<ScheduleDay> schedulesDaysEntities = [];
 
     foreach (var classHour in command.ScheduleDays)
@@ -66,6 +61,6 @@ public class UpdateTimetableHandler :
 
     await _scheduleDayRepository.CreateRangeAsync(schedulesDaysEntities, new CancellationToken());
 
-    return new CommandResult(true, "CLASS_HOUR_CREATED", "", null, 201);
+    return new CommandResult(true, "TIME_TABLE_UPDATED", "", null, 200);
   }
 }

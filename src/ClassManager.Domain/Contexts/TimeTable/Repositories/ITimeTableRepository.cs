@@ -1,7 +1,6 @@
-using ClassManager.Domain.Contexts.ClassDays.Entities;
+using ClassManager.Domain.Contexts.TimesTables.Entities;
 
 namespace ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
 public interface ITimeTableRepository : ITRepository<TimeTable>
 {
-  Task<TimeTable?> FindByIdAndTenantIdWithGroupBy(Guid tenantId, Guid timeTableId);
 }

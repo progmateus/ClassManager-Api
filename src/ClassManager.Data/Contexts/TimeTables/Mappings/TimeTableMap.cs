@@ -1,9 +1,8 @@
-using ClassManager.Domain.Contexts.ClassDays.Entities;
-using ClassManager.Domain.Contexts.Plans.Entities;
+using ClassManager.Domain.Contexts.TimesTables.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ClassManager.Data.Contexts.TimeTables.Mappings;
+namespace ClassManager.Data.Contexts.TimesTabless.Mappings;
 
 public class TimeTableMap : IEntityTypeConfiguration<TimeTable>
 {
