@@ -258,5 +258,7 @@ public static class BuilderExtension
 
     builder.Services.AddTransient<CreateTimeTableHandler>();
     builder.Services.AddTransient<UpdateTimetableHandler>();
+    builder.Services.AddTransient<ListTimesTablesHandler>();
+    builder.Services.AddTransient<GetTimeTableHandler>();
   }
 }
