@@ -39,7 +39,7 @@ public class DeleteSubscriptionHandler : Notifiable, ITenantDeleteAction
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
     }
 
-    var subscription = await _subscriptionRepository.FindByIdAsync(subscriptionId, tenantId, new CancellationToken());
+    var subscription = await _subscriptionRepository.FindByIdAndTenantIdAsync(subscriptionId, tenantId, new CancellationToken());
 
     if (subscription is null)
     {

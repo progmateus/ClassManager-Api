@@ -21,7 +21,7 @@ public abstract class TRepository<TEntity> : ITRepository<TEntity> where TEntity
     await SaveChangesAsync(cancellationToken);
   }
 
-  public async Task<TEntity?> FindByIdAsync(Guid id, Guid tenantId, CancellationToken cancellationToken)
+  public async Task<TEntity?> FindByIdAndTenantIdAsync(Guid id, Guid tenantId, CancellationToken cancellationToken)
   {
     return await DbSet.FirstOrDefaultAsync(x => x.Id == id && x.TenantId == tenantId, cancellationToken);
   }

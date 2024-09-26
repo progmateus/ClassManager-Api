@@ -38,7 +38,7 @@ public class UpdateSubscriptionHandler : Notifiable
 
     var istenantAdmin = await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]);
 
-    var subscription = await _subscriptionRepository.FindByIdAsync(subscriptionId, tenantId, new CancellationToken());
+    var subscription = await _subscriptionRepository.FindByIdAndTenantIdAsync(subscriptionId, tenantId, new CancellationToken());
 
     if (subscription is null)
     {

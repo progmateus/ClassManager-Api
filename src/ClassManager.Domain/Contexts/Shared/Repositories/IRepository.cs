@@ -8,7 +8,7 @@ public interface IRepository<TEntity> where TEntity : Entity
   Task CreateAsync(TEntity entity, CancellationToken cancellationToken);
   Task UpdateAsync(TEntity entity, CancellationToken cancellationToken);
   Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes);
-  Task<TEntity> FindAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes);
+  Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes);
   Task<int> SaveChangesAsync(CancellationToken cancellationToken);
   Task DeleteAsync(Guid id, CancellationToken cancellationToken);
   Task<bool> IdExistsAsync(Guid id, CancellationToken cancellationToken);

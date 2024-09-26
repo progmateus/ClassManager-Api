@@ -31,7 +31,7 @@ public class DeleteUserRoleHandler : Notifiable
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
-    var userRole = await _usersRolesRepository.FindByIdAsync(userRoleId, tenantId, new CancellationToken());
+    var userRole = await _usersRolesRepository.FindByIdAndTenantIdAsync(userRoleId, tenantId, new CancellationToken());
 
     if (userRole is null)
     {
