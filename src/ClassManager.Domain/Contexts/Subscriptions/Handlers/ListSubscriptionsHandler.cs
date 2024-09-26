@@ -37,7 +37,7 @@ public class ListSubscriptionsHandler : Notifiable
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId)
   {
 
-    if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin", "student"]))
+    if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
     {
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
