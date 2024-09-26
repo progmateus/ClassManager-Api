@@ -23,6 +23,7 @@ public class ListTeachersByClassHandler
   }
   public async Task<ICommandResult> Handle(Guid tenantId, Guid classId)
   {
+    
     var classFound = await _classRepository.GetByIdAndTenantIdAsync(tenantId, classId, new CancellationToken());
 
     if (classFound is null)

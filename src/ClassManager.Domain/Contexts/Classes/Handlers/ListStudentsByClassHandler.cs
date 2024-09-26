@@ -11,18 +11,28 @@ public class ListStudentsByClassHandler
   private readonly IClassRepository _classRepository;
   private readonly IStudentsClassesRepository _studentsClassesRepository;
   private readonly IMapper _mapper;
+  private readonly IAccessControlService _accessControlService;
+
   public ListStudentsByClassHandler(
     IClassRepository classRepository,
     IStudentsClassesRepository studentsClassesRepository,
-    IMapper mapper
+    IMapper mapper,
+    IAccessControlService accessControlService
     )
   {
     _classRepository = classRepository;
     _studentsClassesRepository = studentsClassesRepository;
     _mapper = mapper;
+    _accessControlService = accessControlService;
   }
   public async Task<ICommandResult> Handle(Guid tenantId, Guid classId)
   {
+
+    if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin", "student"]))
+    {
+        return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
+    }
+
     var classFound = await _classRepository.GetByIdAndTenantIdAsync(tenantId, classId, new CancellationToken());
 
     if (classFound is null)
