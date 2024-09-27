@@ -11,6 +11,6 @@ namespace ClassManager.Domain.Contexts.TimesTables.Commands
   }
   public class UpdateTimeTableCommand
   {
-    public List<CreateScheduleParams> ScheduleDays { get; set; } = [];
+    public List<CreateScheduleParams> SchedulesDays { get; set; } = [];
   }
 }

@@ -28,7 +28,7 @@ public class UpdateTimetableHandler :
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid timeTableId, UpdateTimeTableCommand command)
   {
-    if (command.ScheduleDays.IsNullOrEmpty())
+    if (command.SchedulesDays.IsNullOrEmpty())
     {
       return new CommandResult(false, "ERR_VALIDATION", null, null, 400);
     }
@@ -50,10 +50,10 @@ public class UpdateTimetableHandler :
 
     List<ScheduleDay> schedulesDaysEntities = [];
 
-    foreach (var classHour in command.ScheduleDays)
+    foreach (var scheduleHour in command.SchedulesDays)
     {
-      var classHourEntity = new ScheduleDay(timeTableId, classHour.WeekDay, classHour.HourStart, classHour.HourEnd, tenantId);
-      schedulesDaysEntities.Add(classHourEntity);
+      var scheduleDayEntity = new ScheduleDay(timeTableId, scheduleHour.WeekDay, scheduleHour.HourStart, scheduleHour.HourEnd, tenantId);
+      schedulesDaysEntities.Add(scheduleDayEntity);
     }
 
     await _scheduleDayRepository.DeleteAllByTimeTableId(timeTableId, new CancellationToken());
