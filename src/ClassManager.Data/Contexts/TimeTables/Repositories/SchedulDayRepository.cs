@@ -1,8 +1,6 @@
 using ClassManager.Data.Contexts.shared.Repositories;
 using ClassManager.Data.Data;
-using ClassManager.Domain.Contexts.ClassDays.Entities;
 using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
-using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.TimesTables.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -11,6 +9,12 @@ namespace ClassManager.Data.Contexts.Plans.Repositories;
 public class ScheduleDayRepository : TRepository<ScheduleDay>, IScheduleDayRepository
 {
   public ScheduleDayRepository(AppDbContext context) : base(context) { }
+
+  public async Task DeleteAllByTimeTableId(Guid timeTableId, CancellationToken cancellationToken)
+  {
+    DbSet.RemoveRange(DbSet.Where(x => x.TimeTableId == timeTableId));
+    await SaveChangesAsync(cancellationToken);
+  }
 
   public async Task<object> GroupByWeekDay(Guid timeTableId)
   {

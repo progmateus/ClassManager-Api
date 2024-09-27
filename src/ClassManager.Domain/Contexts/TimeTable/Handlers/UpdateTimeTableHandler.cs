@@ -43,7 +43,6 @@ public class UpdateTimetableHandler :
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
-
     if (!await _timeTableRepository.IdExistsAsync(timeTableId, tenantId, new CancellationToken()))
     {
       return new CommandResult(false, "ERR_TIME_TABLE_NOT_FOUND", null, null, 404);
@@ -57,7 +56,7 @@ public class UpdateTimetableHandler :
       schedulesDaysEntities.Add(classHourEntity);
     }
 
-    await _scheduleDayRepository.DeleteAllByTenantIdAsync(tenantId, new CancellationToken());
+    await _scheduleDayRepository.DeleteAllByTimeTableId(timeTableId, new CancellationToken());
 
     await _scheduleDayRepository.CreateRangeAsync(schedulesDaysEntities, new CancellationToken());
 
