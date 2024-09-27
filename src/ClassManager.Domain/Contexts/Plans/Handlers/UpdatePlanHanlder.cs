@@ -24,7 +24,7 @@ public class UpdatePlandHandler : Notifiable, IActionHandler<PlanCommand>
     if (command.Invalid)
     {
       AddNotifications(command);
-      return new CommandResult(false, "ERR_PLAN_NOT_UPDATED", null, command.Notifications);
+      return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
 
     var plan = await _repository.GetByIdAsync(id, new CancellationToken());

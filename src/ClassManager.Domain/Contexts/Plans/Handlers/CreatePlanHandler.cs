@@ -23,7 +23,7 @@ public class CreatePlandHandler : Notifiable, IHandler<PlanCommand>
     if (command.Invalid)
     {
       AddNotifications(command);
-      return new CommandResult(false, "ERR_PLAN_NOT_CREATED", null, command.Notifications);
+      return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
 
     var plan = new Plan(command.Name, command.Description, command.StudentsLimit, command.ClassesLimit, command.Price);

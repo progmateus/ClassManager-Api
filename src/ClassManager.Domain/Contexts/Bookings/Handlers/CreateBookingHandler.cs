@@ -41,7 +41,7 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
 
     if (!command.Valid)
     {
-      return new CommandResult(false, "ERR_BOOKING_NOT_CREATED", null, command.Notifications);
+      return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
 
     if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))

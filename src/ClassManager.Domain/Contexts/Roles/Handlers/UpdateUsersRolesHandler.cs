@@ -58,14 +58,14 @@ public class UpdateUsersRolesHandler : Notifiable,
 
     if (roleExists.Count != command.RolesIds.Count)
     {
-      return new CommandResult(false, "ERR_ROLE_NOT_EXISTS", null, null, 404);
+      return new CommandResult(false, "ERR_ROLE_NOT_FOUND", null, null, 404);
     }
 
     var userExists = await _userRepository.IdExistsAsync(command.UserId, new CancellationToken());
 
     if (!userExists)
     {
-      return new CommandResult(false, "ERR_USER_NOT_EXISTS", null, null, 404);
+      return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null, 404);
     }
 
     List<UsersRoles> usersRoles = [];

@@ -31,7 +31,7 @@ public class UpdateClassHandler :
     if (command.Invalid)
     {
       AddNotifications(command);
-      return new CommandResult(false, "ERR_CLASS_NOT_UPDATED", null, command.Notifications);
+      return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
 
     if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))

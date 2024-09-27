@@ -23,7 +23,7 @@ public class CreateRoleHandler : Notifiable,
     if (command.Invalid)
     {
       AddNotifications(command);
-      return new CommandResult(false, "ERR_ROLE_NOT_CREATED", null, command.Notifications);
+      return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
 
     var roleAlreadyExists = await _repository.NameAlreadyExists(command.Name, new CancellationToken());

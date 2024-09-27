@@ -72,7 +72,7 @@ public class CreateUserHandler :
 
     if (Invalid)
     {
-      return new CommandResult(false, "ERR_USER_NOT_CREATED", null, Notifications);
+      return new CommandResult(false, "ERR_VALIDATION", null, Notifications);
     }
 
     // salvar as informações

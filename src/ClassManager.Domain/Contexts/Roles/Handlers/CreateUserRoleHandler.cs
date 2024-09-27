@@ -42,7 +42,7 @@ public class CreateUserRoleHandler : Notifiable,
 
     if (roleFound is null)
     {
-      return new CommandResult(false, "ERR_ROLE_NOT_EXISTS", null, null, 404);
+      return new CommandResult(false, "ERR_ROLE_NOT_FOUND", null, null, 404);
     }
 
     if (!await _userRepository.IdExistsAsync(command.UserId, new CancellationToken()))

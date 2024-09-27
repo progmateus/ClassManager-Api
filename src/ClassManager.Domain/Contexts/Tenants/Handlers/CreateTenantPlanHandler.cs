@@ -56,7 +56,7 @@ public class CreateTenantPlanHandler :
 
     if (Invalid)
     {
-      return new CommandResult(false, "ERR_PLAN_NOT_CREATED", null, null, 400);
+      return new CommandResult(false, "ERR_VALIDATION", null, null, 400);
     }
 
     await _tenantPlanRepository.CreateAsync(tenantPlan, new CancellationToken());

@@ -28,6 +28,6 @@ public class DeleteUserHandler
 
     await _userReporitory.UpdateAsync(user, new CancellationToken());
 
-    return new CommandResult(true, "ERR_DELETED", null, null, 204);
+    return new CommandResult(true, "USER_DELETED", null, null, 204);
   }
 }

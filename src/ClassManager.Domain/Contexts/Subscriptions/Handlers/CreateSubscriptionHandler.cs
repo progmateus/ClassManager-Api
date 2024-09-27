@@ -53,7 +53,7 @@ public class CreateSubscriptionHandler : Notifiable,
     if (command.Invalid)
     {
       AddNotifications(command);
-      return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_CREATED", null, command.Notifications);
+      return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
 
     if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))

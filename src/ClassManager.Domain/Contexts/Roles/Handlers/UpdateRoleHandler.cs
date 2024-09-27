@@ -23,7 +23,7 @@ public class UpdateRoleHandler : Notifiable,
     if (command.Invalid)
     {
       AddNotifications(command);
-      return new CommandResult(false, "ERR_ROLE_NOT_EDITED", null, command.Notifications);
+      return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
 
     var role = await _repository.GetByIdAsync(id, new CancellationToken());
