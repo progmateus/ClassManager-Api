@@ -31,7 +31,6 @@ public class TimeTableController : MainController
   [HttpGet]
   public async Task<IResult> List(
     [FromRoute] Guid tenantId,
-    [FromRoute] Guid timeTableId,
     [FromServices] ListTimesTablesHandler handler
   )
   {

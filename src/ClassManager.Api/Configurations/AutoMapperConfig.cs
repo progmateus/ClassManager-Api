@@ -15,6 +15,8 @@ using ClassManager.Domain.Contexts.Subscriptions.ViewModels;
 using ClassManager.Domain.Contexts.tenants.ViewModels;
 using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Contexts.Tenants.ViewModels;
+using ClassManager.Domain.Contexts.TimesTables.Entities;
+using ClassManager.Domain.Contexts.TimesTables.ViewModels;
 using ClassManager.Domain.Contexts.Users.ViewModels;
 
 namespace ClassManager.Api.Configurations;
@@ -54,5 +56,8 @@ public class AutoMapperConfig : Profile
     CreateMap<Tenant, TenantViewModel>()
   .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address));
     CreateMap<TenantPlan, TenantPlanViewModel>();
+
+    CreateMap<TimeTable, TimeTableViewModel>();
+    CreateMap<ScheduleDay, ScheduleDayViewModel>();
   }
 }
