@@ -1,32 +1,35 @@
+using AutoMapper;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Roles.ViewModels;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Shared.ValueObjects;
+using ClassManager.Domain.Contexts.tenants.ViewModels;
 using ClassManager.Domain.Contexts.Tenants.Commands;
 using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;
-using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
 
 namespace ClassManager.Domain.Contexts.Tenants.Handlers;
 
 public class CreateTenantHandler :
-  Notifiable,
-  IHandler<CreateTenantCommand>
+  Notifiable
 {
   private readonly ITenantRepository _repository;
   private readonly IUserRepository _usersRepository;
   private readonly IRoleRepository _roleRepository;
   private readonly IUsersRolesRepository _usersRolesRepository;
+  private readonly IMapper _mapper;
 
   public CreateTenantHandler(
     ITenantRepository tenantRepository,
     IUserRepository usersRepository,
     IRoleRepository roleRepository,
-    IUsersRolesRepository usersRolesRepository
+    IUsersRolesRepository usersRolesRepository,
+    IMapper mapper
 
     )
   {
@@ -34,8 +37,9 @@ public class CreateTenantHandler :
     _usersRepository = usersRepository;
     _roleRepository = roleRepository;
     _usersRolesRepository = usersRolesRepository;
+    _mapper = mapper;
   }
-  public async Task<ICommandResult> Handle(CreateTenantCommand command)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, CreateTenantCommand command)
   {
     // fail fast validation
     command.Validate();
@@ -68,7 +72,7 @@ public class CreateTenantHandler :
     var document = new Document(command.Document, EDocumentType.CNPJ);
     var email = new Email(command.Email);
 
-    var tenant = new Tenant(command.Name, document, command.Username, command.Description, email, command.UserId);
+    var tenant = new Tenant(command.Name, document, command.Username, command.Description, email, loggedUserId);
 
     AddNotifications(document, email);
 
@@ -86,10 +90,12 @@ public class CreateTenantHandler :
 
     await _repository.CreateAsync(tenant, new CancellationToken());
 
-    var userRole = new UsersRoles(command.UserId, role.Id, tenant.Id);
+    var userRole = new UsersRoles(loggedUserId, role.Id, tenant.Id);
 
     await _usersRolesRepository.CreateAsync(userRole, new CancellationToken());
 
-    return new CommandResult(true, "TENANT_CREATED", tenant, null, 201);
+    var tenantCreated = _mapper.Map<TenantViewModel>(await _repository.FindAsync(x => x.Id == tenant.Id, [x => x.UsersRoles]));
+
+    return new CommandResult(true, "TENANT_CREATED", tenantCreated, null, 201);
   }
 }

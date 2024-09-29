@@ -8,7 +8,6 @@ namespace ClassManager.Domain.Contexts.Tenants.Commands
   {
     public string Name { get; set; } = null!;
     public string Email { get; set; } = null!;
-    public Guid UserId { get; set; }
     public string Username { get; set; } = null!;
     public string? Description { get; set; } = string.Empty;
     public string Document { get; set; } = null!;
