@@ -54,7 +54,7 @@ public class CreateUserHandler :
 
     if (await _userReporitory.UsernameAlreadyExistsAsync(command.Username, new CancellationToken()))
     {
-      AddNotification("Email", "ERR_USERNAME_ALREADY_EXISTS");
+      AddNotification("Username", "ERR_USERNAME_ALREADY_EXISTS");
     }
 
     // gerar vOS
