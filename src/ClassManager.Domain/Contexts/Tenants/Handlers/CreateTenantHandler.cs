@@ -94,7 +94,13 @@ public class CreateTenantHandler :
 
     await _usersRolesRepository.CreateAsync(userRole, new CancellationToken());
 
-    var tenantCreated = _mapper.Map<TenantViewModel>(await _repository.FindAsync(x => x.Id == tenant.Id, [x => x.UsersRoles]));
+    var tenantCreated = _mapper.Map<TenantViewModel>(await _repository.FindAsync(x => x.Id == tenant.Id, [x => x.UsersRoles, x => x.UsersRoles]));
+
+    if (tenantCreated.UsersRoles.Count > 0)
+    {
+      tenantCreated.UsersRoles[0].Role = _mapper.Map<RoleViewModel>(role);
+
+    }
 
     return new CommandResult(true, "TENANT_CREATED", tenantCreated, null, 201);
   }
