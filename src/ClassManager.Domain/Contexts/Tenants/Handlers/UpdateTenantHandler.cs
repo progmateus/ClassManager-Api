@@ -65,7 +65,7 @@ public class UpdateTenantHandler :
       AddNotification("Email", "E-mail already exists");
     }
 
-    var document = new Document(command.Document, EDocumentType.CPF);
+    var document = new Document(command.Document, EDocumentType.CNPJ);
     var email = new Email(command.Email);
 
     tenant.Update(command.Name, email, document, command.Description);
