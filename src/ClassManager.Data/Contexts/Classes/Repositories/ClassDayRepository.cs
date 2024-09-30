@@ -33,7 +33,7 @@ public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
     .Include((x) => x.Class)
     .ThenInclude((c) => c.Tenant)
     .Where(x => tenantIds.IsNullOrEmpty() || tenantIds.Contains(x.Class.TenantId))
-    .Where(x => classesIds.IsNullOrEmpty() || classesIds.Contains(x.ClassId))
+    .Where(x => (!tenantIds.IsNullOrEmpty() && classesIds.IsNullOrEmpty()) || (!classesIds.IsNullOrEmpty() && classesIds.Contains(x.ClassId)))
     .Where(x => x.Date >= zeroTime && x.Date <= finalTime)
     .OrderBy(x => x.Date)
     .ToListAsync();

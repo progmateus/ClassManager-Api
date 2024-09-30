@@ -44,17 +44,20 @@ public class ListClassesDaysHandler
       }
       return new CommandResult(true, "CLASSES_DAYS_LISTED", Array.Empty<string>(), null, 200);
     }
+
+
+
     var usersubscriptions = await _subscriptionsRepository.ListSubscriptions([loggedUserId], []);
 
     var activesubscriptions = usersubscriptions.Where(x => x.Status == ESubscriptionStatus.ACTIVE).ToList();
 
     var tenantsIds = activesubscriptions.Select(s => s.TenantId).ToList();
 
-    var userClasses = await _studentsClassesRepository.ListByUserOrClassOrTenantAsync([loggedUserId], tenantsIds, null);
+    var userClasses = await _studentsClassesRepository.ListByUserOrClassOrTenantAsync([loggedUserId], tenantsIds, []);
 
     var classesIds = userClasses.Select(o => o.ClassId).ToList();
 
-    var classesDays = _mapper.Map<List<ClassDayViewModel>>(await _classDayRepository.ListByTenantOrClassAndDate(null, classesIds, date));
+    var classesDays = _mapper.Map<List<ClassDayViewModel>>(await _classDayRepository.ListByTenantOrClassAndDate([], classesIds, date));
 
     return new CommandResult(true, "CLASSES_DAYS_LISTED", classesDays, null, 200);
   }

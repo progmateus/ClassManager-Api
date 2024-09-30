@@ -63,7 +63,7 @@ public class UpdateStudentClassHandler
       return new CommandResult(false, "STUDENT_ALREADY_ADDED", null, null, 409);
     }
 
-    var userAlreadyOnClass = await _studentsClassesRepository.ListByUserOrClassOrTenantAsync([command.UserId], [tenantId], null);
+    var userAlreadyOnClass = await _studentsClassesRepository.ListByUserOrClassOrTenantAsync([command.UserId], [tenantId], []);
 
     await _studentsClassesRepository.DeleteRangeAsync(userAlreadyOnClass, new CancellationToken());
 

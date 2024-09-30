@@ -32,7 +32,7 @@ public class GetClassDayByIdHandler
 
     if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin", "student", "teacher"]))
     {
-      return new CommandResult(false, "ERR_ACCESS_DENIED", null, null, 403);
+      return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
     }
 
     var classFound = _mapper.Map<ClassDayViewModel>(await _classDayRepository.FindClassDayProfile(tenantId, classDayId));

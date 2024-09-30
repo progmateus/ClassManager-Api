@@ -1,5 +1,6 @@
 using ClassManager.Data.Contexts.shared.Repositories;
 using ClassManager.Data.Data;
+using ClassManager.Data.Migrations;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
@@ -42,9 +43,14 @@ public class StudentsClassesRepository : Repository<StudentsClasses>, IStudentsC
   {
     return await DbSet
     .Include(x => x.Class)
-    .Where(x => tenantsIds.IsNullOrEmpty() || tenantsIds.Contains(x.Class.TenantId))
-    .Where(x => classesIds.IsNullOrEmpty() || classesIds.Contains(x.ClassId))
-    .Where(x => usersIds.IsNullOrEmpty() || usersIds.Contains(x.UserId))
+    .Where(x => tenantsIds.Contains(x.Class.TenantId) || classesIds.Contains(x.ClassId) || usersIds.Contains(x.UserId))
+    .ToListAsync();
+  }
+
+  public async Task<List<StudentsClasses>> ListByUserId(Guid userId)
+  {
+    return await DbSet
+    .Where(x => x.UserId == userId)
     .ToListAsync();
   }
 }
