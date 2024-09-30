@@ -47,7 +47,7 @@ public class GetUserProfileHandler
     var user = users.First();
 
     var userRoles = _mapper.Map<List<UsersRolesViewModel>>(await _usersRolesRepository.FindByUserId(user.Id));
-    var subscriptions = _mapper.Map<List<SubscriptionPreviewViewModel>>(await _subscriptionsrepository.ListSubscriptions([user.Id], null));
+    var subscriptions = _mapper.Map<List<SubscriptionPreviewViewModel>>(await _subscriptionsrepository.ListSubscriptions([user.Id], []));
 
     user.UsersRoles = userRoles;
     user.Subscriptions = subscriptions;

@@ -39,7 +39,7 @@ public class ListClassesDaysHandler
     {
       if (await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId.Value, ["admin"]))
       {
-        var classesDaysFound = _mapper.Map<List<ClassDayViewModel>>(await _classDayRepository.ListByTenantOrClassAndDate([tenantId.Value], null, date));
+        var classesDaysFound = _mapper.Map<List<ClassDayViewModel>>(await _classDayRepository.ListByTenantOrClassAndDate([tenantId.Value], [], date));
         return new CommandResult(true, "CLASSES_DAYS_LISTED", classesDaysFound, null, 200);
       }
       return new CommandResult(true, "CLASSES_DAYS_LISTED", Array.Empty<string>(), null, 200);

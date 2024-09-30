@@ -21,7 +21,7 @@ public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
       .Select(g => new { status = g.Key, count = g.Count() });
   }
 
-  public async Task<List<ClassDay>> ListByTenantOrClassAndDate(List<Guid>? tenantIds, List<Guid>? classesIds, DateTime date)
+  public async Task<List<ClassDay>> ListByTenantOrClassAndDate(List<Guid> tenantIds, List<Guid> classesIds, DateTime date)
   {
     var zeroTime = date.Date;
     var finalTime = date.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
@@ -32,8 +32,7 @@ public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
     .ThenInclude((b) => b.User)
     .Include((x) => x.Class)
     .ThenInclude((c) => c.Tenant)
-    .Where(x => tenantIds.IsNullOrEmpty() || tenantIds.Contains(x.Class.TenantId))
-    .Where(x => (!tenantIds.IsNullOrEmpty() && classesIds.IsNullOrEmpty()) || (!classesIds.IsNullOrEmpty() && classesIds.Contains(x.ClassId)))
+    .Where(x => tenantIds.Contains(x.Class.TenantId) || classesIds.Contains(x.ClassId))
     .Where(x => x.Date >= zeroTime && x.Date <= finalTime)
     .OrderBy(x => x.Date)
     .ToListAsync();

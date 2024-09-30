@@ -50,8 +50,7 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     .Include(x => x.User)
     .Include(x => x.TenantPlan)
     .Include(x => x.Tenant)
-    .Where(x => usersIds.IsNullOrEmpty() || usersIds.Contains(x.UserId))
-    .Where(x => tenantsIds.IsNullOrEmpty() || tenantsIds.Contains(x.TenantId))
+    .Where(x => usersIds.Contains(x.UserId) || tenantsIds.Contains(x.TenantId))
     .GroupBy(x => new { x.TenantId, x.UserId })
     .Select(x => x.OrderByDescending(x => x.CreatedAt).Select(x => x).First()).ToListAsync();
   }
