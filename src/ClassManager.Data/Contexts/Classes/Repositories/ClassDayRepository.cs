@@ -39,19 +39,22 @@ public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
     .ToListAsync();
   }
 
-  public async Task<ClassDay> GetByIdAndTenantIdAsync(Guid tenantId, Guid id)
-  {
-    return await DbSet
-    .AsNoTracking()
-    .Include((x) => x.Bookings)
-    .ThenInclude((b) => b.User)
-    .FirstAsync((x) => x.Class.TenantId == tenantId && x.Id == id);
-  }
-
   public async Task<List<ClassDay>> ListByTenantId(Guid tenantId)
   {
     return await DbSet
       .Where(x => x.Class.TenantId == tenantId)
       .ToListAsync();
+  }
+
+  public async Task<ClassDay?> FindClassDayProfile(Guid tenantId, Guid classDayId)
+  {
+    return await DbSet
+    .AsNoTracking()
+    .Include(x => x.Class)
+    .ThenInclude(x => x.TeachersClasses)
+    .ThenInclude(tc => tc.User)
+    .Include((x) => x.Bookings)
+    .ThenInclude((b) => b.User)
+    .FirstOrDefaultAsync((x) => x.Class.TenantId == tenantId && x.Id == classDayId);
   }
 }

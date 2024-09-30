@@ -34,7 +34,7 @@ public class ClassDayController : MainController
     [FromServices] GetClassDayByIdHandler handler
   )
   {
-    var result = await handler.Handle(tenantId, classDayId);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, classDayId);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 

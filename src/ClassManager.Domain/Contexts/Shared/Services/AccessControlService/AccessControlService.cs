@@ -1,4 +1,5 @@
 
+using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
@@ -25,6 +26,11 @@ public class AccesControlService : IAccessControlService
     _usersRolesRepository = usersRolesRepository;
     _tenantRepository = tenantRepository;
     _subscriptionRepository = subscriptionRepository;
+  }
+
+  public async Task<List<UsersRoles>> GetUserRolesAsync(Guid userId, Guid tenantId)
+  {
+    return await _usersRolesRepository.ListUsersRolesByUserIdAndTenantId(userId, tenantId, new CancellationToken());
   }
 
   public async Task<bool> HasUserAnyRoleAsync(Guid userId, Guid tenantId, List<string> rolesNames)
