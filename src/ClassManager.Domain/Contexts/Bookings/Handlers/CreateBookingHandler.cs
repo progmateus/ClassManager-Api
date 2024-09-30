@@ -1,6 +1,8 @@
+using AutoMapper;
 using ClasManager.Domain.Contexts.Bookings.Commands;
 using ClasManager.Domain.Contexts.Bookings.Entities;
 using ClassManager.Domain.Contexts.Bookings.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Bookings.ViewModels;
 using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Shared.Enums;
@@ -20,12 +22,14 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
   private ISubscriptionRepository _subscriptionRepository;
   private IStudentsClassesRepository _studentsClassesrepository;
   private IAccessControlService _accessControlService;
+  private IMapper _mapper;
   public CreateBookingHandler(
     IBookingRepository bookingRepository,
     IClassDayRepository classDayRepository,
     ISubscriptionRepository subscriptionRepository,
     IStudentsClassesRepository studentsClassesRepository,
-    IAccessControlService accessControlService
+    IAccessControlService accessControlService,
+    IMapper mapper
   )
   {
     _bookingRepository = bookingRepository;
@@ -33,6 +37,7 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
     _subscriptionRepository = subscriptionRepository;
     _studentsClassesrepository = studentsClassesRepository;
     _accessControlService = accessControlService;
+    _mapper = mapper;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, CreateBookingCommand command)
   {
@@ -122,7 +127,7 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
 
     await _bookingRepository.CreateAsync(booking, new CancellationToken());
 
-    var bookingFound = await _bookingRepository.GetWithInclude(command.UserId, booking.Id);
+    var bookingFound = _mapper.Map<BookingViewModel>(await _bookingRepository.FindAsync(x => x.Id == booking.Id, [x => x.User, x => x.ClassDay]));
 
     return new CommandResult(true, "BOOKING_CREATED", bookingFound, null, 201);
   }
