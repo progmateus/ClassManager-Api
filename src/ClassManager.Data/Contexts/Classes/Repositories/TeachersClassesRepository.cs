@@ -34,6 +34,12 @@ public class TeachersClassesRepository : Repository<TeachersClasses>, ITeacherCl
     ).Where((tc) => tc.ClassId == classId).ToListAsync();
   }
 
-
-
+  public async Task<List<TeachersClasses>> ListByUserOrClassOrTenantAsync(List<Guid> usersIds, List<Guid> tenantsIds, List<Guid> classesIds)
+  {
+    return await DbSet
+    .Include(x => x.Class)
+    .Include(x => x.User)
+    .Where(x => usersIds.Contains(x.UserId) || tenantsIds.Contains(x.Class.TenantId) || classesIds.Contains(x.ClassId))
+    .ToListAsync();
+  }
 }

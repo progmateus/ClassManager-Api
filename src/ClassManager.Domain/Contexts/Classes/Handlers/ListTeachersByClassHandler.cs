@@ -42,7 +42,7 @@ public class ListTeachersByClassHandler
     {
       return new CommandResult(false, "ERR_CLASS_NOT_FOUND", null, null, 404);
     }
-    var teachers = _mapper.Map<TeachersClassesViewModel>(await _teachersClassesRepository.ListByClassId(classId, tenantId));
+    var teachers = _mapper.Map<List<TeachersClassesViewModel>>(await _teachersClassesRepository.ListByUserOrClassOrTenantAsync([], [tenantId], [classId]));
 
     return new CommandResult(true, "TEACHERS_LISTED", teachers, null, 200);
   }

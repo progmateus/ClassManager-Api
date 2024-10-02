@@ -34,7 +34,7 @@ public class ListUsersRolesHandler
     {
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
-    var usersRoles = _mapper.Map<UsersRolesViewModel>(await _usersRolesRepository.ListByRoleAsync(tenantId, rolesNames, usersIds));
+    var usersRoles = _mapper.Map<List<UsersRolesViewModel>>(await _usersRolesRepository.ListByRoleAsync(tenantId, rolesNames, usersIds));
 
     return new CommandResult(true, "USERS_ROLES_LISTED", usersRoles, null, 200);
   }
