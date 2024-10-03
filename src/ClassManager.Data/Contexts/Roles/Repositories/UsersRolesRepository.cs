@@ -51,4 +51,11 @@ public class UsersRolesRepository : TRepository<UsersRoles>, IUsersRolesReposito
   {
     return await DbSet.Where(x => x.UserId == userId && x.TenantId == tenantId).ToListAsync(cancellationToken);
   }
+
+  public async Task<List<UsersRoles>> GetByUserIdAndRoleName(Guid userId, List<string> rolesNames)
+  {
+    return await DbSet
+    .Where(x => x.UserId == userId && rolesNames.Contains(x.Role.Name))
+    .ToListAsync();
+  }
 }

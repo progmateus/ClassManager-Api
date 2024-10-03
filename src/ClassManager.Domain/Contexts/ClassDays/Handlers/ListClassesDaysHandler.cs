@@ -18,12 +18,14 @@ public class ListClassesDaysHandler
   private readonly ISubscriptionRepository _subscriptionsRepository;
   private readonly IMapper _mapper;
   private readonly IAccessControlService _accessControlService;
+  private readonly IUsersRolesRepository _usersRolesRepository;
   public ListClassesDaysHandler(
     IClassDayRepository classRepository,
     IStudentsClassesRepository studentsClassesRepository,
     ISubscriptionRepository subscriptionsRepository,
     IMapper mapper,
-    IAccessControlService accessControlService
+    IAccessControlService accessControlService,
+    IUsersRolesRepository usersRolesRepository
     )
   {
     _classDayRepository = classRepository;
@@ -31,9 +33,13 @@ public class ListClassesDaysHandler
     _subscriptionsRepository = subscriptionsRepository;
     _mapper = mapper;
     _accessControlService = accessControlService;
+    _usersRolesRepository = usersRolesRepository;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid? tenantId, DateTime date)
   {
+
+    // se vier tenantId (seção da empresa)
+    // busca apenas as aulas daquela empresa
 
     if (tenantId.HasValue)
     {
@@ -45,7 +51,21 @@ public class ListClassesDaysHandler
       return new CommandResult(true, "CLASSES_DAYS_LISTED", Array.Empty<string>(), null, 200);
     }
 
+    // se vier não vier tenantId (seção do usuário) verifica se o usuario é adm de alguma empresa
+    // lista as aulas de todas as empresas dele
 
+    var userAdminRoles = await _usersRolesRepository.GetByUserIdAndRoleName(loggedUserId, ["admin"]);
+
+    if (userAdminRoles.Count > 0)
+    {
+      var adminTenantsIds = userAdminRoles.Select(s => s.TenantId).ToList();
+
+      var classesDaysFound = _mapper.Map<List<ClassDayViewModel>>(await _classDayRepository.ListByTenantOrClassAndDate(adminTenantsIds, [], date));
+      return new CommandResult(true, "CLASSES_DAYS_LISTED", classesDaysFound, null, 200);
+    }
+
+    // se o usuario não for adm de nenhuma empresa
+    // lista de acordo com as inscrições dele
 
     var usersubscriptions = await _subscriptionsRepository.ListSubscriptions([loggedUserId], []);
 

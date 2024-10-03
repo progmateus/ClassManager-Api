@@ -12,4 +12,5 @@ public interface IUsersRolesRepository : ITRepository<UsersRoles>
   Task<List<UsersRoles>> FindByUserId(Guid userId);
   Task<bool> HasAnyRoleAsync(Guid userId, Guid tenantId, List<string> rolesNames, CancellationToken cancellationToken);
   Task<List<UsersRoles>> ListByRoleAsync(Guid tenantId, List<string> rolesNames, List<Guid> usersIds);
+  Task<List<UsersRoles>> GetByUserIdAndRoleName(Guid userId, List<string> rolesNames);
 }
