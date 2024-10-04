@@ -114,10 +114,11 @@ public class UserController : MainController
   [Authorize]
   [HttpGet("bookings")]
   public async Task<IResult> ListUserBookings(
+    [FromQuery] Guid? tenantId,
     [FromServices] ListBookingsHandler handler
   )
   {
-    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), null, Guid.Empty);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, Guid.Empty);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 

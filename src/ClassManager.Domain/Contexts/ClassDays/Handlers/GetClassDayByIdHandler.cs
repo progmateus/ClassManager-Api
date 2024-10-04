@@ -35,8 +35,8 @@ public class GetClassDayByIdHandler
       return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
     }
 
-    var classFound = _mapper.Map<ClassDayViewModel>(await _classDayRepository.FindClassDayProfile(tenantId, classDayId));
+    var classDayFound = _mapper.Map<ClassDayViewModel>(await _classDayRepository.FindClassDayProfile(tenantId, classDayId));
 
-    return new CommandResult(true, "CLASS_DAY_GOTTEN", classFound, null, 200);
+    return new CommandResult(true, "CLASS_DAY_GOTTEN", classDayFound, null, 200);
   }
 }

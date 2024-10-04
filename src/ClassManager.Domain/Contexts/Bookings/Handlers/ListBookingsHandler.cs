@@ -29,20 +29,25 @@ public class ListBookingsHandler : Notifiable
 
     var userIdNotEmpty = loggedUserId;
 
+    if (userId.HasValue && userId != Guid.Empty)
+    {
+      if (userId.Value != loggedUserId)
+      {
+        if (!tenantId.HasValue || tenantId == Guid.Empty)
+        {
+          return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, 404);
+        }
+
+        if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId.Value, ["admin"]))
+        {
+          return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, 404);
+        }
+        userIdNotEmpty = userId.Value;
+      }
+    }
+
     if (tenantId.HasValue && tenantId != Guid.Empty)
     {
-      if (await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId.Value, ["admin"]))
-      {
-        if (userId.HasValue && userId != Guid.Empty)
-        {
-          userIdNotEmpty = userId.Value;
-        }
-      }
-      else
-      {
-        return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, 404);
-      }
-
       var subscription = await _subscriptionRepository.GetByUserIdAndTenantId(userIdNotEmpty, tenantId.Value, new CancellationToken());
 
       if (subscription is null)
