@@ -74,6 +74,11 @@ public class DeleteBookingHandler : Notifiable
       return new CommandResult(false, "ERR_CLASS_DAY_ALREADY_CONCLUDED", null, null, 403);
     }
 
+    if (DateTime.Now > booking.ClassDay.Date)
+    {
+      return new CommandResult(false, "ERR_CLASS_DAY_TIME_EXPIRED", null, null, 403);
+    }
+
     await _bookingRepository.DeleteAsync(booking.Id, new CancellationToken());
 
     return new CommandResult(true, "BOOKING_DELETED", "", null, 201);

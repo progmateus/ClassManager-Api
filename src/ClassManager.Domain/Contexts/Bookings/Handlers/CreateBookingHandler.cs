@@ -66,6 +66,11 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
       return new CommandResult(false, "ERR_CLASS_NOT_PENDING", null, null, 403);
     }
 
+    if (DateTime.Now > classDay.Date)
+    {
+      return new CommandResult(false, "ERR_CLASS_DAY_TIME_EXPIRED", null, null, 403);
+    }
+
     if (!loggedUserId.Equals(command.UserId))
     {
       if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
