@@ -98,4 +98,20 @@ public class ClassDayController : MainController
 
     return Results.Ok(result);
   }
+
+
+  [HttpPost("class-days/generate")]
+  public async Task<IResult> Generate(
+    [FromServices] GenerateClassesDaysHandler handler
+  )
+  {
+    var result = await handler.Handle();
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
 }

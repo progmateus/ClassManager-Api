@@ -248,6 +248,7 @@ public static class BuilderExtension
     builder.Services.AddTransient<GetClassDayByIdHandler>();
     builder.Services.AddTransient<ListClassesDaysHandler>();
     builder.Services.AddTransient<DeleteClassDayHandler>();
+    builder.Services.AddTransient<GenerateClassesDaysHandler>();
 
 
     builder.Services.AddTransient<CreateBookingHandler>();

@@ -34,5 +34,10 @@ public class ClassMap : IEntityTypeConfiguration<Class>
         .WithMany(p => p.Classes)
         .HasForeignKey(x => x.TenantId)
         .IsRequired(true);
+
+    builder.HasOne(x => x.TimeTable)
+        .WithMany(p => p.Classes)
+        .HasForeignKey(x => x.TimeTableId)
+        .IsRequired(false);
   }
 }

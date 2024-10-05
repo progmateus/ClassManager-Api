@@ -6,6 +6,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Repositories.Contracts
   public interface ITenantRepository : IRepository<Tenant>
   {
     Task<bool> DocumentAlreadyExistsAsync(string document, CancellationToken cancellationToken);
+    Task<List<Tenant>> GetActiveTenantsAsync();
     Task<bool> UsernameAlreadyExistsAsync(string username, CancellationToken cancellationToken);
     Task<bool> EmailAlreadyExtstsAsync(string email, CancellationToken cancellationToken);
     Task<Tenant?> GetByEmailAsync(string email, CancellationToken cancellationToken);

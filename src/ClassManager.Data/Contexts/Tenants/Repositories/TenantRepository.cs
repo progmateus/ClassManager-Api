@@ -21,6 +21,14 @@ public class TenantRepository : Repository<Tenant>, ITenantRepository
     return await DbSet.AsNoTracking().AnyAsync(x => x.Email.Address == email, cancellationToken);
   }
 
+  public async Task<List<Tenant>> GetActiveTenantsAsync()
+  {
+    return await DbSet
+        .AsNoTracking()
+        .Where(x => x.Status == ETenantStatus.ACTIVE)
+        .ToListAsync();
+  }
+
   public async Task<Tenant?> GetByEmailAsync(string email, CancellationToken cancellationToken)
   {
     return await DbSet
