@@ -49,7 +49,7 @@ public class GenerateClassesDaysHelper
 
             foreach (var date in datesGroupedByWeekDay.Dates)
             {
-              var dateGenerated = date.AddHours(int.Parse(hourStart)).AddMinutes(int.Parse(minStart)).ToUniversalTime();
+              var dateGenerated = date.AddHours(int.Parse(hourStart)).AddMinutes(int.Parse(minStart));
 
               var classDay = new ClassDay(dateGenerated, schedule.HourStart, schedule.HourEnd, timeTableClass.Id);
               classesDays.Add(classDay);
