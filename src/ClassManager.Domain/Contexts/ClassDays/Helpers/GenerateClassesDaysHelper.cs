@@ -1,44 +1,28 @@
 using ClassManager.Domain.Contexts.ClassDays.Entities;
 using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
-using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.TimesTables.Entities;
-using ClassManager.Domain.Shared.Commands;
-using ClassManager.Shared.Commands;
 
-namespace ClassManager.Domain.Contexts.ClassDays.Handlers;
+namespace ClassManager.Domain.Contexts.ClassDays.Helpers;
 
-public class GenerateClassesDaysHandler
+public class GenerateClassesDaysHelper
 {
   private readonly IClassDayRepository _classDayRepository;
-  private readonly ITimeTableRepository _timeTableRepository;
 
-  public GenerateClassesDaysHandler(
-    ITimeTableRepository timeTableRepository,
+  public GenerateClassesDaysHelper(
     IClassDayRepository classDayRepository
     )
   {
-    _timeTableRepository = timeTableRepository;
     _classDayRepository = classDayRepository;
   }
-  public async Task<ICommandResult> Handle()
+  public async Task Handle(List<TimeTable> timesTables, int year, int month, int day)
   {
-
-    var timesTables = await _timeTableRepository.GetByActiveTenants();
-
-    int year = DateTime.Now.Year;
-    int month = DateTime.Now.Month;
-
     var dates = new List<DateTime>();
     var classesDays = new List<ClassDay>();
 
     // gera um array com todos os dias do mes
-    for (var date = new DateTime(year, month, 1); date.Month == month; date = date.AddDays(1))
+    for (var date = new DateTime(year, month, day); date.Month == month; date = date.AddDays(1))
     {
-      if (date > DateTime.Now)
-      {
-        dates.Add(date);
-
-      }
+      dates.Add(date);
     }
 
     // agrupa o array pelo dia da semana
@@ -55,15 +39,15 @@ public class GenerateClassesDaysHandler
     {
       foreach (var timeTableClass in timeTable.Classes)
       {
-        foreach (var grouped in groupedDaysByWeekDayList)
+        foreach (var datesGroupedByWeekDay in groupedDaysByWeekDayList)
         {
-          var schedulesInCurrentWeekDay = timeTable.SchedulesDays.Select(x => x).Where(x => (int)x.WeekDay == (int)grouped.DayOfWeek).ToList();
+          var schedulesInCurrentWeekDay = timeTable.SchedulesDays.Select(x => x).Where(x => (int)x.WeekDay == (int)datesGroupedByWeekDay.DayOfWeek).ToList();
           foreach (var schedule in schedulesInCurrentWeekDay)
           {
             var hourStart = schedule.HourStart.Split(":")[0];
             var minStart = schedule.HourStart.Split(":")[1];
 
-            foreach (var date in grouped.Dates)
+            foreach (var date in datesGroupedByWeekDay.Dates)
             {
               var dateGenerated = date.AddHours(int.Parse(hourStart)).AddMinutes(int.Parse(minStart)).ToUniversalTime();
 
@@ -74,14 +58,12 @@ public class GenerateClassesDaysHandler
         }
       }
     }
-
     await _classDayRepository.CreateRangeAsync(classesDays, new CancellationToken());
-    return new CommandResult(true, "GENERATED", classesDays, null, 200);
   }
+}
 
-  class DateObject
-  {
-    public DayOfWeek DayOfWeek { get; set; }
-    public List<DateTime> Dates { get; set; } = [];
-  }
+class DateObject
+{
+  public DayOfWeek DayOfWeek { get; set; }
+  public List<DateTime> Dates { get; set; } = [];
 }

@@ -15,6 +15,7 @@ public class TimeTableRepository : TRepository<TimeTable>, ITimeTableRepository
   {
     return await DbSet
     .Include(x => x.SchedulesDays)
+    .Include(x => x.Classes)
     .AsTracking()
     .Where(x => x.Tenant.Status == ETenantStatus.ACTIVE)
     .ToListAsync();

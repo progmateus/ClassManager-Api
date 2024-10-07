@@ -7,7 +7,7 @@ namespace ClassManager.Domain.Contexts.TimesTables.Entities;
 public class TimeTable : TenantEntity
 {
   public string Name { get; set; } = string.Empty!;
-  public List<ScheduleDay>? SchedulesDays { get; set; } = [];
+  public List<ScheduleDay> SchedulesDays { get; set; } = [];
   public Tenant? Tenant { get; private set; }
   public IList<Class> Classes { get; } = [];
 

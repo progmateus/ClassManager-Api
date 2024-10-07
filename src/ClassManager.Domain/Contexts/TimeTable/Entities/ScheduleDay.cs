@@ -5,7 +5,7 @@ namespace ClassManager.Domain.Contexts.TimesTables.Entities;
 
 public class ScheduleDay : TenantEntity
 {
-  public ScheduleDay(Guid timeTableId, EWeekDay weekDay, string? hourStart, string? hourEnd, Guid tenantId)
+  public ScheduleDay(Guid timeTableId, EWeekDay weekDay, string hourStart, string hourEnd, Guid tenantId)
   {
     TimeTableId = timeTableId;
     WeekDay = weekDay;
@@ -14,14 +14,10 @@ public class ScheduleDay : TenantEntity
     TenantId = tenantId;
   }
 
-  protected ScheduleDay()
-  {
-
-  }
   public Guid TimeTableId { get; private set; }
   public EWeekDay WeekDay { get; private set; }
-  public string? HourStart { get; private set; }
-  public string? HourEnd { get; private set; }
+  public string HourStart { get; private set; }
+  public string HourEnd { get; private set; }
   public TimeTable? TimeTable { get; private set; }
   public DateTime CreatedAt { get; private set; }
   public DateTime UpdatedAt { get; private set; }

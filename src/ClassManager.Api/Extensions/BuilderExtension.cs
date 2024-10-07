@@ -15,6 +15,7 @@ using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Auth.Services;
 using ClassManager.Domain.Contexts.Bookings.Repositories.Contracts;
 using ClassManager.Domain.Contexts.ClassDays.Handlers;
+using ClassManager.Domain.Contexts.ClassDays.Helpers;
 using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Classes.Handlers;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
@@ -27,6 +28,7 @@ using ClassManager.Domain.Contexts.Subscriptions.Handlers;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.Handlers;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
+using ClassManager.Domain.Contexts.TimesTables.Commands;
 using ClassManager.Domain.Contexts.TimesTables.Handlers;
 using ClassManager.Domain.Contexts.TimesTabless.Handlers;
 using ClassManager.Domain.Contexts.Usernames.Handlers;
@@ -251,12 +253,14 @@ public static class BuilderExtension
     builder.Services.AddTransient<GenerateClassesDaysHandler>();
 
 
+
     builder.Services.AddTransient<CreateBookingHandler>();
     builder.Services.AddTransient<ListBookingsHandler>();
     builder.Services.AddTransient<DeleteBookingHandler>();
 
 
     builder.Services.AddTransient<VerifyUsernameHandler>();
+    builder.Services.AddTransient<GenerateClassesDaysHelper>();
 
     builder.Services.AddTransient<CreateTimeTableHandler>();
     builder.Services.AddTransient<UpdateTimetableHandler>();

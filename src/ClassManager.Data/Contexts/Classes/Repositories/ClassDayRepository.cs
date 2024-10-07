@@ -56,4 +56,10 @@ public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
     .ThenInclude((b) => b.User)
     .FirstOrDefaultAsync((x) => x.Class.TenantId == tenantId && x.Id == classDayId);
   }
+
+  public async Task DeleteAllAfterAndBeforeDate(List<Guid> classesIds, DateTime initialDate, DateTime finalDate, CancellationToken cancellationToken)
+  {
+    DbSet.RemoveRange(DbSet.Where((cd) => classesIds.Contains(cd.ClassId) && cd.Date > initialDate && cd.Date < finalDate));
+    await SaveChangesAsync(cancellationToken);
+  }
 }

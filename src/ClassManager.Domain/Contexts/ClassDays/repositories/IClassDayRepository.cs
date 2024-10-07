@@ -7,4 +7,6 @@ public interface IClassDayRepository : IRepository<ClassDay>
   Task<List<ClassDay>> ListByTenantOrClassAndDate(List<Guid> tenantIds, List<Guid> classesIds, DateTime date);
   Task<ClassDay?> FindClassDayProfile(Guid tenantId, Guid classDayId);
   Task<List<ClassDay>> ListByTenantId(Guid tenantId);
+  Task DeleteAllAfterAndBeforeDate(List<Guid> classesIds, DateTime initialDate, DateTime finalDate, CancellationToken cancellationToken);
+
 }

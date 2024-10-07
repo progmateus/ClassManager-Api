@@ -24,4 +24,9 @@ public static partial class DateTimeExtensions
 
   public static DateTime FirstDayOfNextMonth(this DateTime dt) =>
       dt.FirstDayOfMonth().AddMonths(1);
+
+  public static DateTime GetLastDayOfMonth(this DateTime dateTime)
+  {
+    return new DateTime(dateTime.Year, dateTime.Month, DateTime.DaysInMonth(dateTime.Year, dateTime.Month));
+  }
 }
