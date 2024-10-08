@@ -32,8 +32,10 @@ using ClassManager.Domain.Contexts.TimesTables.Commands;
 using ClassManager.Domain.Contexts.TimesTables.Handlers;
 using ClassManager.Domain.Contexts.TimesTabless.Handlers;
 using ClassManager.Domain.Contexts.Usernames.Handlers;
+using ClassManager.Domain.Libs.MassTransit.Events;
 using ClassManager.Domain.Services;
 using ClassManager.Domain.Shared.Services.AccessControlService;
+using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -106,6 +108,25 @@ public static class BuilderExtension
     {
       x.JsonSerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles;
       x.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault;
+    });
+  }
+
+  public static void AddRabbitMQService(this WebApplicationBuilder builder)
+  {
+    builder.Services.AddMassTransit(bussConfigurator =>
+    {
+      bussConfigurator.AddConsumer<GeneratedClassesDaysEventConsumer>();
+
+      bussConfigurator.UsingRabbitMq((ctx, config) =>
+      {
+        config.Host(new Uri(Configuration.RabbitMq.Uri), host =>
+        {
+          host.Username(Configuration.RabbitMq.Username);
+          host.Password(Configuration.RabbitMq.Password);
+        });
+
+        config.ConfigureEndpoints(ctx);
+      });
     });
   }
 
