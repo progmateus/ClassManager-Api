@@ -33,6 +33,7 @@ using ClassManager.Domain.Contexts.TimesTables.Handlers;
 using ClassManager.Domain.Contexts.TimesTabless.Handlers;
 using ClassManager.Domain.Contexts.Usernames.Handlers;
 using ClassManager.Domain.Libs.MassTransit.Events;
+using ClassManager.Domain.Libs.MassTransit.Publish;
 using ClassManager.Domain.Services;
 using ClassManager.Domain.Shared.Services.AccessControlService;
 using MassTransit;
@@ -200,6 +201,10 @@ public static class BuilderExtension
     builder.Services.AddTransient<
     IAccessControlService,
     AccesControlService>();
+
+    builder.Services.AddTransient<
+    IPublishBus,
+    PublishBus>();
 
     builder.Services.AddTransient<TokenService>();
 

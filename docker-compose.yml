@@ -7,3 +7,9 @@ services:
       MSSQL_PID: "Developer"
     ports:
       - "1433:1433"
+
+  rabbitMq:
+    image: rabbitmq:3-management
+    ports:
+      - "15672:15672"
+      - "5672:5672"
