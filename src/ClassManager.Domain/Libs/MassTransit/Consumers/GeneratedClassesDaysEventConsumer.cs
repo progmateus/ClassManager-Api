@@ -2,21 +2,28 @@ using ClassManager.Domain.Contexts.ClassDays.Entities;
 using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
 using ClassManager.Domain.Contexts.TimesTables.Entities;
 using MassTransit;
+using Microsoft.Extensions.Logging;
 
 namespace ClassManager.Domain.Libs.MassTransit.Events;
 
 public sealed class GeneratedClassesDaysEventConsumer : IConsumer<GeneratedClassesDaysEvent>
 {
   private readonly IClassDayRepository _classDayRepository;
+  private readonly ILogger<GeneratedClassesDaysEventConsumer> _logger;
 
-  public GeneratedClassesDaysEventConsumer(IClassDayRepository classDayRepository)
+  public GeneratedClassesDaysEventConsumer(
+    IClassDayRepository classDayRepository,
+    ILogger<GeneratedClassesDaysEventConsumer> logger
+  )
   {
     _classDayRepository = classDayRepository;
+    _logger = logger;
   }
   public async Task Consume(ConsumeContext<GeneratedClassesDaysEvent> context)
   {
     try
     {
+      _logger.LogInformation("Job GeneratedClassesDaysEventConsumer initialized");
       var dates = new List<DateTime>();
       var classesDays = new List<ClassDay>();
 
@@ -65,9 +72,11 @@ public sealed class GeneratedClassesDaysEventConsumer : IConsumer<GeneratedClass
         }
       }
       await _classDayRepository.CreateRangeAsync(classesDays, new CancellationToken());
+      _logger.LogInformation("Job GeneratedClassesDaysEventConsumer finished");
     }
     catch (Exception err)
     {
+      _logger.LogInformation($"Job GeneratedClassesDaysEventConsumer error: {err.Message}");
       throw new Exception(err.Message);
     }
   }
