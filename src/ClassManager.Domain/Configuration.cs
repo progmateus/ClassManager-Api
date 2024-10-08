@@ -7,6 +7,7 @@ namespace ClassManager.Domain
     public static DatabaseConfiguration Database { get; set; } = new();
     public static SendGridConfiguration SendGrid { get; set; } = new();
     public static EmailConfiguration Email { get; set; } = new();
+    public static RabbitMqConfiguration RabbitMq { get; set; } = new();
 
 
     public class SecretsConfiguration
@@ -30,6 +31,13 @@ namespace ClassManager.Domain
     public class SendGridConfiguration
     {
       public string ApiKey { get; set; } = string.Empty;
+    }
+
+    public class RabbitMqConfiguration
+    {
+      public string Uri { get; set; } = "amqp://localhost:5672";
+      public string Username { get; set; } = "guest";
+      public string Password { get; set; } = "guest";
     }
   }
 }
