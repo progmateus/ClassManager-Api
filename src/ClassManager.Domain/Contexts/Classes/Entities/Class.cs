@@ -41,5 +41,10 @@ namespace ClassManager.Domain.Contexts.Classes.Entities
       Name = name;
       Description = description;
     }
+
+    public void UpdateTimeTable(Guid timeTableId)
+    {
+      TimeTableId = timeTableId;
+    }
   }
 }

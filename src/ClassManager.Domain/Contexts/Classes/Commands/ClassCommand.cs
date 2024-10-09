@@ -7,7 +7,7 @@ namespace ClassManager.Domain.Contexts.Classes.Commands
   public class ClassCommand : Notifiable, ICommand
   {
     public string Name { get; set; } = null!;
-    public string BusinessHour { get; set; } = null!;
+    public Guid? TimeTableId { get; set; }
     public string Description { get; set; } = null!;
 
     public void Validate()

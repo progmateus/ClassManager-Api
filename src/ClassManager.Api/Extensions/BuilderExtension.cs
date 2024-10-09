@@ -260,6 +260,7 @@ public static class BuilderExtension
     builder.Services.AddTransient<GetClassProfileHandler>();
     builder.Services.AddTransient<ListStudentsByClassHandler>();
     builder.Services.AddTransient<ListTeachersByClassHandler>();
+    builder.Services.AddTransient<UpdateClassTimeTableHandler>();
 
     builder.Services.AddTransient<UpdateTeacherClassHandler>();
     builder.Services.AddTransient<RemoveTeacherFromClassHandler>();

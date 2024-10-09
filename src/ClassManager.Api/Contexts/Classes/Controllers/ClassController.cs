@@ -147,4 +147,23 @@ public class ClassController : MainController
 
     return Results.Ok(result);
   }
+
+  [HttpPut]
+  [Route("{id}/time-table")]
+  public async Task<IResult> Update(
+    [FromRoute] Guid tenantId,
+    [FromRoute] Guid id,
+    [FromBody] UpdateClassTimeTableCommand command,
+    [FromServices] UpdateClassTimeTableHandler handler
+  )
+  {
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, id, command);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
 }
