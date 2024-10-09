@@ -50,7 +50,7 @@ public class CreateClassHandler :
       return new CommandResult(false, "ERR_CLASS_ALREADY_EXISTS", null, null, 409);
     }
 
-    var newClass = new Class(command.Name, tenantId, command.BusinessHour, command.Description, null);
+    var newClass = new Class(command.Name, tenantId, command.Description, null);
 
     await _classRepository.CreateAsync(newClass, new CancellationToken());
 

@@ -50,7 +50,7 @@ public class UpdateClassHandler :
     {
       return new CommandResult(false, "ERR_CLASS_NOT_FOUND", null, null, 404);
     }
-    classFound.ChangeClass(command.Name, command.BusinessHour, command.Description);
+    classFound.ChangeClass(command.Name, command.Description);
     await _classRepository.UpdateAsync(classFound, new CancellationToken());
 
     return new CommandResult(true, "CLASS_UPDATED", classFound, null, 200);

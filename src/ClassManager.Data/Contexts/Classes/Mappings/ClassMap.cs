@@ -18,12 +18,6 @@ public class ClassMap : IEntityTypeConfiguration<Class>
         .HasMaxLength(80)
         .IsRequired(true);
 
-    builder.Property(x => x.BusinessHour)
-    .HasColumnName("BusinessHour")
-    .HasColumnType("VARCHAR")
-    .HasMaxLength(500)
-    .IsRequired(false);
-
     builder.Property(x => x.Description)
     .HasColumnName("Description")
     .HasColumnType("VARCHAR")

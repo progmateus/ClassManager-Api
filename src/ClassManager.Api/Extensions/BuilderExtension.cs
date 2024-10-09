@@ -117,6 +117,7 @@ public static class BuilderExtension
     builder.Services.AddMassTransit(bussConfigurator =>
     {
       bussConfigurator.AddConsumer<GeneratedClassesDaysEventConsumer>();
+      bussConfigurator.AddConsumer<RefreshClassClassesDaysEventConsumer>();
 
       bussConfigurator.UsingRabbitMq((ctx, config) =>
       {
