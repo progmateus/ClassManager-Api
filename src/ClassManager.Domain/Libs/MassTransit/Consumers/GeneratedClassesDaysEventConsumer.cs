@@ -31,14 +31,14 @@ public sealed class GeneratedClassesDaysEventConsumer : IConsumer<GeneratedClass
       var classesDays = new List<ClassDay>();
 
       var year = context.Message.year;
-      var month = context.Message.month;
-      var day = context.Message.day;
+      var currentMonth = context.Message.currentMonth;
+      var initialDay = context.Message.initialDay;
       var timesTablesIds = context.Message.timesTablesIds;
 
       var timesTables = await _timeTableRepository.GetAsync(x => timesTablesIds.Contains(x.Id), [x => x.Classes, x => x.SchedulesDays]);
 
       // gera um array com todos os dias do mes
-      for (var date = new DateTime(year, month, day); date.Month == month; date = date.AddDays(1))
+      for (var date = new DateTime(year, currentMonth, initialDay); date.Month == currentMonth; date = date.AddDays(1))
       {
         dates.Add(date);
       }
