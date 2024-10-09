@@ -5,5 +5,6 @@ public interface IClassRepository : IRepository<Class>
 {
   Task<bool> NameAlreadyExists(string name, CancellationToken cancellationToken);
   Task<Class?> GetByIdAndTenantIdAsync(Guid tenantId, Guid classId, CancellationToken cancellationToken);
+  Task<Class?> FindByIdWithTimeTable(Guid id, CancellationToken cancellationToken = default);
   Task<List<Class>> ListByTenantId(Guid tenantId, CancellationToken cancellationToken);
 }

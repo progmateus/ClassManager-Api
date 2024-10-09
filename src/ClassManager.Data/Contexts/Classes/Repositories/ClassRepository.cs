@@ -10,6 +10,14 @@ public class ClassRepository : Repository<Class>, IClassRepository
 {
   public ClassRepository(AppDbContext context) : base(context) { }
 
+  public async Task<Class?> FindByIdWithTimeTable(Guid id, CancellationToken cancellationToken = default)
+  {
+    return await DbSet
+    .Include((x) => x.TimeTable)
+    .ThenInclude(tt => tt.SchedulesDays)
+    .FirstOrDefaultAsync((x) => x.Id == id, cancellationToken);
+  }
+
   public async Task<Class?> GetByIdAndTenantIdAsync(Guid tenantId, Guid classId, CancellationToken cancellationToken)
   {
     return await DbSet.Include((x) => x.StudentsClasses).FirstOrDefaultAsync((x) => x.TenantId == tenantId && x.Id == classId, cancellationToken);
