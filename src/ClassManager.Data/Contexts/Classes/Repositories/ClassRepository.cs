@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClassManager.Data.Contexts.Plans.Repositories;
 
-public class ClassRepository : Repository<Class>, IClassRepository
+public class ClassRepository : TRepository<Class>, IClassRepository
 {
   public ClassRepository(AppDbContext context) : base(context) { }
 

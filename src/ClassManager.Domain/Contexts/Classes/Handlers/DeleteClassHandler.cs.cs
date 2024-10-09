@@ -38,7 +38,7 @@ public class DeleteClassHandler : ITenantDeleteAction
     {
       return new CommandResult(false, "ERR_CLASS_NOT_FOUND", null, null, 404);
     }
-    await _classRepository.DeleteAsync(entityId, default);
+    await _classRepository.DeleteAsync(entityId, tenantId, default);
 
     return new CommandResult(true, "CLASS_DELETED", null, null, 204);
   }

@@ -7,7 +7,7 @@ using ClassManager.Domain.Contexts.TimesTables.Entities;
 
 namespace ClassManager.Domain.Contexts.Classes.Entities
 {
-  public class Class : Entity
+  public class Class : TenantEntity
   {
     protected Class()
     {

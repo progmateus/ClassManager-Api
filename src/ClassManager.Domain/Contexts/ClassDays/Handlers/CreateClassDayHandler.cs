@@ -47,7 +47,7 @@ public class CreateClassDayHandler :
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
-    if (!await _classRepository.IdExistsAsync(command.ClassId, new CancellationToken()))
+    if (!await _classRepository.IdExistsAsync(command.ClassId, tenantId, new CancellationToken()))
     {
       return new CommandResult(false, "ERR_CLASS_NOT_FOUND", null, null, 404);
     }
