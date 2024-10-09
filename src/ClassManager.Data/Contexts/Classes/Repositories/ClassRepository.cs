@@ -20,7 +20,7 @@ public class ClassRepository : Repository<Class>, IClassRepository
 
   public async Task<Class?> GetByIdAndTenantIdAsync(Guid tenantId, Guid classId, CancellationToken cancellationToken)
   {
-    return await DbSet.Include((x) => x.StudentsClasses).FirstOrDefaultAsync((x) => x.TenantId == tenantId && x.Id == classId, cancellationToken);
+    return await DbSet.FirstOrDefaultAsync((x) => x.TenantId == tenantId && x.Id == classId, cancellationToken);
   }
 
   public async Task<List<Class>> ListByTenantId(Guid tenantId, CancellationToken cancellationToken)

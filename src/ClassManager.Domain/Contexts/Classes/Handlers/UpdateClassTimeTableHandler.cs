@@ -54,35 +54,35 @@ public class UpdateClassTimeTableHandler :
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
-    var classFound = await _classRepository.GetByIdAndTenantIdAsync(tenantId, classId, new CancellationToken());
+    var classEntity = await _classRepository.GetByIdAndTenantIdAsync(tenantId, classId, new CancellationToken());
 
-    if (classFound is null)
+    if (classEntity is null)
     {
       return new CommandResult(false, "ERR_CLASS_NOT_FOUND", null, null, 404);
     }
 
-    var timeTableExists = await _timeTableRepository.IdExistsAsync(command.TimeTableId, tenantId, new CancellationToken());
+    var newTimeTable = await _timeTableRepository.FindByIdAndTenantIdAsync(command.TimeTableId, tenantId, new CancellationToken());
 
-    if (!timeTableExists)
+    if (newTimeTable is null || newTimeTable.TenantId != classEntity.TenantId)
     {
       return new CommandResult(false, "ERR_TIME_TABLE_NOT_FOUND", null, null, 404);
     }
 
-    if (classFound.TimeTableId.Equals(command.TimeTableId))
+    if (classEntity.TimeTableId.Equals(command.TimeTableId))
     {
       return new CommandResult(false, "ERR_CHOOSE_A_DIFERENTE_TIME_TABLE", null, null, 404);
     }
 
     await _classDayRepository.DeleteAllAfterAndBeforeDate([classId], DateTime.Now, DateTime.Now.GetLastDayOfMonth().AddHours(23).AddMinutes(59).AddSeconds(59), new CancellationToken());
 
-    classFound.UpdateTimeTable(command.TimeTableId);
+    classEntity.UpdateTimeTable(command.TimeTableId);
 
-    await _classRepository.UpdateAsync(classFound, new CancellationToken());
+    await _classRepository.UpdateAsync(classEntity, new CancellationToken());
 
     var eventRequest = new RefreshClassClassesDaysEvent(classId);
 
     await _publishBus.PublicAsync(eventRequest);
 
-    return new CommandResult(true, "CLASS_TIME_TABLE_UPDATED", classFound, null, 200);
+    return new CommandResult(true, "CLASS_TIME_TABLE_UPDATED", classEntity, null, 200);
   }
 }

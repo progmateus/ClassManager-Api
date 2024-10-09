@@ -1,10 +1,12 @@
 using ClassManager.Api.Contexts.Shared.Controllers;
 using ClassManager.Domain.Contexts.Classes.Commands;
 using ClassManager.Domain.Contexts.Classes.Handlers;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClassManager.Api.Contexts.Classes.Controllers;
 
+[Authorize]
 [Route("{tenantId}/classes")]
 public class ClassController : MainController
 {
@@ -150,7 +152,7 @@ public class ClassController : MainController
 
   [HttpPut]
   [Route("{id}/time-table")]
-  public async Task<IResult> Update(
+  public async Task<IResult> UpdateTimeTable(
     [FromRoute] Guid tenantId,
     [FromRoute] Guid id,
     [FromBody] UpdateClassTimeTableCommand command,

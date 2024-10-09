@@ -12,7 +12,7 @@ namespace ClassManager.Domain.Contexts.Classes.Commands
     {
       AddNotifications(new Contract()
       .Requires()
-      .IsNotNull(TimeTableId, "TimeTableId", "TimeTableId can't be null")
+      .IsNotNull(TimeTableId, "TimeTableId", "TimeTableId cannot be null")
     );
     }
   }
