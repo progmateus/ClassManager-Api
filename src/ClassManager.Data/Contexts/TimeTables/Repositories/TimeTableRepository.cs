@@ -11,6 +11,16 @@ public class TimeTableRepository : TRepository<TimeTable>, ITimeTableRepository
 {
   public TimeTableRepository(AppDbContext context) : base(context) { }
 
+  public async Task<List<TimeTable>> FindByIdsWithInclude(List<Guid> ids, Guid tenantId)
+  {
+    return await DbSet
+    .Include(x => x.SchedulesDays)
+    .Include(x => x.Classes)
+    .AsTracking()
+    .Where(x => ids.Contains(x.Id) && x.TenantId == tenantId)
+    .ToListAsync();
+  }
+
   public async Task<List<TimeTable>> GetByActiveTenants()
   {
     return await DbSet

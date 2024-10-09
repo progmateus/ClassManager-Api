@@ -7,6 +7,7 @@ builder.AddServices();
 builder.AddControllers();
 builder.AddDatabase();
 builder.AddJwtAuthentication();
+builder.AddRabbitMQService();
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

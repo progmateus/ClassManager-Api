@@ -9,15 +9,18 @@ namespace ClassManager.Domain.Libs.MassTransit.Events;
 public sealed class GeneratedClassesDaysEventConsumer : IConsumer<GeneratedClassesDaysEvent>
 {
   private readonly IClassDayRepository _classDayRepository;
+  private readonly ITimeTableRepository _timeTableRepository;
   private readonly ILogger<GeneratedClassesDaysEventConsumer> _logger;
 
   public GeneratedClassesDaysEventConsumer(
     IClassDayRepository classDayRepository,
-    ILogger<GeneratedClassesDaysEventConsumer> logger
+    ILogger<GeneratedClassesDaysEventConsumer> logger,
+    ITimeTableRepository timeTableRepository
   )
   {
     _classDayRepository = classDayRepository;
     _logger = logger;
+    _timeTableRepository = timeTableRepository;
   }
   public async Task Consume(ConsumeContext<GeneratedClassesDaysEvent> context)
   {
@@ -30,7 +33,9 @@ public sealed class GeneratedClassesDaysEventConsumer : IConsumer<GeneratedClass
       var year = context.Message.year;
       var month = context.Message.month;
       var day = context.Message.day;
-      var timesTables = context.Message.timesTables;
+      var timesTablesIds = context.Message.timesTablesIds;
+
+      var timesTables = await _timeTableRepository.GetAsync(x => timesTablesIds.Contains(x.Id), [x => x.Classes, x => x.SchedulesDays]);
 
       // gera um array com todos os dias do mes
       for (var date = new DateTime(year, month, day); date.Month == month; date = date.AddDays(1))
