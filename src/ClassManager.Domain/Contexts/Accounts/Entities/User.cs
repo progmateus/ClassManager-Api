@@ -40,6 +40,7 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     public Email Email { get; private set; }
     public string Username { get; private set; }
     public string? Avatar { get; private set; } = string.Empty;
+    public string? Phone { get; private set; } = string.Empty;
     public EUserStatus Status { get; private set; } = EUserStatus.ACTIVE;
     public EUserType Type { get; private set; } = EUserType.NORMAL;
     public DateTime CreatedAt { get; private set; }

@@ -100,5 +100,11 @@ public class UserMap : IEntityTypeConfiguration<User>
         .HasColumnType("VARCHAR")
         .HasMaxLength(29)
         .IsRequired();
+
+        builder.Property(x => x.Phone)
+        .HasColumnName("Phone")
+        .HasColumnType("VARCHAR")
+        .HasMaxLength(20)
+        .IsRequired();
     }
 }
