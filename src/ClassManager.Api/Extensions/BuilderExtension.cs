@@ -143,9 +143,10 @@ public static class BuilderExtension
       opt.AddJob<GenerateMonthlyClassesDaysJob>(options => options.WithIdentity(generateMonthlyClassesDaysJobKey));
       opt.AddTrigger(options =>
       {
-        options.ForJob(generateMonthlyClassesDaysJobKey)
+        options
+        .ForJob(generateMonthlyClassesDaysJobKey)
         .WithIdentity("GenerateMonthlyClassesDaysJob-trigger")
-        .WithCronSchedule(builder.Configuration.GetSection("GenerateMonthlyClassesDaysJob:CronSchedule").Value ?? "0 4 28 * *");
+        .WithCronSchedule(builder.Configuration.GetSection("GenerateMonthlyClassesDaysJob:CronSchedule").Value ?? "0 0 4 28 * ? *");
       });
     });
 
