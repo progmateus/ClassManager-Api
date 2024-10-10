@@ -26,7 +26,7 @@ public sealed class GeneratedClassesDaysEventConsumer : IConsumer<GeneratedClass
   {
     try
     {
-      _logger.LogInformation("Job GeneratedClassesDaysEventConsumer initialized");
+      _logger.LogInformation("Event GeneratedClassesDaysEventConsumer initialized");
       var dates = new List<DateTime>();
       var classesDays = new List<ClassDay>();
 
@@ -77,11 +77,11 @@ public sealed class GeneratedClassesDaysEventConsumer : IConsumer<GeneratedClass
         }
       }
       await _classDayRepository.CreateRangeAsync(classesDays, new CancellationToken());
-      _logger.LogInformation("Job GeneratedClassesDaysEventConsumer finished");
+      _logger.LogInformation("Event GeneratedClassesDaysEventConsumer finished");
     }
     catch (Exception err)
     {
-      _logger.LogInformation($"Job GeneratedClassesDaysEventConsumer error: {err.Message}");
+      _logger.LogInformation($"Event GeneratedClassesDaysEventConsumer error: {err.Message}");
       throw new Exception(err.Message);
     }
   }
