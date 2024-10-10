@@ -9,6 +9,7 @@ namespace ClassManager.Domain.Contexts.Accounts.Commands
     public string FirstName { get; set; } = null!;
     public string LastName { get; set; } = null!;
     public string Document { get; set; } = null!;
+    public string Phone { get; set; } = null!;
     public string Username { get; set; } = null!;
     public string Email { get; set; } = null!;
     public string Password { get; set; } = null!;
@@ -18,9 +19,10 @@ namespace ClassManager.Domain.Contexts.Accounts.Commands
     {
       AddNotifications(new Contract()
       .Requires()
-      .HasMinLen(FirstName, 3, "CreateUserCommand.FirstName", "FirstName min 3 characters")
-      .HasMaxLen(FirstName, 40, "CreateUserCommand.FirstName", "FirstName max 40 characters")
-      .Matchs(Username, "^(?!.*\\.\\.)(?!.*\\.$)[^\\W][\\w.]{0,29}$", "CreateUserCommand.Username", "Invalid username")
+      .HasMinLen(FirstName, 3, "FirstName", "FirstName min 3 characters")
+      .HasMaxLen(FirstName, 40, "FirstName", "FirstName max 40 characters")
+      .Matchs(Username, "^(?!.*\\.\\.)(?!.*\\.$)[^\\W][\\w.]{0,29}$", "Username", "Invalid username")
+      .Matchs(Phone, "^[0-9]{10,}$", "Phone", "Invalid phone")
     );
     }
   }

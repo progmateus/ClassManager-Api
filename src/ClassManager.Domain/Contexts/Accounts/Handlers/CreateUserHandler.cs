@@ -1,8 +1,10 @@
+using AutoMapper;
 using ClassManager.Domain.Contexts.Accounts.Commands;
 using ClassManager.Domain.Contexts.Accounts.Entities;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Shared.ValueObjects;
+using ClassManager.Domain.Contexts.Users.ViewModels;
 using ClassManager.Domain.Services;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;
@@ -17,14 +19,17 @@ public class CreateUserHandler :
 {
   private readonly IUserRepository _userReporitory;
   private readonly IEmailService _emailService;
+  private readonly IMapper _mapper;
 
   public CreateUserHandler(
     IUserRepository userRepository,
-    IEmailService emailService
+    IEmailService emailService,
+    IMapper mapper
     )
   {
     _userReporitory = userRepository;
     _emailService = emailService;
+    _mapper = mapper;
   }
   public async Task<ICommandResult> Handle(CreateUserCommand command)
   {
@@ -64,7 +69,7 @@ public class CreateUserHandler :
     var password = new Password(command.Password);
 
     // gerar as entidades
-    var user = new User(name, document, email, password, command.Username, command.Avatar);
+    var user = new User(name, document, email, password, command.Username, command.Phone, command.Avatar);
 
     // agrupar validações
 
@@ -83,6 +88,6 @@ public class CreateUserHandler :
     await _emailService.SendVerificationEmailAsync(user, new CancellationToken());
     // retornar infos
 
-    return new CommandResult(true, "USER_CREATED", user, null, 201);
+    return new CommandResult(true, "USER_CREATED", _mapper.Map<UserViewModel>(user), null, 201);
   }
 }

@@ -1,8 +1,10 @@
+using AutoMapper;
 using ClassManager.Domain.Contexts.Accounts.Commands;
 using ClassManager.Domain.Contexts.Accounts.Entities;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Shared.ValueObjects;
+using ClassManager.Domain.Contexts.Users.ViewModels;
 using ClassManager.Domain.Services;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;
@@ -16,12 +18,15 @@ public class UpdateUserHandler :
   IActionHandler<UpdateUserCommand>
 {
   private readonly IUserRepository _userReporitory;
+  private readonly IMapper _mapper;
 
   public UpdateUserHandler(
-    IUserRepository userRepository
+    IUserRepository userRepository,
+    IMapper mapper
     )
   {
     _userReporitory = userRepository;
+    _mapper = mapper;
   }
   public async Task<ICommandResult> Handle(Guid id, UpdateUserCommand command)
   {
@@ -60,7 +65,7 @@ public class UpdateUserHandler :
     var email = new Email(command.Email);
 
     // gerar as entidades
-    user.ChangeUser(name, email, document);
+    user.ChangeUser(name, email, document, command.Phone);
 
     // agrupar validações
 
@@ -77,6 +82,6 @@ public class UpdateUserHandler :
 
     // retornar infos
 
-    return new CommandResult(true, "USER_UPDATED", user, null, 201);
+    return new CommandResult(true, "USER_UPDATED", _mapper.Map<UserViewModel>(user), null, 201);
   }
 }

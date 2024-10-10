@@ -10,14 +10,16 @@ namespace ClassManager.Domain.Contexts.Accounts.Commands
     public string LastName { get; set; } = null!;
     public string Document { get; set; } = null!;
     public string Email { get; set; } = null!;
+    public string Phone { get; set; } = null!;
 
     public void Validate()
     {
       AddNotifications(new Contract()
       .Requires()
-      .HasMinLen(FirstName, 3, "UpdateUserCommand.FirstName", "FirstName min 3 characters")
-      .HasMaxLen(FirstName, 40, "UpdateUserCommand.FirstName", "FirstName max 40 characters")
-      .IsEmail(Email, "UpdateUserCommand.Email", "Invalid Email")
+      .HasMinLen(FirstName, 3, "FirstName", "FirstName min 3 characters")
+      .HasMaxLen(FirstName, 40, "FirstName", "FirstName max 40 characters")
+      .IsEmail(Email, "Email", "Invalid Email")
+      .Matchs(Phone, "\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4,5}|null)", "Phone", "Invalid phone")
     );
     }
   }

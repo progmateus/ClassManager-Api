@@ -15,6 +15,7 @@ public class UserViewModel
   public string? LastName { get; set; } = String.Empty;
   public string? Email { get; set; } = String.Empty;
   public string? Username { get; set; } = String.Empty;
+  public string? Phone { get; set; } = String.Empty;
   public string? Avatar { get; set; } = String.Empty;
   public int? Status { get; set; }
   public int? Type { get; set; }
