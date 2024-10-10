@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
 using ClasManager.Domain.Contexts.Bookings.Handlers;
+using ClasManager.Domain.Contexts.ClassDays.Jobs.GenerateMonthlyClassesDays;
 using classManager.Data.Contexts.Roles.Repositories;
 using classManager.Data.Contexts.Subscriptions.Repositories;
 using ClassManager.Data.Contexts.Accounts.Repositories;
@@ -40,6 +41,7 @@ using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Quartz;
 
 namespace ClassManager.Api.Extensions;
 public static class BuilderExtension
@@ -132,11 +134,30 @@ public static class BuilderExtension
     });
   }
 
+  public static void AddQuartz(this WebApplicationBuilder builder)
+  {
+    builder.Services.AddQuartz(opt =>
+    {
+      opt.UseMicrosoftDependencyInjectionJobFactory();
+      var generateMonthlyClassesDaysJobKey = new JobKey("GenerateMonthlyClassesDaysJob");
+      opt.AddJob<GenerateMonthlyClassesDaysJob>(options => options.WithIdentity(generateMonthlyClassesDaysJobKey));
+      opt.AddTrigger(options =>
+      {
+        options.ForJob(generateMonthlyClassesDaysJobKey)
+        .WithIdentity("GenerateMonthlyClassesDaysJob-trigger")
+        .WithCronSchedule(builder.Configuration.GetSection("GenerateMonthlyClassesDaysJob:CronSchedule").Value ?? "0 4 28 * *");
+      });
+    });
+
+    builder.Services.AddQuartzHostedService(q => q.WaitForJobsToComplete = true);
+  }
+
   public static void AddServices(this WebApplicationBuilder builder)
   {
 
     builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options => options.SerializerOptions.ReferenceHandler = ReferenceHandler.IgnoreCycles);
     builder.Services.Configure<Microsoft.AspNetCore.Http.Json.JsonOptions>(options => options.SerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingDefault);
+    builder.Services.Configure<GenerateMonthlyClassesDaysOptions>(builder.Configuration.GetSection(GenerateMonthlyClassesDaysOptions.GenerateMonthlyClassesDaysOptionsKey));
 
     builder.Services.AddTransient<
         IUserRepository,
