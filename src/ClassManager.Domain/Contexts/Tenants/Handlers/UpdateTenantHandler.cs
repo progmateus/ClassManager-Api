@@ -1,12 +1,14 @@
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Shared.ValueObjects;
 using ClassManager.Domain.Contexts.Tenants.Commands;
+using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ClassManager.Domain.Contexts.Tenants.Handlers;
 
@@ -16,6 +18,7 @@ public class UpdateTenantHandler :
 {
   private readonly ITenantRepository _repository;
   private readonly IAccessControlService _accessControlService;
+
 
 
   public UpdateTenantHandler(
@@ -30,6 +33,7 @@ public class UpdateTenantHandler :
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, UpdateTenantCommand command)
   {
+    List<TenantSocial> tenantsSocials = new();
     command.Validate();
     if (command.Invalid)
     {
@@ -69,6 +73,15 @@ public class UpdateTenantHandler :
     var email = new Email(command.Email);
 
     tenant.Update(command.Name, email, document, command.Description);
+
+    if (!command.TenantsSocials.IsNullOrEmpty())
+    {
+      foreach (var social in command.TenantsSocials)
+      {
+        var tenantSocial = new TenantSocial(social.Url, social.Type, tenantId);
+        tenantsSocials.Add(tenantSocial);
+      }
+    }
 
     // agrupar validações
 

@@ -11,10 +11,10 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     {
 
     }
-    public TenantSocial(string uri, ESocialType type, Guid tenantId)
+    public TenantSocial(string url, ESocialType type, Guid tenantId)
     {
       TenantId = tenantId;
-      Url = uri;
+      Url = url;
       Type = type;
     }
 
