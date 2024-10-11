@@ -19,7 +19,7 @@ namespace ClassManager.Domain.Contexts.Accounts.Commands
       .HasMinLen(FirstName, 3, "FirstName", "FirstName min 3 characters")
       .HasMaxLen(FirstName, 40, "FirstName", "FirstName max 40 characters")
       .IsEmail(Email, "Email", "Invalid Email")
-      .Matchs(Phone, "\\(?([0-9]{3})\\)?([ .-]?)([0-9]{3})\\2([0-9]{4,5}|null)", "Phone", "Invalid phone")
+      .Matchs(Phone, "(\\(?\\d{2}\\)?) ?(9{1})? ?(\\d{4})-? ?(\\d{4})", "Phone", "Invalid phone")
     );
     }
   }
