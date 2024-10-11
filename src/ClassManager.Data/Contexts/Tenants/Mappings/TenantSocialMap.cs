@@ -9,7 +9,7 @@ public class TenantSocialMap : IEntityTypeConfiguration<TenantSocial>
 {
   public void Configure(EntityTypeBuilder<TenantSocial> builder)
   {
-    builder.ToTable("TenantSocials");
+    builder.ToTable("TenantsSocials");
 
     builder.HasKey(x => x.Id);
 
