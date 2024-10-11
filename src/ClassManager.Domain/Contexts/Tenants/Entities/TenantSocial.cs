@@ -13,9 +13,9 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     }
     public TenantSocial(string url, ESocialType type, Guid tenantId)
     {
-      TenantId = tenantId;
       Url = url;
       Type = type;
+      TenantId = tenantId;
     }
 
     public string Url { get; private set; } = null!;

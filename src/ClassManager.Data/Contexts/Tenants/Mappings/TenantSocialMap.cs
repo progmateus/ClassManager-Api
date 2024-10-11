@@ -16,6 +16,7 @@ public class TenantSocialMap : IEntityTypeConfiguration<TenantSocial>
     builder.Property(x => x.Url)
       .HasColumnName("Url")
       .HasColumnType("VARCHAR")
+      .HasMaxLength(300)
       .IsRequired(true);
 
     builder.Property(x => x.Type)

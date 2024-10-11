@@ -230,6 +230,10 @@ public static class BuilderExtension
     IPublishBus,
     PublishBus>();
 
+    builder.Services.AddTransient<
+    ITenantSocialRepository,
+    TenantSocialRepository>();
+
     builder.Services.AddTransient<TokenService>();
 
     builder.Services.AddTransient<AuthHandler>();
