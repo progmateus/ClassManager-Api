@@ -39,8 +39,6 @@ public class AuthHandler :
   }
   public async Task<ICommandResult> Handle(AuthCommand command)
   {
-    // fail fast validation
-    #region 01. Valida a requisição
 
     try
     {
@@ -56,32 +54,15 @@ public class AuthHandler :
       return new CommandResult(false, "Internal server error", null, null, 500);
     }
 
-    #endregion
+    var user = await _userReporitory.GetByEmailAsync(command.Email, default);
 
-    #region 02. Recupera o perfil
-
-    User? user;
-    try
+    if (user is null)
     {
-      user = await _userReporitory.GetByEmailAsync(command.Email, default);
-      if (user is null)
-        return new CommandResult(false, "ERR_INVALID_CREDENTIALS", null, null, 401);
+      return new CommandResult(false, "ERR_INVALID_CREDENTIALS", null, null, 401);
     }
-    catch (Exception)
-    {
-      return new CommandResult(false, "Internal server error", null, null, 500);
-    }
-
-    #endregion
-
-    #region 03. Checa se a senha é válida
 
     if (!user.Password.Challenge(command.Password))
       return new CommandResult(false, "ERR_INVALID_CREDENTIALS", null, null, 401);
-
-    #endregion
-
-    #region 04. Checa se a conta está verificada
 
     try
     {
@@ -96,22 +77,17 @@ public class AuthHandler :
     var userRoles = _mapper.Map<List<UsersRolesViewModel>>(await _usersRolesRepository.FindByUserId(user.Id));
     var userSubscriptions = _mapper.Map<List<SubscriptionPreviewViewModel>>(await _subscriptionsrepository.ListSubscriptions([user.Id], []));
 
-    #endregion
-
-    #region 05. Retorna os dados
     var tokenService = new TokenService();
-    var data = new AuthData
+
+    var authData = new AuthData
     {
       Id = user.Id.ToString(),
-      User = _mapper.Map<UserViewModel>(user),
+      User = _mapper.Map<UserProfileViewModel>(user),
     };
-    data.Token = tokenService.Create(data);
-    data.User.Subscriptions = userSubscriptions;
-    data.User.UsersRoles = userRoles;
+    authData.Token = tokenService.Create(authData);
+    authData.User.Subscriptions = userSubscriptions;
+    authData.User.UsersRoles = userRoles;
 
-    var result = new CommandResult(true, "USER_GOTTEN", data, null, 200);
-    return result;
-
-    #endregion
+    return new CommandResult(true, "USER_GOTTEN", authData, null, 200);
   }
 }

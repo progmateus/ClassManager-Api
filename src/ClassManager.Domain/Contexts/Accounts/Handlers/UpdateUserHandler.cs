@@ -1,11 +1,9 @@
 using AutoMapper;
 using ClassManager.Domain.Contexts.Accounts.Commands;
-using ClassManager.Domain.Contexts.Accounts.Entities;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Shared.ValueObjects;
 using ClassManager.Domain.Contexts.Users.ViewModels;
-using ClassManager.Domain.Services;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
