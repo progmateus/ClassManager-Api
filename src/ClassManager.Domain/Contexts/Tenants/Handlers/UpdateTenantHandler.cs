@@ -18,17 +18,18 @@ public class UpdateTenantHandler :
 {
   private readonly ITenantRepository _repository;
   private readonly IAccessControlService _accessControlService;
-
-
+  private readonly ITenantSocialRepository _tenantSocialRepository;
 
   public UpdateTenantHandler(
     ITenantRepository tenantRepository,
-    IAccessControlService accessControlService
+    IAccessControlService accessControlService,
+    ITenantSocialRepository tenantSocialRepository
 
     )
   {
     _repository = tenantRepository;
     _accessControlService = accessControlService;
+    _tenantSocialRepository = tenantSocialRepository;
 
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, UpdateTenantCommand command)
@@ -92,7 +93,11 @@ public class UpdateTenantHandler :
       return new CommandResult(false, "ERR_VALIDATION", null, Notifications);
     }
 
+    await _tenantSocialRepository.DeleteAllByTenantIdAsync(tenantId, default);
+
     await _repository.UpdateAsync(tenant, default);
+
+    await _tenantSocialRepository.CreateRangeAsync(tenantsSocials, default);
 
     return new CommandResult(true, "TENANT_UPDATED", tenant, null, 200);
   }
