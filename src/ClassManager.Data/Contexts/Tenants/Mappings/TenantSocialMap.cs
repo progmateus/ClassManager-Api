@@ -19,7 +19,8 @@ public class TenantSocialMap : IEntityTypeConfiguration<TenantSocial>
       .IsRequired(true);
 
     builder.Property(x => x.Type)
-      .HasColumnName("TINYINT")
+      .HasColumnName("Type")
+      .HasColumnType("TINYINT")
       .HasDefaultValue(ESocialType.WHATSAPP)
       .IsRequired(true);
 
