@@ -43,6 +43,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public List<Role> Roles { get; private set; } = [];
     public List<UsersRoles> UsersRoles { get; private set; } = [];
     public List<TenantPlan> TenantPlans { get; private set; } = [];
+    public List<TenantSocial> TenantsSocials { get; private set; } = [];
     public List<Subscription> Subscriptions { get; private set; } = [];
     public List<TimeTable> TimesTables { get; private set; } = [];
     public List<Class> Classes { get; private set; } = [];

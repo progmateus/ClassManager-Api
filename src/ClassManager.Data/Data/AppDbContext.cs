@@ -12,6 +12,7 @@ using ClassManager.Domain.Contexts.Plans.Entities;
 using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Subscriptions.Entities;
 using ClassManager.Domain.Contexts.Tenants.Entities;
+using ClassManager.Domain.Contexts.TimesTables.Entities;
 using Flunt.Notifications;
 using Microsoft.EntityFrameworkCore;
 
@@ -37,6 +38,9 @@ public class AppDbContext : DbContext
   public DbSet<Subscription> Subscriptions { get; set; } = null!;
   public DbSet<ClassDay> ClassDays { get; set; } = null!;
   public DbSet<Booking> Bookings { get; set; } = null!;
+  public DbSet<TenantSocial> TenantsSocials { get; set; } = null!;
+  public DbSet<TimeTable> TimesTables { get; set; } = null!;
+  public DbSet<ScheduleDay> SchedulesDays { get; set; } = null!;
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
 
@@ -69,6 +73,7 @@ public class AppDbContext : DbContext
     modelBuilder.ApplyConfiguration(new BookingMap());
     modelBuilder.ApplyConfiguration(new TimeTableMap());
     modelBuilder.ApplyConfiguration(new ScheduleDayMap());
+    modelBuilder.ApplyConfiguration(new TenantSocialMap());
 
     base.OnModelCreating(modelBuilder);
   }

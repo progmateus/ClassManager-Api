@@ -4,22 +4,22 @@ using ClassManager.Domain.Contexts.Shared.Enums;
 
 namespace ClassManager.Domain.Contexts.Tenants.Entities
 {
-  public class TenantSocial : Entity
+  public class TenantSocial : TenantEntity
   {
 
     protected TenantSocial()
     {
 
     }
-    public TenantSocial(string uri, ESocialType type)
+    public TenantSocial(string uri, ESocialType type, Guid tenantId)
     {
+      TenantId = tenantId;
       Url = uri;
       Type = type;
     }
 
     public string Url { get; private set; } = null!;
     public ESocialType Type { get; private set; }
-    public Guid TenantId { get; private set; }
     public Tenant? Tenant { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
