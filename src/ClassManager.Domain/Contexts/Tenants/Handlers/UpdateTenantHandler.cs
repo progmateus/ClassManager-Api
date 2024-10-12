@@ -79,8 +79,14 @@ public class UpdateTenantHandler :
     {
       foreach (var social in command.TenantsSocials)
       {
-        var tenantSocial = new TenantSocial(social.Url, social.Type, tenantId);
-        tenantsSocials.Add(tenantSocial);
+        Console.WriteLine("======================");
+        Console.WriteLine("======================");
+        Console.WriteLine("======================");
+        Console.WriteLine(social.Url);
+        Console.WriteLine(social.Type);
+        Console.WriteLine(tenantId);
+        var tenantSocial = new TenantSocial(social.Url, (ESocialType)social.Type, tenantId);
+        tenant.TenantsSocials.Add(tenantSocial);
       }
     }
 
@@ -97,7 +103,7 @@ public class UpdateTenantHandler :
 
     await _repository.UpdateAsync(tenant, default);
 
-    await _tenantSocialRepository.CreateRangeAsync(tenantsSocials, default);
+    /* await _tenantSocialRepository.CreateRangeAsync(tenantsSocials, default); */
 
     return new CommandResult(true, "TENANT_UPDATED", tenant, null, 200);
   }

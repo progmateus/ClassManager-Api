@@ -56,6 +56,7 @@ public class AutoMapperConfig : Profile
     CreateMap<Tenant, TenantViewModel>()
   .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address));
     CreateMap<TenantPlan, TenantPlanViewModel>();
+    CreateMap<TenantSocial, TenantSocialViewModel>();
 
     CreateMap<TimeTable, TimeTableViewModel>();
     CreateMap<ScheduleDay, ScheduleDayViewModel>();
