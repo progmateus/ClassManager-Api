@@ -5,11 +5,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ClassManager.Data.Contexts.Tenants.Mappings;
 
-public class TenantSocialMap : IEntityTypeConfiguration<TenantSocial>
+public class LinkMap : IEntityTypeConfiguration<Link>
 {
-  public void Configure(EntityTypeBuilder<TenantSocial> builder)
+  public void Configure(EntityTypeBuilder<Link> builder)
   {
-    builder.ToTable("TenantsSocials");
+    builder.ToTable("Links");
 
     builder.HasKey(x => x.Id);
 
@@ -26,7 +26,7 @@ public class TenantSocialMap : IEntityTypeConfiguration<TenantSocial>
       .IsRequired(true);
 
     builder.HasOne(x => x.Tenant)
-      .WithMany(p => p.TenantsSocials)
+      .WithMany(p => p.Links)
       .HasForeignKey(x => x.TenantId)
       .IsRequired(true);
   }

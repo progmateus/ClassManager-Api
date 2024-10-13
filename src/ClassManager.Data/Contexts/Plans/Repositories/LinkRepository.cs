@@ -5,7 +5,7 @@ using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 
 namespace ClassManager.Data.Contexts.Plans.Repositories;
 
-public class TenantSocialRepository : TRepository<TenantSocial>, ITenantSocialRepository
+public class LinkRepository : TRepository<Link>, ILinkRepository
 {
-  public TenantSocialRepository(AppDbContext context) : base(context) { }
+  public LinkRepository(AppDbContext context) : base(context) { }
 }

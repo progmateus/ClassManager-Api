@@ -38,7 +38,7 @@ public class AppDbContext : DbContext
   public DbSet<Subscription> Subscriptions { get; set; } = null!;
   public DbSet<ClassDay> ClassDays { get; set; } = null!;
   public DbSet<Booking> Bookings { get; set; } = null!;
-  public DbSet<TenantSocial> TenantsSocials { get; set; } = null!;
+  public DbSet<Link> Links { get; set; } = null!;
   public DbSet<TimeTable> TimesTables { get; set; } = null!;
   public DbSet<ScheduleDay> SchedulesDays { get; set; } = null!;
   protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -73,7 +73,7 @@ public class AppDbContext : DbContext
     modelBuilder.ApplyConfiguration(new BookingMap());
     modelBuilder.ApplyConfiguration(new TimeTableMap());
     modelBuilder.ApplyConfiguration(new ScheduleDayMap());
-    modelBuilder.ApplyConfiguration(new TenantSocialMap());
+    modelBuilder.ApplyConfiguration(new LinkMap());
 
     base.OnModelCreating(modelBuilder);
   }

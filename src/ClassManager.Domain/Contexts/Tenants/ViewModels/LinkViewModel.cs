@@ -1,9 +1,8 @@
 using ClassManager.Domain.Contexts.tenants.ViewModels;
-using ClassManager.Domain.Contexts.Subscriptions.ViewModels;
 
 namespace ClassManager.Domain.Contexts.Tenants.ViewModels
 {
-  public class TenantSocialViewModel
+  public class LinkViewModel
   {
     public Guid Id { get; set; }
     public int type { get; set; }

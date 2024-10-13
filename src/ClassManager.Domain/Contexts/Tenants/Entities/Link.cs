@@ -4,14 +4,14 @@ using ClassManager.Domain.Contexts.Shared.Enums;
 
 namespace ClassManager.Domain.Contexts.Tenants.Entities
 {
-  public class TenantSocial : TenantEntity
+  public class Link : TenantEntity
   {
 
-    protected TenantSocial()
+    protected Link()
     {
 
     }
-    public TenantSocial(string url, ESocialType type, Guid tenantId)
+    public Link(string url, ESocialType type, Guid tenantId)
     {
       Url = url;
       Type = type;

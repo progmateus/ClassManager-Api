@@ -231,8 +231,8 @@ public static class BuilderExtension
     PublishBus>();
 
     builder.Services.AddTransient<
-    ITenantSocialRepository,
-    TenantSocialRepository>();
+    ILinkRepository,
+    LinkRepository>();
 
     builder.Services.AddTransient<TokenService>();
 

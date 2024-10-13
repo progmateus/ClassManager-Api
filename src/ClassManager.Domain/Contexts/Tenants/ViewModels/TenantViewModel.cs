@@ -32,7 +32,7 @@ public class TenantViewModel
   public List<TenantPlanViewModel> TenantPlans { get; set; } = [];
   public List<SubscriptionPreviewViewModel> Subscriptions { get; set; } = [];
   public List<ClassViewModel> Classes { get; set; } = [];
-  public List<TenantSocialViewModel> TenantsSocials { get; set; } = [];
+  public List<Link> Links { get; set; } = [];
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }
 }

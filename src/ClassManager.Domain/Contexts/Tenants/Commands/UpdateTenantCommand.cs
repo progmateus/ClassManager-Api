@@ -12,7 +12,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Commands
     public string? Description { get; set; } = string.Empty;
     public string Document { get; set; } = null!;
     public string Phone { get; set; } = string.Empty;
-    public List<TenantSocialCommand> TenantsSocials { get; set; } = [];
+    public List<LinkCommand> Links { get; set; } = [];
 
     public void Validate()
     {

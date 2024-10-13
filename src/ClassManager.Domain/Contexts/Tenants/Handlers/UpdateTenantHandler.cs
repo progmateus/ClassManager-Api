@@ -18,23 +18,23 @@ public class UpdateTenantHandler :
 {
   private readonly ITenantRepository _repository;
   private readonly IAccessControlService _accessControlService;
-  private readonly ITenantSocialRepository _tenantSocialRepository;
+  private readonly ILinkRepository _linkRepository;
 
   public UpdateTenantHandler(
     ITenantRepository tenantRepository,
     IAccessControlService accessControlService,
-    ITenantSocialRepository tenantSocialRepository
+    ILinkRepository linkRepository
 
     )
   {
     _repository = tenantRepository;
     _accessControlService = accessControlService;
-    _tenantSocialRepository = tenantSocialRepository;
+    _linkRepository = linkRepository;
 
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, UpdateTenantCommand command)
   {
-    List<TenantSocial> tenantsSocials = new();
+    List<Link> links = new();
     command.Validate();
     if (command.Invalid)
     {
@@ -75,18 +75,15 @@ public class UpdateTenantHandler :
 
     tenant.Update(command.Name, email, document, command.Description);
 
-    if (!command.TenantsSocials.IsNullOrEmpty())
+    if (!command.Links.IsNullOrEmpty())
     {
-      foreach (var social in command.TenantsSocials)
+      foreach (var linkCommand in command.Links)
       {
-        Console.WriteLine("======================");
-        Console.WriteLine("======================");
-        Console.WriteLine("======================");
-        Console.WriteLine(social.Url);
-        Console.WriteLine(social.Type);
+        Console.WriteLine(linkCommand.Url);
+        Console.WriteLine(linkCommand.Type);
         Console.WriteLine(tenantId);
-        var tenantSocial = new TenantSocial(social.Url, (ESocialType)social.Type, tenantId);
-        tenantsSocials.Add(tenantSocial);
+        var link = new Link(linkCommand.Url, (ESocialType)linkCommand.Type, tenantId);
+        links.Add(link);
       }
     }
 
@@ -99,11 +96,11 @@ public class UpdateTenantHandler :
       return new CommandResult(false, "ERR_VALIDATION", null, Notifications);
     }
 
-    await _tenantSocialRepository.DeleteAllByTenantIdAsync(tenantId, default);
+    await _linkRepository.DeleteAllByTenantIdAsync(tenantId, default);
 
     await _repository.UpdateAsync(tenant, default);
 
-    await _tenantSocialRepository.CreateRangeAsync(tenantsSocials, default);
+    await _linkRepository.CreateRangeAsync(links, default);
 
     return new CommandResult(true, "TENANT_UPDATED", tenant, null, 200);
   }
