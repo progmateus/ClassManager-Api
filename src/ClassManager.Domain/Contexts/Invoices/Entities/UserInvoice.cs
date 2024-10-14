@@ -33,4 +33,9 @@ public class UserInvoice : Entity
   {
     ExpiresDate = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month));
   }
+
+  public void UpdateStatus(EInvoiceStatus status)
+  {
+    Status = status;
+  }
 }
