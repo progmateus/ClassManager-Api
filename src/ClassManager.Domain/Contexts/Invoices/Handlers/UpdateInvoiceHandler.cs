@@ -13,15 +13,15 @@ public class UpdateInvoiceHandler :
   Notifiable,
   ITenantActionHandler<UpdateInvoiceCommand>
 {
-  private IUserInvoiceRepository _userInvoiceRepository;
+  private IInvoiceRepository _invoiceRepository;
   private readonly IAccessControlService _accessControlService;
 
   public UpdateInvoiceHandler(
-    IUserInvoiceRepository userInvoiceRepository,
+    IInvoiceRepository invoiceRepository,
     IAccessControlService accessControlService
     )
   {
-    _userInvoiceRepository = userInvoiceRepository;
+    _invoiceRepository = invoiceRepository;
     _accessControlService = accessControlService;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid invoiceId, UpdateInvoiceCommand command)
@@ -44,7 +44,7 @@ public class UpdateInvoiceHandler :
       return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
     }
 
-    var invoice = await _userInvoiceRepository.GetByIdAsync(invoiceId, default);
+    var invoice = await _invoiceRepository.FindByIdAndTenantIdAsync(invoiceId, tenantId, default);
 
     if (invoice is null)
     {
@@ -58,7 +58,7 @@ public class UpdateInvoiceHandler :
 
     invoice.UpdateStatus(EInvoiceStatus.PAYED);
 
-    await _userInvoiceRepository.UpdateAsync(invoice, new CancellationToken());
+    await _invoiceRepository.UpdateAsync(invoice, new CancellationToken());
 
     return new CommandResult(true, "INVOICE_UPDATED", invoice, null, 201);
   }
