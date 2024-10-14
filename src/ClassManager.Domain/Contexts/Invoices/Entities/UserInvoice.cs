@@ -5,9 +5,9 @@ using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Shared.Entities;
 
 namespace ClassManager.Domain.Contexts.Invoices.Entities;
-public class Invoice : Entity
+public class UserInvoice : Entity
 {
-  public Invoice(Guid userId, Guid tenantPlanId, Guid subscriptionId, decimal amount, ESubscriptionStatus type, ESubscriptionStatus status, DateTime expiresDate)
+  public UserInvoice(Guid userId, Guid tenantPlanId, Guid subscriptionId, decimal amount, ESubscriptionStatus type, ESubscriptionStatus status, DateTime expiresDate)
   {
     UserId = userId;
     TenantPlanId = tenantPlanId;
@@ -18,7 +18,7 @@ public class Invoice : Entity
     ExpiresDate = expiresDate;
   }
 
-  protected Invoice() { }
+  protected UserInvoice() { }
 
   public Guid UserId { get; private set; }
   public Guid TenantPlanId { get; private set; }
@@ -32,4 +32,14 @@ public class Invoice : Entity
   public Subscription? Subscription { get; private set; }
   public DateTime CreatedAt { get; private set; }
   public DateTime UpdatedAt { get; private set; }
+
+  public void SetAmount()
+  {
+
+  }
+
+  public void SetExpiresDate()
+  {
+
+  }
 }
