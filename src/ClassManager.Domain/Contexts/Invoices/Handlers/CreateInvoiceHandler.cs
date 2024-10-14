@@ -1,4 +1,3 @@
-using AutoMapper;
 using ClasManager.Domain.Contexts.Invoices.Commands;
 using ClassManager.Domain.Contexts.Invoices.Entities;
 using ClassManager.Domain.Contexts.Invoices.Repositories.Contracts;
@@ -16,17 +15,17 @@ public class CreateUserInvoiceHandler :
   ITenantHandler<CreateUserInvoiceCommand>
 {
   private ISubscriptionRepository _subscriptionRepository;
-  private IUserInvoiceRepository _userInvoiceRepository;
+  private IInvoiceRepository _invoiceRepository;
   private readonly IAccessControlService _accessControlService;
 
   public CreateUserInvoiceHandler(
     ISubscriptionRepository subscriptionRepository,
-    IUserInvoiceRepository userInvoiceRepository,
+    IInvoiceRepository invoiceRepository,
     IAccessControlService accessControlService
     )
   {
     _subscriptionRepository = subscriptionRepository;
-    _userInvoiceRepository = userInvoiceRepository;
+    _invoiceRepository = invoiceRepository;
     _accessControlService = accessControlService;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, CreateUserInvoiceCommand command)
@@ -66,9 +65,9 @@ public class CreateUserInvoiceHandler :
       return new CommandResult(false, "ERR_TENANT_PLAN_NOT_FOUND", null, null, 404);
     }
 
-    var userInvoice = new UserInvoice(subscription.UserId, subscription.TenantPlan.Id, subscription.Id, subscription.TenantPlan.Price);
+    var userInvoice = new Invoice(subscription.UserId, subscription.TenantPlan.Id, subscription.Id, subscription.TenantPlan.Price);
 
-    await _userInvoiceRepository.CreateAsync(userInvoice, new CancellationToken());
+    await _invoiceRepository.CreateAsync(userInvoice, new CancellationToken());
 
     return new CommandResult(true, "SUBSCRIPTION_CREATED", subscription, null, 201);
   }
