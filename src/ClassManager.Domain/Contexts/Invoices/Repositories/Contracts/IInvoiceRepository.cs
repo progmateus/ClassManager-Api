@@ -4,7 +4,7 @@ using ClassManager.Domain.Contexts.Subscriptions.Entities;
 namespace ClassManager.Domain.Contexts.Invoices.Repositories.Contracts;
 
 
-public interface IUserInvoiceRepository : IRepository<UserInvoice>
+public interface IInvoiceRepository : ITRepository<Invoice>
 {
   Task<Subscription> CountUserPendingInvoices(Guid userId, Guid tenantId, CancellationToken cancellationToken);
 }
