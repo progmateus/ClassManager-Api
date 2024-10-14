@@ -12,6 +12,7 @@ namespace ClassManager.Domain.Shared.Entities
     public Guid Id { get; }
     public Guid TenantId { get; set; }
 
+
     public bool Equals(Guid id)
         => Id == id;
 

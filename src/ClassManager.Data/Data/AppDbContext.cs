@@ -8,6 +8,7 @@ using ClassManager.Data.Contexts.TimesTabless.Mappings;
 using ClassManager.Domain.Contexts.Accounts.Entities;
 using ClassManager.Domain.Contexts.ClassDays.Entities;
 using ClassManager.Domain.Contexts.Classes.Entities;
+using ClassManager.Domain.Contexts.Invoices.Entities;
 using ClassManager.Domain.Contexts.Plans.Entities;
 using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Subscriptions.Entities;
@@ -41,6 +42,8 @@ public class AppDbContext : DbContext
   public DbSet<Link> Links { get; set; } = null!;
   public DbSet<TimeTable> TimesTables { get; set; } = null!;
   public DbSet<ScheduleDay> SchedulesDays { get; set; } = null!;
+  public DbSet<Invoice> Invoices { get; set; } = null!;
+  public DbSet<ScheduleDay> TenantsInvoices { get; set; } = null!;
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
 

@@ -5,6 +5,7 @@ using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Plans.Entities;
 using ClassManager.Domain.Contexts.Subscriptions.Entities;
+using ClassManager.Domain.Contexts.Invoices.Entities;
 
 namespace ClassManager.Domain.Contexts.Tenants.Entities
 {
@@ -30,6 +31,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public Guid TenantId { get; private set; }
     public Tenant? Tenant { get; private set; }
     public ICollection<Subscription> Subscriptions { get; } = [];
+    public IList<Invoice> Invoices { get; private set; } = [];
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 

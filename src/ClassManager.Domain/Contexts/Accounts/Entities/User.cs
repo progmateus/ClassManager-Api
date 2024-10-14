@@ -8,6 +8,7 @@ using ClassManager.Domain.Contexts.Subscriptions.Entities;
 using ClasManager.Domain.Contexts.Bookings.Entities;
 using ClassManager.Domain.Contexts.Tenants.Entities;
 using System.Text.Json.Serialization;
+using ClassManager.Domain.Contexts.Invoices.Entities;
 
 namespace ClassManager.Domain.Contexts.Accounts.Entities
 {
@@ -54,6 +55,7 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     public IList<Subscription> Subscriptions { get; private set; }
     public IList<Booking> Bookings { get; private set; }
     public IList<Tenant> Tenants { get; private set; }
+    public IList<Invoice> Invoices { get; private set; } = [];
 
     public void ChangeUser(Name name, Email email, Document document, string? phone)
     {

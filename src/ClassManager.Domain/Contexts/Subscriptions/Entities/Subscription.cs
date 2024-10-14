@@ -1,4 +1,5 @@
 using ClassManager.Domain.Contexts.Accounts.Entities;
+using ClassManager.Domain.Contexts.Invoices.Entities;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Shared.Entities;
@@ -22,6 +23,7 @@ public class Subscription : TenantEntity
   public User? User { get; private set; }
   public TenantPlan? TenantPlan { get; private set; }
   public Tenant? Tenant { get; private set; }
+  public IList<Invoice> Invoices { get; private set; } = [];
   public DateTime ExpiresDate { get; private set; }
   public DateTime CreatedAt { get; private set; }
   public DateTime UpdatedAt { get; private set; }

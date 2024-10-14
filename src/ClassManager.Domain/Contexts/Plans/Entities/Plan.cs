@@ -1,3 +1,4 @@
+using ClassManager.Domain.Contexts.Invoices.Entities;
 using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Shared.Entities;
 
@@ -24,6 +25,7 @@ public class Plan : Entity
   public int ClassesLimit { get; private set; }
   public decimal Price { get; private set; }
   public List<Tenant> Tenants { get; private set; } = [];
+  public IList<Invoice> Invoices { get; private set; } = [];
   public DateTime CreatedAt { get; private set; }
   public DateTime UpdatedAt { get; private set; }
 
