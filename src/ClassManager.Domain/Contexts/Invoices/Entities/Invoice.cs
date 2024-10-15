@@ -8,12 +8,14 @@ using ClassManager.Domain.Shared.Entities;
 namespace ClassManager.Domain.Contexts.Invoices.Entities;
 public class Invoice : TenantEntity
 {
-  public Invoice(Guid userId, Guid tenantPlanId, Guid subscriptionId, decimal amount)
+  public Invoice(Guid userId, Guid? tenantPlanId, Guid? subscriptionId, Guid? planId, EInvoiceTargetType targetType, EInvoiceType type)
   {
     UserId = userId;
     TenantPlanId = tenantPlanId;
     SubscriptionId = subscriptionId;
-    Amount = amount;
+    PlanId = planId;
+    TargetType = targetType;
+    Type = type;
   }
 
   protected Invoice() { }

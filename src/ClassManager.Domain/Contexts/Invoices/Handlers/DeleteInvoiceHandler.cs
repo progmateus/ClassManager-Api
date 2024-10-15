@@ -42,6 +42,11 @@ public class DeleteUserInvoiceHandler : ITenantDeleteAction
       return new CommandResult(false, "ERR_INVOICE_NOT_FOUND", null, null, 404);
     }
 
+    if (invoice is null || invoice.TargetType != EInvoiceTargetType.USER)
+    {
+      return new CommandResult(false, "ERR_CANNOT_UPDATE_TENANT_INVOICE", null, null, 404);
+    }
+
     if (invoice.Status == EInvoiceStatus.PAYED)
     {
       return new CommandResult(false, "ERR_INVOICE_ALREADY_BEEN_PAYED", null, null, 409);

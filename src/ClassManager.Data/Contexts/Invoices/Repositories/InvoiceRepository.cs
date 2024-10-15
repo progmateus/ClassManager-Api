@@ -2,7 +2,6 @@ using ClassManager.Data.Contexts.shared.Repositories;
 using ClassManager.Domain.Contexts.Invoices.Entities;
 using ClassManager.Domain.Contexts.Invoices.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Shared.Enums;
-using ClassManager.Domain.Contexts.Subscriptions.Entities;
 using Microsoft.EntityFrameworkCore;
 
 public class InvoiceRepository : TRepository<Invoice>, IInvoiceRepository
@@ -15,5 +14,10 @@ public class InvoiceRepository : TRepository<Invoice>, IInvoiceRepository
   {
     return await DbSet
     .CountAsync((invoice) => invoice.UserId == userId && invoice.TargetType == EInvoiceTargetType.USER && invoice.Type == EInvoiceType.USER_SUBSCRIPTION && invoice.ExpiresAt > initialDate && invoice.ExpiresAt < finalDate);
+  }
+
+  public async Task<Invoice?> FindUserInvoiceById(Guid invoiceId, Guid tenantId, CancellationToken cancellationToken)
+  {
+    return await DbSet.FirstOrDefaultAsync(x => x.Id == invoiceId && x.TenantId == tenantId && x.TargetType == EInvoiceTargetType.USER);
   }
 }

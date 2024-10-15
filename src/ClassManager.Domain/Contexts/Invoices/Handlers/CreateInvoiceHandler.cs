@@ -1,6 +1,7 @@
 using ClasManager.Domain.Contexts.Invoices.Commands;
 using ClassManager.Domain.Contexts.Invoices.Entities;
 using ClassManager.Domain.Contexts.Invoices.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
@@ -12,7 +13,7 @@ namespace ClassManager.Domain.Contexts.Invoices.Handlers;
 
 public class CreateUserInvoiceHandler :
   Notifiable,
-  ITenantHandler<CreateUserInvoiceCommand>
+  ITenantHandler<CreateInvoiceCommand>
 {
   private ISubscriptionRepository _subscriptionRepository;
   private IInvoiceRepository _invoiceRepository;
@@ -28,7 +29,7 @@ public class CreateUserInvoiceHandler :
     _invoiceRepository = invoiceRepository;
     _accessControlService = accessControlService;
   }
-  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, CreateUserInvoiceCommand command)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, CreateInvoiceCommand command)
   {
     command.Validate();
 
@@ -55,7 +56,7 @@ public class CreateUserInvoiceHandler :
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, null, 404);
     }
 
-    if (subscription.Status != Shared.Enums.ESubscriptionStatus.ACTIVE)
+    if (subscription.Status != ESubscriptionStatus.ACTIVE)
     {
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_ACTIVE", null, null, 404);
     }
@@ -65,10 +66,11 @@ public class CreateUserInvoiceHandler :
       return new CommandResult(false, "ERR_TENANT_PLAN_NOT_FOUND", null, null, 404);
     }
 
-    var userInvoice = new Invoice(subscription.UserId, subscription.TenantPlan.Id, subscription.Id, subscription.TenantPlan.Price);
+    var invoice = new Invoice(subscription.UserId, subscription.TenantPlan.Id, subscription.Id, null, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION);
+    invoice.SetExpiresDate();
 
-    await _invoiceRepository.CreateAsync(userInvoice, new CancellationToken());
+    await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
 
-    return new CommandResult(true, "SUBSCRIPTION_CREATED", subscription, null, 201);
+    return new CommandResult(true, "INVOICE_CREATED", subscription, null, 201);
   }
 }
