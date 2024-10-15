@@ -24,6 +24,8 @@ public class Invoice : TenantEntity
   public Guid? PlanId { get; private set; }
   public decimal Amount { get; private set; }
   public EInvoiceStatus Status { get; private set; } = EInvoiceStatus.PENDING;
+  public EInvoiceTarget TargetType { get; private set; } = EInvoiceTarget.USER;
+  public EInvoiceType Type { get; private set; } = EInvoiceType.USER_SUBSCRIPTION;
   public DateTime ExpiresAt { get; private set; }
   public User? User { get; private set; }
   public TenantPlan? TenantPlan { get; private set; }

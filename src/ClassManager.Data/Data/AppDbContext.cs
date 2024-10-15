@@ -43,7 +43,6 @@ public class AppDbContext : DbContext
   public DbSet<TimeTable> TimesTables { get; set; } = null!;
   public DbSet<ScheduleDay> SchedulesDays { get; set; } = null!;
   public DbSet<Invoice> Invoices { get; set; } = null!;
-  public DbSet<ScheduleDay> TenantsInvoices { get; set; } = null!;
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
 
@@ -77,6 +76,7 @@ public class AppDbContext : DbContext
     modelBuilder.ApplyConfiguration(new TimeTableMap());
     modelBuilder.ApplyConfiguration(new ScheduleDayMap());
     modelBuilder.ApplyConfiguration(new LinkMap());
+    modelBuilder.ApplyConfiguration(new InvoiceMap());
 
     base.OnModelCreating(modelBuilder);
   }

@@ -24,6 +24,18 @@ public class InvoiceMap : IEntityTypeConfiguration<Invoice>
       .HasDefaultValue(EInvoiceStatus.PENDING)
       .IsRequired();
 
+    builder.Property(x => x.Type)
+    .HasColumnName("Type")
+    .HasColumnType("TINYINT")
+    .HasDefaultValue(EInvoiceType.USER_SUBSCRIPTION)
+    .IsRequired();
+
+    builder.Property(x => x.TargetType)
+      .HasColumnName("TargetType")
+      .HasColumnType("TINYINT")
+      .HasDefaultValue(EInvoiceTarget.USER)
+      .IsRequired();
+
     builder.HasOne(e => e.User)
       .WithMany(u => u.Invoices)
       .HasForeignKey("UserId")
