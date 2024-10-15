@@ -1,4 +1,5 @@
 
+using ClassManager.Domain.Contexts.Invoices.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Shared.Enums;
@@ -15,17 +16,20 @@ public class AccesControlService : IAccessControlService
   private IUsersRolesRepository _usersRolesRepository;
   private ITenantRepository _tenantRepository;
   private ISubscriptionRepository _subscriptionRepository;
+  private IInvoiceRepository _invoiceRepository;
 
 
   public AccesControlService(
     IUsersRolesRepository usersRolesRepository,
     ITenantRepository tenantRepository,
-    ISubscriptionRepository subscriptionRepository
+    ISubscriptionRepository subscriptionRepository,
+    IInvoiceRepository invoiceRepository
       )
   {
     _usersRolesRepository = usersRolesRepository;
     _tenantRepository = tenantRepository;
     _subscriptionRepository = subscriptionRepository;
+    _invoiceRepository = invoiceRepository;
   }
 
   public async Task<List<UsersRoles>> GetUserRolesAsync(Guid userId, Guid tenantId)
@@ -57,5 +61,10 @@ public class AccesControlService : IAccessControlService
       return false;
     }
     return subscription.Status == ESubscriptionStatus.ACTIVE;
+  }
+
+  public async Task<bool> VerifyUserPendingSubscriptionsInvoices(Guid userId, Guid tenantId, DateTime initialDate, DateTime finalDate, CancellationToken cancelationToken = default)
+  {
+    return await _invoiceRepository.CountUserPendingInvoicesUntilDate(userId, tenantId, initialDate, finalDate, cancelationToken) > 0;
   }
 }
