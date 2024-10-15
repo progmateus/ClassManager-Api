@@ -14,6 +14,6 @@ public class InvoiceRepository : TRepository<Invoice>, IInvoiceRepository
   public async Task<int> CountUserPendingInvoicesUntilDate(Guid userId, Guid tenantId, DateTime initialDate, DateTime finalDate, CancellationToken cancellationToken = default)
   {
     return await DbSet
-    .CountAsync((invoice) => invoice.UserId == userId && invoice.TargetType == EInvoiceTarget.USER && invoice.Type == EInvoiceType.USER_SUBSCRIPTION && invoice.ExpiresAt > initialDate && invoice.ExpiresAt < finalDate);
+    .CountAsync((invoice) => invoice.UserId == userId && invoice.TargetType == EInvoiceTargetType.USER && invoice.Type == EInvoiceType.USER_SUBSCRIPTION && invoice.ExpiresAt > initialDate && invoice.ExpiresAt < finalDate);
   }
 }
