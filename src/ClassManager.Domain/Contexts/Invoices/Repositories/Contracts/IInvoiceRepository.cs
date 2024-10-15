@@ -6,5 +6,5 @@ namespace ClassManager.Domain.Contexts.Invoices.Repositories.Contracts;
 
 public interface IInvoiceRepository : ITRepository<Invoice>
 {
-  Task<Subscription> CountUserPendingInvoices(Guid userId, Guid tenantId, CancellationToken cancellationToken);
+  Task<int> CountUserPendingInvoicesUntilDate(Guid userId, Guid tenantId, DateTime initialDate, DateTime finalDate, CancellationToken cancellationToken);
 }
