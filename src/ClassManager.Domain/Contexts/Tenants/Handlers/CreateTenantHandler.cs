@@ -9,6 +9,7 @@ using ClassManager.Domain.Contexts.tenants.ViewModels;
 using ClassManager.Domain.Contexts.Tenants.Commands;
 using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
+using ClassManager.Domain.Services;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;
 using Flunt.Notifications;
@@ -23,6 +24,7 @@ public class CreateTenantHandler :
   private readonly IUserRepository _usersRepository;
   private readonly IRoleRepository _roleRepository;
   private readonly IUsersRolesRepository _usersRolesRepository;
+  private readonly IStripeService _stripeService;
   private readonly IMapper _mapper;
 
   public CreateTenantHandler(
@@ -30,6 +32,7 @@ public class CreateTenantHandler :
     IUserRepository usersRepository,
     IRoleRepository roleRepository,
     IUsersRolesRepository usersRolesRepository,
+    IStripeService stripeService,
     IMapper mapper
 
     )
@@ -38,6 +41,7 @@ public class CreateTenantHandler :
     _usersRepository = usersRepository;
     _roleRepository = roleRepository;
     _usersRolesRepository = usersRolesRepository;
+    _stripeService = stripeService;
     _mapper = mapper;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, CreateTenantCommand command)
@@ -89,16 +93,9 @@ public class CreateTenantHandler :
       return new CommandResult(false, "ERR_ROLE_NOT_FOUND", null, null, 404);
     }
 
-    var options = new CustomerCreateOptions
-    {
-      Name = tenant.Name,
-      Email = tenant.Email,
-    };
+    var stripeCustomer = _stripeService.CreateCustomer(tenant);
 
-    var service = new CustomerService();
-    var customer = service.Create(options);
-
-    tenant.SetStripeCustomerId(customer.Id);
+    tenant.SetStripeCustomerId(stripeCustomer.Id);
 
     await _repository.CreateAsync(tenant, new CancellationToken());
 

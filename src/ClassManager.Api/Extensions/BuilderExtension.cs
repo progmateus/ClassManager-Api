@@ -9,6 +9,7 @@ using ClassManager.Data.Contexts.Accounts.Services;
 using ClassManager.Data.Contexts.Bookings.Repositories;
 using ClassManager.Data.Contexts.Plans.Repositories;
 using ClassManager.Data.Contexts.Tenants.Repositories;
+using ClassManager.Data.Contexts.Tenants.Services;
 using ClassManager.Data.Data;
 using ClassManager.Domain;
 using ClassManager.Domain.Contexts.Accounts.Handlers;
@@ -248,6 +249,10 @@ public static class BuilderExtension
     builder.Services.AddTransient<
     IInvoiceRepository,
     InvoiceRepository>();
+
+    builder.Services.AddTransient<
+    IStripeService,
+    StripeService>();
 
     builder.Services.AddTransient<TokenService>();
 
