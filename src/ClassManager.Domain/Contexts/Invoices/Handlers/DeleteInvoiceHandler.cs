@@ -1,6 +1,4 @@
-using ClassManager.Domain.Contexts.Invoices.Entities;
 using ClassManager.Domain.Contexts.Invoices.Repositories.Contracts;
-using ClassManager.Domain.Contexts.Plans.Repositories;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
@@ -15,15 +13,16 @@ public class DeleteInvoiceHandler : ITenantDeleteAction
   private readonly IAccessControlService _accessControlService;
 
   public DeleteInvoiceHandler(
+    IInvoiceRepository invoiceRepository,
     IAccessControlService accessControlService
     )
   {
+    _invoiceRepository = invoiceRepository;
     _accessControlService = accessControlService;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid invoiceId)
   {
 
-    throw new NotImplementedException();
 
     if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
     {

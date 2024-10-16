@@ -1,5 +1,4 @@
 using System.Linq.Expressions;
-using System.Reflection.Metadata.Ecma335;
 using ClassManager.Domain.Shared.Entities;
 
 public interface ITRepository<TEntity> where TEntity : TenantEntity

@@ -245,6 +245,10 @@ public static class BuilderExtension
     ILinkRepository,
     LinkRepository>();
 
+    builder.Services.AddTransient<
+    IInvoiceRepository,
+    InvoiceRepository>();
+
     builder.Services.AddTransient<TokenService>();
 
     builder.Services.AddTransient<AuthHandler>();

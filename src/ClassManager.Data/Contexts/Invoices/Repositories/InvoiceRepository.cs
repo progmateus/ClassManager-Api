@@ -1,19 +1,22 @@
 using ClassManager.Data.Contexts.shared.Repositories;
+using ClassManager.Data.Data;
+using ClassManager.Domain.Contexts.Classes.Entities;
+using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Invoices.Entities;
 using ClassManager.Domain.Contexts.Invoices.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
 
+namespace ClassManager.Data.Contexts.Plans.Repositories;
+
 public class InvoiceRepository : TRepository<Invoice>, IInvoiceRepository
 {
-  public InvoiceRepository(DbContext dbContext) : base(dbContext)
-  {
-  }
+  public InvoiceRepository(AppDbContext context) : base(context) { }
 
-  public async Task<int> CountUserPendingInvoicesUntilDate(Guid userId, Guid tenantId, DateTime initialDate, DateTime finalDate, CancellationToken cancellationToken = default)
+  public async Task<int> CountUserPendingInvoicesUntilDate(Guid userId, Guid tenantId, DateTime initialDate, DateTime finalDate, CancellationToken cancellationToken)
   {
     return await DbSet
-    .CountAsync((invoice) => invoice.UserId == userId && invoice.TargetType == EInvoiceTargetType.USER && invoice.Type == EInvoiceType.USER_SUBSCRIPTION && invoice.ExpiresAt > initialDate && invoice.ExpiresAt < finalDate);
+      .CountAsync((invoice) => invoice.UserId == userId && invoice.TargetType == EInvoiceTargetType.USER && invoice.Type == EInvoiceType.USER_SUBSCRIPTION && invoice.ExpiresAt > initialDate && invoice.ExpiresAt < finalDate);
   }
 
   public async Task<Invoice?> FindUserInvoiceById(Guid invoiceId, Guid tenantId, CancellationToken cancellationToken)
