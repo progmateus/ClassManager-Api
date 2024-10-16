@@ -39,5 +39,11 @@ public class TenantPlanMap : IEntityTypeConfiguration<TenantPlan>
       .WithMany(p => p.TenantPlans)
       .HasForeignKey(x => x.TenantId)
       .IsRequired(true);
+
+    builder.Property(x => x.StripeProductId)
+      .HasColumnName("StripeProductId")
+      .HasColumnType("VARCHAR")
+      .HasMaxLength(200)
+      .IsRequired(false);
   }
 }

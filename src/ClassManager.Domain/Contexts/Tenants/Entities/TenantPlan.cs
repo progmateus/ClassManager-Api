@@ -29,6 +29,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public string Description { get; private set; }
     public int TimesOfweek { get; private set; }
     public decimal Price { get; private set; }
+    public string? StripeProductId { get; private set; }
     public Guid TenantId { get; private set; }
     public Tenant? Tenant { get; private set; }
     public ICollection<Subscription> Subscriptions { get; } = [];
@@ -42,6 +43,11 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
       Description = description;
       TimesOfweek = timesOfweek;
       Price = price;
+    }
+
+    public void SetStripeProductId(string stripeCustomerId)
+    {
+      StripeProductId = stripeCustomerId;
     }
   }
 }

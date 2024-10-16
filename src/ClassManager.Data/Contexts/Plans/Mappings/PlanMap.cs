@@ -40,5 +40,11 @@ public class PlanMap : IEntityTypeConfiguration<Plan>
     .HasColumnType("DECIMAL")
     .IsRequired(true);
 
+    builder.Property(x => x.StripeProductId)
+      .HasColumnName("StripeProductId")
+      .HasColumnType("VARCHAR")
+      .HasMaxLength(200)
+      .IsRequired(false);
+
   }
 }
