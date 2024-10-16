@@ -47,9 +47,9 @@ public class DeleteUserInvoiceHandler : ITenantDeleteAction
       return new CommandResult(false, "ERR_CANNOT_UPDATE_TENANT_INVOICE", null, null, 404);
     }
 
-    if (invoice.Status == EInvoiceStatus.PAYED)
+    if (invoice.Status == EInvoiceStatus.PAID)
     {
-      return new CommandResult(false, "ERR_INVOICE_ALREADY_BEEN_PAYED", null, null, 409);
+      return new CommandResult(false, "ERR_INVOICE_ALREADY_BEEN_PAID", null, null, 409);
     }
 
     await _invoiceRepository.DeleteAsync(invoice.Id, tenantId, new CancellationToken());

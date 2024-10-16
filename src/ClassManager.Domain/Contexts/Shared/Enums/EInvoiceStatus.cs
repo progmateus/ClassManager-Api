@@ -4,6 +4,6 @@ namespace ClassManager.Domain.Contexts.Shared.Enums
   {
     PENDING = 1,
     LATE = 2,
-    PAYED = 3,
+    PAID = 3,
   }
 }

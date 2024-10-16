@@ -56,13 +56,13 @@ public class UpdateInvoiceHandler :
       return new CommandResult(false, "ERR_CANNOT_UPDATE_TENANT_INVOICE", null, null, 404);
     }
 
-    if (invoice.Status == EInvoiceStatus.PAYED)
+    if (invoice.Status == EInvoiceStatus.PAID)
     {
-      return new CommandResult(false, "ERR_INVOICE_ALREADY_BEEN_PAYED", null, null, 409);
+      return new CommandResult(false, "ERR_INVOICE_ALREADY_BEEN_PAID", null, null, 409);
     }
 
 
-    invoice.UpdateStatus(EInvoiceStatus.PAYED);
+    invoice.UpdateStatus(EInvoiceStatus.PAID);
 
     await _invoiceRepository.UpdateAsync(invoice, new CancellationToken());
 
