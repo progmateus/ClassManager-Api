@@ -1,12 +1,12 @@
 using ClassManager.Domain.Contexts.Tenants.Commands;
 using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
+using ClassManager.Domain.Services;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
-using Stripe;
 
 namespace ClassManager.Domain.Contexts.Tenants.Handlers;
 
@@ -16,17 +16,18 @@ public class CreateTenantPlanHandler :
 {
   private readonly ITenantPlanRepository _tenantPlanRepository;
   private readonly IAccessControlService _accessControlService;
+  private readonly IStripeService _stripeService;
 
   public CreateTenantPlanHandler(
     ITenantPlanRepository tenantPlanRepository,
-    ITenantRepository tenantRepository,
-    IAccessControlService accessControlService
+    IAccessControlService accessControlService,
+    IStripeService stripeService
 
     )
   {
     _tenantPlanRepository = tenantPlanRepository;
     _accessControlService = accessControlService;
-
+    _stripeService = stripeService;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, TenantPlanCommand command)
   {
@@ -60,21 +61,9 @@ public class CreateTenantPlanHandler :
       return new CommandResult(false, "ERR_VALIDATION", null, null, 400);
     }
 
-    StripeConfiguration.ApiKey = "sk_test_51QAM8w2KNnGfUqKNnduvJzq6760ns870lD16WwOIXXYWXmAAihmFDbhcj64YHT6qDD7OmI4rMSG3p5pYPck5RiI300hGkVMPdo";
-    var productOptions = new ProductCreateOptions { Name = tenantPlan.Name, Metadata = new Dictionary<string, string> { { "tenantId", tenantId.ToString() } } };
-    var productService = new ProductService();
-    var product = productService.Create(productOptions);
+    var stripeProduct = _stripeService.CreateProduct(tenantPlan.Id, "tenant", tenantPlan.Name, tenantId);
 
-    var priceOptions = new PriceCreateOptions
-    {
-      Currency = "brl",
-      UnitAmount = Convert.ToInt64(tenantPlan.Price) * 100,
-      Recurring = new PriceRecurringOptions { Interval = "month" },
-      Product = product.Id,
-      Metadata = new Dictionary<string, string> { { "tenantId", tenantId.ToString() } }
-    };
-    var priceService = new PriceService();
-    priceService.Create(priceOptions);
+    _stripeService.CreatePrice(tenantPlan.Id, tenantId, stripeProduct.Id, tenantPlan.Price * 100);
 
     await _tenantPlanRepository.CreateAsync(tenantPlan, new CancellationToken());
 

@@ -25,23 +25,37 @@ public class StripeService : IStripeService
     return service.Create(options);
   }
 
-  public Price CreatePrice(Guid tenantId, string stripeProductId, decimal priceInCents)
+  public Price CreatePrice(Guid productEntityId, Guid tenantId, string stripeProductId, decimal priceInCents)
   {
+
     var options = new PriceCreateOptions
     {
       Currency = "brl",
       UnitAmount = Convert.ToInt64(priceInCents),
       Recurring = new PriceRecurringOptions { Interval = "month" },
       Product = stripeProductId,
-      Metadata = new Dictionary<string, string> { { "tenantId", tenantId.ToString() } }
+      Metadata = new Dictionary<string, string>
+      {
+        { "tenantId", tenantId.ToString() },
+        { "databaseId", productEntityId.ToString() }
+      }
     };
     var service = new PriceService();
     return service.Create(options);
   }
 
-  public Product CreateProduct(string name, Guid? tenantId)
+  public Product CreateProduct(Guid entityId, string ownerType, string name, Guid? tenantId)
   {
-    var options = new ProductCreateOptions { Name = name, Metadata = new Dictionary<string, string> { { "tenantId", tenantId.Value.ToString() ?? "" } } };
+    var options = new ProductCreateOptions
+    {
+      Id = entityId.ToString(),
+      Name = name,
+      Metadata = new Dictionary<string, string>
+      {
+        { "tenantId", tenantId.Value.ToString() ?? "" },
+        { "ownerType", ownerType }
+      }
+    };
     var service = new ProductService();
     return service.Create(options);
   }
