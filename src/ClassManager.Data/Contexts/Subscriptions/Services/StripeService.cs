@@ -25,7 +25,7 @@ public class StripeService : IStripeService
     return service.Create(options);
   }
 
-  public Price CreatePrice(Guid productEntityId, Guid tenantId, string stripeProductId, decimal priceInCents)
+  public Price CreatePrice(Guid productEntityId, Guid? tenantId, string stripeProductId, decimal priceInCents)
   {
 
     var options = new PriceCreateOptions
@@ -36,7 +36,7 @@ public class StripeService : IStripeService
       Product = stripeProductId,
       Metadata = new Dictionary<string, string>
       {
-        { "tenantId", tenantId.ToString() },
+        { "tenantId", tenantId.ToString() ?? "" },
         { "databaseId", productEntityId.ToString() }
       }
     };
@@ -52,7 +52,7 @@ public class StripeService : IStripeService
       Name = name,
       Metadata = new Dictionary<string, string>
       {
-        { "tenantId", tenantId.Value.ToString() ?? "" },
+        { "tenantId", tenantId.ToString() ?? "" },
         { "ownerType", ownerType }
       }
     };

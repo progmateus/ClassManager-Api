@@ -9,6 +9,6 @@ namespace ClassManager.Domain.Services
     Product CreateProduct(Guid entityId, string ownerType, string name, Guid? tenantId);
     Subscription CreateSubscription(User user);
     Customer CreateCustomer(Tenant tenant);
-    Price CreatePrice(Guid productEntityId, Guid tenantId, string stripeProductId, decimal priceInCents);
+    Price CreatePrice(Guid productEntityId, Guid? tenantId, string stripeProductId, decimal priceInCents);
   }
 }
