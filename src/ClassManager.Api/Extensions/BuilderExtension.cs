@@ -68,6 +68,14 @@ public static class BuilderExtension
 
     Configuration.Stripe.ApiKey =
     builder.Configuration.GetSection("Stripe").GetValue<string>("ApiKey") ?? string.Empty;
+
+    Configuration.Stripe.PublishableKey =
+    builder.Configuration.GetSection("Stripe").GetValue<string>("PublishableKey") ?? string.Empty;
+
+    Configuration.Stripe.SecretKey =
+    builder.Configuration.GetSection("Stripe").GetValue<string>("SecretKey") ?? string.Empty;
+
+
   }
 
   public static void AddDatabase(this WebApplicationBuilder builder)
