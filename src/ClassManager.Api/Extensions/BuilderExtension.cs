@@ -65,6 +65,9 @@ public static class BuilderExtension
         builder.Configuration.GetSection("Email").GetValue<string>("DefaultFromName") ?? string.Empty;
     Configuration.Email.DefaultFromEmail =
         builder.Configuration.GetSection("Email").GetValue<string>("DefaultFromEmail") ?? string.Empty;
+
+    Configuration.Stripe.ApiKey =
+    builder.Configuration.GetSection("Stripe").GetValue<string>("ApiKey") ?? string.Empty;
   }
 
   public static void AddDatabase(this WebApplicationBuilder builder)
