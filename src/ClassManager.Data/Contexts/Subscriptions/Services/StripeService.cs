@@ -1,0 +1,53 @@
+using ClassManager.Domain;
+using ClassManager.Domain.Contexts.Accounts.Entities;
+using ClassManager.Domain.Contexts.Tenants.Entities;
+using ClassManager.Domain.Services;
+using Stripe;
+
+namespace ClassManager.Data.Contexts.Tenants.Services;
+
+public class StripeService : IStripeService
+{
+
+  public StripeService()
+  {
+    StripeConfiguration.ApiKey = Configuration.Stripe.ApiKey;
+  }
+  public Customer CreateCustomer(Tenant tenant)
+  {
+    var options = new CustomerCreateOptions
+    {
+      Name = tenant.Name,
+      Email = tenant.Email,
+    };
+
+    var service = new CustomerService();
+    return service.Create(options);
+  }
+
+  public Price CreatePrice(Guid tenantId, string stripeProductId, decimal priceInCents)
+  {
+    var options = new PriceCreateOptions
+    {
+      Currency = "brl",
+      UnitAmount = Convert.ToInt64(priceInCents),
+      Recurring = new PriceRecurringOptions { Interval = "month" },
+      Product = stripeProductId,
+      Metadata = new Dictionary<string, string> { { "tenantId", tenantId.ToString() } }
+    };
+    var service = new PriceService();
+    return service.Create(options);
+  }
+
+  public Product CreateProduct(string name, Guid? tenantId)
+  {
+    var options = new ProductCreateOptions { Name = name, Metadata = new Dictionary<string, string> { { "tenantId", tenantId.Value.ToString() ?? "" } } };
+    var service = new ProductService();
+    return service.Create(options);
+  }
+
+  public Subscription CreateSubscription(User user)
+  {
+    throw new NotImplementedException();
+  }
+}

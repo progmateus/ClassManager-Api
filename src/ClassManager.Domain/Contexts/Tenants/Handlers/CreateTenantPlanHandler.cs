@@ -6,6 +6,7 @@ using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
+using Stripe;
 
 namespace ClassManager.Domain.Contexts.Tenants.Handlers;
 
@@ -52,12 +53,28 @@ public class CreateTenantPlanHandler :
       return new CommandResult(false, "ERR_PLAN_ALREADY_EXISTS", null, null, 409);
     }
 
-    var tenantPlan = new TenantPlan(command.Name, command.Description, command.TimesOfWeek, tenantId);
+    var tenantPlan = new TenantPlan(command.Name, command.Description, command.TimesOfWeek, tenantId, command.Price);
 
     if (Invalid)
     {
       return new CommandResult(false, "ERR_VALIDATION", null, null, 400);
     }
+
+    StripeConfiguration.ApiKey = "sk_test_51QAM8w2KNnGfUqKNnduvJzq6760ns870lD16WwOIXXYWXmAAihmFDbhcj64YHT6qDD7OmI4rMSG3p5pYPck5RiI300hGkVMPdo";
+    var productOptions = new ProductCreateOptions { Name = tenantPlan.Name, Metadata = new Dictionary<string, string> { { "tenantId", tenantId.ToString() } } };
+    var productService = new ProductService();
+    var product = productService.Create(productOptions);
+
+    var priceOptions = new PriceCreateOptions
+    {
+      Currency = "brl",
+      UnitAmount = Convert.ToInt64(tenantPlan.Price) * 100,
+      Recurring = new PriceRecurringOptions { Interval = "month" },
+      Product = product.Id,
+      Metadata = new Dictionary<string, string> { { "tenantId", tenantId.ToString() } }
+    };
+    var priceService = new PriceService();
+    priceService.Create(priceOptions);
 
     await _tenantPlanRepository.CreateAsync(tenantPlan, new CancellationToken());
 

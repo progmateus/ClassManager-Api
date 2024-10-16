@@ -16,12 +16,13 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     {
 
     }
-    public TenantPlan(string name, string description, int timesOfweek, Guid tenantId)
+    public TenantPlan(string name, string description, int timesOfweek, Guid tenantId, decimal price)
     {
       Name = name;
       Description = description;
       TimesOfweek = timesOfweek;
       TenantId = tenantId;
+      Price = price;
     }
 
     public string Name { get; private set; } = null!;
