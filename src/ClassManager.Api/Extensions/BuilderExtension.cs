@@ -20,6 +20,8 @@ using ClassManager.Domain.Contexts.ClassDays.Helpers;
 using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Classes.Handlers;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Invoices.Handlers;
+using ClassManager.Domain.Contexts.Invoices.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Plans.Handlers;
 using ClassManager.Domain.Contexts.Plans.Repositories;
 using ClassManager.Domain.Contexts.Roles.Commands;
@@ -245,6 +247,10 @@ public static class BuilderExtension
     ILinkRepository,
     LinkRepository>();
 
+    builder.Services.AddTransient<
+    IInvoiceRepository,
+    InvoiceRepository>();
+
     builder.Services.AddTransient<TokenService>();
 
     builder.Services.AddTransient<AuthHandler>();
@@ -332,5 +338,9 @@ public static class BuilderExtension
     builder.Services.AddTransient<UpdateTimetableHandler>();
     builder.Services.AddTransient<ListTimesTablesHandler>();
     builder.Services.AddTransient<GetTimeTableHandler>();
+
+    builder.Services.AddTransient<CreateInvoiceHandler>();
+    builder.Services.AddTransient<UpdateInvoiceHandler>();
+    builder.Services.AddTransient<DeleteInvoiceHandler>();
   }
 }
