@@ -76,8 +76,6 @@ public static class BuilderExtension
 
     Configuration.Stripe.SecretKey =
     builder.Configuration.GetSection("Stripe").GetValue<string>("SecretKey") ?? string.Empty;
-
-
   }
 
   public static void AddDatabase(this WebApplicationBuilder builder)
@@ -246,10 +244,6 @@ public static class BuilderExtension
     builder.Services.AddTransient<
     ILinkRepository,
     LinkRepository>();
-
-    builder.Services.AddTransient<
-    IInvoiceRepository,
-    InvoiceRepository>();
 
     builder.Services.AddTransient<TokenService>();
 

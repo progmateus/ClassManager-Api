@@ -3,13 +3,13 @@ using ClassManager.Domain.Contexts.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace ClassManager.Data.Contexts.Classes.Mappings;
+namespace ClassManager.Data.Contexts.Invoices.Mappings;
 
 public class InvoiceMap : IEntityTypeConfiguration<Invoice>
 {
   public void Configure(EntityTypeBuilder<Invoice> builder)
   {
-    builder.ToTable("UsersInvoices");
+    builder.ToTable("Invoices");
 
     builder.HasKey(x => x.Id);
 
@@ -25,10 +25,10 @@ public class InvoiceMap : IEntityTypeConfiguration<Invoice>
       .IsRequired();
 
     builder.Property(x => x.Type)
-    .HasColumnName("Type")
-    .HasColumnType("TINYINT")
-    .HasDefaultValue(EInvoiceType.USER_SUBSCRIPTION)
-    .IsRequired();
+      .HasColumnName("Type")
+      .HasColumnType("TINYINT")
+      .HasDefaultValue(EInvoiceType.USER_SUBSCRIPTION)
+      .IsRequired();
 
     builder.Property(x => x.TargetType)
       .HasColumnName("TargetType")
@@ -48,9 +48,9 @@ public class InvoiceMap : IEntityTypeConfiguration<Invoice>
       .IsRequired(false);
 
     builder.HasOne(e => e.Tenant)
-    .WithMany(t => t.Invoices)
-    .HasForeignKey("TenantId")
-    .HasPrincipalKey(c => c.Id);
+      .WithMany(t => t.Invoices)
+      .HasForeignKey("TenantId")
+      .HasPrincipalKey(c => c.Id);
 
     builder.HasOne(e => e.Plan)
       .WithMany(t => t.Invoices)

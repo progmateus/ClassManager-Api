@@ -2,6 +2,7 @@ using ClasManager.Domain.Contexts.Bookings.Entities;
 using ClassManager.Data.Contexts.Accounts.Mappings;
 using ClassManager.Data.Contexts.Bookings.Mappings;
 using ClassManager.Data.Contexts.Classes.Mappings;
+using ClassManager.Data.Contexts.Invoices.Mappings;
 using ClassManager.Data.Contexts.Plans.Mappings;
 using ClassManager.Data.Contexts.Tenants.Mappings;
 using ClassManager.Data.Contexts.TimesTabless.Mappings;

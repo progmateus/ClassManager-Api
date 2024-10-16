@@ -12,6 +12,7 @@ using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;
 using Flunt.Notifications;
+using Stripe;
 
 namespace ClassManager.Domain.Contexts.Tenants.Handlers;
 
@@ -87,6 +88,15 @@ public class CreateTenantHandler :
     {
       return new CommandResult(false, "ERR_ROLE_NOT_FOUND", null, null, 404);
     }
+
+    StripeConfiguration.ApiKey = Configuration.Stripe.ApiKey;
+    var options = new CustomerCreateOptions
+    {
+      Name = tenant.Name,
+      Email = tenant.Email
+    };
+    var service = new CustomerService();
+    service.Create(options);
 
     await _repository.CreateAsync(tenant, new CancellationToken());
 

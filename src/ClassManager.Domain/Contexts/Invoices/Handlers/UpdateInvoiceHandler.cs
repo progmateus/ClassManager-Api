@@ -17,11 +17,9 @@ public class UpdateInvoiceHandler :
   private readonly IAccessControlService _accessControlService;
 
   public UpdateInvoiceHandler(
-    IInvoiceRepository invoiceRepository,
     IAccessControlService accessControlService
     )
   {
-    _invoiceRepository = invoiceRepository;
     _accessControlService = accessControlService;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid invoiceId, UpdateInvoiceCommand command)
@@ -33,6 +31,8 @@ public class UpdateInvoiceHandler :
       AddNotifications(command);
       return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
+
+    throw new NotImplementedException();
 
     if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
     {

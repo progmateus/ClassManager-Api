@@ -9,21 +9,21 @@ using ClassManager.Shared.Handlers;
 
 namespace ClassManager.Domain.Contexts.Invoices.Handlers;
 
-public class DeleteUserInvoiceHandler : ITenantDeleteAction
+public class DeleteInvoiceHandler : ITenantDeleteAction
 {
   private IInvoiceRepository _invoiceRepository;
   private readonly IAccessControlService _accessControlService;
 
-  public DeleteUserInvoiceHandler(
-    IInvoiceRepository invoiceRepository,
+  public DeleteInvoiceHandler(
     IAccessControlService accessControlService
     )
   {
-    _invoiceRepository = invoiceRepository;
     _accessControlService = accessControlService;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid invoiceId)
   {
+
+    throw new NotImplementedException();
 
     if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
     {

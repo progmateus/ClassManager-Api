@@ -11,22 +11,19 @@ using Flunt.Notifications;
 
 namespace ClassManager.Domain.Contexts.Invoices.Handlers;
 
-public class CreateUserInvoiceHandler :
+public class CreateInvoiceHandler :
   Notifiable,
   ITenantHandler<CreateInvoiceCommand>
 {
   private ISubscriptionRepository _subscriptionRepository;
-  private IInvoiceRepository _invoiceRepository;
   private readonly IAccessControlService _accessControlService;
 
-  public CreateUserInvoiceHandler(
+  public CreateInvoiceHandler(
     ISubscriptionRepository subscriptionRepository,
-    IInvoiceRepository invoiceRepository,
     IAccessControlService accessControlService
     )
   {
     _subscriptionRepository = subscriptionRepository;
-    _invoiceRepository = invoiceRepository;
     _accessControlService = accessControlService;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, CreateInvoiceCommand command)
@@ -49,6 +46,8 @@ public class CreateUserInvoiceHandler :
       return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
     }
 
+    throw new NotImplementedException();
+
     var subscription = await _subscriptionRepository.FindAsync(x => x.Id == command.SubscriptionId && x.TenantId == tenantId, [x => x.TenantPlan]);
 
     if (subscription is null)
@@ -69,7 +68,7 @@ public class CreateUserInvoiceHandler :
     var invoice = new Invoice(subscription.UserId, subscription.TenantPlan.Id, subscription.Id, null, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION);
     invoice.SetExpiresDate();
 
-    await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
+    /* await _invoiceRepository.CreateAsync(invoice, new CancellationToken()); */
 
     return new CommandResult(true, "INVOICE_CREATED", subscription, null, 201);
   }
