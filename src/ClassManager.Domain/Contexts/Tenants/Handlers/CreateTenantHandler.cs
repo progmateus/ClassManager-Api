@@ -89,14 +89,16 @@ public class CreateTenantHandler :
       return new CommandResult(false, "ERR_ROLE_NOT_FOUND", null, null, 404);
     }
 
-    StripeConfiguration.ApiKey = Configuration.Stripe.ApiKey;
     var options = new CustomerCreateOptions
     {
       Name = tenant.Name,
-      Email = tenant.Email
+      Email = tenant.Email,
     };
+
     var service = new CustomerService();
-    service.Create(options);
+    var customer = service.Create(options);
+
+    tenant.SetStripeCustomerId(customer.Id);
 
     await _repository.CreateAsync(tenant, new CancellationToken());
 

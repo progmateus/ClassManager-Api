@@ -69,15 +69,21 @@ public class TenantMap : IEntityTypeConfiguration<Tenant>
             .IsRequired();
 
         builder.Property(x => x.Description)
-        .HasColumnName("Description")
-        .HasColumnType("VARCHAR")
-        .HasMaxLength(200)
-        .IsRequired(false);
+            .HasColumnName("Description")
+            .HasColumnType("VARCHAR")
+            .HasMaxLength(200)
+            .IsRequired(false);
 
 
         builder.HasOne(x => x.User)
             .WithMany(u => u.Tenants)
             .HasForeignKey(x => x.UserId)
             .IsRequired(true);
+
+        builder.Property(x => x.StripeCustomerId)
+            .HasColumnName("StripeCustomerId")
+            .HasColumnType("VARCHAR")
+            .HasMaxLength(200)
+            .IsRequired(false);
     }
 }

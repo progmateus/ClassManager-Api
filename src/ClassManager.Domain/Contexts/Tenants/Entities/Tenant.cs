@@ -38,6 +38,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public ETenantStatus Status { get; private set; } = ETenantStatus.ACTIVE;
     public Guid? UserId { get; private set; }
     public Guid? PlanId { get; private set; }
+    public string? StripeCustomerId { get; private set; }
     public DateTime? ExpiresDate { get; private set; }
     public Plan? Plan { get; private set; }
     public User? User { get; private set; }
@@ -64,6 +65,11 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public void UpdateStatus(ETenantStatus status)
     {
       Status = status;
+    }
+
+    public void SetStripeCustomerId(string stripeCustomerId)
+    {
+      StripeCustomerId = stripeCustomerId;
     }
   }
 }
