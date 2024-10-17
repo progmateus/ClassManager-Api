@@ -132,7 +132,9 @@ public class CreateSubscriptionHandler : Notifiable,
       await _userRepository.UpdateAsync(user, default);
     }
 
-    _stripeService.CreateSubscription(tenantId, tenantPlan.StripePriceId, user.StripeCustomerId);
+    var stripeSubscription = _stripeService.CreateSubscription(tenantId, tenantPlan.StripePriceId, user.StripeCustomerId);
+
+    subscription.SetStripeSubscriptionId(stripeSubscription.Id);
 
     await _subscriptionRepository.CreateAsync(subscription, new CancellationToken());
 
