@@ -10,20 +10,17 @@ namespace ClassManager.Domain.Contexts.TimesTabless.Handlers;
 public class GetTimeTableHandler
 {
   private readonly ITimeTableRepository _timeTableRepository;
-  private readonly IScheduleDayRepository _scheduleDayRepository;
   private IAccessControlService _accessControlService;
   private IMapper _mapper;
 
   public GetTimeTableHandler(
     ITimeTableRepository classHourRepository,
     IAccessControlService accessControlService,
-    IScheduleDayRepository scheduleDayRepository,
     IMapper mapper
     )
   {
     _timeTableRepository = classHourRepository;
     _accessControlService = accessControlService;
-    _scheduleDayRepository = scheduleDayRepository;
     _mapper = mapper;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid entityId)
@@ -40,10 +37,6 @@ public class GetTimeTableHandler
     {
       return new CommandResult(false, "ERR_TIME_TABLE_NOT_FOUND", null, null, 404);
     }
-
-    /*     var shchedulesDays = _mapper.Map<List<ScheduleDayViwModel>>(await _scheduleDayRepository.GroupByWeekDay(entityId)); ;
-      timeTable.SchedulesDays = shchedulesDays;
-    */
 
     return new CommandResult(true, "TIME_TABLE_GOTTENNN", timeTable, null, 200);
   }

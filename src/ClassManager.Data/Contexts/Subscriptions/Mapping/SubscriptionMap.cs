@@ -30,8 +30,14 @@ public class SubscriptionMap : IEntityTypeConfiguration<Subscription>
       .HasDefaultValue(ESubscriptionStatus.INACTIVE);
 
     builder.HasOne(e => e.Tenant)
-    .WithMany(t => t.Subscriptions)
-    .HasForeignKey("TenantId")
-    .HasPrincipalKey(t => t.Id);
+      .WithMany(t => t.Subscriptions)
+      .HasForeignKey("TenantId")
+      .HasPrincipalKey(t => t.Id);
+
+    builder.Property(x => x.StripeSubscriptionId)
+      .HasColumnName("StripeSubscriptionId")
+      .HasColumnType("VARCHAR")
+      .HasMaxLength(200)
+      .IsRequired(false);
   }
 }

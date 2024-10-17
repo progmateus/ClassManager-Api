@@ -20,6 +20,7 @@ public class Subscription : TenantEntity
   public Guid UserId { get; private set; }
   public Guid TenantPlanId { get; private set; }
   public ESubscriptionStatus Status { get; private set; }
+  public string? StripeSubscriptionId { get; private set; }
   public User? User { get; private set; }
   public TenantPlan? TenantPlan { get; private set; }
   public Tenant? Tenant { get; private set; }
@@ -37,4 +38,10 @@ public class Subscription : TenantEntity
   {
     Status = status;
   }
+
+  public void SetStripeSubscriptionId(string stripeSubscriptionId)
+  {
+    StripeSubscriptionId = stripeSubscriptionId;
+  }
+
 }
