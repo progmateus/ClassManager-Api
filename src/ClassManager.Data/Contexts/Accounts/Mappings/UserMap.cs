@@ -96,15 +96,21 @@ public class UserMap : IEntityTypeConfiguration<User>
             .IsRequired();
 
         builder.Property(x => x.Username)
-        .HasColumnName("Username")
-        .HasColumnType("VARCHAR")
-        .HasMaxLength(29)
-        .IsRequired();
+            .HasColumnName("Username")
+            .HasColumnType("VARCHAR")
+            .HasMaxLength(29)
+            .IsRequired();
 
         builder.Property(x => x.Phone)
-        .HasColumnName("Phone")
-        .HasColumnType("VARCHAR")
-        .HasMaxLength(20)
-        .IsRequired();
+            .HasColumnName("Phone")
+            .HasColumnType("VARCHAR")
+            .HasMaxLength(20)
+            .IsRequired();
+
+        builder.Property(x => x.StripeCustomerId)
+            .HasColumnName("StripeCustomerId")
+            .HasColumnType("VARCHAR")
+            .HasMaxLength(200)
+            .IsRequired(false);
     }
 }
