@@ -6,6 +6,7 @@ using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Subscriptions.Entities;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
+using ClassManager.Domain.Services;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
@@ -25,6 +26,7 @@ public class CreateSubscriptionHandler : Notifiable,
 
   private ITenantPlanRepository _tenantPlanRepository;
   private readonly IAccessControlService _accessControlService;
+  private readonly IStripeService _stripeService;
 
   public CreateSubscriptionHandler(
     ISubscriptionRepository subscriptionRepository,
@@ -33,7 +35,8 @@ public class CreateSubscriptionHandler : Notifiable,
     IStudentsClassesRepository studentsClassesRepository,
     IClassRepository classRepository,
     ITenantPlanRepository tenantPlanrepository,
-    IAccessControlService accessControlService
+    IAccessControlService accessControlService,
+    IStripeService stripeService
 
   )
   {
@@ -44,6 +47,7 @@ public class CreateSubscriptionHandler : Notifiable,
     _classRepository = classRepository;
     _tenantPlanRepository = tenantPlanrepository;
     _accessControlService = accessControlService;
+    _stripeService = stripeService;
 
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, CreateSubscriptionCommand command)
@@ -89,9 +93,9 @@ public class CreateSubscriptionHandler : Notifiable,
       return new CommandResult(false, "ERR_CLASS_NOT_FOUND", null, null, 404);
     }
 
-    var tenantPlan = await _tenantPlanRepository.IdExistsAsync(command.TenantPlanId, new CancellationToken());
+    var tenantPlan = await _tenantPlanRepository.FindAsync(x => x.TenantId == tenantId && x.Id == command.TenantPlanId, [x => x.Tenant]);
 
-    if (!tenantPlan)
+    if (tenantPlan is null)
     {
       return new CommandResult(false, "ERR_PLAN_NOT_FOUND", null, null, 404);
     }
@@ -108,6 +112,8 @@ public class CreateSubscriptionHandler : Notifiable,
     DateTime lastDayOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month));
 
     var subscription = new Subscription(userId, command.TenantPlanId, tenantId, lastDayOfMonth);
+
+    _stripeService.CreateSubscription(tenantId, tenantPlan.StripePriceId, tenantPlan.Tenant.StripeCustomerId);
 
     await _subscriptionRepository.CreateAsync(subscription, new CancellationToken());
 

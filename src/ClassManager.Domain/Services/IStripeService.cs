@@ -7,7 +7,7 @@ namespace ClassManager.Domain.Services
   public interface IStripeService
   {
     Product CreateProduct(Guid entityId, string ownerType, string name, Guid? tenantId);
-    Subscription CreateSubscription(Guid tenantId, Guid stripePriceId, Guid stripeCustomerId);
+    Subscription CreateSubscription(Guid tenantId, string stripePriceId, string stripeCustomerId);
     Customer CreateCustomer(Tenant tenant);
     Price CreatePrice(Guid productEntityId, Guid? tenantId, string stripeProductId, decimal priceInCents);
   }

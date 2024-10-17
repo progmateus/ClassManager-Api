@@ -60,17 +60,17 @@ public class StripeService : IStripeService
     return service.Create(options);
   }
 
-  public Subscription CreateSubscription(Guid tenantId, Guid stripePriceId, Guid stripeCustomerId)
+  public Subscription CreateSubscription(Guid tenantId, string stripePriceId, string stripeCustomerId)
   {
     var options = new SubscriptionCreateOptions
     {
-      Customer = stripeCustomerId.ToString(),
+      Customer = stripeCustomerId,
       Currency = "brl",
       OffSession = true,
       PaymentBehavior = "default_incomplete",
       Items = new List<SubscriptionItemOptions>
       {
-          new SubscriptionItemOptions { Price = stripePriceId.ToString() },
+          new SubscriptionItemOptions { Price = stripePriceId },
       },
       Metadata = new Dictionary<string, string>
       {
