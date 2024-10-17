@@ -33,9 +33,10 @@ public class CreatePlandHandler : Notifiable, IHandler<PlanCommand>
     var plan = new Plan(command.Name, command.Description, command.StudentsLimit, command.ClassesLimit, command.Price);
 
     var stripeProduct = _stripeService.CreateProduct(plan.Id, "application", plan.Name, null);
-    _stripeService.CreatePrice(plan.Id, null, stripeProduct.Id, plan.Price * 100);
+    var stripePrice = _stripeService.CreatePrice(plan.Id, null, stripeProduct.Id, plan.Price * 100);
 
     plan.SetStripeProductId(stripeProduct.Id);
+    plan.SetStripePriceId(stripePrice.Id);
 
     await _planRepository.CreateAsync(plan, new CancellationToken());
 
