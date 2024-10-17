@@ -25,7 +25,7 @@ public class Plan : Entity
   public int ClassesLimit { get; private set; }
   public decimal Price { get; private set; }
   public string? StripeProductId { get; private set; }
-
+  public string? StripePriceId { get; private set; }
   public List<Tenant> Tenants { get; private set; } = [];
   public IList<Invoice> Invoices { get; private set; } = [];
   public DateTime CreatedAt { get; private set; }
@@ -43,5 +43,10 @@ public class Plan : Entity
   public void SetStripeProductId(string stripeCustomerId)
   {
     StripeProductId = stripeCustomerId;
+  }
+
+  public void SetStripePriceId(string stripePriceId)
+  {
+    StripePriceId = stripePriceId;
   }
 }
