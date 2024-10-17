@@ -13,12 +13,12 @@ public class StripeService : IStripeService
   {
     StripeConfiguration.ApiKey = Configuration.Stripe.ApiKey;
   }
-  public Customer CreateCustomer(Tenant tenant)
+  public Customer CreateCustomer(string name, string email)
   {
     var options = new CustomerCreateOptions
     {
-      Name = tenant.Name,
-      Email = tenant.Email,
+      Name = name,
+      Email = email,
     };
 
     var service = new CustomerService();

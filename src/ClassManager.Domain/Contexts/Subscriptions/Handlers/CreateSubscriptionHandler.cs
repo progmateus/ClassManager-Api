@@ -1,3 +1,4 @@
+using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Roles.Commands;
@@ -12,6 +13,7 @@ using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ClassManager.Domain.Contexts.Subscriptions.Handlers;
 
@@ -27,6 +29,7 @@ public class CreateSubscriptionHandler : Notifiable,
   private ITenantPlanRepository _tenantPlanRepository;
   private readonly IAccessControlService _accessControlService;
   private readonly IStripeService _stripeService;
+  private readonly IUserRepository _userRepository;
 
   public CreateSubscriptionHandler(
     ISubscriptionRepository subscriptionRepository,
@@ -36,7 +39,8 @@ public class CreateSubscriptionHandler : Notifiable,
     IClassRepository classRepository,
     ITenantPlanRepository tenantPlanrepository,
     IAccessControlService accessControlService,
-    IStripeService stripeService
+    IStripeService stripeService,
+    IUserRepository userRepository
 
   )
   {
@@ -48,6 +52,7 @@ public class CreateSubscriptionHandler : Notifiable,
     _tenantPlanRepository = tenantPlanrepository;
     _accessControlService = accessControlService;
     _stripeService = stripeService;
+    _userRepository = userRepository;
 
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, CreateSubscriptionCommand command)
@@ -113,7 +118,21 @@ public class CreateSubscriptionHandler : Notifiable,
 
     var subscription = new Subscription(userId, command.TenantPlanId, tenantId, lastDayOfMonth);
 
-    _stripeService.CreateSubscription(tenantId, tenantPlan.StripePriceId, tenantPlan.Tenant.StripeCustomerId);
+    var user = await _userRepository.GetByIdAsync(userId, default);
+
+    if (user is null)
+    {
+      return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null, 404);
+    }
+
+    if (user.StripeCustomerId.IsNullOrEmpty())
+    {
+      var stripeCustomer = _stripeService.CreateCustomer(user.Name.ToString(), user.Email.ToString());
+      user.SetStripeCustomerId(stripeCustomer.Id);
+      await _userRepository.UpdateAsync(user, default);
+    }
+
+    _stripeService.CreateSubscription(tenantId, tenantPlan.StripePriceId, user.StripeCustomerId);
 
     await _subscriptionRepository.CreateAsync(subscription, new CancellationToken());
 
