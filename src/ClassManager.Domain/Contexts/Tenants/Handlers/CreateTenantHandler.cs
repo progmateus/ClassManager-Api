@@ -93,7 +93,7 @@ public class CreateTenantHandler :
       return new CommandResult(false, "ERR_ROLE_NOT_FOUND", null, null, 404);
     }
 
-    var stripeCustomer = _stripeService.CreateCustomer(tenant);
+    var stripeCustomer = _stripeService.CreateCustomer(tenant.Name, tenant.Email);
 
     tenant.SetStripeCustomerId(stripeCustomer.Id);
 
