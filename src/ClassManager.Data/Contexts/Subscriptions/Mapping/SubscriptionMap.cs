@@ -27,7 +27,7 @@ public class SubscriptionMap : IEntityTypeConfiguration<Subscription>
     builder.Property(e => e.Status)
       .HasColumnType("TINYINT")
       .IsRequired(true)
-      .HasDefaultValue(ESubscriptionStatus.INACTIVE);
+      .HasDefaultValue(ESubscriptionStatus.INCOMPLETE);
 
     builder.HasOne(e => e.Tenant)
       .WithMany(t => t.Subscriptions)

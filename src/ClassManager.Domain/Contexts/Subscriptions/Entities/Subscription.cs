@@ -19,7 +19,7 @@ public class Subscription : TenantEntity
 
   public Guid UserId { get; private set; }
   public Guid TenantPlanId { get; private set; }
-  public ESubscriptionStatus Status { get; private set; }
+  public ESubscriptionStatus Status { get; private set; } = ESubscriptionStatus.INCOMPLETE;
   public string? StripeSubscriptionId { get; private set; }
   public User? User { get; private set; }
   public TenantPlan? TenantPlan { get; private set; }
