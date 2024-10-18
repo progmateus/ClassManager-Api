@@ -1,9 +1,12 @@
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Invoices.Entities;
+using ClassManager.Domain.Contexts.Invoices.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Roles.Commands;
 using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Entities;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
@@ -30,6 +33,7 @@ public class CreateSubscriptionHandler : Notifiable,
   private readonly IAccessControlService _accessControlService;
   private readonly IStripeService _stripeService;
   private readonly IUserRepository _userRepository;
+  private readonly IInvoiceRepository _invoiceRepository;
 
   public CreateSubscriptionHandler(
     ISubscriptionRepository subscriptionRepository,
@@ -40,7 +44,8 @@ public class CreateSubscriptionHandler : Notifiable,
     ITenantPlanRepository tenantPlanrepository,
     IAccessControlService accessControlService,
     IStripeService stripeService,
-    IUserRepository userRepository
+    IUserRepository userRepository,
+    IInvoiceRepository invoiceRepository
 
   )
   {
@@ -53,6 +58,7 @@ public class CreateSubscriptionHandler : Notifiable,
     _accessControlService = accessControlService;
     _stripeService = stripeService;
     _userRepository = userRepository;
+    _invoiceRepository = invoiceRepository;
 
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, CreateSubscriptionCommand command)
@@ -118,6 +124,8 @@ public class CreateSubscriptionHandler : Notifiable,
 
     var subscription = new Subscription(userId, command.TenantPlanId, tenantId, lastDayOfMonth);
 
+    var invoice = new Invoice(userId, tenantPlan.Id, subscription.Id, null, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION);
+
     var user = await _userRepository.GetByIdAsync(userId, default);
 
     if (user is null)
@@ -134,11 +142,13 @@ public class CreateSubscriptionHandler : Notifiable,
 
     var stripeSubscription = _stripeService.CreateSubscription(tenantId, tenantPlan.StripePriceId, user.StripeCustomerId);
 
-    _stripeService.CreateInvoice(tenantId, user.StripeCustomerId, stripeSubscription.Id);
+    var stripeInvoice = _stripeService.CreateInvoice(tenantId, user.StripeCustomerId, stripeSubscription.Id);
 
     subscription.SetStripeSubscriptionId(stripeSubscription.Id);
+    invoice.SetStripeInvoiceId(stripeInvoice.Id);
 
     await _subscriptionRepository.CreateAsync(subscription, new CancellationToken());
+    await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
 
     var studentclass = new StudentsClasses(userId, command.ClassId);
 
