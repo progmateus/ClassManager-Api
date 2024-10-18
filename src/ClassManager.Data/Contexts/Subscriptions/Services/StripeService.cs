@@ -1,6 +1,4 @@
 using ClassManager.Domain;
-using ClassManager.Domain.Contexts.Accounts.Entities;
-using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Services;
 using Stripe;
 
@@ -22,6 +20,20 @@ public class StripeService : IStripeService
     };
 
     var service = new CustomerService();
+    return service.Create(options);
+  }
+
+  public Invoice CreateInvoice(Guid tenantId, string stripeCustomerId, string stripeSubscriptionId)
+  {
+    var options = new InvoiceCreateOptions
+    {
+      Customer = stripeCustomerId,
+      Metadata = new Dictionary<string, string>
+      {
+        { "tenantId", tenantId.ToString() },
+      }
+    };
+    var service = new InvoiceService();
     return service.Create(options);
   }
 
