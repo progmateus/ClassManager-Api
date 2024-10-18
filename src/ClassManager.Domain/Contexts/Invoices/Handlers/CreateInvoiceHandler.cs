@@ -67,7 +67,6 @@ public class CreateInvoiceHandler :
     }
 
     var invoice = new Invoice(subscription.UserId, subscription.TenantPlan.Id, subscription.Id, null, subscription.TenantPlan.TenantId, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION);
-    invoice.SetExpiresDate();
 
     await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
 

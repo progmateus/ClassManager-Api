@@ -125,7 +125,6 @@ public class CreateSubscriptionHandler : Notifiable,
     var subscription = new Subscription(userId, command.TenantPlanId, tenantId, lastDayOfMonth);
 
     var invoice = new Invoice(userId, tenantPlan.Id, subscription.Id, null, tenantPlan.TenantId, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION);
-    invoice.SetExpiresDate();
 
     var user = await _userRepository.GetByIdAsync(userId, default);
 

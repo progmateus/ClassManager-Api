@@ -17,6 +17,7 @@ public class Invoice : TenantEntity
     TargetType = targetType;
     Type = type;
     TenantId = tenantId;
+    ExpiresAt = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month));
   }
 
   protected Invoice() { }
