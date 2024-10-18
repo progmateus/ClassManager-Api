@@ -66,7 +66,7 @@ public class CreateInvoiceHandler :
       return new CommandResult(false, "ERR_TENANT_PLAN_NOT_FOUND", null, null, 404);
     }
 
-    var invoice = new Invoice(subscription.UserId, subscription.TenantPlan.Id, subscription.Id, null, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION);
+    var invoice = new Invoice(subscription.UserId, subscription.TenantPlan.Id, subscription.Id, null, subscription.TenantPlan.TenantId, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION);
     invoice.SetExpiresDate();
 
     await _invoiceRepository.CreateAsync(invoice, new CancellationToken());

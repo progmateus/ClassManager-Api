@@ -8,7 +8,7 @@ using ClassManager.Domain.Shared.Entities;
 namespace ClassManager.Domain.Contexts.Invoices.Entities;
 public class Invoice : TenantEntity
 {
-  public Invoice(Guid userId, Guid? tenantPlanId, Guid? subscriptionId, Guid? planId, EInvoiceTargetType targetType, EInvoiceType type)
+  public Invoice(Guid userId, Guid? tenantPlanId, Guid? subscriptionId, Guid? planId, Guid tenantId, EInvoiceTargetType targetType, EInvoiceType type)
   {
     UserId = userId;
     TenantPlanId = tenantPlanId;
@@ -16,6 +16,7 @@ public class Invoice : TenantEntity
     PlanId = planId;
     TargetType = targetType;
     Type = type;
+    TenantId = tenantId;
   }
 
   protected Invoice() { }
@@ -29,7 +30,6 @@ public class Invoice : TenantEntity
   public EInvoiceTargetType TargetType { get; private set; } = EInvoiceTargetType.USER;
   public EInvoiceType Type { get; private set; } = EInvoiceType.USER_SUBSCRIPTION;
   public string? StripeInvoiceId { get; private set; }
-
   public DateTime ExpiresAt { get; private set; }
   public User? User { get; private set; }
   public TenantPlan? TenantPlan { get; private set; }
