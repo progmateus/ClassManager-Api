@@ -5,5 +5,6 @@ namespace ClassManager.Domain.Contexts.Shared.Enums
     INACTIVE = 1,
     CANCELED = 2,
     ACTIVE = 3,
+    INCOMPLETE = 4,
   }
 }
