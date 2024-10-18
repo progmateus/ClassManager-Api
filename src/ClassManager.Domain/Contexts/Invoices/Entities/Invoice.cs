@@ -28,6 +28,8 @@ public class Invoice : TenantEntity
   public EInvoiceStatus Status { get; private set; } = EInvoiceStatus.PENDING;
   public EInvoiceTargetType TargetType { get; private set; } = EInvoiceTargetType.USER;
   public EInvoiceType Type { get; private set; } = EInvoiceType.USER_SUBSCRIPTION;
+  public string? StripeInvoiceId { get; private set; }
+
   public DateTime ExpiresAt { get; private set; }
   public User? User { get; private set; }
   public TenantPlan? TenantPlan { get; private set; }
@@ -45,5 +47,9 @@ public class Invoice : TenantEntity
   public void UpdateStatus(EInvoiceStatus status)
   {
     Status = status;
+  }
+  public void SetStripeInvoiceId(string stripeInvoiceId)
+  {
+    StripeInvoiceId = stripeInvoiceId;
   }
 }

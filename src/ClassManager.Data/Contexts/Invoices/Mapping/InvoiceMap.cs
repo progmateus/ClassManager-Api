@@ -62,5 +62,11 @@ public class InvoiceMap : IEntityTypeConfiguration<Invoice>
       .HasColumnName("ExpiresAt")
       .HasColumnType("DATETIME")
       .IsRequired();
+
+    builder.Property(x => x.StripeInvoiceId)
+      .HasColumnName("StripeInvoiceId")
+      .HasColumnType("VARCHAR")
+      .HasMaxLength(200)
+      .IsRequired(false);
   }
 }
