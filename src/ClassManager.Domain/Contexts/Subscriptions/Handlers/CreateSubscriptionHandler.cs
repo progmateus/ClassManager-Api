@@ -145,7 +145,7 @@ public class CreateSubscriptionHandler : Notifiable,
     var stripeInvoice = _stripeService.CreateInvoice(tenantId, user.StripeCustomerId, stripeSubscription.Id);
 
     subscription.SetStripeSubscriptionId(stripeSubscription.Id);
-    invoice.SetStripeInvoiceId(stripeInvoice.Id);
+    invoice.SetStripeInformations(stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl);
 
     await _subscriptionRepository.CreateAsync(subscription, new CancellationToken());
     await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
