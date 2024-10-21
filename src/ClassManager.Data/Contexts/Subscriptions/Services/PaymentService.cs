@@ -4,10 +4,10 @@ using Stripe;
 
 namespace ClassManager.Data.Contexts.Tenants.Services;
 
-public class StripeService : IStripeService
+public class PaymentService : IPaymentService
 {
 
-  public StripeService()
+  public PaymentService()
   {
     StripeConfiguration.ApiKey = Configuration.Stripe.ApiKey;
   }
@@ -31,6 +31,10 @@ public class StripeService : IStripeService
       Metadata = new Dictionary<string, string>
       {
         { "tenantId", tenantId.ToString() },
+      },
+      PaymentSettings = new InvoicePaymentSettingsOptions
+      {
+        PaymentMethodTypes = ["card", "boleto", "pix"]
       }
     };
     var service = new InvoiceService();

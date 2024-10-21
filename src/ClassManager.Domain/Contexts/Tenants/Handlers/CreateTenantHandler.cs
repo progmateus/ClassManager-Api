@@ -24,7 +24,7 @@ public class CreateTenantHandler :
   private readonly IUserRepository _usersRepository;
   private readonly IRoleRepository _roleRepository;
   private readonly IUsersRolesRepository _usersRolesRepository;
-  private readonly IStripeService _stripeService;
+  private readonly IPaymentService _paymentService;
   private readonly IMapper _mapper;
 
   public CreateTenantHandler(
@@ -32,7 +32,7 @@ public class CreateTenantHandler :
     IUserRepository usersRepository,
     IRoleRepository roleRepository,
     IUsersRolesRepository usersRolesRepository,
-    IStripeService stripeService,
+    IPaymentService paymentService,
     IMapper mapper
 
     )
@@ -41,7 +41,7 @@ public class CreateTenantHandler :
     _usersRepository = usersRepository;
     _roleRepository = roleRepository;
     _usersRolesRepository = usersRolesRepository;
-    _stripeService = stripeService;
+    _paymentService = paymentService;
     _mapper = mapper;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, CreateTenantCommand command)
@@ -93,7 +93,7 @@ public class CreateTenantHandler :
       return new CommandResult(false, "ERR_ROLE_NOT_FOUND", null, null, 404);
     }
 
-    var stripeCustomer = _stripeService.CreateCustomer(tenant.Name, tenant.Email);
+    var stripeCustomer = _paymentService.CreateCustomer(tenant.Name, tenant.Email);
 
     tenant.SetStripeCustomerId(stripeCustomer.Id);
 

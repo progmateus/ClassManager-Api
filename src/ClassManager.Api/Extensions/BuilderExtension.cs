@@ -251,8 +251,8 @@ public static class BuilderExtension
     InvoiceRepository>();
 
     builder.Services.AddTransient<
-    IStripeService,
-    StripeService>();
+    IPaymentService,
+    PaymentService>();
 
     builder.Services.AddTransient<TokenService>();
 

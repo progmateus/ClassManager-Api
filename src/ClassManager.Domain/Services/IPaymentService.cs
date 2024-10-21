@@ -2,7 +2,7 @@ using Stripe;
 
 namespace ClassManager.Domain.Services
 {
-  public interface IStripeService
+  public interface IPaymentService
   {
     Product CreateProduct(Guid entityId, string ownerType, string name, Guid? tenantId);
     Subscription CreateSubscription(Guid tenantId, string stripePriceId, string stripeCustomerId);

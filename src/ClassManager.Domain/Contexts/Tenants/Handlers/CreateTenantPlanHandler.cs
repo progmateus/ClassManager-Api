@@ -16,18 +16,18 @@ public class CreateTenantPlanHandler :
 {
   private readonly ITenantPlanRepository _tenantPlanRepository;
   private readonly IAccessControlService _accessControlService;
-  private readonly IStripeService _stripeService;
+  private readonly IPaymentService _paymentService;
 
   public CreateTenantPlanHandler(
     ITenantPlanRepository tenantPlanRepository,
     IAccessControlService accessControlService,
-    IStripeService stripeService
+    IPaymentService paymentService
 
     )
   {
     _tenantPlanRepository = tenantPlanRepository;
     _accessControlService = accessControlService;
-    _stripeService = stripeService;
+    _paymentService = paymentService;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, TenantPlanCommand command)
   {
@@ -61,9 +61,9 @@ public class CreateTenantPlanHandler :
       return new CommandResult(false, "ERR_VALIDATION", null, null, 400);
     }
 
-    var stripeProduct = _stripeService.CreateProduct(tenantPlan.Id, "tenant", tenantPlan.Name, tenantId);
+    var stripeProduct = _paymentService.CreateProduct(tenantPlan.Id, "tenant", tenantPlan.Name, tenantId);
 
-    var stripePrice = _stripeService.CreatePrice(tenantPlan.Id, tenantId, stripeProduct.Id, tenantPlan.Price * 100);
+    var stripePrice = _paymentService.CreatePrice(tenantPlan.Id, tenantId, stripeProduct.Id, tenantPlan.Price * 100);
 
     tenantPlan.SetStripeProductId(stripeProduct.Id);
     tenantPlan.SetStripePriceId(stripePrice.Id);

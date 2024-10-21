@@ -31,7 +31,7 @@ public class CreateSubscriptionHandler : Notifiable,
 
   private ITenantPlanRepository _tenantPlanRepository;
   private readonly IAccessControlService _accessControlService;
-  private readonly IStripeService _stripeService;
+  private readonly IPaymentService _paymentService;
   private readonly IUserRepository _userRepository;
   private readonly IInvoiceRepository _invoiceRepository;
 
@@ -43,7 +43,7 @@ public class CreateSubscriptionHandler : Notifiable,
     IClassRepository classRepository,
     ITenantPlanRepository tenantPlanrepository,
     IAccessControlService accessControlService,
-    IStripeService stripeService,
+    IPaymentService paymentService,
     IUserRepository userRepository,
     IInvoiceRepository invoiceRepository
 
@@ -56,7 +56,7 @@ public class CreateSubscriptionHandler : Notifiable,
     _classRepository = classRepository;
     _tenantPlanRepository = tenantPlanrepository;
     _accessControlService = accessControlService;
-    _stripeService = stripeService;
+    _paymentService = paymentService;
     _userRepository = userRepository;
     _invoiceRepository = invoiceRepository;
 
@@ -135,14 +135,14 @@ public class CreateSubscriptionHandler : Notifiable,
 
     if (user.StripeCustomerId.IsNullOrEmpty())
     {
-      var stripeCustomer = _stripeService.CreateCustomer(user.Name.ToString(), user.Email.ToString());
+      var stripeCustomer = _paymentService.CreateCustomer(user.Name.ToString(), user.Email.ToString());
       user.SetStripeCustomerId(stripeCustomer.Id);
       await _userRepository.UpdateAsync(user, default);
     }
 
-    var stripeSubscription = _stripeService.CreateSubscription(tenantId, tenantPlan.StripePriceId, user.StripeCustomerId);
+    var stripeSubscription = _paymentService.CreateSubscription(tenantId, tenantPlan.StripePriceId, user.StripeCustomerId);
 
-    var stripeInvoice = _stripeService.CreateInvoice(tenantId, user.StripeCustomerId, stripeSubscription.Id);
+    var stripeInvoice = _paymentService.CreateInvoice(tenantId, user.StripeCustomerId, stripeSubscription.Id);
 
     subscription.SetStripeSubscriptionId(stripeSubscription.Id);
     invoice.SetStripeInformations(stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl);

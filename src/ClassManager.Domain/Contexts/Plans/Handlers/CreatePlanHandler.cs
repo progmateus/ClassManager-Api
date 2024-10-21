@@ -12,14 +12,14 @@ namespace ClassManager.Domain.Contexts.Plans.Handlers;
 public class CreatePlandHandler : Notifiable, IHandler<PlanCommand>
 {
   private readonly IPlanRepository _planRepository;
-  private readonly IStripeService _stripeService;
+  private readonly IPaymentService _paymentService;
   public CreatePlandHandler(
     IPlanRepository planRepository,
-    IStripeService stripeService
+    IPaymentService paymentService
     )
   {
     _planRepository = planRepository;
-    _stripeService = stripeService;
+    _paymentService = paymentService;
   }
   public async Task<ICommandResult> Handle(PlanCommand command)
   {
@@ -32,8 +32,8 @@ public class CreatePlandHandler : Notifiable, IHandler<PlanCommand>
 
     var plan = new Plan(command.Name, command.Description, command.StudentsLimit, command.ClassesLimit, command.Price);
 
-    var stripeProduct = _stripeService.CreateProduct(plan.Id, "application", plan.Name, null);
-    var stripePrice = _stripeService.CreatePrice(plan.Id, null, stripeProduct.Id, plan.Price * 100);
+    var stripeProduct = _paymentService.CreateProduct(plan.Id, "application", plan.Name, null);
+    var stripePrice = _paymentService.CreatePrice(plan.Id, null, stripeProduct.Id, plan.Price * 100);
 
     plan.SetStripeProductId(stripeProduct.Id);
     plan.SetStripePriceId(stripePrice.Id);
