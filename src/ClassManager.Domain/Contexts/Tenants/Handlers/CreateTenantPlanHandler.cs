@@ -65,8 +65,7 @@ public class CreateTenantPlanHandler :
 
     var stripePrice = _paymentService.CreatePrice(tenantPlan.Id, tenantId, stripeProduct.Id, tenantPlan.Price * 100);
 
-    tenantPlan.SetStripeProductId(stripeProduct.Id);
-    tenantPlan.SetStripePriceId(stripePrice.Id);
+    tenantPlan.SetStripeInformations(stripePrice.Id, stripeProduct.Id);
 
     await _tenantPlanRepository.CreateAsync(tenantPlan, new CancellationToken());
 

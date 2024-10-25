@@ -46,14 +46,10 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
       Price = price;
     }
 
-    public void SetStripeProductId(string stripeCustomerId)
-    {
-      StripeProductId = stripeCustomerId;
-    }
-
-    public void SetStripePriceId(string stripePriceId)
+    public void SetStripeInformations(string stripePriceId, string stripeCustomerId)
     {
       StripePriceId = stripePriceId;
+      StripeProductId = stripeCustomerId;
     }
   }
 }

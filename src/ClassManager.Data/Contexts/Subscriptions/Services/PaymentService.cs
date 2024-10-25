@@ -64,12 +64,12 @@ public class PaymentService : IPaymentService
   {
     var options = new ProductCreateOptions
     {
-      Id = entityId.ToString(),
       Name = name,
       Metadata = new Dictionary<string, string>
       {
         { "tenantId", tenantId.ToString() ?? "" },
-        { "ownerType", ownerType }
+        { "ownerType", ownerType },
+        { "databaseId", entityId.ToString() }
       }
     };
     var service = new ProductService();

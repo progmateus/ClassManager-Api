@@ -125,10 +125,6 @@ public class CreateSubscriptionHandler : Notifiable,
 
     DateTime lastDayOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month));
 
-    var subscription = new Subscription(userId, command.TenantPlanId, tenantId, lastDayOfMonth);
-
-    var invoice = new Invoice(userId, tenantPlan.Id, subscription.Id, null, tenantPlan.TenantId, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION);
-
     var user = await _userRepository.GetByIdAsync(userId, default);
 
     if (user is null)
@@ -146,11 +142,14 @@ public class CreateSubscriptionHandler : Notifiable,
       await _userRepository.UpdateAsync(user, default);
     }
 
-    var stripeSubscription = _paymentService.CreateSubscription(tenantId, tenantPlan.StripePriceId, stripeCustomerEntity.StripeCustomerId);
+    var stripeSubscriptionCreated = _paymentService.CreateSubscription(tenantId, tenantPlan.StripePriceId, stripeCustomerEntity.StripeCustomerId);
 
-    var stripeInvoice = _paymentService.CreateInvoice(tenantId, stripeCustomerEntity.StripeCustomerId, stripeSubscription.Id);
+    var stripeInvoice = _paymentService.CreateInvoice(tenantId, stripeCustomerEntity.StripeCustomerId, stripeSubscriptionCreated.Id);
 
-    subscription.SetStripeSubscriptionId(stripeSubscription.Id);
+    var subscription = new Subscription(userId, command.TenantPlanId, tenantId, stripeSubscriptionCreated.Id, lastDayOfMonth);
+
+    var invoice = new Invoice(userId, tenantPlan.Id, subscription.Id, null, tenantPlan.TenantId, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION);
+
     invoice.SetStripeInformations(stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl);
 
     await _subscriptionRepository.CreateAsync(subscription, new CancellationToken());

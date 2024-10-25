@@ -8,13 +8,14 @@ namespace ClassManager.Domain.Contexts.Subscriptions.Entities;
 public class Subscription : TenantEntity
 {
   protected Subscription() { }
-  public Subscription(Guid userId, Guid planId, Guid tenantId, DateTime expiresDate)
+  public Subscription(Guid userId, Guid planId, Guid tenantId, string stripeSubscriptionId, DateTime expiresDate)
   {
     UserId = userId;
     TenantId = tenantId;
     TenantPlanId = planId;
     Status = ESubscriptionStatus.ACTIVE;
     ExpiresDate = expiresDate;
+    StripeSubscriptionId = stripeSubscriptionId;
   }
 
   public Guid UserId { get; private set; }
@@ -38,10 +39,4 @@ public class Subscription : TenantEntity
   {
     Status = status;
   }
-
-  public void SetStripeSubscriptionId(string stripeSubscriptionId)
-  {
-    StripeSubscriptionId = stripeSubscriptionId;
-  }
-
 }
