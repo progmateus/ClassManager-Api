@@ -39,6 +39,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public Guid? UserId { get; private set; }
     public Guid? PlanId { get; private set; }
     public string? StripeAccountId { get; private set; }
+    public string? StripeCustomerId { get; private set; }
     public DateTime? ExpiresDate { get; private set; }
     public Plan? Plan { get; private set; }
     public User? User { get; private set; }
@@ -68,9 +69,10 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
       Status = status;
     }
 
-    public void SetStripeAccountId(string stripeAccountId)
+    public void SetStripeInformations(string stripeAccountId, string stripeCustomerId)
     {
       StripeAccountId = stripeAccountId;
+      StripeCustomerId = stripeCustomerId;
     }
   }
 }
