@@ -110,17 +110,19 @@ public class CreateTenantHandler :
     tenant.SetStripeInformations(stripeCreatedAccount.Id, stripeCreatedCustomer.Id, stripeSubscription.Id);
 
     await _repository.CreateAsync(tenant, new CancellationToken());
+    _paymentService.CreateWebhook(tenant.StripeAccountId);
 
-    var userRole = new UsersRoles(loggedUserId, role.Id, tenant.Id);
 
-    await _usersRolesRepository.CreateAsync(userRole, new CancellationToken());
+    /* var userRole = new UsersRoles(loggedUserId, role.Id, tenant.Id);
+
+    await _usersRolesRepository.CreateAsync(userRole, new CancellationToken()); */
 
     var tenantCreated = _mapper.Map<TenantViewModel>(await _repository.FindAsync(x => x.Id == tenant.Id, [x => x.UsersRoles]));
 
-    if (tenantCreated.UsersRoles.Count > 0)
+    /* if (tenantCreated.UsersRoles.Count > 0)
     {
       tenantCreated.UsersRoles[0].Role = _mapper.Map<RoleViewModel>(role);
-    }
+    } */
 
     return new CommandResult(true, "TENANT_CREATED", tenantCreated, null, 201);
   }
