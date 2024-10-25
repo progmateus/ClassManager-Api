@@ -10,6 +10,6 @@ namespace ClassManager.Domain.Services
     Price CreatePrice(Guid productEntityId, Guid? tenantId, string stripeProductId, decimal priceInCents, string? connectedAccountId);
     Invoice CreateInvoice(Guid tenantId, string stripeCustomerId, string stripeSubscriptionId, string? connectedAccountId);
     Account CreateAccount(Guid tenantId, string tenantEmail);
-    void CreateWebhook(string? connectedAccountId);
+    void CreateWebhook();
   }
 }

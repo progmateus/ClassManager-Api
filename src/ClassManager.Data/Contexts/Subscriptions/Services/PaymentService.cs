@@ -141,13 +141,8 @@ public class PaymentService : IPaymentService
     return service.Create(options, requestOptions);
   }
 
-  public void CreateWebhook(string? connectedAccountId)
+  public void CreateWebhook()
   {
-    var requestOptions = new RequestOptions
-    {
-      StripeAccount = connectedAccountId ?? null,
-    };
-
     var options = new WebhookEndpointCreateOptions
     {
       EnabledEvents = new List<string> {
@@ -156,16 +151,19 @@ public class PaymentService : IPaymentService
         "payment_intent.succeeded",
         "payment_intent.canceled",
         "payment_intent.payment_failed",
+        "invoice.created",
         "invoice.payment_succeeded",
         "invoice.payment_failed",
         "invoice.paid",
         "invoice.finalized",
-        "identity.verification_session.verified"
+        "identity.verification_session.verified",
+        "customer.created"
       },
       Url = $"{Configuration.BaseUrl}/webhooks/stripe",
+      Connect = true
     };
     var service = new WebhookEndpointService();
-    service.Create(options, requestOptions);
+    service.Create(options);
   }
 
   public void RequestUsingConnectedAccount()

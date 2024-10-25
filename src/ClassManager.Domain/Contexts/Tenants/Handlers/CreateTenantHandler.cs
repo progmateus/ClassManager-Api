@@ -105,12 +105,12 @@ public class CreateTenantHandler :
 
     var stripeCreatedAccount = _paymentService.CreateAccount(tenant.Id, tenant.Email);
     var stripeCreatedCustomer = _paymentService.CreateCustomer(tenant.Name, tenant.Email, null);
-    var stripeSubscription = _paymentService.CreateSubscription(null, tenantPlan.StripePriceId, tenant.StripeCustomerId, null);
+    var stripeSubscription = _paymentService.CreateSubscription(null, tenantPlan.StripePriceId, stripeCreatedCustomer.Id, null);
 
     tenant.SetStripeInformations(stripeCreatedAccount.Id, stripeCreatedCustomer.Id, stripeSubscription.Id);
 
     await _repository.CreateAsync(tenant, new CancellationToken());
-    _paymentService.CreateWebhook(tenant.StripeAccountId);
+    /*  _paymentService.CreateWebhook(tenant.StripeAccountId); */
 
 
     /* var userRole = new UsersRoles(loggedUserId, role.Id, tenant.Id);
