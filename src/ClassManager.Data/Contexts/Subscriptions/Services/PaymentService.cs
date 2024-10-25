@@ -151,7 +151,7 @@ public class PaymentService : IPaymentService
     var options = new WebhookEndpointCreateOptions
     {
       EnabledEvents = new List<string> { "charge.succeeded", "charge.failed" },
-      Url = $"{Configuration.BaseUrl}/webhooks",
+      Url = $"{Configuration.BaseUrl}/webhooks/stripe",
     };
     var service = new WebhookEndpointService();
     service.Create(options, requestOptions);
