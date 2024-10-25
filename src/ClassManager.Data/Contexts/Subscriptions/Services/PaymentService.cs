@@ -150,7 +150,18 @@ public class PaymentService : IPaymentService
 
     var options = new WebhookEndpointCreateOptions
     {
-      EnabledEvents = new List<string> { "charge.succeeded", "charge.failed" },
+      EnabledEvents = new List<string> {
+        "charge.succeeded",
+        "charge.failed",
+        "payment_intent.succeeded",
+        "payment_intent.canceled",
+        "payment_intent.payment_failed",
+        "invoice.payment_succeeded",
+        "invoice.payment_failed",
+        "invoice.paid",
+        "invoice.finalized",
+        "identity.verification_session.verified"
+      },
       Url = $"{Configuration.BaseUrl}/webhooks/stripe",
     };
     var service = new WebhookEndpointService();
