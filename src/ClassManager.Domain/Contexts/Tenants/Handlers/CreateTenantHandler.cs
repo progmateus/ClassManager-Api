@@ -1,5 +1,6 @@
 using AutoMapper;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Invoices.Entities;
 using ClassManager.Domain.Contexts.Plans.Repositories;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Shared.Enums;
@@ -104,8 +105,13 @@ public class CreateTenantHandler :
     var stripeCreatedAccount = _paymentService.CreateAccount(tenant.Id, tenant.Email);
     var stripeCreatedCustomer = _paymentService.CreateCustomer(tenant.Name, tenant.Email, null);
     var stripeSubscription = _paymentService.CreateSubscription(null, tenantPlan.StripePriceId, stripeCreatedCustomer.Id, null);
+    /* var stripeSubscription = _paymentService.CreateSubscription(null, tenantPlan.StripePriceId, stripeCreatedCustomer.Id, null); */
 
     tenant.SetStripeInformations(stripeCreatedAccount.Id, stripeCreatedCustomer.Id, stripeSubscription.Id);
+
+    /* var subscriptionInvoice = new Invoice(loggedUserId, null, null, tenantPlan.Id, tenant.Id, EInvoiceTargetType.TENANT, EInvoiceType.TENANT_SUBSCRIPTION); */
+
+    /* tenant.Invoices.Add(subscriptionInvoice); */
 
     await _repository.CreateAsync(tenant, new CancellationToken());
     /*  _paymentService.CreateWebhook(tenant.StripeAccountId); */

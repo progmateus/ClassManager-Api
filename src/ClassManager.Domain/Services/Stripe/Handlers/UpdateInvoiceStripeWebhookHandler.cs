@@ -3,20 +3,23 @@ using Stripe;
 
 namespace ClassManager.Domain.Services.Stripe.Handlers;
 
-public class UpdateStripeWebhookInvoiceHandler
+public class UpdateInvoiceStripeWebhookHandler
 {
   private readonly IInvoiceRepository _invoiceRepository;
 
-  public UpdateStripeWebhookInvoiceHandler(
+  public UpdateInvoiceStripeWebhookHandler(
     IInvoiceRepository invoiceRepository
 
     )
   {
     _invoiceRepository = invoiceRepository;
   }
-  public async Task Handle(Invoice stripeInvoice)
+  public async Task Handle(Invoice? stripeInvoice)
   {
-
+    if (stripeInvoice is null)
+    {
+      return;
+    }
     var invoice = await _invoiceRepository.FindByStripeInvoiceId(stripeInvoice.Id);
 
     if (invoice is null)
