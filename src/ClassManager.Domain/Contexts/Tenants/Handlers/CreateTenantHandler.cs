@@ -1,5 +1,6 @@
 using AutoMapper;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Plans.Repositories;
 using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Roles.ViewModels;
@@ -25,6 +26,7 @@ public class CreateTenantHandler :
   private readonly IUsersRolesRepository _usersRolesRepository;
   private readonly IPaymentService _paymentService;
   private readonly IMapper _mapper;
+  private readonly IPlanRepository _planRepository;
 
   public CreateTenantHandler(
     ITenantRepository tenantRepository,
@@ -32,7 +34,8 @@ public class CreateTenantHandler :
     IRoleRepository roleRepository,
     IUsersRolesRepository usersRolesRepository,
     IPaymentService paymentService,
-    IMapper mapper
+    IMapper mapper,
+    IPlanRepository planRepository
 
     )
   {
@@ -42,6 +45,7 @@ public class CreateTenantHandler :
     _usersRolesRepository = usersRolesRepository;
     _paymentService = paymentService;
     _mapper = mapper;
+    _planRepository = planRepository;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, CreateTenantCommand command)
   {
@@ -90,12 +94,21 @@ public class CreateTenantHandler :
       return new CommandResult(false, "ERR_ROLE_NOT_FOUND", null, null, 404);
     }
 
+    var tenantPlan = await _planRepository.GetByIdAsync(command.PlanId, new CancellationToken());
+
+    if (tenantPlan is null)
+    {
+      return new CommandResult(false, "ERR_PLAN_NOT_FOUND", null, null, 404);
+    }
+
     var tenant = new Tenant(command.Name, document, command.Username, command.Description, email, loggedUserId);
 
     var stripeCreatedAccount = _paymentService.CreateAccount(tenant.Id, tenant.Email);
     var stripeCreatedCustomer = _paymentService.CreateCustomer(tenant.Name, tenant.Email, null);
 
     tenant.SetStripeInformations(stripeCreatedAccount.Id, stripeCreatedCustomer.Id);
+
+    var stripeSubscription = _paymentService.CreateSubscription(null, tenantPlan.StripePriceId, tenant.StripeCustomerId, null);
 
     await _repository.CreateAsync(tenant, new CancellationToken());
 

@@ -114,7 +114,7 @@ public class PaymentService : IPaymentService
     return service.Create(options, requestOptions);
   }
 
-  public Subscription CreateSubscription(Guid tenantId, string stripePriceId, string stripeCustomerId, string? connectedAccountId)
+  public Subscription CreateSubscription(Guid? tenantId, string stripePriceId, string stripeCustomerId, string? connectedAccountId)
   {
 
     var requestOptions = new RequestOptions
