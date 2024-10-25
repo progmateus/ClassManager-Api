@@ -39,6 +39,8 @@ using ClassManager.Domain.Contexts.Usernames.Handlers;
 using ClassManager.Domain.Libs.MassTransit.Events;
 using ClassManager.Domain.Libs.MassTransit.Publish;
 using ClassManager.Domain.Services;
+using ClassManager.Domain.Services.Stripe.Handlers;
+using ClassManager.Domain.Services.Stripe.Repositories.Contracts;
 using ClassManager.Domain.Shared.Services.AccessControlService;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -349,5 +351,7 @@ public static class BuilderExtension
     builder.Services.AddTransient<CreateInvoiceHandler>();
     builder.Services.AddTransient<UpdateInvoiceHandler>();
     builder.Services.AddTransient<DeleteInvoiceHandler>();
+
+    builder.Services.AddTransient<CreateStripeWebhookHandler>();
   }
 }

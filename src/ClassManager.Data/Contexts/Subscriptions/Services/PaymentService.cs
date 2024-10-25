@@ -1,5 +1,5 @@
 using ClassManager.Domain;
-using ClassManager.Domain.Services;
+using ClassManager.Domain.Services.Stripe.Repositories.Contracts;
 using Stripe;
 
 namespace ClassManager.Data.Contexts.Tenants.Services;

@@ -2,6 +2,7 @@ using ClassManager.Domain.Contexts.Plans.Commands;
 using ClassManager.Domain.Contexts.Plans.Entities;
 using ClassManager.Domain.Contexts.Plans.Repositories;
 using ClassManager.Domain.Services;
+using ClassManager.Domain.Services.Stripe.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;

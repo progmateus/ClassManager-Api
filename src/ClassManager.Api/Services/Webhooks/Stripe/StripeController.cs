@@ -1,6 +1,7 @@
 using ClasManager.Domain.Contexts.Bookings.Commands;
 using ClasManager.Domain.Contexts.Bookings.Handlers;
 using ClassManager.Api.Contexts.Shared.Controllers;
+using ClassManager.Domain.Services.Stripe.Handlers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Stripe;
@@ -11,8 +12,8 @@ namespace ClassManager.Api.Contexts.Tenants.Controllers;
 public class StripeController : MainController
 {
   [Authorize]
-  [HttpPost]
-  public async Task<IResult> Create(
+  [HttpPost("listen")]
+  public async Task<IResult> Listen(
     [FromBody] Event stripeEvent,
     [FromServices] CreateBookingHandler handler
   )
@@ -52,6 +53,17 @@ public class StripeController : MainController
       return Results.BadRequest();
     }
 
+    return Results.Ok();
+  }
+
+
+  [Authorize]
+  [HttpPost("create")]
+  public IResult Create(
+  [FromServices] CreateStripeWebhookHandler handler
+)
+  {
+    handler.Handle();
     return Results.Ok();
   }
 }

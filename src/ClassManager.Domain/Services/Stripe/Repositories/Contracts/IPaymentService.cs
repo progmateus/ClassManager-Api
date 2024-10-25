@@ -1,6 +1,6 @@
 using Stripe;
 
-namespace ClassManager.Domain.Services
+namespace ClassManager.Domain.Services.Stripe.Repositories.Contracts
 {
   public interface IPaymentService
   {
