@@ -44,6 +44,7 @@ public class AppDbContext : DbContext
   public DbSet<TimeTable> TimesTables { get; set; } = null!;
   public DbSet<ScheduleDay> SchedulesDays { get; set; } = null!;
   public DbSet<Invoice> Invoices { get; set; } = null!;
+  public DbSet<StripeCustomer> StripeCustomers { get; set; } = null!;
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
 
@@ -78,6 +79,7 @@ public class AppDbContext : DbContext
     modelBuilder.ApplyConfiguration(new ScheduleDayMap());
     modelBuilder.ApplyConfiguration(new LinkMap());
     modelBuilder.ApplyConfiguration(new InvoiceMap());
+    modelBuilder.ApplyConfiguration(new StripeCustomerMap());
 
     base.OnModelCreating(modelBuilder);
   }

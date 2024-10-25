@@ -80,8 +80,8 @@ public class TenantMap : IEntityTypeConfiguration<Tenant>
             .HasForeignKey(x => x.UserId)
             .IsRequired(true);
 
-        builder.Property(x => x.StripeCustomerId)
-            .HasColumnName("StripeCustomerId")
+        builder.Property(x => x.StripeAccountId)
+            .HasColumnName("StripeAccountId")
             .HasColumnType("VARCHAR")
             .HasMaxLength(200)
             .IsRequired(false);

@@ -9,5 +9,7 @@ namespace ClassManager.Domain.Services
     Customer CreateCustomer(string name, string email);
     Price CreatePrice(Guid productEntityId, Guid? tenantId, string stripeProductId, decimal priceInCents);
     Invoice CreateInvoice(Guid tenantId, string stripeCustomerId, string stripeSubscriptionId);
+    Account CreateAccount(Guid tenantId, string tenantEmail);
+    void RequestUsingConnectedAccount();
   }
 }

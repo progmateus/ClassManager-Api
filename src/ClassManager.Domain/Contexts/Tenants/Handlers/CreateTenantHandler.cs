@@ -13,7 +13,6 @@ using ClassManager.Domain.Services;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;
 using Flunt.Notifications;
-using Stripe;
 
 namespace ClassManager.Domain.Contexts.Tenants.Handlers;
 
@@ -77,8 +76,6 @@ public class CreateTenantHandler :
     var document = new Document(command.Document, EDocumentType.CNPJ);
     var email = new Email(command.Email);
 
-    var tenant = new Tenant(command.Name, document, command.Username, command.Description, email, loggedUserId);
-
     AddNotifications(document, email);
 
     if (Invalid)
@@ -93,9 +90,11 @@ public class CreateTenantHandler :
       return new CommandResult(false, "ERR_ROLE_NOT_FOUND", null, null, 404);
     }
 
-    var stripeCustomer = _paymentService.CreateCustomer(tenant.Name, tenant.Email);
+    var tenant = new Tenant(command.Name, document, command.Username, command.Description, email, loggedUserId);
 
-    tenant.SetStripeCustomerId(stripeCustomer.Id);
+    var stripeCreatedAccount = _paymentService.CreateAccount(tenant.Id, tenant.Email);
+
+    tenant.SetStripeAccountId(stripeCreatedAccount.Id);
 
     await _repository.CreateAsync(tenant, new CancellationToken());
 
@@ -103,12 +102,11 @@ public class CreateTenantHandler :
 
     await _usersRolesRepository.CreateAsync(userRole, new CancellationToken());
 
-    var tenantCreated = _mapper.Map<TenantViewModel>(await _repository.FindAsync(x => x.Id == tenant.Id, [x => x.UsersRoles, x => x.UsersRoles]));
+    var tenantCreated = _mapper.Map<TenantViewModel>(await _repository.FindAsync(x => x.Id == tenant.Id, [x => x.UsersRoles]));
 
     if (tenantCreated.UsersRoles.Count > 0)
     {
       tenantCreated.UsersRoles[0].Role = _mapper.Map<RoleViewModel>(role);
-
     }
 
     return new CommandResult(true, "TENANT_CREATED", tenantCreated, null, 201);

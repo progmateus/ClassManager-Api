@@ -11,6 +11,27 @@ public class PaymentService : IPaymentService
   {
     StripeConfiguration.ApiKey = Configuration.Stripe.ApiKey;
   }
+
+  public Account CreateAccount(Guid tenantId, string tenantEmail)
+  {
+    var options = new AccountCreateOptions
+    {
+      Country = "BR",
+      Email = tenantEmail,
+      Controller = new AccountControllerOptions
+      {
+        Fees = new AccountControllerFeesOptions { Payer = "account" },
+        Losses = new AccountControllerLossesOptions { Payments = "stripe" },
+        StripeDashboard = new AccountControllerStripeDashboardOptions
+        {
+          Type = "express",
+        },
+      },
+    };
+    var service = new AccountService();
+    return service.Create(options);
+  }
+
   public Customer CreateCustomer(string name, string email)
   {
     var options = new CustomerCreateOptions
@@ -95,5 +116,24 @@ public class PaymentService : IPaymentService
     };
     var service = new SubscriptionService();
     return service.Create(options);
+  }
+
+  public void RequestUsingConnectedAccount()
+  {
+    var options = new PaymentIntentCreateOptions
+    {
+      Amount = 1000,
+      Currency = "usd",
+      AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions
+      {
+        Enabled = true,
+      },
+    };
+    var requestOptions = new RequestOptions
+    {
+      StripeAccount = "{{CONNECTED_ACCOUNT_ID}}",
+    };
+    var service = new PaymentIntentService();
+    service.Create(options, requestOptions);
   }
 }

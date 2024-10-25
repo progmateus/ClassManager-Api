@@ -254,6 +254,10 @@ public static class BuilderExtension
     IPaymentService,
     PaymentService>();
 
+    builder.Services.AddTransient<
+    IStripeCustomerRepository,
+    StripeCustomerRepository>();
+
     builder.Services.AddTransient<TokenService>();
 
     builder.Services.AddTransient<AuthHandler>();
