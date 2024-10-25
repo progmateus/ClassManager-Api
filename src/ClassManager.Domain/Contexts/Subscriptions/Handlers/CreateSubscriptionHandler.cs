@@ -34,6 +34,7 @@ public class CreateSubscriptionHandler : Notifiable,
   private readonly IPaymentService _paymentService;
   private readonly IUserRepository _userRepository;
   private readonly IInvoiceRepository _invoiceRepository;
+  private readonly IStripeCustomerRepository _stripeCustomerRepository;
 
   public CreateSubscriptionHandler(
     ISubscriptionRepository subscriptionRepository,
@@ -45,7 +46,8 @@ public class CreateSubscriptionHandler : Notifiable,
     IAccessControlService accessControlService,
     IPaymentService paymentService,
     IUserRepository userRepository,
-    IInvoiceRepository invoiceRepository
+    IInvoiceRepository invoiceRepository,
+    IStripeCustomerRepository stripeCustomerRepository
 
   )
   {
@@ -59,6 +61,7 @@ public class CreateSubscriptionHandler : Notifiable,
     _paymentService = paymentService;
     _userRepository = userRepository;
     _invoiceRepository = invoiceRepository;
+    _stripeCustomerRepository = stripeCustomerRepository;
 
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, CreateSubscriptionCommand command)
@@ -133,16 +136,19 @@ public class CreateSubscriptionHandler : Notifiable,
       return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null, 404);
     }
 
-    if (user.StripeCustomerId.IsNullOrEmpty())
+    var stripeCustomerEntity = await _stripeCustomerRepository.FindByUserIdAndTenantId(user.Id, tenantId, default);
+
+    if (stripeCustomerEntity is null)
     {
-      var stripeCustomer = _paymentService.CreateCustomer(user.Name.ToString(), user.Email.ToString());
-      user.SetStripeCustomerId(stripeCustomer.Id);
+      var stripeCustomerCreated = _paymentService.CreateCustomer(user.Name.ToString(), user.Email.ToString());
+      stripeCustomerEntity = new StripeCustomer(user.Id, tenantId, stripeCustomerCreated.Id);
+      user.StripeCustomers.Add(stripeCustomerEntity);
       await _userRepository.UpdateAsync(user, default);
     }
 
-    var stripeSubscription = _paymentService.CreateSubscription(tenantId, tenantPlan.StripePriceId, user.StripeCustomerId);
+    var stripeSubscription = _paymentService.CreateSubscription(tenantId, tenantPlan.StripePriceId, stripeCustomerEntity.StripeCustomerId);
 
-    var stripeInvoice = _paymentService.CreateInvoice(tenantId, user.StripeCustomerId, stripeSubscription.Id);
+    var stripeInvoice = _paymentService.CreateInvoice(tenantId, stripeCustomerEntity.StripeCustomerId, stripeSubscription.Id);
 
     subscription.SetStripeSubscriptionId(stripeSubscription.Id);
     invoice.SetStripeInformations(stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl);
