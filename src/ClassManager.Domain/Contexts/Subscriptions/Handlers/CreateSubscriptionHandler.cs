@@ -149,7 +149,7 @@ public class CreateSubscriptionHandler : Notifiable,
 
     var subscription = new Subscription(userId, command.TenantPlanId, tenantId, stripeSubscriptionCreated.Id, lastDayOfMonth);
 
-    var invoice = new Invoice(userId, tenantPlan.Id, subscription.Id, null, tenantPlan.TenantId, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION);
+    var invoice = new Invoice(userId, tenantPlan.Id, subscription.Id, null, tenantPlan.TenantId, tenantPlan.Price, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION);
 
     invoice.SetStripeInformations(stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl);
 

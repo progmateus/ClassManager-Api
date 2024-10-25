@@ -2,7 +2,9 @@ using AutoMapper;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Invoices.Entities;
 using ClassManager.Domain.Contexts.Plans.Repositories;
+using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Roles.ViewModels;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Shared.ValueObjects;
 using ClassManager.Domain.Contexts.tenants.ViewModels;
@@ -19,7 +21,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Handlers;
 public class CreateTenantHandler :
   Notifiable
 {
-  private readonly ITenantRepository _repository;
+  private readonly ITenantRepository _tenantRepository;
   private readonly IUserRepository _usersRepository;
   private readonly IRoleRepository _roleRepository;
   private readonly IUsersRolesRepository _usersRolesRepository;
@@ -38,7 +40,7 @@ public class CreateTenantHandler :
 
     )
   {
-    _repository = tenantRepository;
+    _tenantRepository = tenantRepository;
     _usersRepository = usersRepository;
     _roleRepository = roleRepository;
     _usersRolesRepository = usersRolesRepository;
@@ -56,12 +58,12 @@ public class CreateTenantHandler :
       return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
 
-    if (await _repository.DocumentAlreadyExistsAsync(command.Document, new CancellationToken()))
+    if (await _tenantRepository.DocumentAlreadyExistsAsync(command.Document, new CancellationToken()))
     {
       AddNotification("Document", "Document already exists");
     }
 
-    if (await _repository.UsernameAlreadyExistsAsync(command.Username, new CancellationToken()))
+    if (await _tenantRepository.UsernameAlreadyExistsAsync(command.Username, new CancellationToken()))
     {
       AddNotification("Username", "Username already exists");
     }
@@ -71,7 +73,7 @@ public class CreateTenantHandler :
       AddNotification("Username", "Username already exists");
     }
 
-    if (await _repository.EmailAlreadyExtstsAsync(command.Email, new CancellationToken()))
+    if (await _tenantRepository.EmailAlreadyExtstsAsync(command.Email, new CancellationToken()))
     {
       AddNotification("Email", "E-mail already exists");
     }
@@ -105,28 +107,26 @@ public class CreateTenantHandler :
     var stripeCreatedAccount = _paymentService.CreateAccount(tenant.Id, tenant.Email);
     var stripeCreatedCustomer = _paymentService.CreateCustomer(tenant.Name, tenant.Email, null);
     var stripeSubscription = _paymentService.CreateSubscription(null, tenantPlan.StripePriceId, stripeCreatedCustomer.Id, null);
-    /* var stripeSubscription = _paymentService.CreateSubscription(null, tenantPlan.StripePriceId, stripeCreatedCustomer.Id, null); */
+    var stripeInvoice = _paymentService.CreateInvoice(tenant.Id, stripeCreatedCustomer.Id, stripeSubscription.Id, null);
 
     tenant.SetStripeInformations(stripeCreatedAccount.Id, stripeCreatedCustomer.Id, stripeSubscription.Id);
 
-    /* var subscriptionInvoice = new Invoice(loggedUserId, null, null, tenantPlan.Id, tenant.Id, EInvoiceTargetType.TENANT, EInvoiceType.TENANT_SUBSCRIPTION); */
+    var invoice = new Invoice(loggedUserId, null, null, tenantPlan.Id, tenant.Id, tenantPlan.Price, EInvoiceTargetType.TENANT, EInvoiceType.TENANT_SUBSCRIPTION);
+    invoice.SetStripeInformations(stripeInvoice.Id, null);
 
-    /* tenant.Invoices.Add(subscriptionInvoice); */
+    var userAdminRole = new UsersRoles(loggedUserId, role.Id, tenant.Id);
 
-    await _repository.CreateAsync(tenant, new CancellationToken());
-    /*  _paymentService.CreateWebhook(tenant.StripeAccountId); */
+    tenant.Invoices.Add(invoice);
+    tenant.UsersRoles.Add(userAdminRole);
 
+    await _tenantRepository.CreateAsync(tenant, new CancellationToken());
 
-    /* var userRole = new UsersRoles(loggedUserId, role.Id, tenant.Id);
+    var tenantCreated = _mapper.Map<TenantViewModel>(tenant);
 
-    await _usersRolesRepository.CreateAsync(userRole, new CancellationToken()); */
-
-    var tenantCreated = _mapper.Map<TenantViewModel>(await _repository.FindAsync(x => x.Id == tenant.Id, [x => x.UsersRoles]));
-
-    /* if (tenantCreated.UsersRoles.Count > 0)
+    if (tenantCreated.UsersRoles.Count > 0)
     {
       tenantCreated.UsersRoles[0].Role = _mapper.Map<RoleViewModel>(role);
-    } */
+    }
 
     return new CommandResult(true, "TENANT_CREATED", tenantCreated, null, 201);
   }

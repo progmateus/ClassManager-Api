@@ -63,7 +63,7 @@ public class PaymentService : IPaymentService
       },
       PaymentSettings = new InvoicePaymentSettingsOptions
       {
-        PaymentMethodTypes = ["card", "boleto", "pix"]
+        PaymentMethodTypes = ["card", "boleto"]
       }
     };
     var service = new InvoiceService();

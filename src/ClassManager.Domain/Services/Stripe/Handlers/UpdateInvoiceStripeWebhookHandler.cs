@@ -27,7 +27,7 @@ public class UpdateInvoiceStripeWebhookHandler
       return;
     }
 
-    invoice.SetStripeHostedUrl(stripeInvoice.HostedInvoiceUrl);
+    invoice.SetStripeInformations(null, stripeInvoice.HostedInvoiceUrl);
     await _invoiceRepository.UpdateAsync(invoice, new CancellationToken());
   }
 }
