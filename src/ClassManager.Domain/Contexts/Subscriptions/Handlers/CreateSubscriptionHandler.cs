@@ -136,15 +136,15 @@ public class CreateSubscriptionHandler : Notifiable,
 
     if (stripeCustomerEntity is null)
     {
-      var stripeCustomerCreated = _paymentService.CreateCustomer(user.Name.ToString(), user.Email.ToString());
+      var stripeCustomerCreated = _paymentService.CreateCustomer(user.Name.ToString(), user.Email.ToString(), tenantPlan.Tenant.StripeAccountId);
       stripeCustomerEntity = new StripeCustomer(user.Id, tenantId, stripeCustomerCreated.Id);
       user.StripeCustomers.Add(stripeCustomerEntity);
       await _userRepository.UpdateAsync(user, default);
     }
 
-    var stripeSubscriptionCreated = _paymentService.CreateSubscription(tenantId, tenantPlan.StripePriceId, stripeCustomerEntity.StripeCustomerId);
+    var stripeSubscriptionCreated = _paymentService.CreateSubscription(tenantId, tenantPlan.StripePriceId, stripeCustomerEntity.StripeCustomerId, tenantPlan.Tenant.StripeAccountId);
 
-    var stripeInvoice = _paymentService.CreateInvoice(tenantId, stripeCustomerEntity.StripeCustomerId, stripeSubscriptionCreated.Id);
+    var stripeInvoice = _paymentService.CreateInvoice(tenantId, stripeCustomerEntity.StripeCustomerId, stripeSubscriptionCreated.Id, tenantPlan.Tenant.StripeAccountId);
 
     var subscription = new Subscription(userId, command.TenantPlanId, tenantId, stripeSubscriptionCreated.Id, lastDayOfMonth);
 

@@ -17,17 +17,20 @@ public class CreateTenantPlanHandler :
   private readonly ITenantPlanRepository _tenantPlanRepository;
   private readonly IAccessControlService _accessControlService;
   private readonly IPaymentService _paymentService;
+  private readonly ITenantRepository _tenantRepository;
 
   public CreateTenantPlanHandler(
     ITenantPlanRepository tenantPlanRepository,
     IAccessControlService accessControlService,
-    IPaymentService paymentService
+    IPaymentService paymentService,
+    ITenantRepository tenantRepository
 
     )
   {
     _tenantPlanRepository = tenantPlanRepository;
     _accessControlService = accessControlService;
     _paymentService = paymentService;
+    _tenantRepository = tenantRepository;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, TenantPlanCommand command)
   {
@@ -54,6 +57,8 @@ public class CreateTenantPlanHandler :
       return new CommandResult(false, "ERR_PLAN_ALREADY_EXISTS", null, null, 409);
     }
 
+    var tenant = await _tenantRepository.GetByIdAsync(tenantId, default);
+
     var tenantPlan = new TenantPlan(command.Name, command.Description, command.TimesOfWeek, tenantId, command.Price);
 
     if (Invalid)
@@ -61,9 +66,9 @@ public class CreateTenantPlanHandler :
       return new CommandResult(false, "ERR_VALIDATION", null, null, 400);
     }
 
-    var stripeProduct = _paymentService.CreateProduct(tenantPlan.Id, "tenant", tenantPlan.Name, tenantId);
+    var stripeProduct = _paymentService.CreateProduct(tenantPlan.Id, "tenant", tenantPlan.Name, tenantId, tenant.StripeAccountId);
 
-    var stripePrice = _paymentService.CreatePrice(tenantPlan.Id, tenantId, stripeProduct.Id, tenantPlan.Price * 100);
+    var stripePrice = _paymentService.CreatePrice(tenantPlan.Id, tenantId, stripeProduct.Id, tenantPlan.Price * 100, tenant.StripeAccountId);
 
     tenantPlan.SetStripeInformations(stripePrice.Id, stripeProduct.Id);
 

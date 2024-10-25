@@ -32,8 +32,8 @@ public class CreatePlandHandler : Notifiable, IHandler<PlanCommand>
 
     var plan = new Plan(command.Name, command.Description, command.StudentsLimit, command.ClassesLimit, command.Price);
 
-    var stripeProduct = _paymentService.CreateProduct(plan.Id, "application", plan.Name, null);
-    var stripePrice = _paymentService.CreatePrice(plan.Id, null, stripeProduct.Id, plan.Price * 100);
+    var stripeProduct = _paymentService.CreateProduct(plan.Id, "application", plan.Name, null, null);
+    var stripePrice = _paymentService.CreatePrice(plan.Id, null, stripeProduct.Id, plan.Price * 100, null);
 
     plan.SetStripeProductId(stripeProduct.Id);
     plan.SetStripePriceId(stripePrice.Id);

@@ -32,8 +32,12 @@ public class PaymentService : IPaymentService
     return service.Create(options);
   }
 
-  public Customer CreateCustomer(string name, string email)
+  public Customer CreateCustomer(string name, string email, string? connectedAccountId)
   {
+    var requestOptions = new RequestOptions
+    {
+      StripeAccount = connectedAccountId ?? null,
+    };
     var options = new CustomerCreateOptions
     {
       Name = name,
@@ -41,11 +45,15 @@ public class PaymentService : IPaymentService
     };
 
     var service = new CustomerService();
-    return service.Create(options);
+    return service.Create(options, requestOptions);
   }
 
-  public Invoice CreateInvoice(Guid tenantId, string stripeCustomerId, string stripeSubscriptionId)
+  public Invoice CreateInvoice(Guid tenantId, string stripeCustomerId, string stripeSubscriptionId, string? connectedAccountId)
   {
+    var requestOptions = new RequestOptions
+    {
+      StripeAccount = connectedAccountId ?? null,
+    };
     var options = new InvoiceCreateOptions
     {
       Customer = stripeCustomerId,
@@ -59,11 +67,15 @@ public class PaymentService : IPaymentService
       }
     };
     var service = new InvoiceService();
-    return service.Create(options);
+    return service.Create(options, requestOptions);
   }
 
-  public Price CreatePrice(Guid productEntityId, Guid? tenantId, string stripeProductId, decimal priceInCents)
+  public Price CreatePrice(Guid productEntityId, Guid? tenantId, string stripeProductId, decimal priceInCents, string? connectedAccountId)
   {
+    var requestOptions = new RequestOptions
+    {
+      StripeAccount = connectedAccountId ?? null,
+    };
 
     var options = new PriceCreateOptions
     {
@@ -78,11 +90,16 @@ public class PaymentService : IPaymentService
       }
     };
     var service = new PriceService();
-    return service.Create(options);
+    return service.Create(options, requestOptions);
   }
 
-  public Product CreateProduct(Guid entityId, string ownerType, string name, Guid? tenantId)
+  public Product CreateProduct(Guid entityId, string ownerType, string name, Guid? tenantId, string? connectedAccountId)
   {
+    var requestOptions = new RequestOptions
+    {
+      StripeAccount = connectedAccountId ?? null,
+    };
+
     var options = new ProductCreateOptions
     {
       Name = name,
@@ -94,11 +111,17 @@ public class PaymentService : IPaymentService
       }
     };
     var service = new ProductService();
-    return service.Create(options);
+    return service.Create(options, requestOptions);
   }
 
-  public Subscription CreateSubscription(Guid tenantId, string stripePriceId, string stripeCustomerId)
+  public Subscription CreateSubscription(Guid tenantId, string stripePriceId, string stripeCustomerId, string? connectedAccountId)
   {
+
+    var requestOptions = new RequestOptions
+    {
+      StripeAccount = connectedAccountId ?? null,
+    };
+
     var options = new SubscriptionCreateOptions
     {
       Customer = stripeCustomerId,
@@ -115,7 +138,7 @@ public class PaymentService : IPaymentService
       }
     };
     var service = new SubscriptionService();
-    return service.Create(options);
+    return service.Create(options, requestOptions);
   }
 
   public void RequestUsingConnectedAccount()
