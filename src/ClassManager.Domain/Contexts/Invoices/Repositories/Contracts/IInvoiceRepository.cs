@@ -6,4 +6,5 @@ public interface IInvoiceRepository : ITRepository<Invoice>
 {
   Task<int> CountUserPendingInvoicesUntilDate(Guid userId, Guid tenantId, DateTime initialDate, DateTime finalDate, CancellationToken cancellationToken);
   Task<Invoice?> FindUserInvoiceById(Guid invoiceId, Guid tenantId, CancellationToken cancellationToken);
+  Task<Invoice?> FindByStripeInvoiceId(string stripeInvoiceId);
 }

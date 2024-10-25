@@ -19,6 +19,11 @@ public class InvoiceRepository : TRepository<Invoice>, IInvoiceRepository
       .CountAsync((invoice) => invoice.UserId == userId && invoice.TargetType == EInvoiceTargetType.USER && invoice.Type == EInvoiceType.USER_SUBSCRIPTION && invoice.ExpiresAt > initialDate && invoice.ExpiresAt < finalDate);
   }
 
+  public async Task<Invoice?> FindByStripeInvoiceId(string stripeInvoiceId)
+  {
+    return await DbSet.FirstOrDefaultAsync(x => x.StripeInvoiceId == stripeInvoiceId);
+  }
+
   public async Task<Invoice?> FindUserInvoiceById(Guid invoiceId, Guid tenantId, CancellationToken cancellationToken)
   {
     return await DbSet.FirstOrDefaultAsync(x => x.Id == invoiceId && x.TenantId == tenantId && x.TargetType == EInvoiceTargetType.USER);

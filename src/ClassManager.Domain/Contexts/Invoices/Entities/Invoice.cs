@@ -55,4 +55,9 @@ public class Invoice : TenantEntity
     StripeInvoiceId = stripeInvoiceId;
     StripeInvoiceUrl = stripeInvoiceUrl;
   }
+
+  public void SetStripeHostedUrl(string stripeInvoiceUrl)
+  {
+    StripeInvoiceUrl = stripeInvoiceUrl;
+  }
 }
