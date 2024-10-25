@@ -141,6 +141,22 @@ public class PaymentService : IPaymentService
     return service.Create(options, requestOptions);
   }
 
+  public void CreateWebhook(string? connectedAccountId)
+  {
+    var requestOptions = new RequestOptions
+    {
+      StripeAccount = connectedAccountId ?? null,
+    };
+
+    var options = new WebhookEndpointCreateOptions
+    {
+      EnabledEvents = new List<string> { "charge.succeeded", "charge.failed" },
+      Url = $"{Configuration.BaseUrl}/webhooks",
+    };
+    var service = new WebhookEndpointService();
+    service.Create(options, requestOptions);
+  }
+
   public void RequestUsingConnectedAccount()
   {
     var options = new PaymentIntentCreateOptions
