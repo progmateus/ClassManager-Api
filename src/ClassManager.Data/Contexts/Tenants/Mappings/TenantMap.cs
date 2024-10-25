@@ -84,6 +84,12 @@ public class TenantMap : IEntityTypeConfiguration<Tenant>
             .HasColumnName("StripeAccountId")
             .HasColumnType("VARCHAR")
             .HasMaxLength(200)
-            .IsRequired(false);
+            .IsRequired(true);
+
+        builder.Property(x => x.StripeCustomerId)
+        .HasColumnName("StripeCustomerId")
+        .HasColumnType("VARCHAR")
+        .HasMaxLength(200)
+        .IsRequired(true);
     }
 }
