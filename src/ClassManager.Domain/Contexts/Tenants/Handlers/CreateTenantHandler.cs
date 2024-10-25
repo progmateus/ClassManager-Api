@@ -105,10 +105,9 @@ public class CreateTenantHandler :
 
     var stripeCreatedAccount = _paymentService.CreateAccount(tenant.Id, tenant.Email);
     var stripeCreatedCustomer = _paymentService.CreateCustomer(tenant.Name, tenant.Email, null);
-
-    tenant.SetStripeInformations(stripeCreatedAccount.Id, stripeCreatedCustomer.Id);
-
     var stripeSubscription = _paymentService.CreateSubscription(null, tenantPlan.StripePriceId, tenant.StripeCustomerId, null);
+
+    tenant.SetStripeInformations(stripeCreatedAccount.Id, stripeCreatedCustomer.Id, stripeSubscription.Id);
 
     await _repository.CreateAsync(tenant, new CancellationToken());
 
