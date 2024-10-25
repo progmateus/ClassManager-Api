@@ -50,6 +50,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public List<TimeTable> TimesTables { get; private set; } = [];
     public List<Class> Classes { get; private set; } = [];
     public IList<Invoice> Invoices { get; private set; } = [];
+    public IList<StripeCustomer> StripeCustomers { get; private set; } = [];
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 

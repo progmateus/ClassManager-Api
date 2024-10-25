@@ -58,6 +58,7 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     public IList<Booking> Bookings { get; private set; }
     public IList<Tenant> Tenants { get; private set; }
     public IList<Invoice> Invoices { get; private set; } = [];
+    public IList<StripeCustomer> StripeCustomers { get; private set; } = [];
 
     public void ChangeUser(Name name, Email email, Document document, string? phone)
     {
