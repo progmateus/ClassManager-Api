@@ -20,8 +20,8 @@ public class PaymentService : IPaymentService
       Email = tenantEmail,
       Controller = new AccountControllerOptions
       {
-        Fees = new AccountControllerFeesOptions { Payer = "account" },
-        Losses = new AccountControllerLossesOptions { Payments = "stripe" },
+        Fees = new AccountControllerFeesOptions { Payer = "application" },
+        Losses = new AccountControllerLossesOptions { Payments = "application" },
         StripeDashboard = new AccountControllerStripeDashboardOptions
         {
           Type = "express",
