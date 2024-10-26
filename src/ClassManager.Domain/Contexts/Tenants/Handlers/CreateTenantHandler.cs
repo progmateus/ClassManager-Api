@@ -112,7 +112,7 @@ public class CreateTenantHandler :
     tenant.SetStripeInformations(stripeCreatedAccount.Id, stripeCreatedCustomer.Id, stripeSubscription.Id);
 
     var invoice = new Invoice(loggedUserId, null, null, tenantPlan.Id, tenant.Id, tenantPlan.Price, EInvoiceTargetType.TENANT, EInvoiceType.TENANT_SUBSCRIPTION);
-    invoice.SetStripeInformations(stripeInvoice.Id, null);
+    invoice.SetStripeInformations(stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
 
     var userAdminRole = new UsersRoles(loggedUserId, role.Id, tenant.Id);
 

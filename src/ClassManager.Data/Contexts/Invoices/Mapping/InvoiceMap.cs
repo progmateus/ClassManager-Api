@@ -74,5 +74,11 @@ public class InvoiceMap : IEntityTypeConfiguration<Invoice>
       .HasColumnType("VARCHAR")
       .HasMaxLength(300)
       .IsRequired(false);
+
+    builder.Property(x => x.StripeInvoiceNumber)
+      .HasColumnName("StripeInvoiceNumber")
+      .HasColumnType("VARCHAR")
+      .HasMaxLength(300)
+      .IsRequired(false);
   }
 }

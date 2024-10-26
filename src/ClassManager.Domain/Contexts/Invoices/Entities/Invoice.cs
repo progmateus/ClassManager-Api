@@ -33,6 +33,7 @@ public class Invoice : TenantEntity
   public EInvoiceType Type { get; private set; } = EInvoiceType.USER_SUBSCRIPTION;
   public string? StripeInvoiceId { get; private set; }
   public string? StripeInvoiceUrl { get; private set; }
+  public string? StripeInvoiceNumber { get; private set; }
   public DateTime ExpiresAt { get; private set; }
   public User? User { get; private set; }
   public TenantPlan? TenantPlan { get; private set; }
@@ -51,9 +52,10 @@ public class Invoice : TenantEntity
   {
     Status = status;
   }
-  public void SetStripeInformations(string? stripeInvoiceId, string? stripeInvoiceUrl)
+  public void SetStripeInformations(string? stripeInvoiceId, string? stripeInvoiceUrl, string? stripeInvoiceNumber)
   {
     StripeInvoiceId = stripeInvoiceId ?? StripeInvoiceId;
     StripeInvoiceUrl = stripeInvoiceUrl ?? StripeInvoiceUrl;
+    StripeInvoiceNumber = stripeInvoiceNumber ?? StripeInvoiceNumber;
   }
 }
