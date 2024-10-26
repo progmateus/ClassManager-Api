@@ -353,5 +353,6 @@ public static class BuilderExtension
     builder.Services.AddTransient<DeleteInvoiceHandler>();
 
     builder.Services.AddTransient<CreateStripeWebhookHandler>();
+    builder.Services.AddTransient<UpdateInvoiceStripeWebhookHandler>();
   }
 }

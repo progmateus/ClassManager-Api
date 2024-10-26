@@ -156,10 +156,11 @@ public class PaymentService : IPaymentService
         "invoice.payment_failed",
         "invoice.paid",
         "invoice.finalized",
+        "invoice.updated",
         "identity.verification_session.verified",
         "customer.created"
       },
-      Url = $"{Configuration.BaseUrl}/webhooks/stripe",
+      Url = $"{Configuration.BaseUrl}/webhooks/stripe/listen",
       Connect = true
     };
     var service = new WebhookEndpointService();

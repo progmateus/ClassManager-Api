@@ -117,7 +117,7 @@ public class CreateTenantHandler :
     var userAdminRole = new UsersRoles(loggedUserId, role.Id, tenant.Id);
 
     tenant.Invoices.Add(invoice);
-    tenant.UsersRoles.Add(userAdminRole);
+    /* tenant.UsersRoles.Add(userAdminRole); */
 
     await _tenantRepository.CreateAsync(tenant, new CancellationToken());
 

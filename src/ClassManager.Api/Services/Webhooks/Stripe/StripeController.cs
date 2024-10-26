@@ -12,15 +12,17 @@ namespace ClassManager.Api.Contexts.Tenants.Controllers;
 [Route("webhooks/stripe")]
 public class StripeController : MainController
 {
-  [Authorize]
   [HttpPost("listen")]
   public async Task<IResult> Listen(
-    [FromBody] Event stripeEvent,
     [FromServices] UpdateInvoiceStripeWebhookHandler updateInvoiceStripeWebhookHandler
   )
   {
     try
     {
+      var json = await new StreamReader(HttpContext.Request.Body).ReadToEndAsync();
+
+      var stripeEvent = EventUtility.ParseEvent(json);
+
       if (stripeEvent.Type == EventTypes.InvoiceFinalized)
       {
         await updateInvoiceStripeWebhookHandler.Handle(stripeEvent.Data.Object as Invoice);
