@@ -29,5 +29,10 @@ public class StripeCustomerMap : IEntityTypeConfiguration<StripeCustomer>
       .HasColumnType("VARCHAR")
       .HasMaxLength(200)
       .IsRequired();
+
+    builder.Property(e => e.Type)
+      .HasColumnType("TINYINT")
+      .IsRequired(true)
+      .HasDefaultValue(EStripeCustomerType.USER);
   }
 }

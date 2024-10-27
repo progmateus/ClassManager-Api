@@ -138,7 +138,7 @@ public class CreateSubscriptionHandler : Notifiable,
     if (stripeCustomerEntity is null)
     {
       var stripeCustomerCreated = _paymentService.CreateCustomer(user.Name.ToString(), user.Email.ToString(), tenantPlan.Tenant.StripeAccountId);
-      stripeCustomerEntity = new StripeCustomer(user.Id, tenantId, stripeCustomerCreated.Id);
+      stripeCustomerEntity = new StripeCustomer(user.Id, tenantId, stripeCustomerCreated.Id, EStripeCustomerType.USER);
       user.StripeCustomers.Add(stripeCustomerEntity);
       await _userRepository.UpdateAsync(user, default);
     }
