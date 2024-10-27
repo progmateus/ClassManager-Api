@@ -133,7 +133,7 @@ public class CreateSubscriptionHandler : Notifiable,
       return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null, 404);
     }
 
-    var stripeCustomerEntity = await _stripeCustomerRepository.FindByUserIdAndTenantId(user.Id, tenantId, default);
+    var stripeCustomerEntity = await _stripeCustomerRepository.FindByUserIdAndTenantIdAndType(user.Id, tenantId, EStripeCustomerType.USER, new CancellationToken());
 
     if (stripeCustomerEntity is null)
     {

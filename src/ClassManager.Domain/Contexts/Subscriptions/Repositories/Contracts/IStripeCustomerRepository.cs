@@ -1,3 +1,4 @@
+using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Entities;
 
 namespace ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
@@ -5,5 +6,5 @@ namespace ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 
 public interface IStripeCustomerRepository : ITRepository<StripeCustomer>
 {
-  Task<StripeCustomer?> FindByUserIdAndTenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken);
+  Task<StripeCustomer?> FindByUserIdAndTenantIdAndType(Guid userId, Guid tenantId, EStripeCustomerType type, CancellationToken cancellationToken);
 }
