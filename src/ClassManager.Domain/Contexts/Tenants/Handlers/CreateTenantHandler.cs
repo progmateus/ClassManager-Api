@@ -7,6 +7,7 @@ using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Roles.ViewModels;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Shared.ValueObjects;
+using ClassManager.Domain.Contexts.Subscriptions.Entities;
 using ClassManager.Domain.Contexts.tenants.ViewModels;
 using ClassManager.Domain.Contexts.Tenants.Commands;
 using ClassManager.Domain.Contexts.Tenants.Entities;
@@ -112,11 +113,13 @@ public class CreateTenantHandler :
     tenant.SetStripeInformations(stripeCreatedAccount.Id, stripeCreatedCustomer.Id, stripeSubscription.Id);
 
     var invoice = new Invoice(loggedUserId, null, null, tenantPlan.Id, tenant.Id, tenantPlan.Price, EInvoiceTargetType.TENANT, EInvoiceType.TENANT_SUBSCRIPTION);
+    var stripeCustomerEntity = new StripeCustomer(loggedUserId, tenantPlan.Id, stripeCreatedCustomer.Id, EStripeCustomerType.TENANT);
     invoice.SetStripeInformations(stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
 
     var userAdminRole = new UsersRoles(loggedUserId, role.Id, tenant.Id);
 
     tenant.Invoices.Add(invoice);
+    tenant.StripeCustomers.Add(stripeCustomerEntity);
     /* tenant.UsersRoles.Add(userAdminRole); */
 
     await _tenantRepository.CreateAsync(tenant, new CancellationToken());
