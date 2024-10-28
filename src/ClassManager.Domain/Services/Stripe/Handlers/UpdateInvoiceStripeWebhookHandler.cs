@@ -30,9 +30,14 @@ public class UpdateInvoiceStripeWebhookHandler
     }
     Contexts.Invoices.Entities.Invoice invoice;
 
-    var invoiceEntity = await _invoiceRepository.FindByStripeInvoiceId(stripeInvoice.Id);
+    /* var invoiceEntity = await _invoiceRepository.FindByStripeInvoiceId(stripeInvoice.Id);
 
     if (invoiceEntity is null)
+    {
+      return;
+    } */
+
+    if (stripeInvoice.Status == "draft")
     {
       return;
     }
@@ -43,6 +48,7 @@ public class UpdateInvoiceStripeWebhookHandler
     {
       return;
     }
+
 
     if (stripeInvoice.BillingReason == "subscription_create")
     {

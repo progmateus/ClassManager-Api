@@ -23,7 +23,7 @@ public class StripeController : MainController
 
       var stripeEvent = EventUtility.ParseEvent(json);
 
-      if (stripeEvent.Type == EventTypes.InvoiceFinalized)
+      if (stripeEvent.Type == EventTypes.InvoiceFinalized || stripeEvent.Type == EventTypes.InvoiceCreated)
       {
         await updateInvoiceStripeWebhookHandler.Handle(stripeEvent.Data.Object as Invoice);
       }
