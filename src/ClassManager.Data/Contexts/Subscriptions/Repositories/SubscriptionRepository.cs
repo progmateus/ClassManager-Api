@@ -54,4 +54,9 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     .GroupBy(x => new { x.TenantId, x.UserId })
     .Select(x => x.OrderByDescending(x => x.CreatedAt).Select(x => x).First()).ToListAsync();
   }
+
+  public async Task<Subscription?> FindByStripeSubscriptionId(string stripeSubscriptionId, CancellationToken cancellationToken)
+  {
+    return await DbSet.FirstOrDefaultAsync(x => x.StripeSubscriptionId == stripeSubscriptionId);
+  }
 }

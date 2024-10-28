@@ -11,6 +11,12 @@ namespace classManager.Data.Contexts.Subscriptions.Repositories;
 public class StripeCustomerRepository : TRepository<StripeCustomer>, IStripeCustomerRepository
 {
   public StripeCustomerRepository(AppDbContext context) : base(context) { }
+
+  public async Task<StripeCustomer?> FindByCustomerId(string customerId, CancellationToken cancellationToken = default)
+  {
+    return await DbSet.FirstOrDefaultAsync(x => x.StripeCustomerId == customerId, cancellationToken);
+  }
+
   public async Task<StripeCustomer?> FindByUserIdAndTenantIdAndType(Guid userId, Guid tenantId, EStripeCustomerType type, CancellationToken cancellationToken)
   {
     return await DbSet.FirstOrDefaultAsync(x => x.UserId == userId && x.TenantId == tenantId && x.Type == type);
