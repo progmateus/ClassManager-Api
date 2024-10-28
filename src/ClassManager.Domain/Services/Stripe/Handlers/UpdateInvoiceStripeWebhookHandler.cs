@@ -40,7 +40,6 @@ public class UpdateInvoiceStripeWebhookHandler
 
     if (stripeInvoice.Status == "draft")
     {
-      Console.WriteLine("É DRAFT");
       return;
     }
 
@@ -48,7 +47,6 @@ public class UpdateInvoiceStripeWebhookHandler
 
     if (customer is null)
     {
-      Console.WriteLine("NÃO ACHOU CUSTOMER");
       return;
     }
 
@@ -56,14 +54,12 @@ public class UpdateInvoiceStripeWebhookHandler
     {
       if (customer.Type == EStripeCustomerType.USER)
       {
-        Console.WriteLine("USER");
         var subscription = await _subscriptionRepository.FindByStripeSubscriptionId(stripeInvoice.SubscriptionId, new CancellationToken());
         invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, subscription.TenantPlan.Id, subscription.Id, null, customer.TenantId, subscription.TenantPlan.Price, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
         await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
       }
       else
       {
-        Console.WriteLine("TENANT");
         invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, null, null, customer.Tenant.Plan.Id, customer.TenantId, customer.Tenant.Plan.Price, EInvoiceTargetType.TENANT, EInvoiceType.TENANT_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
         await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
       }
