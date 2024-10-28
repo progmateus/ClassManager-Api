@@ -65,7 +65,7 @@ public class Rolecontroller : MainController
   [Route("{id}")]
   public async Task<IResult> Delete(
     [FromRoute] Guid id,
-    [FromServices] DeleteroleHandler handler
+    [FromServices] DeleteRoleHandler handler
   )
   {
     var result = await handler.Handle(id);

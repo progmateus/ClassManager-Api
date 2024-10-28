@@ -17,7 +17,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     {
 
     }
-    public Tenant(string name, Document document, string username, string description, Email email, Guid userId)
+    public Tenant(string name, Document document, string username, string description, Email email, Guid userId, Guid planId)
     {
       Name = name;
       Document = document;
@@ -25,6 +25,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
       Description = description;
       Email = email;
       UserId = userId;
+      PlanId = planId;
       CreatedAt = DateTime.UtcNow;
       UpdatedAt = DateTime.UtcNow;
     }

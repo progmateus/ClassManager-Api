@@ -127,7 +127,7 @@ public class PaymentService : IPaymentService
       Customer = stripeCustomerId,
       Currency = "brl",
       OffSession = true,
-      PaymentBehavior = "allow_incomplete",
+      PaymentBehavior = "default_incomplete",
       Items = new List<SubscriptionItemOptions>
       {
           new SubscriptionItemOptions { Price = stripePriceId },

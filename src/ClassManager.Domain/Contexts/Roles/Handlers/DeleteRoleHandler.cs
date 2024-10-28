@@ -4,10 +4,10 @@ using ClassManager.Shared.Commands;
 
 namespace ClassManager.Domain.Contexts.Roles.Handlers;
 
-public class DeleteroleHandler
+public class DeleteRoleHandler
 {
   private IRoleRepository _repository;
-  public DeleteroleHandler(IRoleRepository roleRepository)
+  public DeleteRoleHandler(IRoleRepository roleRepository)
   {
     _repository = roleRepository;
   }

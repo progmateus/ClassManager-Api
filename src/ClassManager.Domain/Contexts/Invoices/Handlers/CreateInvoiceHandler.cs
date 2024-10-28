@@ -66,10 +66,10 @@ public class CreateInvoiceHandler :
       return new CommandResult(false, "ERR_TENANT_PLAN_NOT_FOUND", null, null, 404);
     }
 
-    var invoice = new Invoice(subscription.UserId, subscription.TenantPlan.Id, subscription.Id, null, subscription.TenantPlan.TenantId, subscription.TenantPlan.Price, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION);
+    /* var invoice = new Invoice(subscription.UserId, subscription.TenantPlan.Id, subscription.Id, null, subscription.TenantPlan.TenantId, subscription.TenantPlan.Price, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION);
 
-    await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
+    await _invoiceRepository.CreateAsync(invoice, new CancellationToken()); */
 
-    return new CommandResult(true, "INVOICE_CREATED", subscription, null, 201);
+    return new CommandResult(true, "INVOICE_CREATED", "", null, 201);
   }
 }

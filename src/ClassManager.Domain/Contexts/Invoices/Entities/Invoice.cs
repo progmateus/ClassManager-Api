@@ -8,7 +8,19 @@ using ClassManager.Domain.Shared.Entities;
 namespace ClassManager.Domain.Contexts.Invoices.Entities;
 public class Invoice : TenantEntity
 {
-  public Invoice(Guid userId, Guid? tenantPlanId, Guid? subscriptionId, Guid? planId, Guid tenantId, decimal amount, EInvoiceTargetType targetType, EInvoiceType type)
+  public Invoice(
+    Guid userId,
+    Guid? tenantPlanId,
+      Guid? subscriptionId,
+    Guid? planId,
+    Guid tenantId,
+    decimal amount,
+    EInvoiceTargetType targetType,
+    EInvoiceType type,
+    string stripeInvoiceId,
+    string stripeInvoiceUrl,
+    string stripeInvoiceNumber
+  )
   {
     UserId = userId;
     TenantPlanId = tenantPlanId;
@@ -18,6 +30,9 @@ public class Invoice : TenantEntity
     Type = type;
     TenantId = tenantId;
     Amount = amount;
+    StripeInvoiceId = stripeInvoiceId;
+    StripeInvoiceUrl = stripeInvoiceUrl;
+    StripeInvoiceNumber = stripeInvoiceNumber;
     ExpiresAt = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month));
   }
 

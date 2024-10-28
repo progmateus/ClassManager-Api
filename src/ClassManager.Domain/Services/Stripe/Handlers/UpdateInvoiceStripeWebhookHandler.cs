@@ -37,30 +37,34 @@ public class UpdateInvoiceStripeWebhookHandler
       return;
     } */
 
+
     if (stripeInvoice.Status == "draft")
     {
+      Console.WriteLine("É DRAFT");
       return;
     }
 
-    var customer = await _stripeCustomerRepository.FindByCustomerId(stripeInvoice.Customer.Id, new CancellationToken());
+    var customer = await _stripeCustomerRepository.FindByCustomerId(stripeInvoice.CustomerId, default);
 
     if (customer is null)
     {
+      Console.WriteLine("NÃO ACHOU CUSTOMER");
       return;
     }
 
-
     if (stripeInvoice.BillingReason == "subscription_create")
     {
-      if (customer.Type != EStripeCustomerType.USER)
+      if (customer.Type == EStripeCustomerType.USER)
       {
-        var subscription = await _subscriptionRepository.FindByStripeSubscriptionId(stripeInvoice.Subscription.Id, new CancellationToken());
-        invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, subscription.TenantPlan.Id, subscription.Id, null, customer.TenantId, subscription.TenantPlan.Price, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION);
+        Console.WriteLine("USER");
+        var subscription = await _subscriptionRepository.FindByStripeSubscriptionId(stripeInvoice.SubscriptionId, new CancellationToken());
+        invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, subscription.TenantPlan.Id, subscription.Id, null, customer.TenantId, subscription.TenantPlan.Price, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
         await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
       }
       else
       {
-        invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, null, null, customer.Tenant.Plan.Id, customer.TenantId, customer.Tenant.Plan.Price, EInvoiceTargetType.TENANT, EInvoiceType.TENANT_SUBSCRIPTION);
+        Console.WriteLine("TENANT");
+        invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, null, null, customer.Tenant.Plan.Id, customer.TenantId, customer.Tenant.Plan.Price, EInvoiceTargetType.TENANT, EInvoiceType.TENANT_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
         await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
       }
     }

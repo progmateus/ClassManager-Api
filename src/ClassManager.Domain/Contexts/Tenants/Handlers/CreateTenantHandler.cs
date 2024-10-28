@@ -103,27 +103,29 @@ public class CreateTenantHandler :
       return new CommandResult(false, "ERR_PLAN_NOT_FOUND", null, null, 404);
     }
 
-    var tenant = new Tenant(command.Name, document, command.Username, command.Description, email, loggedUserId);
+    var tenant = new Tenant(command.Name, document, command.Username, command.Description, email, loggedUserId, command.PlanId);
 
     var stripeCreatedAccount = _paymentService.CreateAccount(tenant.Id, tenant.Email);
     var stripeCreatedCustomer = _paymentService.CreateCustomer(tenant.Name, tenant.Email, null);
     var stripeSubscription = _paymentService.CreateSubscription(null, tenantPlan.StripePriceId, stripeCreatedCustomer.Id, null);
-    var stripeInvoice = _paymentService.CreateInvoice(tenant.Id, stripeCreatedCustomer.Id, stripeSubscription.Id, null);
+    /* var stripeInvoice = _paymentService.CreateInvoice(tenant.Id, stripeCreatedCustomer.Id, stripeSubscription.Id, null); */
 
     tenant.SetStripeInformations(stripeCreatedAccount.Id, stripeCreatedCustomer.Id, stripeSubscription.Id);
 
-    var invoice = new Invoice(loggedUserId, null, null, tenantPlan.Id, tenant.Id, tenantPlan.Price, EInvoiceTargetType.TENANT, EInvoiceType.TENANT_SUBSCRIPTION);
+    /* var invoice = new Invoice(loggedUserId, null, null, tenantPlan.Id, tenant.Id, tenantPlan.Price, EInvoiceTargetType.TENANT, EInvoiceType.TENANT_SUBSCRIPTION); */
     var stripeCustomerEntity = new StripeCustomer(loggedUserId, tenantPlan.Id, stripeCreatedCustomer.Id, EStripeCustomerType.TENANT);
 
-    invoice.SetStripeInformations(stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
+    /* invoice.SetStripeInformations(stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number); */
 
     var userAdminRole = new UsersRoles(loggedUserId, role.Id, tenant.Id);
 
-    tenant.Invoices.Add(invoice);
+    /* tenant.Invoices.Add(invoice); */
     tenant.StripeCustomers.Add(stripeCustomerEntity);
-    /* tenant.UsersRoles.Add(userAdminRole); */
+    tenant.UsersRoles.Add(userAdminRole);
 
     await _tenantRepository.CreateAsync(tenant, new CancellationToken());
+
+    _paymentService.CreateInvoice(tenant.Id, stripeCreatedCustomer.Id, stripeSubscription.Id, null);
 
     var tenantCreated = _mapper.Map<TenantViewModel>(tenant);
 
