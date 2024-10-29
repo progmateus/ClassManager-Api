@@ -5,13 +5,13 @@ using Stripe;
 
 namespace ClassManager.Domain.Services.Stripe.Handlers;
 
-public class UpdateInvoiceStripeWebhookHandler
+public class UpdateStripeInvoiceWebhookHandler
 {
   private readonly IInvoiceRepository _invoiceRepository;
   private readonly IStripeCustomerRepository _stripeCustomerRepository;
   private readonly ISubscriptionRepository _subscriptionRepository;
 
-  public UpdateInvoiceStripeWebhookHandler(
+  public UpdateStripeInvoiceWebhookHandler(
     IInvoiceRepository invoiceRepository,
     IStripeCustomerRepository stripeCustomerRepository,
     ISubscriptionRepository subscriptionRepository
@@ -55,6 +55,14 @@ public class UpdateInvoiceStripeWebhookHandler
       if (customer.Type == EStripeCustomerType.USER)
       {
         var subscription = await _subscriptionRepository.FindByStripeSubscriptionId(stripeInvoice.SubscriptionId, new CancellationToken());
+
+        if (subscription is null)
+        {
+          Console.WriteLine("======================");
+          Console.WriteLine("======================");
+          Console.WriteLine("======================");
+          Console.WriteLine("NÃO ACHOU SUBSCRIPTION");
+        }
         invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, subscription.TenantPlan.Id, subscription.Id, null, customer.TenantId, subscription.TenantPlan.Price, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
         await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
       }

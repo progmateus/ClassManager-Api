@@ -2,10 +2,10 @@ using ClassManager.Domain.Contexts.Roles.Commands;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
+using ClassManager.Domain.Services.Stripe.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
-using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
 
 namespace ClassManager.Domain.Contexts.Subscriptions.Handlers;
@@ -15,16 +15,22 @@ public class UpdateSubscriptionHandler : Notifiable
   private ISubscriptionRepository _subscriptionRepository;
   private ITenantPlanRepository _tenantPlanrepository;
   private readonly IAccessControlService _accessControlService;
+  private readonly IPaymentService _paymentService;
+  private readonly ITenantRepository _tenantRepository;
 
   public UpdateSubscriptionHandler(ISubscriptionRepository subscriptionRepository,
   ITenantPlanRepository tenantPlanrepository,
-  IAccessControlService accessControlService
+  IAccessControlService accessControlService,
+  IPaymentService paymentService,
+  ITenantRepository tenantRepository
 
   )
   {
     _subscriptionRepository = subscriptionRepository;
     _tenantPlanrepository = tenantPlanrepository;
     _accessControlService = accessControlService;
+    _paymentService = paymentService;
+    _tenantRepository = tenantRepository;
 
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid subscriptionId, UpdateSubscriptionCommand command)
@@ -40,6 +46,14 @@ public class UpdateSubscriptionHandler : Notifiable
 
     var subscription = await _subscriptionRepository.FindByIdAndTenantIdAsync(subscriptionId, tenantId, new CancellationToken());
 
+    var tenant = await _tenantRepository.GetByIdAsync(tenantId, new CancellationToken());
+
+
+    if (tenant is null)
+    {
+      return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, null, 404);
+    }
+
     if (subscription is null)
     {
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, null, 404);
@@ -53,9 +67,23 @@ public class UpdateSubscriptionHandler : Notifiable
     if (command.Status.HasValue)
     {
 
+      if (command.Status.Value == subscription.Status)
+      {
+        return new CommandResult(false, "ERR_INVALID_STATUS", null, null, 400);
+      }
+
       if (subscription.Status == ESubscriptionStatus.CANCELED)
       {
         return new CommandResult(false, "ERR_SUBSCRIPTION_INACTIVE", null, null, 400);
+      }
+
+      if (command.Status == ESubscriptionStatus.ACTIVE)
+      {
+        _paymentService.ResumeSubscription(subscription.StripeSubscriptionId, tenant.StripeAccountId);
+      }
+      else if (command.Status == ESubscriptionStatus.CANCELED)
+      {
+        _paymentService.CancelSubscription(subscription.StripeSubscriptionId, tenant.StripeAccountId);
       }
       subscription.ChangeStatus(command.Status.Value);
     }

@@ -29,12 +29,10 @@ public class CreateSubscriptionHandler : Notifiable,
   private IRoleRepository _roleRepository;
   private IStudentsClassesRepository _studentsClassesRepository;
   private IClassRepository _classRepository;
-
   private ITenantPlanRepository _tenantPlanRepository;
   private readonly IAccessControlService _accessControlService;
   private readonly IPaymentService _paymentService;
   private readonly IUserRepository _userRepository;
-  private readonly IInvoiceRepository _invoiceRepository;
   private readonly IStripeCustomerRepository _stripeCustomerRepository;
 
   public CreateSubscriptionHandler(
@@ -47,7 +45,6 @@ public class CreateSubscriptionHandler : Notifiable,
     IAccessControlService accessControlService,
     IPaymentService paymentService,
     IUserRepository userRepository,
-    IInvoiceRepository invoiceRepository,
     IStripeCustomerRepository stripeCustomerRepository
 
   )
@@ -61,7 +58,6 @@ public class CreateSubscriptionHandler : Notifiable,
     _accessControlService = accessControlService;
     _paymentService = paymentService;
     _userRepository = userRepository;
-    _invoiceRepository = invoiceRepository;
     _stripeCustomerRepository = stripeCustomerRepository;
 
   }
@@ -124,7 +120,7 @@ public class CreateSubscriptionHandler : Notifiable,
       await _usersRolesRepository.CreateAsync(userRole, new CancellationToken());
     }
 
-    DateTime lastDayOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month));
+    /* DateTime lastDayOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month)); */
 
     var user = await _userRepository.GetByIdAsync(userId, default);
 
@@ -139,22 +135,16 @@ public class CreateSubscriptionHandler : Notifiable,
     {
       var stripeCustomerCreated = _paymentService.CreateCustomer(user.Name.ToString(), user.Email.ToString(), tenantPlan.Tenant.StripeAccountId);
       stripeCustomerEntity = new StripeCustomer(user.Id, tenantId, stripeCustomerCreated.Id, EStripeCustomerType.USER);
-      user.StripeCustomers.Add(stripeCustomerEntity);
-      await _userRepository.UpdateAsync(user, default);
+      await _stripeCustomerRepository.CreateAsync(stripeCustomerEntity, new CancellationToken());
     }
 
     var stripeSubscriptionCreated = _paymentService.CreateSubscription(tenantId, tenantPlan.StripePriceId, stripeCustomerEntity.StripeCustomerId, tenantPlan.Tenant.StripeAccountId);
 
     var stripeInvoice = _paymentService.CreateInvoice(tenantId, stripeCustomerEntity.StripeCustomerId, stripeSubscriptionCreated.Id, tenantPlan.Tenant.StripeAccountId);
 
-    var subscription = new Subscription(userId, command.TenantPlanId, tenantId, stripeSubscriptionCreated.Id, lastDayOfMonth);
+    /* var subscription = new Subscription(userId, command.TenantPlanId, tenantId, stripeSubscriptionCreated.Id, DateTime.Now);
 
-    /* var invoice = new Invoice(userId, tenantPlan.Id, subscription.Id, null, tenantPlan.TenantId, tenantPlan.Price, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION); */
-
-    /* invoice.SetStripeInformations(stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number); */
-
-    await _subscriptionRepository.CreateAsync(subscription, new CancellationToken());
-    /* await _invoiceRepository.CreateAsync(invoice, new CancellationToken()); */
+    await _subscriptionRepository.CreateAsync(subscription, new CancellationToken()); */
 
     var studentclass = new StudentsClasses(userId, command.ClassId);
 
@@ -162,6 +152,6 @@ public class CreateSubscriptionHandler : Notifiable,
 
     await _studentsClassesRepository.CreateAsync(studentclass, new CancellationToken());
 
-    return new CommandResult(true, "SUBSCRIPTION_CREATED", subscription, null, 201);
+    return new CommandResult(true, "SUBSCRIPTION_CREATED", new { }, null, 201);
   }
 }

@@ -169,7 +169,12 @@ public class PaymentService : IPaymentService
         "invoice.finalized",
         "invoice.updated",
         "identity.verification_session.verified",
-        "customer.created"
+        "customer.created",
+        "customer.subscription.created",
+        "customer.subscription.paused",
+        "customer.subscription.pending_update_applied",
+        "customer.subscription.pending_update_expired",
+        "customer.subscription.resumed",
       },
       Url = $"{Configuration.BaseUrl}/webhooks/stripe/listen",
       Connect = true

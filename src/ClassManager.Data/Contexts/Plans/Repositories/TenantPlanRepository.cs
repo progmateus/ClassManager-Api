@@ -1,7 +1,5 @@
 using ClassManager.Data.Contexts.shared.Repositories;
 using ClassManager.Data.Data;
-using ClassManager.Domain.Contexts.Plans.Entities;
-using ClassManager.Domain.Contexts.Plans.Repositories;
 using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
@@ -11,6 +9,11 @@ namespace ClassManager.Data.Contexts.Plans.Repositories;
 public class TenantPlanRepository : Repository<TenantPlan>, ITenantPlanRepository
 {
   public TenantPlanRepository(AppDbContext context) : base(context) { }
+
+  public async Task<TenantPlan?> FindByStripePriceId(string stripePriceId, CancellationToken cancellationToken = default)
+  {
+    return await DbSet.FirstOrDefaultAsync((x) => x.StripePriceId == stripePriceId, cancellationToken);
+  }
 
   public async Task<TenantPlan> GetByIdAndTenantId(Guid tenantId, Guid planId, CancellationToken cancellationToken)
   {

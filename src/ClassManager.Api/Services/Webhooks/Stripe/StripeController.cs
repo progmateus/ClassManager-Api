@@ -1,10 +1,7 @@
-using ClasManager.Domain.Contexts.Bookings.Commands;
-using ClasManager.Domain.Contexts.Bookings.Handlers;
 using ClassManager.Api.Contexts.Shared.Controllers;
 using ClassManager.Domain.Services.Stripe.Handlers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Newtonsoft.Json;
 using Stripe;
 
 namespace ClassManager.Api.Contexts.Tenants.Controllers;
@@ -14,7 +11,8 @@ public class StripeController : MainController
 {
   [HttpPost("listen")]
   public async Task<IResult> Listen(
-    [FromServices] UpdateInvoiceStripeWebhookHandler updateInvoiceStripeWebhookHandler
+    [FromServices] UpdateStripeInvoiceWebhookHandler updateStripeInvoiceWebhookHandler,
+    [FromServices] CreateStripeSubscriptionWebhookHandler createStripeSubscriptionWebhookHandler
   )
   {
     try
@@ -25,17 +23,11 @@ public class StripeController : MainController
 
       if (stripeEvent.Type == EventTypes.InvoiceFinalized)
       {
-        await updateInvoiceStripeWebhookHandler.Handle(stripeEvent.Data.Object as Invoice);
+        await updateStripeInvoiceWebhookHandler.Handle(stripeEvent.Data.Object as Invoice);
       }
-
-      if (stripeEvent.Type == EventTypes.PaymentIntentSucceeded)
+      else if (stripeEvent.Type == EventTypes.SubscriptionScheduleCreated)
       {
-        var paymentIntent = stripeEvent.Data.Object as PaymentIntent;
-
-      }
-      else if (stripeEvent.Type == EventTypes.PaymentMethodAttached)
-      {
-        var paymentMethod = stripeEvent.Data.Object as PaymentMethod;
+        await createStripeSubscriptionWebhookHandler.Handle(stripeEvent.Data.Object as Subscription);
       }
       else
       {
