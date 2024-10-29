@@ -12,6 +12,17 @@ public class PaymentService : IPaymentService
     StripeConfiguration.ApiKey = Configuration.Stripe.ApiKey;
   }
 
+  public Subscription CancelSubscription(string stripeSubscriptionId, string? connectedAccountId)
+  {
+    var requestOptions = new RequestOptions
+    {
+      StripeAccount = connectedAccountId ?? null,
+    };
+
+    var service = new SubscriptionService();
+    return service.Cancel(stripeSubscriptionId, null, requestOptions);
+  }
+
   public Account CreateAccount(Guid tenantId, string tenantEmail)
   {
     var options = new AccountCreateOptions
@@ -167,22 +178,18 @@ public class PaymentService : IPaymentService
     service.Create(options);
   }
 
-  public void RequestUsingConnectedAccount()
+  public Subscription ResumeSubscription(string stripeSubscriptionId, string? connectedAccountId)
   {
-    var options = new PaymentIntentCreateOptions
-    {
-      Amount = 1000,
-      Currency = "usd",
-      AutomaticPaymentMethods = new PaymentIntentAutomaticPaymentMethodsOptions
-      {
-        Enabled = true,
-      },
-    };
     var requestOptions = new RequestOptions
     {
-      StripeAccount = "{{CONNECTED_ACCOUNT_ID}}",
+      StripeAccount = connectedAccountId ?? null,
     };
-    var service = new PaymentIntentService();
-    service.Create(options, requestOptions);
+
+    var options = new SubscriptionResumeOptions
+    {
+      BillingCycleAnchor = SubscriptionBillingCycleAnchor.Now,
+    };
+    var service = new SubscriptionService();
+    return service.Resume(stripeSubscriptionId, options, requestOptions);
   }
 }

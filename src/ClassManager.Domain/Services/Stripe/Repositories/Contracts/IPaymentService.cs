@@ -10,6 +10,8 @@ namespace ClassManager.Domain.Services.Stripe.Repositories.Contracts
     Price CreatePrice(Guid productEntityId, Guid? tenantId, string stripeProductId, decimal priceInCents, string? connectedAccountId);
     Invoice CreateInvoice(Guid tenantId, string stripeCustomerId, string stripeSubscriptionId, string? connectedAccountId);
     Account CreateAccount(Guid tenantId, string tenantEmail);
+    Subscription ResumeSubscription(string stripeSubscriptionId, string? connectedAccountId);
+    Subscription CancelSubscription(string stripeSubscriptionId, string? connectedAccountId);
     void CreateWebhook();
   }
 }
