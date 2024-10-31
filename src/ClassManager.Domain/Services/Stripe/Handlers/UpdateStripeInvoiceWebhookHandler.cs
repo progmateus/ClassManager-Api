@@ -28,15 +28,6 @@ public class UpdateStripeInvoiceWebhookHandler
     {
       return;
     }
-    Contexts.Invoices.Entities.Invoice invoice;
-
-    /* var invoiceEntity = await _invoiceRepository.FindByStripeInvoiceId(stripeInvoice.Id);
-
-    if (invoiceEntity is null)
-    {
-      return;
-    } */
-
 
     if (stripeInvoice.Status == "draft")
     {
@@ -58,17 +49,14 @@ public class UpdateStripeInvoiceWebhookHandler
 
         if (subscription is null)
         {
-          Console.WriteLine("======================");
-          Console.WriteLine("======================");
-          Console.WriteLine("======================");
-          Console.WriteLine("NÃO ACHOU SUBSCRIPTION");
+          return;
         }
-        invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, subscription.TenantPlan.Id, subscription.Id, null, customer.TenantId, subscription.TenantPlan.Price, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
+        var invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, subscription.TenantPlan.Id, subscription.Id, null, customer.TenantId, subscription.TenantPlan.Price, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
         await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
       }
       else
       {
-        invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, null, null, customer.Tenant.Plan.Id, customer.TenantId, customer.Tenant.Plan.Price, EInvoiceTargetType.TENANT, EInvoiceType.TENANT_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
+        var invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, null, null, customer.Tenant.Plan.Id, customer.TenantId, customer.Tenant.Plan.Price, EInvoiceTargetType.TENANT, EInvoiceType.TENANT_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
         await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
       }
     }

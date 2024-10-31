@@ -25,7 +25,7 @@ public class StripeController : MainController
       {
         await updateStripeInvoiceWebhookHandler.Handle(stripeEvent.Data.Object as Invoice);
       }
-      else if (stripeEvent.Type == EventTypes.SubscriptionScheduleCreated)
+      else if (stripeEvent.Type == EventTypes.CustomerSubscriptionCreated)
       {
         await createStripeSubscriptionWebhookHandler.Handle(stripeEvent.Data.Object as Subscription);
       }

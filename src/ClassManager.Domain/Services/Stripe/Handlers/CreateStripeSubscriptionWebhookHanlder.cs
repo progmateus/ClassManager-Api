@@ -1,6 +1,7 @@
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
+using ClassManager.Domain.Services.Stripe.Repositories.Contracts;
 using Stripe;
 
 namespace ClassManager.Domain.Services.Stripe.Handlers;
@@ -10,20 +11,24 @@ public class CreateStripeSubscriptionWebhookHandler
   private readonly IStripeCustomerRepository _stripeCustomerRepository;
   private readonly ISubscriptionRepository _subscriptionRepository;
   private readonly ITenantPlanRepository _tenantPlanRepository;
+  private readonly IPaymentService _paymentService;
 
   public CreateStripeSubscriptionWebhookHandler(
     IStripeCustomerRepository stripeCustomerRepository,
     ISubscriptionRepository subscriptionRepository,
-    ITenantPlanRepository tenantPlanRepository
+    ITenantPlanRepository tenantPlanRepository,
+    IPaymentService paymentService
 
     )
   {
     _stripeCustomerRepository = stripeCustomerRepository;
     _subscriptionRepository = subscriptionRepository;
     _tenantPlanRepository = tenantPlanRepository;
+    _paymentService = paymentService;
   }
   public async Task Handle(Subscription? stripeSubscription)
   {
+
     if (stripeSubscription is null)
     {
       return;
@@ -36,7 +41,7 @@ public class CreateStripeSubscriptionWebhookHandler
       return;
     }
 
-    var tenantPlan = await _tenantPlanRepository.FindByStripePriceId(stripeSubscription.Items.Data['0'].Plan.Id);
+    var tenantPlan = await _tenantPlanRepository.FindByStripePriceId(stripeSubscription.Items.Data[0].Plan.Id);
 
     if (tenantPlan is null)
     {
@@ -46,5 +51,7 @@ public class CreateStripeSubscriptionWebhookHandler
     var subscription = new Contexts.Subscriptions.Entities.Subscription(customer.UserId, tenantPlan.Id, tenantPlan.TenantId, stripeSubscription.Id, DateTime.Now);
 
     await _subscriptionRepository.CreateAsync(subscription, new CancellationToken());
+
+    _paymentService.CreateInvoice(tenantPlan.TenantId, customer.StripeCustomerId, stripeSubscription.Id, tenantPlan.Tenant.StripeAccountId);
   }
 }
