@@ -13,7 +13,7 @@ public class Subscription : TenantEntity
     UserId = userId;
     TenantId = tenantId;
     TenantPlanId = planId;
-    Status = ESubscriptionStatus.ACTIVE;
+    Status = ESubscriptionStatus.INCOMPLETE;
     ExpiresDate = expiresDate;
     StripeSubscriptionId = stripeSubscriptionId;
   }

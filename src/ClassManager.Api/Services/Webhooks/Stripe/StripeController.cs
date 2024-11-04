@@ -29,6 +29,15 @@ public class StripeController : MainController
       {
         await createStripeSubscriptionWebhookHandler.Handle(stripeEvent.Data.Object as Subscription);
       }
+      else if (
+        stripeEvent.Type == EventTypes.CustomerSubscriptionCreated ||
+        stripeEvent.Type == EventTypes.CustomerSubscriptionPaused ||
+        stripeEvent.Type == EventTypes.CustomerSubscriptionDeleted ||
+        stripeEvent.Type == EventTypes.CustomerSubscriptionResumed ||
+        stripeEvent.Type == EventTypes.CustomerSubscriptionUpdated)
+      {
+        await createStripeSubscriptionWebhookHandler.Handle(stripeEvent.Data.Object as Subscription);
+      }
       else
       {
         Console.WriteLine("Unhandled event type: {0}", stripeEvent.Type);

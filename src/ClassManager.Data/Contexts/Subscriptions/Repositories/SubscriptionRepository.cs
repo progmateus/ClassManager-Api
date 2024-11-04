@@ -19,7 +19,7 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
 
   public async Task<bool> HasActiveSubscription(Guid userId, Guid tenantId, CancellationToken cancellationToken)
   {
-    return await DbSet.Include(x => x.TenantPlan).AsNoTracking().AnyAsync(x => x.TenantPlan.TenantId == tenantId && x.UserId == userId && x.Status == ESubscriptionStatus.ACTIVE, cancellationToken);
+    return await DbSet.Include(x => x.TenantPlan).AsNoTracking().AnyAsync(x => x.TenantPlan.TenantId == tenantId && x.UserId == userId && (x.Status == ESubscriptionStatus.ACTIVE || x.Status == ESubscriptionStatus.INCOMPLETE), cancellationToken);
   }
 
   public async Task<Subscription?> GetSubscriptionProfileAsync(Guid id, Guid tenantId, CancellationToken cancellationToken)

@@ -74,7 +74,7 @@ public class UpdateSubscriptionHandler : Notifiable
 
       if (subscription.Status == ESubscriptionStatus.CANCELED)
       {
-        return new CommandResult(false, "ERR_SUBSCRIPTION_INACTIVE", null, null, 400);
+        return new CommandResult(false, "ERR_SUBSCRIPTION_CANCELED", null, null, 400);
       }
 
       if (command.Status == ESubscriptionStatus.ACTIVE)
@@ -99,7 +99,7 @@ public class UpdateSubscriptionHandler : Notifiable
       subscription.ChangePlan(command.TenantPlanId.Value);
     }
 
-    await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
+    /* await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken()); */
 
     return new CommandResult(true, "SUBSCRIPTION_UPDATED", subscription, null, 200);
   }
