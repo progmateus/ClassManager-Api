@@ -12,6 +12,7 @@ namespace ClassManager.Domain.Services.Stripe.Repositories.Contracts
     Account CreateAccount(Guid tenantId, string tenantEmail);
     Subscription ResumeSubscription(string stripeSubscriptionId, string? connectedAccountId);
     Subscription CancelSubscription(string stripeSubscriptionId, string? connectedAccountId);
+    void CreateBankAccount(string stripeCustomerId, string number, string country, string currency, string holderName, string connectedAccountId);
     void CreateWebhook();
   }
 }
