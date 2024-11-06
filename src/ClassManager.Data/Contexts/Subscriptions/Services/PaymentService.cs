@@ -12,6 +12,20 @@ public class PaymentService : IPaymentService
     StripeConfiguration.ApiKey = Configuration.Stripe.ApiKey;
   }
 
+  public void AcceptStripeTerms(string ip, string connectedAccountId)
+  {
+    var options = new AccountUpdateOptions
+    {
+      TosAcceptance = new AccountTosAcceptanceOptions
+      {
+        Date = DateTimeOffset.FromUnixTimeSeconds(1609798905).UtcDateTime,
+        Ip = ip,
+      },
+    };
+    var service = new AccountService();
+    service.Update("{{CONNECTED_ACCOUNT_ID}}", options);
+  }
+
   public Subscription CancelSubscription(string stripeSubscriptionId, string? connectedAccountId)
   {
     var requestOptions = new RequestOptions

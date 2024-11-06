@@ -13,6 +13,7 @@ namespace ClassManager.Domain.Services.Stripe.Repositories.Contracts
     Subscription ResumeSubscription(string stripeSubscriptionId, string? connectedAccountId);
     Subscription CancelSubscription(string stripeSubscriptionId, string? connectedAccountId);
     void CreateBankAccount(string number, string country, string currency, string holderName, string connectedAccountId);
+    void AcceptStripeTerms(string ip, string connectedAccountId);
     void CreateWebhook();
   }
 }
