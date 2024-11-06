@@ -94,4 +94,21 @@ public class TenantController : MainController
 
     return Results.Ok(result);
   }
+
+  [HttpPost("{id}/bank-account")]
+  public async Task<IResult> CreateBankAccount(
+    [FromRoute] Guid id,
+    [FromServices] CreateTenantBankAccountHandler handler,
+    [FromBody] CreateTenantBankAccountCommand command
+  )
+  {
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), id, command);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
 }

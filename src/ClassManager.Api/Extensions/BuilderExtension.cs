@@ -278,6 +278,8 @@ public static class BuilderExtension
     builder.Services.AddTransient<UpdateTenantHandler>();
     builder.Services.AddTransient<DeleteTenantHandler>();
     builder.Services.AddTransient<GetTenantHandler>();
+    builder.Services.AddTransient<CreateTenantBankAccountHandler>();
+
 
 
     builder.Services.AddTransient<CreatePlandHandler>();

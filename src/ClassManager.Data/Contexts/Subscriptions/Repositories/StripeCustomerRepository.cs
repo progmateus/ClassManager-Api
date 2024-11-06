@@ -17,8 +17,8 @@ public class StripeCustomerRepository : TRepository<StripeCustomer>, IStripeCust
     return await DbSet.Include(x => x.Tenant).ThenInclude(t => t.Plan).FirstOrDefaultAsync(x => x.StripeCustomerId == customerId, cancellationToken);
   }
 
-  public async Task<StripeCustomer?> FindByUserIdAndTenantIdAndType(Guid userId, Guid tenantId, EStripeCustomerType type, CancellationToken cancellationToken)
+  public async Task<StripeCustomer?> FindByUserIdAndTenantIdAndType(Guid? userId, Guid tenantId, EStripeCustomerType type, CancellationToken cancellationToken)
   {
-    return await DbSet.FirstOrDefaultAsync(x => x.UserId == userId && x.TenantId == tenantId && x.Type == type);
+    return await DbSet.FirstOrDefaultAsync(x => (!userId.HasValue || x.UserId == userId) && x.TenantId == tenantId && x.Type == type, cancellationToken);
   }
 }

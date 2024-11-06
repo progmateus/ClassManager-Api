@@ -43,26 +43,22 @@ public class PaymentService : IPaymentService
     return service.Create(options);
   }
 
-  public void CreateBankAccount(string stripeCustomerId, string number, string country, string currency, string holderName, string connectedAccountId)
+  public void CreateBankAccount(string number, string country, string currency, string holderName, string connectedAccountId)
   {
-    var requestOptions = new RequestOptions
-    {
-      StripeAccount = connectedAccountId ?? null,
-    };
     var options = new AccountExternalAccountCreateOptions
     {
-      ExternalAccount = new AccountExternalAccountCardOptions()
+      ExternalAccount = new AccountExternalAccountBankAccountOptions()
       {
-        Number = number,
-        AddressCountry = country,
+        AccountNumber = number,
+        Country = country,
         Currency = currency,
         Object = "bank_account",
-        Name = holderName,
-
+        AccountHolderName = holderName,
+        RoutingNumber = "110-0000",
       },
     };
     var service = new AccountExternalAccountService();
-    service.Create(stripeCustomerId, options, requestOptions);
+    service.Create(connectedAccountId, options);
   }
 
   public Customer CreateCustomer(string name, string email, string? connectedAccountId)
