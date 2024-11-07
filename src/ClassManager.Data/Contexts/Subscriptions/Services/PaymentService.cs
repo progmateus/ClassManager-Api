@@ -1,6 +1,8 @@
 using ClassManager.Domain;
+using ClassManager.Domain.Contexts.Shared.ValueObjects;
 using ClassManager.Domain.Services.Stripe.Repositories.Contracts;
 using Stripe;
+using Address = ClassManager.Domain.Contexts.Shared.ValueObjects.Address;
 
 namespace ClassManager.Data.Contexts.Tenants.Services;
 
@@ -23,7 +25,7 @@ public class PaymentService : IPaymentService
       },
     };
     var service = new AccountService();
-    service.Update("{{CONNECTED_ACCOUNT_ID}}", options);
+    service.Update(connectedAccountId, options);
   }
 
   public Subscription CancelSubscription(string stripeSubscriptionId, string? connectedAccountId)
@@ -49,9 +51,119 @@ public class PaymentService : IPaymentService
         Losses = new AccountControllerLossesOptions { Payments = "application" },
         StripeDashboard = new AccountControllerStripeDashboardOptions
         {
-          Type = "express",
+          Type = "none",
         },
+        RequirementCollection = "application"
       },
+      Capabilities = new AccountCapabilitiesOptions
+      {
+        Transfers = new AccountCapabilitiesTransfersOptions
+        {
+          Requested = true,
+        },
+        CardPayments = new AccountCapabilitiesCardPaymentsOptions
+        {
+          Requested = true
+        },
+        BoletoPayments = new AccountCapabilitiesBoletoPaymentsOptions
+        {
+          Requested = true
+        }
+      },
+      BusinessType = "individual",
+      Individual = new AccountIndividualOptions
+      {
+        FirstName = "Volei",
+        LastName = "Quadra",
+        Email = tenantEmail,
+        Address = new AddressOptions
+        {
+          Line1 = "Teste ta",
+          City = "Rio de Janeiro",
+          State = "Rio de Janeiro",
+          Country = "BR",
+          PostalCode = "21235603",
+        },
+        Phone = "+5521979407109",
+        PoliticalExposure = "none",
+        IdNumber = "366.350.230-97",
+        Dob = new DobOptions
+        {
+          Day = 30,
+          Month = 9,
+          Year = 2000
+        }
+      },
+      BusinessProfile = new AccountBusinessProfileOptions
+      {
+        ProductDescription = "Description",
+        Mcc = "8299"
+      }
+    };
+    var service = new AccountService();
+    return service.Create(options);
+  }
+
+  public Account CreateAccount(string firstName, string LastName, string email, string phone, DateTime birthDate, string document, Address address)
+  {
+    var options = new AccountCreateOptions
+    {
+      Country = "BR",
+      Email = email,
+      Controller = new AccountControllerOptions
+      {
+        Fees = new AccountControllerFeesOptions { Payer = "application" },
+        Losses = new AccountControllerLossesOptions { Payments = "application" },
+        StripeDashboard = new AccountControllerStripeDashboardOptions
+        {
+          Type = "none",
+        },
+        RequirementCollection = "application"
+      },
+      Capabilities = new AccountCapabilitiesOptions
+      {
+        Transfers = new AccountCapabilitiesTransfersOptions
+        {
+          Requested = true,
+        },
+        CardPayments = new AccountCapabilitiesCardPaymentsOptions
+        {
+          Requested = true
+        },
+        BoletoPayments = new AccountCapabilitiesBoletoPaymentsOptions
+        {
+          Requested = true
+        }
+      },
+      BusinessType = "individual",
+      Individual = new AccountIndividualOptions
+      {
+        FirstName = firstName,
+        LastName = LastName,
+        Email = email,
+        Address = new AddressOptions
+        {
+          Line1 = address.Street,
+          City = address.City,
+          State = address.State,
+          Country = address.Country,
+          PostalCode = address.ZipCode,
+        },
+        Phone = phone,
+        PoliticalExposure = "none",
+        IdNumber = document,
+        Dob = new DobOptions
+        {
+          Day = birthDate.Day,
+          Month = birthDate.Month,
+          Year = birthDate.Year
+        }
+      },
+      BusinessProfile = new AccountBusinessProfileOptions
+      {
+        ProductDescription = "Description",
+        Mcc = "8299"
+      }
     };
     var service = new AccountService();
     return service.Create(options);

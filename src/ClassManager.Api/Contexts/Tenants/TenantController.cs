@@ -3,6 +3,8 @@ using ClassManager.Domain.Contexts.Tenants.Commands;
 using ClassManager.Domain.Contexts.Tenants.Handlers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Web;
+
 
 namespace ClassManager.Api.Contexts.Tenants.Controllers;
 [Authorize]
@@ -15,7 +17,9 @@ public class TenantController : MainController
       [FromServices] CreateTenantHandler handler
   )
   {
-    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), command);
+    string userIp = HttpContext.Connection.RemoteIpAddress?.ToString() ?? "";
+
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), userIp, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 

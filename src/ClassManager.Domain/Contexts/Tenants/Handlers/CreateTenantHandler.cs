@@ -49,7 +49,7 @@ public class CreateTenantHandler :
     _mapper = mapper;
     _planRepository = planRepository;
   }
-  public async Task<ICommandResult> Handle(Guid loggedUserId, CreateTenantCommand command)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, string userIpAddress, CreateTenantCommand command)
   {
     // fail fast validation
     command.Validate();
@@ -108,18 +108,14 @@ public class CreateTenantHandler :
     var stripeCreatedAccount = _paymentService.CreateAccount(tenant.Id, tenant.Email);
     var stripeCreatedCustomer = _paymentService.CreateCustomer(tenant.Name, tenant.Email, null);
     var stripeSubscription = _paymentService.CreateSubscription(null, plan.StripePriceId, stripeCreatedCustomer.Id, null);
-    /* var stripeInvoice = _paymentService.CreateInvoice(tenant.Id, stripeCreatedCustomer.Id, stripeSubscription.Id, null); */
+    _paymentService.AcceptStripeTerms(userIpAddress, stripeCreatedAccount.Id);
 
     tenant.SetStripeInformations(stripeCreatedAccount.Id, stripeCreatedCustomer.Id, stripeSubscription.Id);
 
-    /* var invoice = new Invoice(loggedUserId, null, null, tenantPlan.Id, tenant.Id, tenantPlan.Price, EInvoiceTargetType.TENANT, EInvoiceType.TENANT_SUBSCRIPTION); */
     var stripeCustomerEntity = new StripeCustomer(loggedUserId, tenant.Id, stripeCreatedCustomer.Id, EStripeCustomerType.TENANT);
-
-    /* invoice.SetStripeInformations(stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number); */
 
     var userAdminRole = new UsersRoles(loggedUserId, role.Id, tenant.Id);
 
-    /* tenant.Invoices.Add(invoice); */
     tenant.StripeCustomers.Add(stripeCustomerEntity);
     tenant.UsersRoles.Add(userAdminRole);
 

@@ -1,4 +1,5 @@
 using Stripe;
+using Address = ClassManager.Domain.Contexts.Shared.ValueObjects.Address;
 
 namespace ClassManager.Domain.Services.Stripe.Repositories.Contracts
 {
@@ -9,7 +10,7 @@ namespace ClassManager.Domain.Services.Stripe.Repositories.Contracts
     Customer CreateCustomer(string name, string email, string? connectedAccountId);
     Price CreatePrice(Guid productEntityId, Guid? tenantId, string stripeProductId, decimal priceInCents, string? connectedAccountId);
     Invoice CreateInvoice(Guid tenantId, string stripeCustomerId, string stripeSubscriptionId, string? connectedAccountId);
-    Account CreateAccount(Guid tenantId, string tenantEmail);
+    Account CreateAccount(string firstName, string LastName, string email, string phone, DateTime birthDate, string document, Address address);
     Subscription ResumeSubscription(string stripeSubscriptionId, string? connectedAccountId);
     Subscription CancelSubscription(string stripeSubscriptionId, string? connectedAccountId);
     void CreateBankAccount(string number, string country, string currency, string holderName, string connectedAccountId);
