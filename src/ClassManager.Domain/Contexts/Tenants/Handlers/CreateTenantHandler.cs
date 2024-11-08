@@ -79,10 +79,12 @@ public class CreateTenantHandler :
       AddNotification("Email", "E-mail already exists");
     }
 
-    var document = new Document(command.Document, EDocumentType.CNPJ);
+    var document = new Document(command.Document, EDocumentType.CPF);
     var email = new Email(command.Email);
+    var name = new Name(command.FirstName, command.LastName);
+    var address = new Address(command.Street, command.City, command.State, command.ZipCode);
 
-    AddNotifications(document, email);
+    AddNotifications(document, email, name, address);
 
     if (Invalid)
     {
@@ -103,9 +105,15 @@ public class CreateTenantHandler :
       return new CommandResult(false, "ERR_PLAN_NOT_FOUND", null, null, 404);
     }
 
-    var tenant = new Tenant(command.Name, document, command.Username, command.Description, email, loggedUserId, command.PlanId);
+    Console.WriteLine("==============================");
+    Console.WriteLine("==============================");
+    Console.WriteLine("==============================");
+    Console.WriteLine("==============================");
+    Console.WriteLine(command.BirthDate);
 
-    var stripeCreatedAccount = _paymentService.CreateAccount(tenant.Id, tenant.Email);
+    var tenant = new Tenant($"{command.FirstName} {command.LastName}", document, command.Username, command.Description, email, loggedUserId, command.PlanId);
+
+    var stripeCreatedAccount = _paymentService.CreateAccount(command.FirstName, command.LastName, email, command.Phone, command.BirthDate, command.Document, address);
     var stripeCreatedCustomer = _paymentService.CreateCustomer(tenant.Name, tenant.Email, null);
     var stripeSubscription = _paymentService.CreateSubscription(null, plan.StripePriceId, stripeCreatedCustomer.Id, null);
     _paymentService.AcceptStripeTerms(userIpAddress, stripeCreatedAccount.Id);

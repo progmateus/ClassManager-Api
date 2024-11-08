@@ -22,9 +22,25 @@ namespace ClassManager.Domain.Contexts.Shared.ValueObjects
         .HasMaxLen(Street, 40, "Address.Street", "Street max 40 characters")
       );
     }
+
+    public Address(string street, string city, string state, string zipCode)
+    {
+      Street = street;
+      City = city;
+      State = state;
+      ZipCode = zipCode;
+
+      AddNotifications(new Contract()
+        .Requires()
+        .IsNotNullOrEmpty(City, "City", "City cannot be null")
+        .IsNotNullOrEmpty(State, "State", "State cannot be null")
+        .IsNotNullOrEmpty(ZipCode, "ZipCode", "ZipCode cannot be null")
+        .IsNotNullOrEmpty(Street, "Street", "Street cannot be null")
+      );
+    }
     public string Street { get; private set; }
-    public string Number { get; private set; }
-    public string Neighborhood { get; private set; }
+    public string? Number { get; private set; }
+    public string? Neighborhood { get; private set; }
     public string City { get; private set; }
     public string State { get; private set; }
     public string Country { get; private set; } = "BR";
