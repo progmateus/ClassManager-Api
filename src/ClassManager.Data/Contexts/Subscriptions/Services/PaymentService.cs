@@ -2,6 +2,7 @@ using ClassManager.Domain;
 using ClassManager.Domain.Contexts.Shared.ValueObjects;
 using ClassManager.Domain.Services.Stripe.Repositories.Contracts;
 using Stripe;
+using Stripe.Identity;
 using Address = ClassManager.Domain.Contexts.Shared.ValueObjects.Address;
 
 namespace ClassManager.Data.Contexts.Tenants.Services;
@@ -202,6 +203,25 @@ public class PaymentService : IPaymentService
     };
     var service = new ProductService();
     return service.Create(options, requestOptions);
+  }
+
+  public VerificationSession CreateVerificationSession(string email, Guid userId, string connectedAccountId)
+  {
+    var options = new VerificationSessionCreateOptions
+    {
+      Type = "document",
+      ProvidedDetails = new VerificationSessionProvidedDetailsOptions
+      {
+        Email = email,
+      },
+      Metadata = new Dictionary<string, string>
+      {
+        {"user_id", userId.ToString()},
+      },
+    };
+
+    var service = new VerificationSessionService();
+    return service.Create(options);
   }
 
   public Subscription CreateSubscription(Guid? tenantId, string stripePriceId, string stripeCustomerId, string? connectedAccountId)

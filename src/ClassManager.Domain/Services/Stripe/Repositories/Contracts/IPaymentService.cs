@@ -1,4 +1,5 @@
 using Stripe;
+using Stripe.Identity;
 using Address = ClassManager.Domain.Contexts.Shared.ValueObjects.Address;
 
 namespace ClassManager.Domain.Services.Stripe.Repositories.Contracts
@@ -16,5 +17,6 @@ namespace ClassManager.Domain.Services.Stripe.Repositories.Contracts
     void CreateBankAccount(string number, string country, string currency, string holderName, string connectedAccountId);
     void AcceptStripeTerms(string ip, string connectedAccountId);
     void CreateWebhook();
+    VerificationSession CreateVerificationSession(string email, Guid userId, string connectedAccountId);
   }
 }
