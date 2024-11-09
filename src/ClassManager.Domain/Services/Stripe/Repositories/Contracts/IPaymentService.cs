@@ -17,6 +17,6 @@ namespace ClassManager.Domain.Services.Stripe.Repositories.Contracts
     void CreateBankAccount(string number, string country, string currency, string holderName, string connectedAccountId);
     void AcceptStripeTerms(string ip, string connectedAccountId);
     void CreateWebhook();
-    VerificationSession CreateVerificationSession(string email, Guid userId, string connectedAccountId);
+    VerificationSession CreateVerificationSession(string email, string connectedAccountId);
   }
 }

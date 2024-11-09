@@ -205,7 +205,7 @@ public class PaymentService : IPaymentService
     return service.Create(options, requestOptions);
   }
 
-  public VerificationSession CreateVerificationSession(string email, Guid userId, string connectedAccountId)
+  public VerificationSession CreateVerificationSession(string email, string connectedAccountId)
   {
     var options = new VerificationSessionCreateOptions
     {
@@ -213,11 +213,7 @@ public class PaymentService : IPaymentService
       ProvidedDetails = new VerificationSessionProvidedDetailsOptions
       {
         Email = email,
-      },
-      Metadata = new Dictionary<string, string>
-      {
-        {"user_id", userId.ToString()},
-      },
+      }
     };
 
     var service = new VerificationSessionService();
