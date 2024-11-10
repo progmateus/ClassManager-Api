@@ -280,4 +280,11 @@ public class PaymentService : IPaymentService
     var service = new AccountLinkService();
     return service.Create(options);
   }
+
+  public Account GetAccount(string stripeAccountId)
+  {
+
+    var service = new AccountService();
+    return service.Get(stripeAccountId);
+  }
 }
