@@ -27,7 +27,6 @@ namespace ClassManager.Domain.Contexts.Shared.ValueObjects
         return true;
       }
 
-      Console.WriteLine(Number.Length);
       if (Type == EDocumentType.CPF && Number.Length == 11)
       {
         return true;

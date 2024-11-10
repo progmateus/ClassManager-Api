@@ -13,7 +13,7 @@ public class StripeController : MainController
   public async Task<IResult> Listen(
     [FromServices] UpdateStripeInvoiceWebhookHandler updateStripeInvoiceWebhookHandler,
     [FromServices] CreateStripeSubscriptionWebhookHandler createStripeSubscriptionWebhookHandler,
-    [FromServices] UpdateStripeAccountHandler UpdateSripeAccountHandler
+    [FromServices] UpdateStripeAccountWebhookHandler updateStripeAccountWebhookHandler
   )
   {
     try
@@ -41,7 +41,7 @@ public class StripeController : MainController
       }
       else if (stripeEvent.Type == EventTypes.AccountUpdated)
       {
-        await UpdateSripeAccountHandler.Handle(stripeEvent.Data.Object as Account);
+        await updateStripeAccountWebhookHandler.Handle(stripeEvent.Data.Object as Account);
       }
       else
       {

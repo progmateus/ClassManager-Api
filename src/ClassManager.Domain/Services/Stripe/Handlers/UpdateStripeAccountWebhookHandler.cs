@@ -3,11 +3,11 @@ using Stripe;
 
 namespace ClassManager.Domain.Services.Stripe.Handlers;
 
-public class UpdateStripeAccountHandler
+public class UpdateStripeAccountWebhookHandler
 {
   private readonly ITenantRepository _tenantRepository;
 
-  public UpdateStripeAccountHandler(
+  public UpdateStripeAccountWebhookHandler(
     ITenantRepository tenantRepository
 
     )

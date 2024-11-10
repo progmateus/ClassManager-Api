@@ -79,9 +79,6 @@ public class UpdateTenantHandler :
     {
       foreach (var linkCommand in command.Links)
       {
-        Console.WriteLine(linkCommand.Url);
-        Console.WriteLine(linkCommand.Type);
-        Console.WriteLine(tenantId);
         var link = new Link(linkCommand.Url, (ESocialType)linkCommand.Type, tenantId);
         links.Add(link);
       }
