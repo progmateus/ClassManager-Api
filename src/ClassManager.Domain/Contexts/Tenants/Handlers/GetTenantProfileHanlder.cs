@@ -32,8 +32,13 @@ public class GetTenantProfileHandler
     }
 
 
-    _paymentService.CreateVerificationSession(tenant.Email, tenant.StripeAccountId);
+    var verificationSession = _paymentService.CreateVerificationSession(tenant.Email, tenant.StripeAccountId);
+    var linkdssa = _paymentService.CreateAccountLink(tenant.StripeAccountId);
 
-    return new CommandResult(true, "TENANT_GOTTEN", tenant, null, 201);
+    return new CommandResult(true, "TENANT_GOTTEN", new
+    {
+      Link = linkdssa,
+      Ver = verificationSession
+    }, null, 201);
   }
 }

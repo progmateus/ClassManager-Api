@@ -105,15 +105,9 @@ public class CreateTenantHandler :
       return new CommandResult(false, "ERR_PLAN_NOT_FOUND", null, null, 404);
     }
 
-    Console.WriteLine("==============================");
-    Console.WriteLine("==============================");
-    Console.WriteLine("==============================");
-    Console.WriteLine("==============================");
-    Console.WriteLine(command.BirthDate);
-
     var tenant = new Tenant($"{command.FirstName} {command.LastName}", document, command.Username, command.Description, email, loggedUserId, command.PlanId);
 
-    var stripeCreatedAccount = _paymentService.CreateAccount(command.FirstName, command.LastName, email, command.Phone, command.BirthDate, command.Document, address);
+    var stripeCreatedAccount = _paymentService.CreateAccount(email);
     var stripeCreatedCustomer = _paymentService.CreateCustomer(tenant.Name, tenant.Email, null);
     var stripeSubscription = _paymentService.CreateSubscription(null, plan.StripePriceId, stripeCreatedCustomer.Id, null);
     _paymentService.AcceptStripeTerms(userIpAddress, stripeCreatedAccount.Id);

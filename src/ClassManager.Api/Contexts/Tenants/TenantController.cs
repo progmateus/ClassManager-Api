@@ -47,6 +47,22 @@ public class TenantController : MainController
     return Results.Ok(result);
   }
 
+  [HttpGet("{id}/profile")]
+  public async Task<IResult> Profile(
+      [FromRoute] Guid id,
+      [FromServices] GetTenantProfileHandler handler
+  )
+  {
+    var result = await handler.Handle(id);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
   [HttpGet]
   public async Task<IResult> List(
     [FromServices] ListTenantsHandler handler,

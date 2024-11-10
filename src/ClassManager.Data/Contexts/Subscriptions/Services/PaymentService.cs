@@ -40,7 +40,7 @@ public class PaymentService : IPaymentService
     return service.Cancel(stripeSubscriptionId, null, requestOptions);
   }
 
-  public Account CreateAccount(string firstName, string LastName, string email, string phone, DateTime birthDate, string document, Address address)
+  public Account CreateAccount(string email)
   {
     var options = new AccountCreateOptions
     {
@@ -70,35 +70,6 @@ public class PaymentService : IPaymentService
         {
           Requested = true
         }
-      },
-      BusinessType = "individual",
-      Individual = new AccountIndividualOptions
-      {
-        FirstName = firstName,
-        LastName = LastName,
-        Email = email,
-        Address = new AddressOptions
-        {
-          Line1 = address.Street,
-          City = address.City,
-          State = address.State,
-          Country = address.Country,
-          PostalCode = address.ZipCode,
-        },
-        Phone = phone,
-        PoliticalExposure = "none",
-        IdNumber = document,
-        Dob = new DobOptions
-        {
-          Day = birthDate.Day,
-          Month = birthDate.Month,
-          Year = birthDate.Year
-        }
-      },
-      BusinessProfile = new AccountBusinessProfileOptions
-      {
-        ProductDescription = "Description",
-        Mcc = "8299"
       }
     };
     var service = new AccountService();
@@ -291,5 +262,22 @@ public class PaymentService : IPaymentService
     };
     var service = new SubscriptionService();
     return service.Resume(stripeSubscriptionId, options, requestOptions);
+  }
+
+  public AccountLink CreateAccountLink(string connectedAccountId, string? linkType = "account_onboarding")
+  {
+    var options = new AccountLinkCreateOptions
+    {
+      Account = connectedAccountId,
+      RefreshUrl = "https://example.com/refresh",
+      ReturnUrl = "https://example.com/return",
+      Type = linkType,
+      CollectionOptions = new AccountLinkCollectionOptionsOptions
+      {
+        Fields = "eventually_due",
+      },
+    };
+    var service = new AccountLinkService();
+    return service.Create(options);
   }
 }
