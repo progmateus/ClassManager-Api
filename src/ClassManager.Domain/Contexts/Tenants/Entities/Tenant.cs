@@ -78,5 +78,10 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
       StripeCustomerId = stripeCustomerId;
       StripeSubscriptionId = stripeSubscriptionId;
     }
+
+    public void UpdateChargesEnabled(bool chargesEnabled)
+    {
+      StripeChargesEnabled = chargesEnabled;
+    }
   }
 }

@@ -12,7 +12,8 @@ public class StripeController : MainController
   [HttpPost("listen")]
   public async Task<IResult> Listen(
     [FromServices] UpdateStripeInvoiceWebhookHandler updateStripeInvoiceWebhookHandler,
-    [FromServices] CreateStripeSubscriptionWebhookHandler createStripeSubscriptionWebhookHandler
+    [FromServices] CreateStripeSubscriptionWebhookHandler createStripeSubscriptionWebhookHandler,
+    [FromServices] UpdateStripeAccountHandler UpdateSripeAccountHandler
   )
   {
     try
@@ -37,6 +38,10 @@ public class StripeController : MainController
         stripeEvent.Type == EventTypes.CustomerSubscriptionUpdated)
       {
         await createStripeSubscriptionWebhookHandler.Handle(stripeEvent.Data.Object as Subscription);
+      }
+      else if (stripeEvent.Type == EventTypes.AccountUpdated)
+      {
+        await UpdateSripeAccountHandler.Handle(stripeEvent.Data.Object as Account);
       }
       else
       {

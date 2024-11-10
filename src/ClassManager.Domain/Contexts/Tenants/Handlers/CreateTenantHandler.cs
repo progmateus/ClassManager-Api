@@ -58,7 +58,7 @@ public class CreateTenantHandler :
       return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
 
-    if (await _tenantRepository.DocumentAlreadyExistsAsync(command.Document, new CancellationToken()))
+    if (await _tenantRepository.DocumentAlreadyExistsAsync(command.Document.Replace(".", "").Replace("-", "").Replace(" ", ""), new CancellationToken()))
     {
       AddNotification("Document", "Document already exists");
     }

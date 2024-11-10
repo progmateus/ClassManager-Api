@@ -241,6 +241,7 @@ public class PaymentService : IPaymentService
         "customer.subscription.pending_update_applied",
         "customer.subscription.pending_update_expired",
         "customer.subscription.resumed",
+        "account.updated"
       },
       Url = $"{Configuration.BaseUrl}/webhooks/stripe/listen",
       Connect = true

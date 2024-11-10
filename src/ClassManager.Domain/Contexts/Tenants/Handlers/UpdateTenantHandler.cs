@@ -59,7 +59,7 @@ public class UpdateTenantHandler :
       return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, command.Notifications, 404);
     }
 
-    if ((tenant.Document.Number != command.Document) && await _repository.DocumentAlreadyExistsAsync(command.Document, new CancellationToken()))
+    if ((tenant.Document.Number != command.Document) && await _repository.DocumentAlreadyExistsAsync(command.Document.Replace(".", "").Replace("-", "").Replace(" ", ""), new CancellationToken()))
     {
       AddNotification("Document", "Document already exists");
     }

@@ -11,6 +11,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Repositories.Contracts
     Task<bool> EmailAlreadyExtstsAsync(string email, CancellationToken cancellationToken);
     Task<Tenant?> GetByEmailAsync(string email, CancellationToken cancellationToken);
     Task<Tenant?> GetByIdAndIncludePlanAsync(Guid tenantId, CancellationToken cancellationToken);
+    Task<Tenant?> FindByStripeAccountId(string stripeAccountId, CancellationToken cancellationToken);
     Task<List<Tenant>> SearchAsync(string search);
 
   }

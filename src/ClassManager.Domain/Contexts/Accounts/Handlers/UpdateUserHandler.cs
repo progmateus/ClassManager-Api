@@ -45,7 +45,7 @@ public class UpdateUserHandler :
 
     // verificar se doc existe
 
-    if ((user.Document.Number != command.Document) && await _userReporitory.DocumentAlreadyExistsAsync(command.Document, new CancellationToken()))
+    if ((user.Document.Number != command.Document) && await _userReporitory.DocumentAlreadyExistsAsync(command.Document.Replace(".", "").Replace("-", "").Replace(" ", ""), new CancellationToken()))
     {
       AddNotification("Document", "Document already exists");
     }
