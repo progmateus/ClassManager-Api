@@ -87,15 +87,21 @@ public class TenantMap : IEntityTypeConfiguration<Tenant>
             .IsRequired(true);
 
         builder.Property(x => x.StripeCustomerId)
-        .HasColumnName("StripeCustomerId")
-        .HasColumnType("VARCHAR")
-        .HasMaxLength(200)
-        .IsRequired(true);
+            .HasColumnName("StripeCustomerId")
+            .HasColumnType("VARCHAR")
+            .HasMaxLength(200)
+            .IsRequired(true);
 
         builder.Property(x => x.StripeSubscriptionId)
-        .HasColumnName("StripeSubscriptionId")
-        .HasColumnType("VARCHAR")
-        .HasMaxLength(200)
-        .IsRequired(true);
+            .HasColumnName("StripeSubscriptionId")
+            .HasColumnType("VARCHAR")
+            .HasMaxLength(200)
+            .IsRequired(true);
+
+        builder.Property(x => x.StripeChargesEnabled)
+            .HasColumnName("StripeChargesEnabled")
+            .HasDefaultValue(false)
+            .IsRequired(true);
+
     }
 }

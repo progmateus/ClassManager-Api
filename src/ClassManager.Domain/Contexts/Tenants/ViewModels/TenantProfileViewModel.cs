@@ -24,6 +24,7 @@ public class TenantProfileViewModel
   public string? StripeAccountId { get; private set; }
   public string? StripeCustomerId { get; private set; }
   public string? StripeSubscriptionId { get; private set; }
+  public bool? StripeChargesEnabled { get; private set; }
   public int Status { get; set; }
   public int Type { get; set; }
   public Guid UserId { get; set; }

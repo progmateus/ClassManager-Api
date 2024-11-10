@@ -42,6 +42,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public string? StripeAccountId { get; private set; }
     public string? StripeCustomerId { get; private set; }
     public string? StripeSubscriptionId { get; private set; }
+    public bool StripeChargesEnabled { get; private set; } = false;
     public DateTime? ExpiresDate { get; private set; }
     public Plan? Plan { get; private set; }
     public User? User { get; private set; }
