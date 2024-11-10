@@ -58,6 +58,11 @@ public class AutoMapperConfig : Profile
     CreateMap<TenantPlan, TenantPlanViewModel>();
     CreateMap<Link, LinkViewModel>();
 
+    CreateMap<Tenant, TenantProfileViewModel>()
+  .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address));
+    CreateMap<TenantPlan, TenantPlanViewModel>();
+    CreateMap<Link, LinkViewModel>();
+
     CreateMap<TimeTable, TimeTableViewModel>();
     CreateMap<ScheduleDay, ScheduleDayViewModel>();
   }

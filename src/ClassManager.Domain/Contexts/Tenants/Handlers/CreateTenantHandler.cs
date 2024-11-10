@@ -1,6 +1,5 @@
 using AutoMapper;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
-using ClassManager.Domain.Contexts.Invoices.Entities;
 using ClassManager.Domain.Contexts.Plans.Repositories;
 using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
@@ -125,7 +124,7 @@ public class CreateTenantHandler :
 
     _paymentService.CreateInvoice(tenant.Id, stripeCreatedCustomer.Id, stripeSubscription.Id, null);
 
-    var tenantCreated = _mapper.Map<TenantViewModel>(tenant);
+    var tenantCreated = _mapper.Map<TenantProfileViewModel>(tenant);
 
     if (tenantCreated.UsersRoles.Count > 0)
     {

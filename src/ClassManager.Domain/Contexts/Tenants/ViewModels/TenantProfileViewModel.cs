@@ -11,7 +11,7 @@ using ClassManager.Domain.Contexts.Users.ViewModels;
 
 namespace ClassManager.Domain.Contexts.tenants.ViewModels;
 
-public class TenantViewModel
+public class TenantProfileViewModel
 {
   public Guid Id { get; set; }
   public string? Name { get; set; }
@@ -20,6 +20,10 @@ public class TenantViewModel
   public string? Email { get; set; }
   public string? Document { get; set; }
   public string? Avatar { get; set; }
+  public string? StripeOnboardUrl { get; set; }
+  public string? StripeAccountId { get; private set; }
+  public string? StripeCustomerId { get; private set; }
+  public string? StripeSubscriptionId { get; private set; }
   public int Status { get; set; }
   public int Type { get; set; }
   public Guid UserId { get; set; }
