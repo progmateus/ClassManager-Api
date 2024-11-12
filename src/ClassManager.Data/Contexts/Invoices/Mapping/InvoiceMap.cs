@@ -21,7 +21,7 @@ public class InvoiceMap : IEntityTypeConfiguration<Invoice>
     builder.Property(x => x.Status)
       .HasColumnName("Status")
       .HasColumnType("TINYINT")
-      .HasDefaultValue(EInvoiceStatus.PENDING)
+      .HasDefaultValue(EInvoiceStatus.OPEN)
       .IsRequired();
 
     builder.Property(x => x.Type)

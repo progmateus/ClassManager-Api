@@ -11,7 +11,7 @@ public class StripeController : MainController
 {
   [HttpPost("listen")]
   public async Task<IResult> Listen(
-    [FromServices] UpdateStripeInvoiceWebhookHandler updateStripeInvoiceWebhookHandler,
+    [FromServices] FinalizeStripeInvoiceWebhookHandler finalizeStripeInvoiceWebhookHandler,
     [FromServices] CreateStripeSubscriptionWebhookHandler createStripeSubscriptionWebhookHandler,
     [FromServices] UpdateStripeAccountWebhookHandler updateStripeAccountWebhookHandler
   )
@@ -24,7 +24,7 @@ public class StripeController : MainController
 
       if (stripeEvent.Type == EventTypes.InvoiceFinalized)
       {
-        await updateStripeInvoiceWebhookHandler.Handle(stripeEvent.Data.Object as Invoice);
+        await finalizeStripeInvoiceWebhookHandler.Handle(stripeEvent.Data.Object as Invoice);
       }
       else if (stripeEvent.Type == EventTypes.CustomerSubscriptionCreated)
       {
@@ -38,6 +38,10 @@ public class StripeController : MainController
         stripeEvent.Type == EventTypes.CustomerSubscriptionUpdated)
       {
         await createStripeSubscriptionWebhookHandler.Handle(stripeEvent.Data.Object as Subscription);
+      }
+      else if (stripeEvent.Type == EventTypes.InvoiceUpdated)
+      {
+
       }
       else if (stripeEvent.Type == EventTypes.AccountUpdated)
       {

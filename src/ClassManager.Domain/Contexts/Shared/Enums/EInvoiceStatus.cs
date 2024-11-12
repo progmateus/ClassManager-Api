@@ -2,8 +2,10 @@ namespace ClassManager.Domain.Contexts.Shared.Enums
 {
   public enum EInvoiceStatus
   {
-    PENDING = 1,
-    UNPAID = 2,
-    PAID = 3,
+    OPEN = 1,
+    PAID = 2,
+    UNPAID = 3,
+    VOID = 4,
+    UNCOLLECTIBLE = 5
   }
 }
