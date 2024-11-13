@@ -37,6 +37,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public Email Email { get; private set; }
     public string? Avatar { get; private set; } = string.Empty;
     public ETenantStatus Status { get; private set; } = ETenantStatus.ACTIVE;
+    public ESubscriptionStatus SubscriptionStatus { get; private set; } = ESubscriptionStatus.INCOMPLETE;
     public Guid? UserId { get; private set; }
     public Guid? PlanId { get; private set; }
     public string? StripeAccountId { get; private set; }
