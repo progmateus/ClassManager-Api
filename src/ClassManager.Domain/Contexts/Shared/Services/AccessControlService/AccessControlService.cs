@@ -40,6 +40,17 @@ public class AccesControlService : IAccessControlService
     return await _usersRolesRepository.HasAnyRoleAsync(userId, tenantId, rolesNames, new CancellationToken());
   }
 
+  public async Task<bool> IsTenantActiveAndChargesEnabled(Guid tenantId)
+  {
+    var tenant = await _tenantRepository.GetByIdAsync(tenantId, new CancellationToken());
+    if (tenant is null)
+    {
+
+      return false;
+    }
+    return tenant.Status == ETenantStatus.ACTIVE && tenant.SubscriptionStatus == ESubscriptionStatus.ACTIVE && tenant.StripeChargesEnabled == true;
+  }
+
   public async Task<bool> IsTenantSubscriptionActiveAsync(Guid tenantId)
   {
     var tenant = await _tenantRepository.GetByIdAsync(tenantId, new CancellationToken());
