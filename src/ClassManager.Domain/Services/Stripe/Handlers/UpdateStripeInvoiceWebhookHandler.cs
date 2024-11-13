@@ -16,6 +16,7 @@ public class UpdateStripeInvoiceWebhookHandler
   }
   public async Task Handle(Invoice? stripeInvoice)
   {
+
     if (stripeInvoice is null)
     {
       return;
