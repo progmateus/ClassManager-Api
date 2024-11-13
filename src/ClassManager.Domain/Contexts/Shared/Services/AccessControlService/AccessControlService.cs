@@ -48,7 +48,7 @@ public class AccesControlService : IAccessControlService
 
       return false;
     }
-    return tenant.Status == ETenantStatus.ACTIVE;
+    return tenant.Status == ETenantStatus.ACTIVE && tenant.SubscriptionStatus == ESubscriptionStatus.ACTIVE;
   }
 
   public async Task<bool> IsUserActiveSubscriptionAsync(Guid userId, Guid tenantId)
