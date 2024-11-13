@@ -44,6 +44,8 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public string? StripeCustomerId { get; private set; }
     public string? StripeSubscriptionId { get; private set; }
     public bool StripeChargesEnabled { get; private set; } = false;
+    public DateTime? CurrentPeriodStart { get; private set; }
+    public DateTime? CurrentPeriodEnd { get; private set; }
     public DateTime? ExpiresDate { get; private set; }
     public Plan? Plan { get; private set; }
     public User? User { get; private set; }
@@ -88,6 +90,12 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public void UpdateSubscriptionStatus(ESubscriptionStatus status)
     {
       SubscriptionStatus = status;
+    }
+
+    public void SetCurrentPeriod(DateTime? currentPeriodStart, DateTime? currentPeriodEnd)
+    {
+      CurrentPeriodStart = currentPeriodStart ?? CurrentPeriodStart;
+      CurrentPeriodEnd = currentPeriodEnd ?? CurrentPeriodEnd;
     }
   }
 }

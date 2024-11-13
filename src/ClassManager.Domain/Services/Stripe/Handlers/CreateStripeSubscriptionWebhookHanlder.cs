@@ -2,6 +2,7 @@ using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Services.Stripe.Repositories.Contracts;
+using ClassManager.Domain.Shared.Helpers;
 using Stripe;
 
 namespace ClassManager.Domain.Services.Stripe.Handlers;
@@ -48,7 +49,7 @@ public class CreateStripeSubscriptionWebhookHandler
       return;
     }
 
-    var subscription = new Contexts.Subscriptions.Entities.Subscription(customer.UserId, tenantPlan.Id, tenantPlan.TenantId, stripeSubscription.Id, DateTime.Now);
+    var subscription = new Contexts.Subscriptions.Entities.Subscription(customer.UserId, tenantPlan.Id, tenantPlan.TenantId, stripeSubscription.Id, stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);
 
     await _subscriptionRepository.CreateAsync(subscription, new CancellationToken());
 

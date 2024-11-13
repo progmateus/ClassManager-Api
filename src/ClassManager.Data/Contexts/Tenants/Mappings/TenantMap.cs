@@ -109,5 +109,13 @@ public class TenantMap : IEntityTypeConfiguration<Tenant>
             .HasDefaultValue(false)
             .IsRequired(true);
 
+        builder.Property(x => x.CurrentPeriodStart)
+            .HasColumnName("CurrentPeriodStart")
+            .IsRequired(false);
+
+        builder.Property(x => x.CurrentPeriodEnd)
+            .HasColumnName("CurrentPeriodEnd")
+            .IsRequired(false);
+
     }
 }

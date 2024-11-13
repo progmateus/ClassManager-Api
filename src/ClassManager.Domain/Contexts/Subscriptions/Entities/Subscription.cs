@@ -8,13 +8,15 @@ namespace ClassManager.Domain.Contexts.Subscriptions.Entities;
 public class Subscription : TenantEntity
 {
   protected Subscription() { }
-  public Subscription(Guid userId, Guid planId, Guid tenantId, string stripeSubscriptionId, DateTime expiresDate)
+  public Subscription(Guid userId, Guid planId, Guid tenantId, string stripeSubscriptionId, DateTime currentPeriodStart, DateTime currentPeriodEnd)
   {
     UserId = userId;
     TenantId = tenantId;
     TenantPlanId = planId;
     Status = ESubscriptionStatus.INCOMPLETE;
-    ExpiresDate = expiresDate;
+    CurrentPeriodStart = currentPeriodStart;
+    CurrentPeriodEnd = currentPeriodEnd;
+    ExpiresDate = DateTime.Now;
     StripeSubscriptionId = stripeSubscriptionId;
   }
 

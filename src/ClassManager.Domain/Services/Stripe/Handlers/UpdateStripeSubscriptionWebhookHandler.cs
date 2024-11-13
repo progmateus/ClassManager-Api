@@ -1,7 +1,6 @@
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
-using ClassManager.Domain.Services.Stripe.Repositories.Contracts;
 using Stripe;
 
 namespace ClassManager.Domain.Services.Stripe.Handlers;
