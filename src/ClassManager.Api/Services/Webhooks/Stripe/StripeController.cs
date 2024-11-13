@@ -14,7 +14,8 @@ public class StripeController : MainController
     [FromServices] FinalizeStripeInvoiceWebhookHandler finalizeStripeInvoiceWebhookHandler,
     [FromServices] CreateStripeSubscriptionWebhookHandler createStripeSubscriptionWebhookHandler,
     [FromServices] UpdateStripeAccountWebhookHandler updateStripeAccountWebhookHandler,
-    [FromServices] UpdateStripeInvoiceWebhookHandler updateStripeInvoiceWebhookHandler
+    [FromServices] UpdateStripeInvoiceWebhookHandler updateStripeInvoiceWebhookHandler,
+    [FromServices] UpdateStripeSubscriptionWebhookHandler updateStripeSubscriptionWebhookHandler
   )
   {
     try
@@ -30,6 +31,10 @@ public class StripeController : MainController
       else if (stripeEvent.Type == EventTypes.CustomerSubscriptionCreated)
       {
         await createStripeSubscriptionWebhookHandler.Handle(stripeEvent.Data.Object as Subscription);
+      }
+      else if (stripeEvent.Type == EventTypes.CustomerSubscriptionUpdated)
+      {
+        await updateStripeSubscriptionWebhookHandler.Handle(stripeEvent.Data.Object as Subscription);
       }
       else if (
         stripeEvent.Type == EventTypes.CustomerSubscriptionCreated ||

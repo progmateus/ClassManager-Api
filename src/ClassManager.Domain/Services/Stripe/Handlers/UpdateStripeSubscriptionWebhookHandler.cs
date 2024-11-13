@@ -44,12 +44,12 @@ public class UpdateStripeSubscriptionWebhookHandler
 
     var customer = await _stripeCustomerRepository.FindByCustomerId(stripeSubscription.CustomerId, default);
 
-    if (customer is null || customer.Type != EStripeCustomerType.USER)
+    if (customer is null)
     {
       return;
     }
 
-    var subscriptionType = stripeSubscription.Metadata.FirstOrDefault(x => x.Value == "type");
+    var subscriptionType = stripeSubscription.Metadata.FirstOrDefault(x => x.Key == "type");
 
     var status =
       stripeSubscription.Status == "paused" ? ESubscriptionStatus.PAUSED
