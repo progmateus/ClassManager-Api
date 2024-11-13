@@ -1,6 +1,5 @@
 using Stripe;
 using Stripe.Identity;
-using Address = ClassManager.Domain.Contexts.Shared.ValueObjects.Address;
 
 namespace ClassManager.Domain.Services.Stripe.Repositories.Contracts
 {

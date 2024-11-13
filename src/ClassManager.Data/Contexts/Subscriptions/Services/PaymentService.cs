@@ -112,12 +112,6 @@ public class PaymentService : IPaymentService
 
   public Invoice CreateInvoice(Guid tenantId, string stripeCustomerId, string stripeSubscriptionId, string? connectedAccountId)
   {
-    Console.WriteLine("=====================");
-    Console.WriteLine("=====================");
-    Console.WriteLine("=====================");
-    Console.WriteLine("=====================");
-    Console.WriteLine("=====================");
-    Console.WriteLine("CreateInvoice");
     var requestOptions = new RequestOptions
     {
       StripeAccount = connectedAccountId ?? null,
