@@ -34,10 +34,20 @@ public class FinalizeStripeInvoiceWebhookHandler
       return;
     }
 
+    Console.WriteLine("===========================");
+    Console.WriteLine("===========================");
+    Console.WriteLine("===========================");
+    Console.WriteLine("ENTROU");
+    Console.WriteLine(stripeInvoice.CustomerId);
+
     var customer = await _stripeCustomerRepository.FindByCustomerId(stripeInvoice.CustomerId, default);
 
     if (customer is null)
     {
+      Console.WriteLine("===========================");
+      Console.WriteLine("===========================");
+      Console.WriteLine("===========================");
+      Console.WriteLine("NÃO ACHOU CUSTOMER");
       return;
     }
 

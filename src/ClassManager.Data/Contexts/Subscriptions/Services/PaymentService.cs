@@ -112,6 +112,12 @@ public class PaymentService : IPaymentService
 
   public Invoice CreateInvoice(Guid tenantId, string stripeCustomerId, string stripeSubscriptionId, string? connectedAccountId)
   {
+    Console.WriteLine("=====================");
+    Console.WriteLine("=====================");
+    Console.WriteLine("=====================");
+    Console.WriteLine("=====================");
+    Console.WriteLine("=====================");
+    Console.WriteLine("CreateInvoice");
     var requestOptions = new RequestOptions
     {
       StripeAccount = connectedAccountId ?? null,
@@ -191,7 +197,7 @@ public class PaymentService : IPaymentService
     return service.Create(options);
   }
 
-  public Subscription CreateSubscription(Guid? tenantId, string stripePriceId, string stripeCustomerId, string? connectedAccountId)
+  public Subscription CreateSubscription(Guid? tenantId, string stripePriceId, string stripeCustomerId, string type, string? connectedAccountId)
   {
 
     var requestOptions = new RequestOptions
@@ -211,7 +217,8 @@ public class PaymentService : IPaymentService
       },
       Metadata = new Dictionary<string, string>
       {
-        { "tenantId", tenantId.ToString() ?? "" }
+        { "tenantId", tenantId.ToString() ?? "" },
+        { "type", type }
       }
     };
     var service = new SubscriptionService();

@@ -7,7 +7,7 @@ namespace ClassManager.Domain.Services.Stripe.Repositories.Contracts
   public interface IPaymentService
   {
     Product CreateProduct(Guid entityId, string ownerType, string name, Guid? tenantId, string? connectedAccountId);
-    Subscription CreateSubscription(Guid? tenantId, string stripePriceId, string stripeCustomerId, string? connectedAccountId);
+    Subscription CreateSubscription(Guid? tenantId, string stripePriceId, string stripeCustomerId, string type, string? connectedAccountId);
     Customer CreateCustomer(string name, string email, string? connectedAccountId);
     Price CreatePrice(Guid productEntityId, Guid? tenantId, string stripeProductId, decimal priceInCents, string? connectedAccountId);
     Invoice CreateInvoice(Guid tenantId, string stripeCustomerId, string stripeSubscriptionId, string? connectedAccountId);
@@ -19,7 +19,6 @@ namespace ClassManager.Domain.Services.Stripe.Repositories.Contracts
     void CreateWebhook();
     VerificationSession CreateVerificationSession(string email, string connectedAccountId);
     AccountLink CreateAccountLink(string connectedAccountId, string? linkType = "account_onboarding");
-
     Account GetAccount(string stripeAccountId);
   }
 }

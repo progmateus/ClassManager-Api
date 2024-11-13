@@ -360,5 +360,6 @@ public static class BuilderExtension
     builder.Services.AddTransient<CreateStripeSubscriptionWebhookHandler>();
     builder.Services.AddTransient<UpdateStripeAccountWebhookHandler>();
     builder.Services.AddTransient<UpdateStripeAccountWebhookHandler>();
+    builder.Services.AddTransient<FinalizeStripeInvoiceWebhookHandler>();
   }
 }

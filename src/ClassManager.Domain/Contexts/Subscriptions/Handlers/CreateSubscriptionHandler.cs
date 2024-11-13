@@ -138,7 +138,7 @@ public class CreateSubscriptionHandler : Notifiable,
       await _stripeCustomerRepository.CreateAsync(stripeCustomerEntity, new CancellationToken());
     }
 
-    _paymentService.CreateSubscription(tenantId, tenantPlan.StripePriceId, stripeCustomerEntity.StripeCustomerId, tenantPlan.Tenant.StripeAccountId);
+    _paymentService.CreateSubscription(tenantId, tenantPlan.StripePriceId, stripeCustomerEntity.StripeCustomerId, "user", tenantPlan.Tenant.StripeAccountId);
 
     var studentclass = new StudentsClasses(userId, command.ClassId);
 
