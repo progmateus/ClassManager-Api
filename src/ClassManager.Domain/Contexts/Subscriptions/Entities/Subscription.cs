@@ -22,6 +22,8 @@ public class Subscription : TenantEntity
   public Guid TenantPlanId { get; private set; }
   public ESubscriptionStatus Status { get; private set; } = ESubscriptionStatus.INCOMPLETE;
   public string? StripeSubscriptionId { get; private set; }
+  public DateTime CurrentPeriodStart { get; private set; }
+  public DateTime CurrentPeriodEnd { get; private set; }
   public User? User { get; private set; }
   public TenantPlan? TenantPlan { get; private set; }
   public Tenant? Tenant { get; private set; }

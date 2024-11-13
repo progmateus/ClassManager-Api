@@ -39,5 +39,13 @@ public class SubscriptionMap : IEntityTypeConfiguration<Subscription>
       .HasColumnType("VARCHAR")
       .HasMaxLength(200)
       .IsRequired(false);
+
+    builder.Property(x => x.CurrentPeriodStart)
+      .HasColumnName("CurrentPeriodStart")
+      .IsRequired();
+
+    builder.Property(x => x.CurrentPeriodEnd)
+      .HasColumnName("CurrentPeriodEnd")
+      .IsRequired();
   }
 }
