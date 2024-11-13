@@ -12,6 +12,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Repositories.Contracts
     Task<Tenant?> GetByEmailAsync(string email, CancellationToken cancellationToken);
     Task<Tenant?> GetByIdAndIncludePlanAsync(Guid tenantId, CancellationToken cancellationToken);
     Task<Tenant?> FindByStripeAccountId(string stripeAccountId, CancellationToken cancellationToken);
+    Task<Tenant?> FindByStripeSubscriptionId(string stripeSubscriptionId, CancellationToken cancellationToken);
     Task<List<Tenant>> SearchAsync(string search);
 
   }

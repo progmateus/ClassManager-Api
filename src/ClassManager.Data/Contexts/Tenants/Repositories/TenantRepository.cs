@@ -26,6 +26,11 @@ public class TenantRepository : Repository<Tenant>, ITenantRepository
     return await DbSet.AsNoTracking().FirstOrDefaultAsync(x => x.StripeAccountId == stripeAccountId, cancellationToken);
   }
 
+  public async Task<Tenant?> FindByStripeSubscriptionId(string stripeSubscriptionId, CancellationToken cancellationToken)
+  {
+    return await DbSet.AsNoTracking().FirstOrDefaultAsync(x => x.StripeSubscriptionId == stripeSubscriptionId, cancellationToken);
+  }
+
   public async Task<List<Tenant>> GetActiveTenantsAsync()
   {
     return await DbSet

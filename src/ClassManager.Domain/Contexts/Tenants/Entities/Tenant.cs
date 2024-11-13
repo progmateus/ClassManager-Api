@@ -84,5 +84,10 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     {
       StripeChargesEnabled = chargesEnabled;
     }
+
+    public void UpdateSubscriptionStatus(ESubscriptionStatus status)
+    {
+      SubscriptionStatus = status;
+    }
   }
 }

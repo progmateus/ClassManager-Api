@@ -10,26 +10,34 @@ public class UpdateStripeSubscriptionWebhookHandler
 {
   private readonly IStripeCustomerRepository _stripeCustomerRepository;
   private readonly ISubscriptionRepository _subscriptionRepository;
-  private readonly ITenantPlanRepository _tenantPlanRepository;
-  private readonly IPaymentService _paymentService;
+  private readonly ITenantRepository _tenantRepository;
 
   public UpdateStripeSubscriptionWebhookHandler(
     IStripeCustomerRepository stripeCustomerRepository,
     ISubscriptionRepository subscriptionRepository,
-    ITenantPlanRepository tenantPlanRepository,
-    IPaymentService paymentService
+    ITenantRepository tenantRepository
 
     )
   {
     _stripeCustomerRepository = stripeCustomerRepository;
     _subscriptionRepository = subscriptionRepository;
-    _tenantPlanRepository = tenantPlanRepository;
-    _paymentService = paymentService;
+    _tenantRepository = tenantRepository;
   }
   public async Task Handle(Subscription? stripeSubscription)
   {
 
     if (stripeSubscription is null)
+    {
+      return;
+    }
+
+    var enabledStatus = new List<string> {
+        "paused",
+        "canceled",
+        "active",
+      };
+
+    if (!enabledStatus.Contains(stripeSubscription.Status))
     {
       return;
     }
@@ -41,34 +49,35 @@ public class UpdateStripeSubscriptionWebhookHandler
       return;
     }
 
-    /* var tenantPlan = await _tenantPlanRepository.FindByStripePriceId(stripeSubscription.Items.Data[0].Plan.Id);
+    var subscriptionType = stripeSubscription.Metadata.FirstOrDefault(x => x.Value == "type");
 
-    if (tenantPlan is null)
+    var status =
+      stripeSubscription.Status == "paused" ? ESubscriptionStatus.PAUSED
+        : stripeSubscription.Status == "canceled" ? ESubscriptionStatus.CANCELED
+          : ESubscriptionStatus.ACTIVE;
+
+    if (subscriptionType.Value == "user")
     {
-      return;
-    } */
+      var subscription = await _subscriptionRepository.FindByStripeSubscriptionId(stripeSubscription.Id, new CancellationToken());
 
-    var subscription = await _subscriptionRepository.FindByStripeSubscriptionId(stripeSubscription.Id, new CancellationToken());
+      if (subscription is null)
+      {
+        return;
+      }
 
-    if (subscription is null)
-    {
-      return;
+      subscription.ChangeStatus(status);
+      await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
     }
-
-    var enabledStatus = new List<string> {
-      "paused",
-      "canceled",
-      "active",
-    };
-
-    if (!enabledStatus.Contains(stripeSubscription.Status))
+    else if (subscriptionType.Value == "tenant")
     {
-      return;
+      var tenant = await _tenantRepository.FindByStripeSubscriptionId(stripeSubscription.Id, new CancellationToken());
+
+      if (tenant is null)
+      {
+        return;
+      }
+      tenant.UpdateSubscriptionStatus(status);
+      await _tenantRepository.UpdateAsync(tenant, new CancellationToken());
     }
-
-    var status = stripeSubscription.Status == "paused" ? ESubscriptionStatus.PAUSED : stripeSubscription.Status == "canceled" ? ESubscriptionStatus.CANCELED : ESubscriptionStatus.ACTIVE;
-
-    subscription.ChangeStatus(status);
-    await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
   }
 }
