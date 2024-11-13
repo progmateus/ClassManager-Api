@@ -54,7 +54,7 @@ public class TenantMap : IEntityTypeConfiguration<Tenant>
         builder.Property(x => x.SubscriptionStatus)
             .HasColumnName("SubscriptionStatus")
             .HasColumnType("TINYINT")
-            .HasDefaultValue(ESubscriptionStatus.ACTIVE)
+            .HasDefaultValue(ESubscriptionStatus.INCOMPLETE)
             .IsRequired();
 
         builder.OwnsOne(x => x.Email)
