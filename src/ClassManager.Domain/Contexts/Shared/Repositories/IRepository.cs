@@ -5,7 +5,7 @@ public interface IRepository<TEntity> where TEntity : Entity
 {
   Task<TEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken);
   Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken);
-  Task<List<TEntity>> ListByTenantIdWithPaginationAsync(string search = "", int skip = 0, int limit = 30, CancellationToken cancellationToken = default);
+  Task<List<TEntity>> ListWithPaginationAsync(string search = "", int skip = 0, int limit = 30, CancellationToken cancellationToken = default);
   Task CreateAsync(TEntity entity, CancellationToken cancellationToken);
   Task UpdateAsync(TEntity entity, CancellationToken cancellationToken);
   Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes);

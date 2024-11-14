@@ -90,7 +90,7 @@ public class UpdateSubscriptionHandler : Notifiable
 
     if (command.TenantPlanId.HasValue && istenantAdmin)
     {
-      var tenantPlan = await _tenantPlanrepository.GetByIdAsync(command.TenantPlanId.Value, new CancellationToken());
+      var tenantPlan = await _tenantPlanrepository.FindByIdAndTenantIdAsync(command.TenantPlanId.Value, tenantId, new CancellationToken());
 
       if (tenantPlan is null)
       {

@@ -2,7 +2,7 @@ using ClassManager.Domain.Contexts.Tenants.Entities;
 
 namespace ClassManager.Domain.Contexts.Tenants.Repositories.Contracts
 {
-  public interface ITenantPlanRepository : IRepository<TenantPlan>
+  public interface ITenantPlanRepository : ITRepository<TenantPlan>
   {
     Task<bool> PlanAlreadyExists(string name, CancellationToken cancellationToken);
     Task<List<TenantPlan>> ListByTenantId(Guid tenantId, CancellationToken cancellationToken);

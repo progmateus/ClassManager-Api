@@ -40,7 +40,7 @@ public class DeleteTenantPlanHandler : ITenantDeleteAction
       return new CommandResult(false, "ERR_PLAN_NOT_FOUND", null, null, 404);
     }
 
-    await _tenantPlansRepository.DeleteAsync(entityId, default);
+    await _tenantPlansRepository.DeleteAsync(entityId, tenantId, default);
 
     return new CommandResult(true, "PLAN_DELETED", null, null, 204);
   }

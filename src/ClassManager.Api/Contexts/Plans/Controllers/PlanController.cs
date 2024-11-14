@@ -3,6 +3,7 @@ using ClassManager.Domain.Contexts.Accounts.Commands;
 using ClassManager.Domain.Contexts.Plans.Commands;
 using ClassManager.Domain.Contexts.Plans.Handlers;
 using ClassManager.Domain.Contexts.Tenants.Handlers;
+using ClassManager.Domain.Shared.Commands;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClassManager.Api.Contexts.Tenants.Controllers;
@@ -28,10 +29,11 @@ public class PlanController : MainController
 
   [HttpGet]
   public async Task<IResult> List(
-    [FromServices] ListPlansHandler handler
+    [FromServices] ListPlansHandler handler,
+    [FromQuery] PaginationCommand command
   )
   {
-    var result = await handler.Handle();
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 

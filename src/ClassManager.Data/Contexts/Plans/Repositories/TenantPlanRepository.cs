@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ClassManager.Data.Contexts.Plans.Repositories;
 
-public class TenantPlanRepository : Repository<TenantPlan>, ITenantPlanRepository
+public class TenantPlanRepository : TRepository<TenantPlan>, ITenantPlanRepository
 {
   public TenantPlanRepository(AppDbContext context) : base(context) { }
 
