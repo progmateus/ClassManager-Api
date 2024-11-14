@@ -14,6 +14,5 @@ namespace ClassManager.Domain.Contexts.Tenants.Repositories.Contracts
     Task<Tenant?> FindByStripeAccountId(string stripeAccountId, CancellationToken cancellationToken);
     Task<Tenant?> FindByStripeSubscriptionId(string stripeSubscriptionId, CancellationToken cancellationToken);
     Task<List<Tenant>> SearchAsync(int skip, int limit, string search = "");
-
   }
 }

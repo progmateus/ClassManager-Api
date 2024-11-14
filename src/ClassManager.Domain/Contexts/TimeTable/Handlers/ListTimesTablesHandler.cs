@@ -23,7 +23,7 @@ public class ListTimesTablesHandler
     _accessControlService = accessControlService;
     _mapper = mapper;
   }
-  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, int page)
   {
 
     if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
@@ -31,7 +31,13 @@ public class ListTimesTablesHandler
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
-    var timeTables = _mapper.Map<List<TimeTableViewModel>>(await _timeTableRepository.ListByTenantId(tenantId, new CancellationToken())); ;
+    if (page < 1) page = 1;
+
+    var limit = 30;
+
+    var skip = (page - 1) * limit;
+
+    var timeTables = _mapper.Map<List<TimeTableViewModel>>(await _timeTableRepository.ListByTenantId(tenantId, "", skip, limit, new CancellationToken()));
 
     return new CommandResult(true, "TIMES_TABLES_LISTED", timeTables, null, 200);
   }

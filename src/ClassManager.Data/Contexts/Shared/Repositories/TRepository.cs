@@ -75,9 +75,9 @@ public abstract class TRepository<TEntity> : ITRepository<TEntity> where TEntity
     await SaveChangesAsync(cancellationToken);
   }
 
-  public async Task<List<TEntity>> ListByTenantId(Guid tenantId, CancellationToken cancellationToken)
+  public async Task<List<TEntity>> ListByTenantId(Guid tenantId, string search = "", int skip = 0, int limit = 30, CancellationToken cancellationToken = default)
   {
-    return await DbSet.Where(x => x.TenantId == tenantId).ToListAsync(cancellationToken);
+    return await DbSet.Where(x => x.TenantId == tenantId).Skip(skip).Take(limit).ToListAsync(cancellationToken);
   }
 
   public async Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
