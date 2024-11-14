@@ -31,7 +31,10 @@ public class GetTenantProfileHandler
       return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, null, 404);
     }
 
-    tenant.StripeOnboardUrl = _paymentService.CreateAccountLink(tenant.StripeAccountId).Url;
+    if (!tenant.StripeChargesEnabled)
+    {
+      tenant.StripeOnboardUrl = _paymentService.CreateAccountLink(tenant.StripeAccountId).Url;
+    }
 
     return new CommandResult(true, "TENANT_GOTTEN", tenant, null, 201);
   }

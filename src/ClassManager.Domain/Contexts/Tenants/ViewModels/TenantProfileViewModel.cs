@@ -21,10 +21,10 @@ public class TenantProfileViewModel
   public string? Document { get; set; }
   public string? Avatar { get; set; }
   public string? StripeOnboardUrl { get; set; }
-  public string? StripeAccountId { get; private set; }
-  public string? StripeCustomerId { get; private set; }
-  public string? StripeSubscriptionId { get; private set; }
-  public bool? StripeChargesEnabled { get; private set; }
+  public string? StripeAccountId { get; set; }
+  public string? StripeCustomerId { get; set; }
+  public string? StripeSubscriptionId { get; set; }
+  public bool StripeChargesEnabled { get; set; }
   public int Status { get; set; }
   public int Type { get; set; }
   public Guid UserId { get; set; }

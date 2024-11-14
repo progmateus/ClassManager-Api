@@ -6,6 +6,7 @@ using ClassManager.Domain.Contexts.ClassDays.Entities;
 using ClassManager.Domain.Contexts.ClassDays.ViewModels;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Classes.ViewModels;
+using ClassManager.Domain.Contexts.Invoices.Entities;
 using ClassManager.Domain.Contexts.Plans.Entities;
 using ClassManager.Domain.Contexts.Plans.ViewModels;
 using ClassManager.Domain.Contexts.Roles.Entities;
@@ -54,16 +55,17 @@ public class AutoMapperConfig : Profile
     CreateMap<Subscription, SubscriptionProfileViewModel>();
 
     CreateMap<Tenant, TenantViewModel>()
-  .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address));
+    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address));
+
     CreateMap<TenantPlan, TenantPlanViewModel>();
     CreateMap<Link, LinkViewModel>();
 
     CreateMap<Tenant, TenantProfileViewModel>()
-  .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address));
-    CreateMap<TenantPlan, TenantPlanViewModel>();
-    CreateMap<Link, LinkViewModel>();
+    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address));
 
     CreateMap<TimeTable, TimeTableViewModel>();
     CreateMap<ScheduleDay, ScheduleDayViewModel>();
+
+    CreateMap<Invoice, InvoiceViewModel>();
   }
 }
