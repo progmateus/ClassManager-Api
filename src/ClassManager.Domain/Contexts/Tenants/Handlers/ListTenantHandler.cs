@@ -3,10 +3,11 @@ using ClassManager.Domain.Contexts.tenants.ViewModels;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;
+using ClassManager.Shared.Handlers;
 
 namespace ClassManager.Domain.Contexts.Tenants.Handlers;
 
-public class ListTenantsHandler
+public class ListTenantsHandler : IPaginationHandler<PaginationCommand>
 {
   private readonly ITenantRepository _tenantsRepository;
   private readonly IMapper _mapper;
@@ -18,15 +19,13 @@ public class ListTenantsHandler
     _tenantsRepository = tenantRepository;
     _mapper = mapper;
   }
-  public async Task<ICommandResult> Handle(string search = "", int page = 1)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, PaginationCommand command)
   {
-    if (page < 1) page = 1;
+    if (command.Page < 1) command.Page = 1;
 
-    var limit = 30;
+    var skip = (command.Page - 1) * command.Limit;
 
-    var skip = (page - 1) * limit;
-
-    var tenants = _mapper.Map<List<TenantViewModel>>(await _tenantsRepository.SearchAsync(skip, limit, search));
+    var tenants = _mapper.Map<List<TenantViewModel>>(await _tenantsRepository.SearchAsync(skip, command.Limit, command.Search));
 
     return new CommandResult(true, "TENANTS_LISTED", tenants, null, 201);
   }

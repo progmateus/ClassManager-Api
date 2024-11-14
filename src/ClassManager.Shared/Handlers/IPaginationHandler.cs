@@ -5,6 +5,6 @@ namespace ClassManager.Shared.Handlers
 {
   public interface IPaginationHandler<T> where T : IPaginationCommand
   {
-    Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, T comamnd);
+    Task<ICommandResult> Handle(Guid loggedUserId, T comamnd);
   }
 }
