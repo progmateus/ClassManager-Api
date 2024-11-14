@@ -54,12 +54,14 @@ public class TenantRepository : Repository<Tenant>, ITenantRepository
     .FirstOrDefaultAsync(x => x.Id == tenantId, cancellationToken);
   }
 
-  public async Task<List<Tenant>> SearchAsync(string search = "")
+  public async Task<List<Tenant>> SearchAsync(int skip, int limit, string search = "")
   {
     return await DbSet
     .AsNoTracking()
     .Where(x => string.IsNullOrEmpty(search) || x.Name.Contains(search) || x.Username.Contains(search))
     .Where(x => x.Status != ETenantStatus.DELETED)
+    .Skip(skip)
+    .Take(limit)
     .ToListAsync();
   }
 
