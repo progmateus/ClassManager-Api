@@ -43,7 +43,7 @@ public class ListInvoicesHandler
       userTargetId = userId.Value;
     }
 
-    var invoices = await _invoiceRepository.ListByUserIdAndTenantId(tenantId, userTargetId);
+    var invoices = await _invoiceRepository.ListByUserIdAndTenantId(tenantId.Value, userTargetId);
 
     return new CommandResult(true, "INVOICES_LISTED", invoices, null, 200);
   }
