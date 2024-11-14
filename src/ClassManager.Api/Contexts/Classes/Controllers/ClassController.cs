@@ -1,6 +1,7 @@
 using ClassManager.Api.Contexts.Shared.Controllers;
 using ClassManager.Domain.Contexts.Classes.Commands;
 using ClassManager.Domain.Contexts.Classes.Handlers;
+using ClassManager.Domain.Shared.Commands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,10 +32,11 @@ public class ClassController : MainController
   [HttpGet]
   public async Task<IResult> List(
     [FromRoute] Guid tenantId,
-    [FromServices] ListClassesHandler handler
+    [FromServices] ListClassesHandler handler,
+    [FromQuery] PaginationCommand command
   )
   {
-    var result = await handler.Handle(tenantId);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 

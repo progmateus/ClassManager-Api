@@ -1,6 +1,7 @@
 using ClassManager.Api.Contexts.Shared.Controllers;
 using ClassManager.Domain.Contexts.Tenants.Commands;
 using ClassManager.Domain.Contexts.Tenants.Handlers;
+using ClassManager.Domain.Shared.Commands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Web;
@@ -66,10 +67,10 @@ public class TenantController : MainController
   [HttpGet]
   public async Task<IResult> List(
     [FromServices] ListTenantsHandler handler,
-    [FromQuery] string? search
+    [FromQuery] PaginationCommand command
   )
   {
-    var result = await handler.Handle(search);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 

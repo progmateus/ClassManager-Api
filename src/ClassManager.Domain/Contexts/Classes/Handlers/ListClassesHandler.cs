@@ -24,7 +24,7 @@ public class ListClassesHandler : ITenantPaginationHandler<PaginationCommand>
 
     if (command.Page < 1) command.Page = 1;
 
-    command.Limit = (command.Page - 1) * command.Limit;
+    var skip = (command.Page - 1) * command.Limit;
 
     var classes = _mapper.Map<List<ClassViewModel>>(await _classRepository.ListByTenantId(tenantId, new CancellationToken()));
 
