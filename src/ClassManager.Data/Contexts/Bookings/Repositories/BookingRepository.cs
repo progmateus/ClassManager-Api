@@ -29,4 +29,15 @@ public class BookingRepository : Repository<Booking>, IBookingRepository
     .Where(x => x.UserId == userId && (!tenantId.HasValue || x.ClassDay.Class.TenantId == tenantId.Value))
     .ToListAsync();
   }
+
+  public async Task<List<Booking>> ListByUserIdAndTenantIdWithPagination(Guid? tenantId, Guid userId, string search = "", int skip = 0, int limit = 30, CancellationToken cancellationToken = default)
+  {
+    return await DbSet
+      .Include(x => x.ClassDay)
+      .ThenInclude(x => x.Class)
+      .Where(x => x.UserId == userId && (!tenantId.HasValue || x.ClassDay.Class.TenantId == tenantId.Value))
+      .Skip(skip)
+      .Take(limit)
+      .ToListAsync();
+  }
 }

@@ -1,15 +1,14 @@
-using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
+using ClasManager.Domain.Contexts.Bookings.Commands;
 using ClassManager.Domain.Contexts.Bookings.Repositories.Contracts;
-using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
-using Flunt.Notifications;
+using ClassManager.Shared.Handlers;
 
 namespace ClasManager.Domain.Contexts.Bookings.Handlers;
 
-public class ListBookingsHandler : Notifiable
+public class ListBookingsHandler : IPaginationHandler<ListSubscriptionsCommand>
 {
   private IBookingRepository _bookingRepository;
   private ISubscriptionRepository _subscriptionRepository;
@@ -24,31 +23,31 @@ public class ListBookingsHandler : Notifiable
     _subscriptionRepository = subscriptionRepository;
     _accessControlService = accessControlService;
   }
-  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid? tenantId, Guid? userId)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, ListSubscriptionsCommand command)
   {
 
     var userIdNotEmpty = loggedUserId;
 
-    if (userId.HasValue && userId != Guid.Empty)
+    if (command.UserId.HasValue && command.UserId != Guid.Empty)
     {
-      if (userId.Value != loggedUserId)
+      if (command.UserId.Value != loggedUserId)
       {
-        if (!tenantId.HasValue || tenantId == Guid.Empty)
+        if (!command.TenantId.HasValue || command.TenantId == Guid.Empty)
         {
           return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, 404);
         }
 
-        if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId.Value, ["admin"]))
+        if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, command.TenantId.Value, ["admin"]))
         {
           return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, 404);
         }
-        userIdNotEmpty = userId.Value;
+        userIdNotEmpty = command.UserId.Value;
       }
     }
 
-    if (tenantId.HasValue && tenantId != Guid.Empty)
+    if (command.TenantId.HasValue && command.TenantId != Guid.Empty)
     {
-      var subscription = await _subscriptionRepository.GetByUserIdAndTenantId(userIdNotEmpty, tenantId.Value, new CancellationToken());
+      var subscription = await _subscriptionRepository.GetByUserIdAndTenantId(userIdNotEmpty, command.TenantId.Value, new CancellationToken());
 
       if (subscription is null)
       {
@@ -56,7 +55,11 @@ public class ListBookingsHandler : Notifiable
       }
     }
 
-    var bookings = await _bookingRepository.ListByUserIdAndTenantId(tenantId, userIdNotEmpty);
+    if (command.Page < 1) command.Page = 1;
+
+    var skip = (command.Page - 1) * command.Limit;
+
+    var bookings = await _bookingRepository.ListByUserIdAndTenantIdWithPagination(command.TenantId, userIdNotEmpty, command.Search, skip, command.Limit, new CancellationToken());
 
     return new CommandResult(true, "BOOKINGS_LISTED", bookings, null, 200);
   }

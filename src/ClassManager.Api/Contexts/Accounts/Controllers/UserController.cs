@@ -1,7 +1,7 @@
+using ClasManager.Domain.Contexts.Bookings.Commands;
 using ClasManager.Domain.Contexts.Bookings.Handlers;
 using ClassManager.Api.Contexts.Shared.Controllers;
 using ClassManager.Domain.Contexts.Accounts.Commands;
-using ClassManager.Domain.Contexts.Accounts.Entities;
 using ClassManager.Domain.Contexts.Accounts.Handlers;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -114,11 +114,11 @@ public class UserController : MainController
   [Authorize]
   [HttpGet("bookings")]
   public async Task<IResult> ListUserBookings(
-    [FromQuery] Guid? tenantId,
-    [FromServices] ListBookingsHandler handler
+    [FromServices] ListBookingsHandler handler,
+    [FromQuery] ListSubscriptionsCommand command
   )
   {
-    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, Guid.Empty);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
