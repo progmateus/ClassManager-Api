@@ -5,6 +5,7 @@ public interface ITRepository<TEntity> where TEntity : TenantEntity
 {
   Task<TEntity?> FindByIdAndTenantIdAsync(Guid id, Guid tenantId, CancellationToken cancellationToken);
   Task<List<TEntity>> ListByTenantId(Guid tenantId, string search = "", int skip = 0, int limit = 30, CancellationToken cancellationToken = default);
+  Task<List<TEntity>> ListByTenantIdWithPagination(Guid tenantId, string search = "", int skip = 0, int limit = 30, CancellationToken cancellationToken = default);
   Task CreateAsync(TEntity entity, CancellationToken cancellationToken);
   Task UpdateAsync(TEntity entity, CancellationToken cancellationToken);
   Task<IEnumerable<TEntity>> GetAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes);
