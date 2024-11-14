@@ -19,7 +19,11 @@ public class ListPlansHandler : IPaginationHandler<PaginationCommand>
   public async Task<ICommandResult> Handle(Guid loggedUserId, PaginationCommand command)
   {
 
-    var plans = await _repository.List(new CancellationToken());
+    if (command.Page < 1) command.Page = 1;
+
+    var skip = (command.Page - 1) * command.Limit;
+
+    var plans = await _repository.ListWithPaginationAsync(command.Search, skip, command.Limit, new CancellationToken());
 
     return new CommandResult(true, "PLANS_LISTED", plans, null, 204);
   }
