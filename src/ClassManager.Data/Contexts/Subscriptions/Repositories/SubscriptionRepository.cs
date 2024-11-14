@@ -44,7 +44,7 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
   .FirstAsync();
   }
 
-  public async Task<List<Subscription>> ListSubscriptions(List<Guid>? usersIds, List<Guid>? tenantsIds)
+  public async Task<List<Subscription>> ListSubscriptions(List<Guid>? usersIds, List<Guid>? tenantsIds, string search = "", int skip = 0, int limit = 30, CancellationToken cancellationToken = default)
   {
     return await DbSet
     .Include(x => x.User)
@@ -52,7 +52,10 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     .Include(x => x.Tenant)
     .Where(x => usersIds.Contains(x.UserId) || tenantsIds.Contains(x.TenantId))
     .GroupBy(x => new { x.TenantId, x.UserId })
-    .Select(x => x.OrderByDescending(x => x.CreatedAt).Select(x => x).First()).ToListAsync();
+    .Select(x => x.OrderByDescending(x => x.CreatedAt).Select(x => x).First())
+    .Skip(skip)
+    .Take(limit)
+    .ToListAsync();
   }
 
   public async Task<Subscription?> FindByStripeSubscriptionId(string stripeSubscriptionId, CancellationToken cancellationToken)
