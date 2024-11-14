@@ -29,7 +29,7 @@ public class InvoiceController : MainController
     return Results.Ok(result);
   }
 
-  [HttpGet]
+  [HttpGet("invoices")]
   public async Task<IResult> List(
   [FromQuery] Guid tenantId,
   [FromQuery] Guid userId,

@@ -21,21 +21,21 @@ public class ListInvoicesHandler
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid? tenantId, Guid? userId)
   {
-    if (tenantId.HasValue && !await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId.Value))
+    if (tenantId != Guid.Empty && tenantId != Guid.Empty && !await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId.Value))
     {
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
     }
 
     var userTargetId = loggedUserId;
 
-    if (userId.HasValue)
+    if (userId.HasValue && userId != Guid.Empty)
     {
-      if (!tenantId.HasValue)
+      if (tenantId == Guid.Empty)
       {
         return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
       }
 
-      if (userId.Value != loggedUserId && !await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId.Value, ["admin"]))
+      if (userId.HasValue && userId != Guid.Empty && userId.Value != loggedUserId && !await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId.Value, ["admin"]))
       {
         return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
       }
