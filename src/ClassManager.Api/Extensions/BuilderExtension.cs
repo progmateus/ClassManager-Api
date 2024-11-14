@@ -352,6 +352,7 @@ public static class BuilderExtension
     builder.Services.AddTransient<GetTimeTableHandler>();
 
     builder.Services.AddTransient<CreateInvoiceHandler>();
+    builder.Services.AddTransient<ListInvoicesHandler>();
     builder.Services.AddTransient<UpdateInvoiceHandler>();
     builder.Services.AddTransient<DeleteInvoiceHandler>();
 

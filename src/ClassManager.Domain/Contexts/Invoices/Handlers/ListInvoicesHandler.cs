@@ -1,5 +1,5 @@
+using ClassManager.Domain.Contexts.Accounts.Entities;
 using ClassManager.Domain.Contexts.Invoices.Repositories.Contracts;
-using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
@@ -19,18 +19,32 @@ public class ListInvoicesHandler
     _invoiceRepository = invoiceRepository;
     _accessControlService = accessControlService;
   }
-  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid? tenantId, Guid userId)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid? tenantId, Guid? userId)
   {
     if (tenantId.HasValue && !await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId.Value))
     {
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
     }
 
-    if (tenantId.HasValue && await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId.Value, ["admin"]))
+    var userTargetId = loggedUserId;
+
+    if (userId.HasValue)
     {
-      return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
+      if (!tenantId.HasValue)
+      {
+        return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
+      }
+
+      if (userId.Value != loggedUserId && !await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId.Value, ["admin"]))
+      {
+        return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
+      }
+
+      userTargetId = userId.Value;
     }
 
-    return new CommandResult(true, "INVOICE_UPDATED", "", null, 201);
+    var invoices = await _invoiceRepository.ListByUserIdAndTenantId(tenantId, userTargetId);
+
+    return new CommandResult(true, "INVOICES_LISTED", invoices, null, 200);
   }
 }

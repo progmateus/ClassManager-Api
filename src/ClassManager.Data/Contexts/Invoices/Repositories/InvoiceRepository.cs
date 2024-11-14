@@ -1,7 +1,5 @@
 using ClassManager.Data.Contexts.shared.Repositories;
 using ClassManager.Data.Data;
-using ClassManager.Domain.Contexts.Classes.Entities;
-using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Invoices.Entities;
 using ClassManager.Domain.Contexts.Invoices.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Shared.Enums;
@@ -27,5 +25,13 @@ public class InvoiceRepository : TRepository<Invoice>, IInvoiceRepository
   public async Task<Invoice?> FindUserInvoiceById(Guid invoiceId, Guid tenantId, CancellationToken cancellationToken)
   {
     return await DbSet.FirstOrDefaultAsync(x => x.Id == invoiceId && x.TenantId == tenantId && x.TargetType == EInvoiceTargetType.USER);
+  }
+
+  public async Task<List<Invoice>> ListByUserIdAndTenantId(Guid? tenantId, Guid? userId)
+  {
+    return await DbSet
+    .Include(x => x.Tenant)
+    .Where(x => (!tenantId.HasValue || x.TenantId == tenantId) && (!userId.HasValue || x.UserId == userId))
+    .ToListAsync();
   }
 }
