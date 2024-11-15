@@ -84,10 +84,11 @@ public class ClassController : MainController
   public async Task<IResult> ListStudents(
     [FromRoute] Guid tenantId,
     [FromRoute] Guid id,
-    [FromServices] ListStudentsByClassHandler handler
+    [FromServices] ListStudentsByClassHandler handler,
+    [FromQuery] PaginationCommand command
   )
   {
-    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, id);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, id, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
@@ -101,10 +102,11 @@ public class ClassController : MainController
   public async Task<IResult> ListTeachers(
     [FromRoute] Guid tenantId,
     [FromRoute] Guid id,
-    [FromServices] ListTeachersByClassHandler handler
+    [FromServices] ListTeachersByClassHandler handler,
+    [FromQuery] PaginationCommand command
   )
   {
-    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, id);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, id, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
