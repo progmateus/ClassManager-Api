@@ -26,7 +26,7 @@ public class ListStudentsByClassHandler
     _mapper = mapper;
     _accessControlService = accessControlService;
   }
-  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid classId)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid classId, PaginationCommand command)
   {
     if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin", "student"]))
     {
@@ -40,7 +40,11 @@ public class ListStudentsByClassHandler
       return new CommandResult(false, "ERR_CLASS_NOT_FOUND", null, null, 404);
     }
 
-    var students = _mapper.Map<List<StudentsClassesViewModel>>(await _studentsClassesRepository.ListByUserOrClassOrTenantAsync([], [tenantId], [classId]));
+    if (command.Page < 1) command.Page = 1;
+
+    var skip = (command.Page - 1) * command.Limit;
+
+    var students = _mapper.Map<List<StudentsClassesViewModel>>(await _studentsClassesRepository.ListByUserOrClassOrTenantAsync([], [tenantId], [classId], command.Search, skip, command.Limit));
 
     return new CommandResult(true, "STUDENTS_LISTED", students, null, 200);
   }
