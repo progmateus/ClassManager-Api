@@ -36,7 +36,7 @@ public class TimeTableController : MainController
     [FromQuery] PaginationCommand command
   )
   {
-    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, 0);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
