@@ -1,9 +1,7 @@
 using ClasManager.Domain.Contexts.Invoices.Commands;
 using ClassManager.Api.Contexts.Shared.Controllers;
 using ClassManager.Domain.Contexts.Invoices.Handlers;
-using ClassManager.Domain.Contexts.TimesTables.Commands;
-using ClassManager.Domain.Contexts.TimesTables.Handlers;
-using ClassManager.Domain.Contexts.TimesTabless.Handlers;
+using ClassManager.Domain.Shared.Commands;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -31,12 +29,11 @@ public class InvoiceController : MainController
 
   [HttpGet("invoices")]
   public async Task<IResult> List(
-  [FromQuery] Guid tenantId,
-  [FromQuery] Guid userId,
-  [FromServices] ListInvoicesHandler handler
+  [FromServices] ListInvoicesHandler handler,
+  [FromQuery] ListInvoicesCommand command
 )
   {
-    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, userId);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
