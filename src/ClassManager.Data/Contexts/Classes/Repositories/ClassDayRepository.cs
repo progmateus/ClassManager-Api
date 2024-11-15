@@ -2,10 +2,7 @@ using ClassManager.Data.Contexts.shared.Repositories;
 using ClassManager.Data.Data;
 using ClassManager.Domain.Contexts.ClassDays.Entities;
 using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
-using ClassManager.Domain.Contexts.Classes.Entities;
-using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.IdentityModel.Tokens;
 
 namespace ClassManager.Data.Contexts.Plans.Repositories;
 
@@ -21,7 +18,7 @@ public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
       .Select(g => new { status = g.Key, count = g.Count() });
   }
 
-  public async Task<List<ClassDay>> ListByTenantOrClassAndDate(List<Guid> tenantIds, List<Guid> classesIds, DateTime date)
+  public async Task<List<ClassDay>> ListByTenantOrClassAndDate(List<Guid> tenantIds, List<Guid> classesIds, DateTime date, string search = "", int skip = 0, int limit = 30, CancellationToken cancellationToken = default)
   {
     var zeroTime = date.Date;
     var finalTime = date.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
@@ -35,6 +32,8 @@ public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
     .Where(x => tenantIds.Contains(x.Class.TenantId) || classesIds.Contains(x.ClassId))
     .Where(x => x.Date >= zeroTime && x.Date <= finalTime)
     .OrderBy(x => x.Date)
+    .Skip(skip)
+    .Take(limit)
     .ToListAsync();
   }
 

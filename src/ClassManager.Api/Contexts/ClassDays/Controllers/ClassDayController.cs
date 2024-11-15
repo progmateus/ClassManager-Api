@@ -1,3 +1,4 @@
+using ClasManager.Domain.Contexts.Bookings.Commands;
 using ClassManager.Api.Contexts.Shared.Controllers;
 using ClassManager.Domain.Contexts.ClassDays.Commands;
 using ClassManager.Domain.Contexts.ClassDays.Handlers;
@@ -47,12 +48,11 @@ public class ClassDayController : MainController
 
   [HttpGet("class-days")]
   public async Task<IResult> List(
-    [FromQuery] DateTime date,
-    [FromQuery] Guid? tenantId,
-    [FromServices] ListClassesDaysHandler handler
+    [FromServices] ListClassesDaysHandler handler,
+    [FromQuery] ListClassesDaysCommand command
   )
   {
-    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, date);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
