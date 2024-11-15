@@ -34,12 +34,14 @@ public class TeachersClassesRepository : Repository<TeachersClasses>, ITeacherCl
     ).Where((tc) => tc.ClassId == classId).ToListAsync();
   }
 
-  public async Task<List<TeachersClasses>> ListByUserOrClassOrTenantAsync(List<Guid> usersIds, List<Guid> tenantsIds, List<Guid> classesIds)
+  public async Task<List<TeachersClasses>> ListByUserOrClassOrTenantAsync(List<Guid> usersIds, List<Guid> tenantsIds, List<Guid> classesIds, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)
   {
     return await DbSet
     .Include(x => x.Class)
     .Include(x => x.User)
     .Where(x => usersIds.Contains(x.UserId) || tenantsIds.Contains(x.Class.TenantId) || classesIds.Contains(x.ClassId))
+    .Skip(skip)
+    .Take(limit)
     .ToListAsync();
   }
 }

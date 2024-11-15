@@ -6,6 +6,6 @@ public interface ITeacherClassesRepository : IRepository<TeachersClasses>
   Task<TeachersClasses> GetByUserIdAndClassId(Guid classId, Guid userId);
   Task<List<TeachersClasses>> ListByClassId(Guid classId, Guid tenantId);
   Task<List<TeachersClasses>> GetByUserIdAndTenantId(Guid tenantId, Guid userId);
-  Task<List<TeachersClasses>> ListByUserOrClassOrTenantAsync(List<Guid> usersIds, List<Guid> tenantsIds, List<Guid> classesIds);
+  Task<List<TeachersClasses>> ListByUserOrClassOrTenantAsync(List<Guid> usersIds, List<Guid> tenantsIds, List<Guid> classesIds, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default);
   int CountByClassId(Guid classId);
 }

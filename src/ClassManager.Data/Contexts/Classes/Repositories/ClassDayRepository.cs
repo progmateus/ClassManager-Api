@@ -18,7 +18,7 @@ public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
       .Select(g => new { status = g.Key, count = g.Count() });
   }
 
-  public async Task<List<ClassDay>> ListByTenantOrClassAndDate(List<Guid> tenantIds, List<Guid> classesIds, DateTime date, string search = "", int skip = 0, int limit = 30, CancellationToken cancellationToken = default)
+  public async Task<List<ClassDay>> ListByTenantOrClassAndDate(List<Guid> tenantIds, List<Guid> classesIds, DateTime date, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)
   {
     var zeroTime = date.Date;
     var finalTime = date.Date.AddHours(23).AddMinutes(59).AddSeconds(59);

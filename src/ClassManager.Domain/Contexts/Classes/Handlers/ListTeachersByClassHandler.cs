@@ -4,6 +4,7 @@ using ClassManager.Domain.Contexts.Classes.ViewModels;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
+using ClassManager.Shared.Handlers;
 
 namespace ClassManager.Domain.Contexts.Classes.Handlers;
 
@@ -28,8 +29,12 @@ public class ListTeachersByClassHandler
     _accessControlService = accessControlService;
 
   }
-  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid classId)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid classId, PaginationCommand command)
   {
+
+    if (command.Page < 1) command.Page = 1;
+
+    var skip = (command.Page - 1) * command.Limit;
 
     if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin", "student"]))
     {
@@ -42,7 +47,8 @@ public class ListTeachersByClassHandler
     {
       return new CommandResult(false, "ERR_CLASS_NOT_FOUND", null, null, 404);
     }
-    var teachers = _mapper.Map<List<TeachersClassesViewModel>>(await _teachersClassesRepository.ListByUserOrClassOrTenantAsync([], [tenantId], [classId]));
+
+    var teachers = _mapper.Map<List<TeachersClassesViewModel>>(await _teachersClassesRepository.ListByUserOrClassOrTenantAsync([], [tenantId], [classId], command.Search, skip, command.Limit));
 
     return new CommandResult(true, "TEACHERS_LISTED", teachers, null, 200);
   }

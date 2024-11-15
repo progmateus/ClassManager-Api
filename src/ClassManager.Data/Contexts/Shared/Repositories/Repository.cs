@@ -88,7 +88,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
     return await includes.Aggregate(query, (current, includeProperty) => current.Include(includeProperty)).FirstOrDefaultAsync();
   }
 
-  public async Task<List<TEntity>> ListWithPaginationAsync(string search = "", int skip = 0, int limit = 30, CancellationToken cancellationToken = default)
+  public async Task<List<TEntity>> ListWithPaginationAsync(string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)
   {
     return await DbSet.Skip(skip).Take(limit).ToListAsync(cancellationToken);
   }

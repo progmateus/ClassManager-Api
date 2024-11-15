@@ -44,7 +44,7 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
   .FirstAsync();
   }
 
-  public async Task<List<Subscription>> ListSubscriptions(List<Guid>? usersIds, List<Guid>? tenantsIds, string search = "", int skip = 0, int limit = 30, CancellationToken cancellationToken = default)
+  public async Task<List<Subscription>> ListSubscriptions(List<Guid>? usersIds, List<Guid>? tenantsIds, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)
   {
     return await DbSet
     .Include(x => x.User)
