@@ -49,6 +49,20 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
       return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
 
+    var targetUserId = loggedUserId;
+
+    if (command.UserId.HasValue)
+    {
+      if (await _accessControlService.CheckParameterUserIdPermission(tenantId, loggedUserId, command.UserId))
+      {
+        targetUserId = command.UserId.Value;
+      }
+      else
+      {
+        return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
+      }
+    }
+
     if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
     {
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
@@ -71,20 +85,12 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
       return new CommandResult(false, "ERR_CLASS_DAY_TIME_EXPIRED", null, null, 403);
     }
 
-    if (!loggedUserId.Equals(command.UserId))
-    {
-      if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
-      {
-        return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
-      }
-    }
-
-    if (!await _accessControlService.HasUserAnyRoleAsync(command.UserId, tenantId, ["student"]))
+    if (!await _accessControlService.HasUserAnyRoleAsync(targetUserId, tenantId, ["student"]))
     {
       return new CommandResult(false, "ERR_STUDENT_ROLE_NOT_FOUND", null, null, 403);
     }
 
-    var subscription = await _subscriptionRepository.FindUserLatestSubscription(tenantId, command.UserId, new CancellationToken());
+    var subscription = await _subscriptionRepository.FindUserLatestSubscription(tenantId, targetUserId, new CancellationToken());
 
     if (subscription is null)
     {
@@ -96,7 +102,7 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_ACTIVE", null, 403);
     }
 
-    var isClassStudent = await _studentsClassesrepository.FindByUserIdAndClassId(classDay.ClassId, command.UserId);
+    var isClassStudent = await _studentsClassesrepository.FindByUserIdAndClassId(classDay.ClassId, targetUserId);
 
     if (isClassStudent is null)
     {
@@ -111,24 +117,21 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
       return new CommandResult(false, "ERR_TENANT_PLAN_NOT_FOUND", null, 404);
     }
 
-    if (loggedUserId.Equals(command.UserId))
-    {
-      var weekBookings = await _bookingRepository.GetAsync(x => x.UserId == command.UserId && x.ClassDay.Class.TenantId == tenantId && x.ClassDay.Date > sunday && x.ClassDay.Date < monday && x.ClassDay.Status != EClassDayStatus.CANCELED, []);
+    var weekBookings = await _bookingRepository.GetAsync(x => x.UserId == targetUserId && x.ClassDay.Class.TenantId == tenantId && x.ClassDay.Date > sunday && x.ClassDay.Date < monday && x.ClassDay.Status != EClassDayStatus.CANCELED, []);
 
-      if (weekBookings.Count() >= subscription.TenantPlan.TimesOfweek)
-      {
-        return new CommandResult(false, "ERR_WEEK_TIMES_EXCEEDED", null, 400);
-      }
+    if (weekBookings.Count() >= subscription.TenantPlan.TimesOfweek)
+    {
+      return new CommandResult(false, "ERR_WEEK_TIMES_EXCEEDED", null, 400);
     }
 
-    var bookingAlreadyExists = await _bookingRepository.GetAsync(x => x.UserId == command.UserId && x.ClassDayId == command.ClassDayId, []);
+    var bookingAlreadyExists = await _bookingRepository.GetAsync(x => x.UserId == targetUserId && x.ClassDayId == command.ClassDayId, []);
 
     if (bookingAlreadyExists.Count() > 0)
     {
       return new CommandResult(false, "ERR_BOOKING_ALREADY_EXISTS", null, 409);
     }
 
-    var booking = new Booking(command.UserId, command.ClassDayId);
+    var booking = new Booking(targetUserId, command.ClassDayId);
 
     await _bookingRepository.CreateAsync(booking, new CancellationToken());
 

@@ -6,7 +6,7 @@ namespace ClasManager.Domain.Contexts.Bookings.Commands;
 
 public class CreateBookingCommand : Notifiable, ICommand
 {
-  public Guid UserId { get; set; }
+  public Guid? UserId { get; set; }
   public Guid ClassDayId { get; set; }
 
   public void Validate()

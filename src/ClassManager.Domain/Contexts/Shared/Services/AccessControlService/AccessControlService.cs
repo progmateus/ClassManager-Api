@@ -30,6 +30,32 @@ public class AccesControlService : IAccessControlService
     _invoiceRepository = invoiceRepository;
   }
 
+  public async Task<bool> CheckParameterUserIdPermission(Guid? tenantId, Guid loggedUserId, Guid? userIdParameter)
+  {
+
+    if (!tenantId.HasValue || tenantId == Guid.Empty)
+    {
+      return false;
+    }
+
+    if (!userIdParameter.HasValue || userIdParameter == Guid.Empty)
+    {
+      return false;
+    }
+
+    if (loggedUserId.Equals(userIdParameter.Value))
+    {
+      return true;
+    }
+
+    if (!await HasUserAnyRoleAsync(loggedUserId, tenantId.Value, ["admin"]))
+    {
+      return false;
+    }
+
+    return true;
+  }
+
   public async Task<List<UsersRoles>> GetUserRolesAsync(Guid userId, Guid tenantId)
   {
     return await _usersRolesRepository.ListUsersRolesByUserIdAndTenantId(userId, tenantId, new CancellationToken());
