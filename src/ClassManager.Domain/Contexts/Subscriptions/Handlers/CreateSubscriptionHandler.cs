@@ -72,14 +72,21 @@ public class CreateSubscriptionHandler : Notifiable,
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
     }
 
-    Guid userId = loggedUserId;
+    Guid targetUserId = loggedUserId;
 
-    if (await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
+    if (command.UserId.HasValue && command.UserId != Guid.Empty)
     {
-      userId = command.UserId;
+      if (await _accessControlService.CheckParameterUserIdPermission(tenantId, loggedUserId, command.UserId))
+      {
+        targetUserId = command.UserId.Value;
+      }
+      else
+      {
+        return new CommandResult(false, "ADMIN_ROLE_NOT_FOUND", null, null, 409);
+      }
     }
 
-    var subscriptionAlreadyActive = await _subscriptionRepository.HasActiveSubscription(userId, tenantId, new CancellationToken());
+    var subscriptionAlreadyActive = await _subscriptionRepository.HasActiveSubscription(targetUserId, tenantId, new CancellationToken());
 
     if (subscriptionAlreadyActive)
     {
@@ -107,18 +114,18 @@ public class CreateSubscriptionHandler : Notifiable,
       return new CommandResult(false, "ERR_PLAN_NOT_FOUND", null, null, 404);
     }
 
-    var userRoleAlreadyExists = await _usersRolesRepository.HasAnyRoleAsync(userId, tenantId, ["student"], new CancellationToken());
+    var userRoleAlreadyExists = await _usersRolesRepository.HasAnyRoleAsync(targetUserId, tenantId, ["student"], new CancellationToken());
 
     if (!userRoleAlreadyExists)
     {
-      var userRole = new UsersRoles(userId, role.Id, tenantId);
+      var userRole = new UsersRoles(targetUserId, role.Id, tenantId);
 
       await _usersRolesRepository.CreateAsync(userRole, new CancellationToken());
     }
 
     /* DateTime lastDayOfMonth = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month)); */
 
-    var user = await _userRepository.GetByIdAsync(userId, default);
+    var user = await _userRepository.GetByIdAsync(targetUserId, default);
 
     if (user is null)
     {
@@ -136,9 +143,9 @@ public class CreateSubscriptionHandler : Notifiable,
 
     _paymentService.CreateSubscription(tenantId, tenantPlan.StripePriceId, stripeCustomerEntity.StripeCustomerId, "user", tenantPlan.Tenant.StripeAccountId);
 
-    var studentclass = new StudentsClasses(userId, command.ClassId);
+    var studentclass = new StudentsClasses(targetUserId, command.ClassId);
 
-    await _studentsClassesRepository.DeleteByUserIdAndtenantId(tenantId, userId, new CancellationToken());
+    await _studentsClassesRepository.DeleteByUserIdAndtenantId(tenantId, targetUserId, new CancellationToken());
 
     await _studentsClassesRepository.CreateAsync(studentclass, new CancellationToken());
 

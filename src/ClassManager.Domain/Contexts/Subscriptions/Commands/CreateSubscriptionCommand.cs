@@ -6,7 +6,7 @@ namespace ClassManager.Domain.Contexts.Roles.Commands;
 
 public class CreateSubscriptionCommand : Notifiable, ICommand
 {
-  public Guid UserId { get; set; }
+  public Guid? UserId { get; set; }
   public Guid TenantPlanId { get; set; }
   public Guid ClassId { get; set; }
   public void Validate()
