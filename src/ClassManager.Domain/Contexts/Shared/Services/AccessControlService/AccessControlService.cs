@@ -33,11 +33,6 @@ public class AccesControlService : IAccessControlService
   public async Task<bool> CheckParameterUserIdPermission(Guid? tenantId, Guid loggedUserId, Guid? userIdParameter)
   {
 
-    if (!tenantId.HasValue || tenantId == Guid.Empty)
-    {
-      return false;
-    }
-
     if (!userIdParameter.HasValue || userIdParameter == Guid.Empty)
     {
       return false;
@@ -46,6 +41,11 @@ public class AccesControlService : IAccessControlService
     if (loggedUserId.Equals(userIdParameter.Value))
     {
       return true;
+    }
+
+    if (!tenantId.HasValue || tenantId == Guid.Empty)
+    {
+      return false;
     }
 
     if (!await HasUserAnyRoleAsync(loggedUserId, tenantId.Value, ["admin"]))
