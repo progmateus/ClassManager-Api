@@ -2,6 +2,7 @@ using ClassManager.Data.Contexts.shared.Repositories;
 using ClassManager.Data.Data;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClassManager.Data.Contexts.Plans.Repositories;
@@ -25,6 +26,11 @@ public class TeachersClassesRepository : Repository<TeachersClasses>, ITeacherCl
     return await DbSet.Include(x => x.Class).Where((tc) => tc.Class.TenantId == tenantId && tc.UserId == userId).ToListAsync();
   }
 
+  public async Task<List<TeachersClasses>> GetByUsersIdsAndTenantActive(List<Guid> usersIds, CancellationToken cancellationToken = default)
+  {
+    return await DbSet.Where((tc) => usersIds.Contains(tc.UserId) && tc.Class.Tenant.Status == ETenantStatus.ACTIVE).ToListAsync();
+  }
+
   public async Task<List<TeachersClasses>> ListByClassId(Guid classId, Guid tenantId)
   {
     return await DbSet.
@@ -39,7 +45,7 @@ public class TeachersClassesRepository : Repository<TeachersClasses>, ITeacherCl
     return await DbSet
     .Include(x => x.Class)
     .Include(x => x.User)
-    .Where(x => usersIds.Contains(x.UserId) || tenantsIds.Contains(x.Class.TenantId) || classesIds.Contains(x.ClassId))
+    .Where(x => (usersIds.Contains(x.UserId) || tenantsIds.Contains(x.Class.TenantId) || classesIds.Contains(x.ClassId)) && x.Class.Tenant.Status == ETenantStatus.ACTIVE)
     .Skip(skip)
     .Take(limit)
     .ToListAsync();

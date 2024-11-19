@@ -7,4 +7,5 @@ public interface IClassRepository : ITRepository<Class>
   Task<Class?> GetByIdAndTenantIdAsync(Guid tenantId, Guid classId, CancellationToken cancellationToken);
   Task<Class?> FindByIdWithTimeTable(Guid id, CancellationToken cancellationToken = default);
   Task<List<Class>> ListByTenantId(Guid tenantId, CancellationToken cancellationToken);
+  Task<List<Class>> GetByTenantsIds(List<Guid> tenantsIds, CancellationToken cancellationToken = default);
 }

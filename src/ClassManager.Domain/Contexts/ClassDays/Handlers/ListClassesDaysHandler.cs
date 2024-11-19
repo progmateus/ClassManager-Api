@@ -10,6 +10,7 @@ using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
+using MassTransit.Initializers;
 
 namespace ClassManager.Domain.Contexts.ClassDays.Handlers;
 
@@ -17,25 +18,31 @@ public class ListClassesDaysHandler : IPaginationHandler<ListClassesDaysCommand>
 {
   private readonly IClassDayRepository _classDayRepository;
   private readonly IStudentsClassesRepository _studentsClassesRepository;
+  private readonly ITeacherClassesRepository _teachersClassesRepository;
   private readonly ISubscriptionRepository _subscriptionsRepository;
   private readonly IMapper _mapper;
   private readonly IAccessControlService _accessControlService;
   private readonly IUsersRolesRepository _usersRolesRepository;
+  private readonly IClassRepository _classRepository;
   public ListClassesDaysHandler(
-    IClassDayRepository classRepository,
+    IClassDayRepository classDayRepository,
     IStudentsClassesRepository studentsClassesRepository,
     ISubscriptionRepository subscriptionsRepository,
     IMapper mapper,
     IAccessControlService accessControlService,
-    IUsersRolesRepository usersRolesRepository
+    IUsersRolesRepository usersRolesRepository,
+    ITeacherClassesRepository teacherClassesRepository,
+    IClassRepository classRepository
     )
   {
-    _classDayRepository = classRepository;
+    _classDayRepository = classDayRepository;
     _studentsClassesRepository = studentsClassesRepository;
     _subscriptionsRepository = subscriptionsRepository;
     _mapper = mapper;
     _accessControlService = accessControlService;
     _usersRolesRepository = usersRolesRepository;
+    _teachersClassesRepository = teacherClassesRepository;
+    _classRepository = classRepository;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, ListClassesDaysCommand command)
   {
@@ -48,6 +55,9 @@ public class ListClassesDaysHandler : IPaginationHandler<ListClassesDaysCommand>
     var skip = (command.Page - 1) * command.Limit;
 
 
+    var classesIds = new List<Guid>();
+
+
     if (command.TenantId.HasValue)
     {
       if (await _accessControlService.HasUserAnyRoleAsync(loggedUserId, command.TenantId.Value, ["admin"]))
@@ -58,7 +68,7 @@ public class ListClassesDaysHandler : IPaginationHandler<ListClassesDaysCommand>
       return new CommandResult(true, "CLASSES_DAYS_LISTED", Array.Empty<string>(), null, 200);
     }
 
-    // se vier não vier tenantId (seção do usuário) verifica se o usuario é adm de alguma empresa
+    // se não vier tenantId (seção do usuário) verifica se o usuario é adm de alguma empresa
     // lista as aulas de todas as empresas dele
 
     var userAdminRoles = await _usersRolesRepository.GetByUserIdAndRoleName(loggedUserId, ["admin"]);
@@ -67,8 +77,12 @@ public class ListClassesDaysHandler : IPaginationHandler<ListClassesDaysCommand>
     {
       var adminTenantsIds = userAdminRoles.Select(s => s.TenantId).ToList();
 
-      var classesDaysFound = _mapper.Map<List<ClassDayViewModel>>(await _classDayRepository.ListByTenantOrClassAndDate(adminTenantsIds, [], command.Date, command.Search, skip, command.Limit, new CancellationToken()));
-      return new CommandResult(true, "CLASSES_DAYS_LISTED", classesDaysFound, null, 200);
+      var classesOwned = await _classRepository.GetByTenantsIds(adminTenantsIds);
+
+      classesIds.AddRange(classesOwned.Select(x => x.Id).ToList());
+
+      /* var classesDaysFound = _mapper.Map<List<ClassDayViewModel>>(await _classDayRepository.ListByTenantOrClassAndDate(adminTenantsIds, [], command.Date, command.Search, skip, command.Limit, new CancellationToken()));
+      return new CommandResult(true, "CLASSES_DAYS_LISTED", classesDaysFound, null, 200); */
     }
 
     // se o usuario não for adm de nenhuma empresa
@@ -76,13 +90,14 @@ public class ListClassesDaysHandler : IPaginationHandler<ListClassesDaysCommand>
 
     var usersubscriptions = await _subscriptionsRepository.ListSubscriptions([loggedUserId], []);
 
-    var activesubscriptions = usersubscriptions.Where(x => x.Status == ESubscriptionStatus.ACTIVE).ToList();
+    var activesubscriptions = usersubscriptions.Where(x => x.Status == ESubscriptionStatus.ACTIVE && x.Tenant.Status == ETenantStatus.ACTIVE).ToList();
 
     var tenantsIds = activesubscriptions.Select(s => s.TenantId).ToList();
 
-    var userClasses = await _studentsClassesRepository.ListByUserOrClassOrTenantAsync([loggedUserId], tenantsIds, []);
+    var userStudentsClasses = await _studentsClassesRepository.ListByUserOrClassOrTenantAsync([loggedUserId], tenantsIds, []);
+    var userTeahcerClasses = await _teachersClassesRepository.GetByUsersIdsAndTenantActive([loggedUserId]);
 
-    var classesIds = userClasses.Select(o => o.ClassId).ToList();
+    classesIds.Union(userStudentsClasses.Select(x => x.ClassId).Union(userTeahcerClasses.Select(x => x.ClassId)).ToList());
 
     var classesDays = _mapper.Map<List<ClassDayViewModel>>(await _classDayRepository.ListByTenantOrClassAndDate([], classesIds, command.Date, command.Search, skip, command.Limit, new CancellationToken()));
 

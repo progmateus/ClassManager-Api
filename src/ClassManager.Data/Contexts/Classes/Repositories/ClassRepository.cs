@@ -23,6 +23,11 @@ public class ClassRepository : TRepository<Class>, IClassRepository
     return await DbSet.FirstOrDefaultAsync((x) => x.TenantId == tenantId && x.Id == classId, cancellationToken);
   }
 
+  public async Task<List<Class>> GetByTenantsIds(List<Guid> tenantsIds, CancellationToken cancellationToken = default)
+  {
+    return await DbSet.Where((x) => tenantsIds.Contains(x.TenantId)).ToListAsync(cancellationToken);
+  }
+
   public async Task<List<Class>> ListByTenantId(Guid tenantId, CancellationToken cancellationToken)
   {
     return await DbSet.Where((x) => x.TenantId == tenantId).ToListAsync(cancellationToken);
