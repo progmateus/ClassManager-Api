@@ -48,7 +48,7 @@ public class ListInvoicesHandler : IPaginationHandler<ListInvoicesCommand>
 
     var skip = (command.Page - 1) * command.Limit;
 
-    var invoices = await _invoiceRepository.ListByUserIdAndTenantId(command.TenantId.Value, userTargetId, command.Search, skip, command.Limit, new CancellationToken());
+    var invoices = await _invoiceRepository.ListByUserIdAndTenantId(command.TenantId, userTargetId, command.Search, skip, command.Limit, new CancellationToken());
 
     return new CommandResult(true, "INVOICES_LISTED", invoices, null, 200);
   }
