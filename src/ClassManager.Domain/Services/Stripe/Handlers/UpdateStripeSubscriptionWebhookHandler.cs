@@ -51,8 +51,14 @@ public class UpdateStripeSubscriptionWebhookHandler
     var subscriptionType = stripeSubscription.Metadata.FirstOrDefault(x => x.Key == "type");
 
     var status =
-      stripeSubscription.Status == "paused" ? ESubscriptionStatus.PAUSED
+      stripeSubscription.Status == "incomplete" ? ESubscriptionStatus.INCOMPLETE
+        : stripeSubscription.Status == "incomplete_expired" ? ESubscriptionStatus.INCOMPLETE_EXPIRED
+        : stripeSubscription.Status == "trialing" ? ESubscriptionStatus.TRIALING
+        : stripeSubscription.Status == "active" ? ESubscriptionStatus.ACTIVE
+        : stripeSubscription.Status == "past_due" ? ESubscriptionStatus.PAST_DUE
         : stripeSubscription.Status == "canceled" ? ESubscriptionStatus.CANCELED
+        : stripeSubscription.Status == "unpaid" ? ESubscriptionStatus.UNPAID
+        : stripeSubscription.Status == "paused" ? ESubscriptionStatus.PAUSED
           : ESubscriptionStatus.ACTIVE;
 
     if (subscriptionType.Value == "user")

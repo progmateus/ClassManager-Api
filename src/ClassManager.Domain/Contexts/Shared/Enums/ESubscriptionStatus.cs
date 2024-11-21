@@ -3,9 +3,12 @@ namespace ClassManager.Domain.Contexts.Shared.Enums
   public enum ESubscriptionStatus
   {
     INCOMPLETE = 1,
-    ACTIVE = 2,
-    PAUSED = 3,
-    CANCELED = 4,
-    INCOMPLETE_EXPIRED = 5
+    INCOMPLETE_EXPIRED = 2,
+    TRIALING = 3,
+    ACTIVE = 4,
+    PAST_DUE = 5,
+    CANCELED = 6,
+    PAUSED = 7,
+    UNPAID = 8,
   }
 }
