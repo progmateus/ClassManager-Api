@@ -39,7 +39,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public ETenantStatus Status { get; private set; } = ETenantStatus.ACTIVE;
     public ESubscriptionStatus SubscriptionStatus { get; private set; } = ESubscriptionStatus.INCOMPLETE;
     public Guid? UserId { get; private set; }
-    public Guid? PlanId { get; private set; }
+    public Guid PlanId { get; private set; }
     public string? StripeAccountId { get; private set; }
     public string? StripeCustomerId { get; private set; }
     public string? StripeSubscriptionId { get; private set; }
