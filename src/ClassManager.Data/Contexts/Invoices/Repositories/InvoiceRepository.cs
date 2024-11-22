@@ -31,7 +31,7 @@ public class InvoiceRepository : TRepository<Invoice>, IInvoiceRepository
   {
     return await DbSet
     .Include(x => x.Tenant)
-    .Where(x => (tenantId.HasValue || x.TenantId == tenantId) && (!userId.HasValue || x.UserId == userId))
+    .Where(x => (!tenantId.HasValue || x.TenantId == tenantId) && (!userId.HasValue || x.UserId == userId))
     .Skip(skip)
     .Take(limit)
     .ToListAsync();
