@@ -1,4 +1,3 @@
-using ClasManager.Domain.Contexts.Bookings.Entities;
 using ClassManager.Domain.Contexts.Bookings.ViewModels;
 using ClassManager.Domain.Contexts.Classes.ViewModels;
 using ClassManager.Domain.Contexts.Roles.ViewModels;
@@ -25,6 +24,7 @@ public class UserViewModel
   public IList<TeachersClassesViewModel> TeachersClasses { get; set; } = [];
   public IList<StudentsClassesViewModel> StudentsClasses { get; set; } = [];
   public IList<SubscriptionPreviewViewModel> Subscriptions { get; set; } = [];
+  public List<StripeCustomerViewModel> StripeCustomers { get; set; } = [];
   public IList<BookingViewModel> Bookings { get; set; } = [];
   public IList<TenantViewModel> Tenants { get; set; } = [];
   public DateTime CreatedAt { get; set; }

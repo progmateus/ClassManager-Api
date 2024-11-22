@@ -67,5 +67,6 @@ public class AutoMapperConfig : Profile
     CreateMap<ScheduleDay, ScheduleDayViewModel>();
 
     CreateMap<Invoice, InvoiceViewModel>();
+    CreateMap<StripeCustomer, StripeCustomerViewModel>();
   }
 }

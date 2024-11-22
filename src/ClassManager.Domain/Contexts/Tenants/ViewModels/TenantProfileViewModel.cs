@@ -26,6 +26,7 @@ public class TenantProfileViewModel
   public string? StripeSubscriptionId { get; set; }
   public bool StripeChargesEnabled { get; set; }
   public int Status { get; set; }
+  public int SubscriptionStatus { get; set; }
   public int Type { get; set; }
   public Guid UserId { get; set; }
   public Guid PlanId { get; set; }
@@ -38,6 +39,7 @@ public class TenantProfileViewModel
   public List<SubscriptionPreviewViewModel> Subscriptions { get; set; } = [];
   public List<ClassViewModel> Classes { get; set; } = [];
   public List<Link> Links { get; set; } = [];
+  public List<StripeCustomerViewModel> StripeCustomers { get; set; } = [];
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }
 }
