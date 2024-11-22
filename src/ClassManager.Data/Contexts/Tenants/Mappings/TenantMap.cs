@@ -63,7 +63,7 @@ public class TenantMap : IEntityTypeConfiguration<Tenant>
         builder.HasOne(x => x.Plan)
             .WithMany(p => p.Tenants)
             .HasForeignKey(x => x.PlanId)
-            .IsRequired(false);
+            .IsRequired();
 
         builder.Property(x => x.ExpiresDate)
             .HasColumnName("ExpiresDate");
