@@ -29,44 +29,44 @@ public class AutoMapperConfig : Profile
     .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Name.FirstName))
     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.Name.FirstName} {src.Name.LastName}"))
     .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Name.LastName))
-    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address));
+    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address)).PreserveReferences();
 
     CreateMap<User, UserProfileViewModel>()
     .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Name.FirstName))
     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.Name.FirstName} {src.Name.LastName}"))
     .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Name.LastName))
     .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address))
-    .ForMember(dest => dest.Document, opt => opt.MapFrom(src => src.Document.Number));
+    .ForMember(dest => dest.Document, opt => opt.MapFrom(src => src.Document.Number)).PreserveReferences();
 
-    CreateMap<Booking, BookingViewModel>();
+    CreateMap<Booking, BookingViewModel>().PreserveReferences();
 
 
-    CreateMap<Class, ClassViewModel>();
-    CreateMap<ClassDay, ClassDayViewModel>();
-    CreateMap<StudentsClasses, StudentsClassesViewModel>();
-    CreateMap<TeachersClasses, TeachersClassesViewModel>();
+    CreateMap<Class, ClassViewModel>().PreserveReferences();
+    CreateMap<ClassDay, ClassDayViewModel>().PreserveReferences();
+    CreateMap<StudentsClasses, StudentsClassesViewModel>().PreserveReferences();
+    CreateMap<TeachersClasses, TeachersClassesViewModel>().PreserveReferences();
 
-    CreateMap<Plan, PlanViewModel>();
+    CreateMap<Plan, PlanViewModel>().PreserveReferences();
 
-    CreateMap<Role, RoleViewModel>();
-    CreateMap<UsersRoles, UsersRolesViewModel>();
+    CreateMap<Role, RoleViewModel>().PreserveReferences();
+    CreateMap<UsersRoles, UsersRolesViewModel>().PreserveReferences();
 
-    CreateMap<Subscription, SubscriptionPreviewViewModel>();
-    CreateMap<Subscription, SubscriptionProfileViewModel>();
+    CreateMap<Subscription, SubscriptionPreviewViewModel>().PreserveReferences();
+    CreateMap<Subscription, SubscriptionProfileViewModel>().PreserveReferences();
 
     CreateMap<Tenant, TenantViewModel>()
-    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address));
+    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address)).PreserveReferences();
 
-    CreateMap<TenantPlan, TenantPlanViewModel>();
-    CreateMap<Link, LinkViewModel>();
+    CreateMap<TenantPlan, TenantPlanViewModel>().PreserveReferences();
+    CreateMap<Link, LinkViewModel>().PreserveReferences();
 
     CreateMap<Tenant, TenantProfileViewModel>()
-    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address));
+    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address)).PreserveReferences();
 
-    CreateMap<TimeTable, TimeTableViewModel>();
-    CreateMap<ScheduleDay, ScheduleDayViewModel>();
+    CreateMap<TimeTable, TimeTableViewModel>().PreserveReferences();
+    CreateMap<ScheduleDay, ScheduleDayViewModel>().PreserveReferences();
 
-    CreateMap<Invoice, InvoiceViewModel>();
-    CreateMap<StripeCustomer, StripeCustomerViewModel>();
+    CreateMap<Invoice, InvoiceViewModel>().PreserveReferences();
+    CreateMap<StripeCustomer, StripeCustomerViewModel>().PreserveReferences();
   }
 }

@@ -27,15 +27,15 @@ public class UserRepository : Repository<User>, IUserRepository
         .FirstOrDefaultAsync(x => x.Email.Address == email, cancellationToken);
   }
 
-  public async Task<User?> GetByIdWithIncludeAsync(Guid userId, CancellationToken cancellationToken)
+  public async Task<User?> FindUserProfile(Guid userId, CancellationToken cancellationToken)
   {
     return await DbSet
     .AsNoTracking()
-    .Include(x => x.UsersRoles)
-    .ThenInclude(x => x.Tenant)
     .Include(x => x.Subscriptions)
     .Include(x => x.UsersRoles)
     .ThenInclude(x => x.Role)
+    .Include(x => x.TeachersClasses)
+    .Include(x => x.StudentsClasses)
     .FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
   }
 
