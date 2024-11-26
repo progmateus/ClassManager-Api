@@ -141,7 +141,13 @@ public class CreateSubscriptionHandler : Notifiable,
       await _stripeCustomerRepository.CreateAsync(stripeCustomerEntity, new CancellationToken());
     }
 
-    _paymentService.CreateSubscription(tenantId, tenantPlan.StripePriceId, stripeCustomerEntity.StripeCustomerId, "user", tenantPlan.Tenant.StripeAccountId);
+    var stripeSubscription = _paymentService.CreateSubscription(tenantId, tenantPlan.StripePriceId, stripeCustomerEntity.StripeCustomerId, "user", tenantPlan.Tenant.StripeAccountId);
+
+    var subscription = new Subscription(stripeCustomerEntity.UserId, tenantPlan.Id, tenantPlan.TenantId, stripeSubscription.Id, stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);
+
+    await _subscriptionRepository.CreateAsync(subscription, new CancellationToken());
+
+    _paymentService.CreateInvoice(tenantPlan.TenantId, stripeCustomerEntity.StripeCustomerId, stripeSubscription.Id, tenantPlan.Tenant.StripeAccountId);
 
     var studentclass = new StudentsClasses(targetUserId, command.ClassId);
 
@@ -149,6 +155,6 @@ public class CreateSubscriptionHandler : Notifiable,
 
     await _studentsClassesRepository.CreateAsync(studentclass, new CancellationToken());
 
-    return new CommandResult(true, "SUBSCRIPTION_CREATED", new { }, null, 201);
+    return new CommandResult(true, "SUBSCRIPTION_CREATED", subscription, null, 201);
   }
 }

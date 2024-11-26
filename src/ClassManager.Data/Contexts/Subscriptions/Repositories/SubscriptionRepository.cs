@@ -27,6 +27,7 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     return await DbSet
     .Include(x => x.TenantPlan)
     .Include(x => x.Tenant)
+    .Include(x => x.Invoices)
     .Include(x => x.User)
     .ThenInclude(u => u.StudentsClasses.Where(sc => sc.Class.TenantId == tenantId))
     .ThenInclude(sc => sc.Class)

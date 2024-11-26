@@ -30,6 +30,8 @@ public class CreateStripeSubscriptionWebhookHandler
   public async Task Handle(Subscription? stripeSubscription)
   {
 
+    return;
+
     if (stripeSubscription is null)
     {
       return;

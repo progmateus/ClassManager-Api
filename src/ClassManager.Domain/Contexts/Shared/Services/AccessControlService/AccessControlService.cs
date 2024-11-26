@@ -82,7 +82,6 @@ public class AccesControlService : IAccessControlService
     var tenant = await _tenantRepository.GetByIdAsync(tenantId, new CancellationToken());
     if (tenant is null)
     {
-
       return false;
     }
     return tenant.Status == ETenantStatus.ACTIVE && tenant.SubscriptionStatus == ESubscriptionStatus.ACTIVE;
