@@ -9,6 +9,6 @@ public class BookingViewModel
   public Guid Id { get; set; }
   public Guid UserId { get; set; }
   public Guid ClassDayId { get; set; }
-  public UserViewModel? User { get; set; }
+  public UserPreviewViewModel? User { get; set; }
   public ClassDayViewModel? ClassDay { get; set; }
 }

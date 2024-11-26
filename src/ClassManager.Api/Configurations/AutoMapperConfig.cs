@@ -25,7 +25,7 @@ public class AutoMapperConfig : Profile
 {
   public AutoMapperConfig()
   {
-    CreateMap<User, UserViewModel>()
+    CreateMap<User, UserPreviewViewModel>()
     .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Name.FirstName))
     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.Name.FirstName} {src.Name.LastName}"))
     .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Name.LastName))
@@ -54,7 +54,7 @@ public class AutoMapperConfig : Profile
     CreateMap<Subscription, SubscriptionPreviewViewModel>().PreserveReferences();
     CreateMap<Subscription, SubscriptionProfileViewModel>().PreserveReferences();
 
-    CreateMap<Tenant, TenantViewModel>()
+    CreateMap<Tenant, TenantPreviewViewModel>()
     .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address)).PreserveReferences();
 
     CreateMap<TenantPlan, TenantPlanViewModel>().PreserveReferences();

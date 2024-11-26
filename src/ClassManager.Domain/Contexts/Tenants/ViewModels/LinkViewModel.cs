@@ -9,7 +9,7 @@ namespace ClassManager.Domain.Contexts.Tenants.ViewModels
     public string url { get; set; } = string.Empty;
     public decimal Price { get; set; }
     public Guid TenantId { get; set; }
-    public TenantViewModel? Tenant { get; set; }
+    public TenantPreviewViewModel? Tenant { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
   }

@@ -11,6 +11,6 @@ public class StripeCustomerViewModel
   public int Type { get; set; }
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }
-  public UserViewModel? User { get; set; }
-  public TenantViewModel? Tenant { get; set; }
+  public UserPreviewViewModel? User { get; set; }
+  public TenantPreviewViewModel? Tenant { get; set; }
 }

@@ -20,7 +20,7 @@ public class GetTenantHandler
   }
   public async Task<ICommandResult> Handle(Guid id)
   {
-    var tenant = _mapper.Map<TenantViewModel>(await _repository.FindAsync(x => x.Id == id, [x => x.Links]));
+    var tenant = _mapper.Map<TenantPreviewViewModel>(await _repository.FindAsync(x => x.Id == id, [x => x.Links]));
 
     if (tenant is null)
     {

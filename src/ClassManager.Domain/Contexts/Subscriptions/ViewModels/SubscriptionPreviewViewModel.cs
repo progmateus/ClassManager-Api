@@ -13,9 +13,9 @@ public class SubscriptionPreviewViewModel
   public Guid TenantPlanId { get; set; }
   public Guid TenantId { get; set; }
   public int Status { get; set; }
-  public UserViewModel? User { get; set; }
+  public UserPreviewViewModel? User { get; set; }
   public TenantPlanViewModel? TenantPlan { get; set; }
-  public TenantViewModel? Tenant { get; set; }
+  public TenantPreviewViewModel? Tenant { get; set; }
   public DateTime ExpiresDate { get; set; }
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }

@@ -88,6 +88,6 @@ public class CreateUserHandler :
     await _emailService.SendVerificationEmailAsync(user, new CancellationToken());
     // retornar infos
 
-    return new CommandResult(true, "USER_CREATED", _mapper.Map<UserViewModel>(user), null, 201);
+    return new CommandResult(true, "USER_CREATED", _mapper.Map<UserPreviewViewModel>(user), null, 201);
   }
 }

@@ -11,5 +11,5 @@ public class UsersRolesViewModel
   public Guid RoleId { get; set; }
   public UserProfileViewModel? User { get; set; }
   public RoleViewModel? Role { get; set; }
-  public TenantViewModel? Tenant { get; set; }
+  public TenantPreviewViewModel? Tenant { get; set; }
 }

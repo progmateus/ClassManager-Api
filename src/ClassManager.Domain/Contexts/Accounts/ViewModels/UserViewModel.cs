@@ -6,7 +6,7 @@ using ClassManager.Domain.Contexts.tenants.ViewModels;
 
 namespace ClassManager.Domain.Contexts.Users.ViewModels;
 
-public class UserViewModel
+public class UserPreviewViewModel
 {
   public Guid Id { get; set; }
   public string? Name { get => $"{FirstName} {LastName}"; }
@@ -26,7 +26,7 @@ public class UserViewModel
   public IList<SubscriptionPreviewViewModel> Subscriptions { get; set; } = [];
   public List<StripeCustomerViewModel> StripeCustomers { get; set; } = [];
   public IList<BookingViewModel> Bookings { get; set; } = [];
-  public IList<TenantViewModel> Tenants { get; set; } = [];
+  public IList<TenantPreviewViewModel> Tenants { get; set; } = [];
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }
 }

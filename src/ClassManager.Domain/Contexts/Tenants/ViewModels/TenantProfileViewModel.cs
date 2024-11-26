@@ -32,7 +32,7 @@ public class TenantProfileViewModel
   public Guid PlanId { get; set; }
   public DateTime ExpiresDate { get; set; }
   public PlanViewModel? Plan { get; set; }
-  public UserViewModel? User { get; set; }
+  public UserPreviewViewModel? User { get; set; }
   public List<RoleViewModel> Roles { get; set; } = [];
   public List<UsersRolesViewModel> UsersRoles { get; set; } = [];
   public List<TenantPlanViewModel> TenantPlans { get; set; } = [];

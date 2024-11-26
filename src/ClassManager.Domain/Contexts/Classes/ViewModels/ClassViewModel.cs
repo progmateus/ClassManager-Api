@@ -13,8 +13,8 @@ namespace ClassManager.Domain.Contexts.Classes.ViewModels
     public string? Description { get; set; }
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
-    public TenantViewModel Tenant { get; set; } = null!;
-    public List<UserViewModel> Users { get; set; } = [];
+    public TenantPreviewViewModel Tenant { get; set; } = null!;
+    public List<UserPreviewViewModel> Users { get; set; } = [];
     public List<TeachersClasses> TeachersClasses { get; set; } = [];
     public List<StudentsClasses> StudentsClasses { get; set; } = [];
     public List<ClassDayViewModel> ClassDays { get; set; } = [];

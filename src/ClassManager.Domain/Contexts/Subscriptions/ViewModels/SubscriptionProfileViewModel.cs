@@ -14,7 +14,7 @@ public class SubscriptionProfileViewModel
   public int Status { get; set; }
   public UserProfileViewModel? User { get; set; }
   public TenantPlanViewModel? TenantPlan { get; set; }
-  public TenantViewModel? Tenant { get; set; }
+  public TenantPreviewViewModel? Tenant { get; set; }
   public DateTime ExpiresDate { get; set; }
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }

@@ -20,7 +20,7 @@ public class ListUsersHandler
   }
   public async Task<ICommandResult> Handle()
   {
-    var users = _mapper.Map<List<UserViewModel>>(await _userReporitory.GetAllAsync(default));
+    var users = _mapper.Map<List<UserPreviewViewModel>>(await _userReporitory.GetAllAsync(default));
     return new CommandResult(true, "USERS_LISTED", users, null, 201);
   }
 }

@@ -27,7 +27,7 @@ public class UserProfileViewModel
   public IList<StudentsClassesViewModel> StudentsClasses { get; set; } = [];
   public IList<SubscriptionPreviewViewModel> Subscriptions { get; set; } = [];
   public IList<BookingViewModel> Bookings { get; set; } = [];
-  public IList<TenantViewModel> Tenants { get; set; } = [];
+  public IList<TenantPreviewViewModel> Tenants { get; set; } = [];
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }
 }
