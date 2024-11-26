@@ -1,9 +1,6 @@
-using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Classes.ViewModels;
 using ClassManager.Domain.Contexts.Plans.ViewModels;
-using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Roles.ViewModels;
-using ClassManager.Domain.Contexts.Subscriptions.Entities;
 using ClassManager.Domain.Contexts.Subscriptions.ViewModels;
 using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Contexts.Tenants.ViewModels;
@@ -21,9 +18,6 @@ public class TenantProfileViewModel
   public string? Document { get; set; }
   public string? Avatar { get; set; }
   public string? StripeOnboardUrl { get; set; }
-  public string? StripeAccountId { get; set; }
-  public string? StripeCustomerId { get; set; }
-  public string? StripeSubscriptionId { get; set; }
   public bool StripeChargesEnabled { get; set; }
   public int Status { get; set; }
   public int SubscriptionStatus { get; set; }
@@ -34,7 +28,7 @@ public class TenantProfileViewModel
   public PlanViewModel? Plan { get; set; }
   public UserPreviewViewModel? User { get; set; }
   public List<RoleViewModel> Roles { get; set; } = [];
-  public List<UsersRolesViewModel> UsersRoles { get; set; } = [];
+  public List<UsersRolesProfileViewModel> UsersRoles { get; set; } = [];
   public List<TenantPlanViewModel> TenantPlans { get; set; } = [];
   public List<SubscriptionPreviewViewModel> Subscriptions { get; set; } = [];
   public List<ClassViewModel> Classes { get; set; } = [];

@@ -1,5 +1,4 @@
 using AutoMapper;
-using ClassManager.Domain.Contexts.Accounts.Entities;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Auth.Commands;
 using ClassManager.Domain.Contexts.Auth.Services;
@@ -74,7 +73,7 @@ public class AuthHandler :
       return new CommandResult(false, "Internal server error", null, null, 500);
     }
 
-    var userRoles = _mapper.Map<List<UsersRolesViewModel>>(await _usersRolesRepository.FindByUserId(user.Id));
+    var userRoles = _mapper.Map<List<UsersRolesProfileViewModel>>(await _usersRolesRepository.FindByUserId(user.Id));
     var userSubscriptions = _mapper.Map<List<SubscriptionPreviewViewModel>>(await _subscriptionsrepository.ListSubscriptions([user.Id], []));
 
     var tokenService = new TokenService();

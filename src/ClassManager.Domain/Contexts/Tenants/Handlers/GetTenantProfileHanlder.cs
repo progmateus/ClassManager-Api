@@ -24,18 +24,21 @@ public class GetTenantProfileHandler
   }
   public async Task<ICommandResult> Handle(Guid id)
   {
-    var tenant = _mapper.Map<TenantProfileViewModel>(await _repository.FindAsync(x => x.Id == id, [x => x.Links]));
+    var tenant = await _repository.FindAsync(x => x.Id == id, [x => x.Links]);
+
 
     if (tenant is null)
     {
       return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, null, 404);
     }
 
+    var tenantResponse = _mapper.Map<TenantProfileViewModel>(tenant);
+
     if (!tenant.StripeChargesEnabled)
     {
-      tenant.StripeOnboardUrl = _paymentService.CreateAccountLink(tenant.StripeAccountId).Url;
+      tenantResponse.StripeOnboardUrl = _paymentService.CreateAccountLink(tenant.StripeAccountId).Url;
     }
 
-    return new CommandResult(true, "TENANT_GOTTEN", tenant, null, 201);
+    return new CommandResult(true, "TENANT_GOTTEN", tenantResponse, null, 201);
   }
 }

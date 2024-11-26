@@ -49,7 +49,8 @@ public class AutoMapperConfig : Profile
     CreateMap<Plan, PlanViewModel>().PreserveReferences();
 
     CreateMap<Role, RoleViewModel>().PreserveReferences();
-    CreateMap<UsersRoles, UsersRolesViewModel>().PreserveReferences();
+    CreateMap<UsersRoles, UsersRolesPreviewViewModel>().PreserveReferences();
+    CreateMap<UsersRoles, UsersRolesProfileViewModel>().PreserveReferences();
 
     CreateMap<Subscription, SubscriptionPreviewViewModel>().PreserveReferences();
     CreateMap<Subscription, SubscriptionProfileViewModel>().PreserveReferences();

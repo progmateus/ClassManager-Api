@@ -19,7 +19,7 @@ public class UserPreviewViewModel
   public int? Status { get; set; }
   public int? Type { get; set; }
   public IList<RoleViewModel> Roles { get; set; } = [];
-  public IList<UsersRolesViewModel> UsersRoles { get; set; } = [];
+  public IList<UsersRolesPreviewViewModel> UsersRoles { get; set; } = [];
   public IList<ClassViewModel> Classes { get; set; } = [];
   public IList<TeachersClassesViewModel> TeachersClasses { get; set; } = [];
   public IList<StudentsClassesViewModel> StudentsClasses { get; set; } = [];
