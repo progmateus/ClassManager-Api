@@ -14,9 +14,8 @@ namespace ClassManager.Domain.Contexts.Classes.Commands
     {
       AddNotifications(new Contract()
       .Requires()
-      .HasMinLen(Observation, 3, "UpdateClassDayCommand.Observation", "Observation min 3 characters")
-      .HasMaxLen(Observation, 10, "UpdateClassDayCommand.Observation", "Observation max 40 characters")
-      .IsNotNull(Status, "UpdateClassDayCommand.Status", "Status not null")
+      .HasMaxLen(Observation, 40, "Observation", "Observation max 40 characters")
+      .IsNotNull(Status, "Status", "Status not null")
     );
     }
   }

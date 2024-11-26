@@ -1,6 +1,7 @@
 using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Classes.Commands;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
@@ -15,16 +16,19 @@ public class UpdateClassDayHandler :
 {
   private readonly IClassDayRepository _classDayRepository;
   private readonly IAccessControlService _accessControlService;
+  private readonly ITeacherClassesRepository _teacherClassesrepository;
 
 
   public UpdateClassDayHandler(
     IClassDayRepository classDayRepository,
-    IAccessControlService accessControlService
+    IAccessControlService accessControlService,
+    ITeacherClassesRepository teacherClassesRepository
 
     )
   {
     _classDayRepository = classDayRepository;
     _accessControlService = accessControlService;
+    _teacherClassesrepository = teacherClassesRepository;
 
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid classDayId, UpdateClassDayCommand command)
@@ -41,7 +45,7 @@ public class UpdateClassDayHandler :
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
     }
 
-    if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
+    if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin", "teacher"]))
     {
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
@@ -51,6 +55,16 @@ public class UpdateClassDayHandler :
     if (classDay is null)
     {
       return new CommandResult(false, "ERR_CLASS_DAY_NOT_FOUND", null, null, 404);
+    }
+
+    if (await _teacherClassesrepository.GetByUserIdAndClassId(loggedUserId, classDay.ClassId) is null)
+    {
+      return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
+    }
+
+    if (classDay.Status != EClassDayStatus.PENDING)
+    {
+      return new CommandResult(false, "ERR_CLASS_DAY_NOT_PENDING", null, null, 409);
     }
 
     classDay.ChangeStatus(command.Status, command.Observation);
