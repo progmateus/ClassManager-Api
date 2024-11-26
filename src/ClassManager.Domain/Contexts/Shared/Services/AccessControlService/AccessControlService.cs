@@ -1,4 +1,5 @@
 
+using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Invoices.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
@@ -15,7 +16,8 @@ public class AccesControlService : IAccessControlService
   private ITenantRepository _tenantRepository;
   private ISubscriptionRepository _subscriptionRepository;
   private IInvoiceRepository _invoiceRepository;
-
+  private IStudentsClassesRepository _studentsClassesRepository;
+  private ITeacherClassesRepository _teacherClassesRepository;
 
   public AccesControlService(
     IUsersRolesRepository usersRolesRepository,
@@ -59,6 +61,32 @@ public class AccesControlService : IAccessControlService
   public async Task<List<UsersRoles>> GetUserRolesAsync(Guid userId, Guid tenantId)
   {
     return await _usersRolesRepository.ListUsersRolesByUserIdAndTenantId(userId, tenantId, new CancellationToken());
+  }
+
+  public async Task<bool> HasClassRoleAsync(Guid loggedUserId, Guid tenantId, Guid classId, List<string> classRolesNames)
+  {
+    if (await HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
+    {
+      return true;
+    }
+
+    if (classRolesNames.Contains("student"))
+    {
+      if (await _studentsClassesRepository.FindByUserIdAndClassId(classId, loggedUserId) is not null)
+      {
+        return true;
+      }
+    }
+
+    if (classRolesNames.Contains("teacher"))
+    {
+      if (await _teacherClassesRepository.GetByUserIdAndClassId(classId, loggedUserId) is not null)
+      {
+        return true;
+      }
+    }
+
+    return false;
   }
 
   public async Task<bool> HasUserAnyRoleAsync(Guid userId, Guid tenantId, List<string> rolesNames)

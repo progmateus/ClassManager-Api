@@ -102,11 +102,9 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_ACTIVE", null, 403);
     }
 
-    var isClassStudent = await _studentsClassesrepository.FindByUserIdAndClassId(classDay.ClassId, targetUserId);
-
-    if (isClassStudent is null)
+    if (!await _accessControlService.HasClassRoleAsync(targetUserId, tenantId, classDay.ClassId, ["student"]))
     {
-      return new CommandResult(false, "ERR_NOT_CLASS_STUDENT", null, 404);
+      return new CommandResult(false, "ERR_NOT_CLASS_STUDENT", null, null, 403);
     }
 
     var sunday = DateTime.Now.FirstDayOfWeek();

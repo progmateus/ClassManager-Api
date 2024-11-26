@@ -45,10 +45,7 @@ public class UpdateClassDayHandler :
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
     }
 
-    if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin", "teacher"]))
-    {
-      return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
-    }
+    var isAdmin = await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]);
 
     var classDay = await _classDayRepository.GetByIdAsync(classDayId, new CancellationToken());
 
@@ -57,7 +54,12 @@ public class UpdateClassDayHandler :
       return new CommandResult(false, "ERR_CLASS_DAY_NOT_FOUND", null, null, 404);
     }
 
-    if (await _teacherClassesrepository.GetByUserIdAndClassId(loggedUserId, classDay.ClassId) is null)
+    if (!await _accessControlService.HasClassRoleAsync(loggedUserId, tenantId, classDay.ClassId, ["student", "teacher"]))
+    {
+      return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
+    }
+
+    if (await _teacherClassesrepository.GetByUserIdAndClassId(loggedUserId, classDay.ClassId) is null && !isAdmin)
     {
       return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
     }
