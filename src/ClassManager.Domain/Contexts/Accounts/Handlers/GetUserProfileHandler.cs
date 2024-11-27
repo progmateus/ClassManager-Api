@@ -35,20 +35,20 @@ public class GetUserProfileHandler
   public async Task<ICommandResult> Handle(Guid id)
   {
 
-    /* var user = _mapper.Map<UserProfileViewModel>(await _userReporitory.FindUserProfile(id, default)); */
+    var user = _mapper.Map<UserProfileViewModel>(await _userReporitory.FindUserProfile(id, default));
 
-    var user = await _userReporitory.FindUserProfile(id, default);
+    /* var user = await _userReporitory.FindUserProfile(id, default); */
 
     if (user is null)
     {
       return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null, 404);
     }
 
-    /* var userRoles = _mapper.Map<List<UsersRolesViewModel>>(await _usersRolesRepository.FindByUserId(user.Id));
+    /* var userRoles = _mapper.Map<List<UsersRolesViewModel>>(await _usersRolesRepository.FindByUserId(user.Id)); */
     var subscriptions = _mapper.Map<List<SubscriptionPreviewViewModel>>(await _subscriptionsrepository.ListSubscriptions([user.Id], []));
 
-    user.UsersRoles = userRoles;
-    user.Subscriptions = subscriptions; */
+    /* user.UsersRoles = userRoles; */
+    user.Subscriptions = subscriptions;
     return new CommandResult(true, "USER_GOTTEN", user, null, 200);
   }
 }
