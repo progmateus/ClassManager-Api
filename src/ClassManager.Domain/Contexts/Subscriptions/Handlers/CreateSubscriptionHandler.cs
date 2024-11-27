@@ -86,11 +86,16 @@ public class CreateSubscriptionHandler : Notifiable,
       }
     }
 
-    var subscriptionAlreadyActive = await _subscriptionRepository.HasActiveSubscription(targetUserId, tenantId, new CancellationToken());
+    var subscriptionsAlreadyExists = await _subscriptionRepository.GetSubscriptionsByStatus(targetUserId, tenantId, [ESubscriptionStatus.ACTIVE, ESubscriptionStatus.UNPAID, ESubscriptionStatus.PAST_DUE], new CancellationToken());
 
-    if (subscriptionAlreadyActive)
+    if (subscriptionsAlreadyExists.Any(x => x.Status == ESubscriptionStatus.ACTIVE || x.Status == ESubscriptionStatus.INCOMPLETE))
     {
       return new CommandResult(false, "ACTIVE_SUBSCRIPTION_ALREADY_EXISTS", null, null, 409);
+    }
+
+    if (subscriptionsAlreadyExists.Any(x => x.Status != ESubscriptionStatus.ACTIVE && x.Status != ESubscriptionStatus.CANCELED && x.Status != ESubscriptionStatus.INCOMPLETE))
+    {
+      return new CommandResult(false, "UNPAID_SUBSCRIPTION_ALREADY_EXISTS", null, null, 409);
     }
 
     var role = await _roleRepository.GetByNameAsync("student", new CancellationToken());
