@@ -15,6 +15,7 @@ public class SubscriptionProfileViewModel
   public UserProfileViewModel? User { get; set; }
   public TenantPlanViewModel? TenantPlan { get; set; }
   public TenantPreviewViewModel? Tenant { get; set; }
+  public List<InvoiceViewModel> Invoices { get; set; } = [];
   public DateTime ExpiresDate { get; set; }
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }

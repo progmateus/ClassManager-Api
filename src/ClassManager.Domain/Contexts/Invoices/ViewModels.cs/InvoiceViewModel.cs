@@ -24,7 +24,7 @@ public class InvoiceViewModel
   public TenantPlanViewModel? TenantPlan { get; set; }
   public TenantPreviewViewModel? Tenant { get; set; }
   public PlanViewModel? Plan { get; set; }
-  public SubscriptionPreviewViewModel? Subscription { get; set; }
+  public SubscriptionProfileViewModel? Subscription { get; set; }
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }
 }

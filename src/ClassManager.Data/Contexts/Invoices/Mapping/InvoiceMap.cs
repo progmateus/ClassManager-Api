@@ -47,6 +47,12 @@ public class InvoiceMap : IEntityTypeConfiguration<Invoice>
       .HasPrincipalKey(c => c.Id)
       .IsRequired(false);
 
+    builder.HasOne(e => e.Subscription)
+      .WithMany(t => t.Invoices)
+      .HasForeignKey("SubscriptionId")
+      .HasPrincipalKey(s => s.Id)
+      .IsRequired(false);
+
     builder.HasOne(e => e.Tenant)
       .WithMany(t => t.Invoices)
       .HasForeignKey("TenantId")

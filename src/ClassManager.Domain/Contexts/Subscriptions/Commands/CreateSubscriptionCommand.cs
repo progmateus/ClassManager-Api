@@ -13,9 +13,8 @@ public class CreateSubscriptionCommand : Notifiable, ICommand
   {
     AddNotifications(new Contract()
     .Requires()
-    .IsNotNull(UserId, "SubscriptionCommand.UserId", "UserId not null")
-    .IsNotNull(TenantPlanId, "SubscriptionCommand.TenantPlan", "TenantPlan not null")
-    .IsNotNull(TenantPlanId, "SubscriptionCommand.ClassId", "ClassId not null")
+    .IsNotNull(TenantPlanId, "TenantPlan", "TenantPlan cannot be null")
+    .IsNotNull(ClassId, "ClassId", "ClassId cannot be null")
     );
   }
 }
