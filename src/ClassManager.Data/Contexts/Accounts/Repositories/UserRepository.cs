@@ -33,6 +33,8 @@ public class UserRepository : Repository<User>, IUserRepository
     .AsNoTracking()
     .Include(x => x.UsersRoles)
     .ThenInclude(x => x.Role)
+    .Include(x => x.UsersRoles)
+    .ThenInclude(x => x.Tenant)
     .Include(x => x.TeachersClasses)
     .Include(x => x.StudentsClasses)
     .FirstOrDefaultAsync(x => x.Id == userId, cancellationToken);
