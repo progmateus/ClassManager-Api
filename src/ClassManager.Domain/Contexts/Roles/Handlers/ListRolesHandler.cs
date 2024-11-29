@@ -1,9 +1,6 @@
-using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Shared.Commands;
-using ClassManager.Shared.Handlers;
-using Flunt.Notifications;
 
 namespace ClassManager.Domain.Contexts.Roles.Handlers;
 

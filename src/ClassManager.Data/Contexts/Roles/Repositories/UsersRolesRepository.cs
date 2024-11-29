@@ -42,9 +42,14 @@ public class UsersRolesRepository : TRepository<UsersRoles>, IUsersRolesReposito
     return await DbSet.Include(x => x.Role).Where(x => x.UserId == userId && x.TenantId == tenantId && x.Role.Name == "student").ToListAsync(cancellationToken);
   }
 
-  public async Task<List<UsersRoles>> ListByRoleAsync(Guid tenantId, List<string> rolesNames, List<Guid> usersIds)
+  public async Task<List<UsersRoles>> ListByRoleAsync(Guid tenantId, List<string> rolesNames, List<Guid> usersIds, string search = "", int skip = 0, int limit = int.MaxValue)
   {
-    return await DbSet.Include(x => x.User).Where(x => x.TenantId == tenantId && (rolesNames.IsNullOrEmpty() || rolesNames.Contains(x.Role.Name) && (usersIds.IsNullOrEmpty() || usersIds.Contains(x.UserId)))).ToListAsync();
+    return await DbSet
+    .Include(x => x.User)
+    .Where(x => x.TenantId == tenantId && (rolesNames.IsNullOrEmpty() || rolesNames.Contains(x.Role.Name) && (usersIds.IsNullOrEmpty() || usersIds.Contains(x.UserId))))
+    .Skip(skip)
+    .Take(limit)
+    .ToListAsync();
   }
 
   public async Task<List<UsersRoles>> ListUsersRolesByUserIdAndTenantId(Guid userId, Guid tenantId, CancellationToken cancellationToken)

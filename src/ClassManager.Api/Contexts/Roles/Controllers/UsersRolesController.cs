@@ -1,3 +1,4 @@
+using ClasManager.Domain.Contexts.Roles.Commands;
 using ClassManager.Api.Contexts.Shared.Controllers;
 using ClassManager.Domain.Contexts.Accounts.Commands;
 using ClassManager.Domain.Contexts.Accounts.Handlers;
@@ -50,12 +51,11 @@ public class UsersrolesController : MainController
   [HttpGet("users-roles")]
   public async Task<IResult> ListUsersRoles(
       [FromRoute] Guid tenantId,
-      [FromQuery] List<string> rolesNames,
-      [FromQuery] List<Guid> usersIds,
+      [FromQuery] ListUsersRolesCommand command,
       [FromServices] ListUsersRolesHandler handler
   )
   {
-    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, rolesNames, usersIds);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 

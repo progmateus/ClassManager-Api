@@ -1,13 +1,15 @@
 using AutoMapper;
+using ClasManager.Domain.Contexts.Roles.Commands;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Roles.ViewModels;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
+using ClassManager.Shared.Handlers;
 
 namespace ClassManager.Domain.Contexts.Accounts.Handlers;
 
-public class ListUsersRolesHandler
+public class ListUsersRolesHandler : ITenantPaginationHandler<ListUsersRolesCommand>
 {
   private readonly IUsersRolesRepository _usersRolesRepository;
   private readonly IMapper _mapper;
@@ -22,7 +24,7 @@ public class ListUsersRolesHandler
     _mapper = mapper;
     _accessControlService = accessControlService;
   }
-  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, List<string> rolesNames, List<Guid> usersIds)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, ListUsersRolesCommand command)
   {
     if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
     {
@@ -33,7 +35,12 @@ public class ListUsersRolesHandler
     {
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
-    var usersRoles = _mapper.Map<List<UsersRolesPreviewViewModel>>(await _usersRolesRepository.ListByRoleAsync(tenantId, rolesNames, usersIds));
+
+    if (command.Page < 1) command.Page = 1;
+
+    var skip = (command.Page - 1) * command.Limit;
+
+    var usersRoles = _mapper.Map<List<UsersRolesPreviewViewModel>>(await _usersRolesRepository.ListByRoleAsync(tenantId, command.RolesNames, command.UsersIds, command.Search, skip, command.Limit));
 
     return new CommandResult(true, "USERS_ROLES_LISTED", usersRoles, null, 200);
   }

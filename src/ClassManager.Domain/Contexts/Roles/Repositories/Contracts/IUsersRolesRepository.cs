@@ -11,6 +11,6 @@ public interface IUsersRolesRepository : ITRepository<UsersRoles>
   Task<UsersRoles?> FindByIdWithInclude(Guid id, Guid tenantId);
   Task<List<UsersRoles>> FindByUserId(Guid userId);
   Task<bool> HasAnyRoleAsync(Guid userId, Guid tenantId, List<string> rolesNames, CancellationToken cancellationToken);
-  Task<List<UsersRoles>> ListByRoleAsync(Guid tenantId, List<string> rolesNames, List<Guid> usersIds);
+  Task<List<UsersRoles>> ListByRoleAsync(Guid tenantId, List<string> rolesNames, List<Guid> usersIds, string search = "", int skip = 0, int limit = int.MaxValue);
   Task<List<UsersRoles>> GetByUserIdAndRoleName(Guid userId, List<string> rolesNames);
 }
