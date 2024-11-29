@@ -101,12 +101,12 @@ public class ListClassesDaysHandler : IPaginationHandler<ListClassesDaysCommand>
     var userStudentsClasses = await _studentsClassesRepository.ListByUserOrClassOrTenantAsync([loggedUserId], tenantsIds, []);
     var userTeahcerClasses = await _teachersClassesRepository.GetByUsersIdsAndTenantActive([loggedUserId]);
 
-    classesIds.Union(userStudentsClasses.Select(x => x.ClassId).Union(userTeahcerClasses.Select(x => x.ClassId)).ToList());
+    classesIds.AddRange(classesIds.Union(userStudentsClasses.Select(x => x.ClassId).Union(userTeahcerClasses.Select(x => x.ClassId)).ToList()));
 
-    var teste = userStudentsClasses.Select(x => x.ClassId).ToList();
+    var teste = userStudentsClasses.Select(x => x.UserId).ToList();
 
     var classesDays = _mapper.Map<List<ClassDayViewModel>>(await _classDayRepository.ListByTenantOrClassAndDate([], classesIds, command.Date, command.Search, skip, command.Limit, new CancellationToken()));
 
-    return new CommandResult(true, "CLASSES_DAYS_LISTED", userStudentsClasses, null, 200);
+    return new CommandResult(true, "CLASSES_DAYS_LISTED", classesDays, null, 200);
   }
 }

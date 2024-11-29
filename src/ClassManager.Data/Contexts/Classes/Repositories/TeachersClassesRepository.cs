@@ -46,7 +46,7 @@ public class TeachersClassesRepository : Repository<TeachersClasses>, ITeacherCl
     return await DbSet
     .Include(x => x.Class)
     .Include(x => x.User)
-    .Where(x => (usersIds.IsNullOrEmpty() || usersIds.Contains(x.UserId)) && (classesIds.IsNullOrEmpty() || classesIds.Contains(x.ClassId)) || (tenantsIds.IsNullOrEmpty() || tenantsIds.Contains(x.Class.TenantId)) && x.Class.Tenant.Status == ETenantStatus.ACTIVE)
+    .Where(x => (usersIds.IsNullOrEmpty() || usersIds.Contains(x.UserId)) && (classesIds.IsNullOrEmpty() || classesIds.Contains(x.ClassId)) && (tenantsIds.IsNullOrEmpty() || tenantsIds.Contains(x.Class.TenantId)) && x.Class.Tenant.Status == ETenantStatus.ACTIVE)
     .Skip(skip)
     .Take(limit)
     .ToListAsync();
