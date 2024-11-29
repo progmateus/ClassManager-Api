@@ -60,6 +60,10 @@ public class ListClassesDaysHandler : IPaginationHandler<ListClassesDaysCommand>
 
     if (command.TenantId.HasValue && command.TenantId != Guid.Empty)
     {
+      Console.WriteLine("==============ENTROU=====================");
+      Console.WriteLine("==============ENTROU=====================");
+      Console.WriteLine("==============ENTROU=====================");
+      Console.WriteLine("==============ENTROU=====================");
       if (await _accessControlService.HasUserAnyRoleAsync(loggedUserId, command.TenantId.Value, ["admin"]))
       {
         var classesDaysFound = _mapper.Map<List<ClassDayViewModel>>(await _classDayRepository.ListByTenantOrClassAndDate([command.TenantId.Value], [], command.Date, command.Search, skip, command.Limit, new CancellationToken()));
@@ -99,8 +103,10 @@ public class ListClassesDaysHandler : IPaginationHandler<ListClassesDaysCommand>
 
     classesIds.Union(userStudentsClasses.Select(x => x.ClassId).Union(userTeahcerClasses.Select(x => x.ClassId)).ToList());
 
+    var teste = userStudentsClasses.Select(x => x.ClassId).ToList();
+
     var classesDays = _mapper.Map<List<ClassDayViewModel>>(await _classDayRepository.ListByTenantOrClassAndDate([], classesIds, command.Date, command.Search, skip, command.Limit, new CancellationToken()));
 
-    return new CommandResult(true, "CLASSES_DAYS_LISTED", classesDays, null, 200);
+    return new CommandResult(true, "CLASSES_DAYS_LISTED", userStudentsClasses, null, 200);
   }
 }
