@@ -58,7 +58,7 @@ public class ListClassesDaysHandler : IPaginationHandler<ListClassesDaysCommand>
     var classesIds = new List<Guid>();
 
 
-    if (command.TenantId.HasValue)
+    if (command.TenantId.HasValue && command.TenantId != Guid.Empty)
     {
       if (await _accessControlService.HasUserAnyRoleAsync(loggedUserId, command.TenantId.Value, ["admin"]))
       {
