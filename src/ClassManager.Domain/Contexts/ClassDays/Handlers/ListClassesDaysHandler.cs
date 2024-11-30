@@ -47,8 +47,6 @@ public class ListClassesDaysHandler : IPaginationHandler<ListClassesDaysCommand>
   public async Task<ICommandResult> Handle(Guid loggedUserId, ListClassesDaysCommand command)
   {
 
-    // se vier tenantId (seção da empresa)
-    // busca apenas as aulas daquela empresa
 
     if (command.Page < 1) command.Page = 1;
 
@@ -57,6 +55,8 @@ public class ListClassesDaysHandler : IPaginationHandler<ListClassesDaysCommand>
 
     var classesIds = new List<Guid>();
 
+    // se vier tenantId (seção da empresa)
+    // busca apenas as aulas daquela empresa
 
     if (command.TenantId.HasValue && command.TenantId != Guid.Empty)
     {
@@ -81,9 +81,6 @@ public class ListClassesDaysHandler : IPaginationHandler<ListClassesDaysCommand>
       var classesOwned = await _classRepository.GetByTenantsIds(adminTenantsIds);
 
       classesIds.AddRange(classesOwned.Select(x => x.Id).ToList());
-
-      /* var classesDaysFound = _mapper.Map<List<ClassDayViewModel>>(await _classDayRepository.ListByTenantOrClassAndDate(adminTenantsIds, [], command.Date, command.Search, skip, command.Limit, new CancellationToken()));
-      return new CommandResult(true, "CLASSES_DAYS_LISTED", classesDaysFound, null, 200); */
     }
 
     // se o usuario não for adm de nenhuma empresa
