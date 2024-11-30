@@ -14,7 +14,7 @@ public class StudentsClasses : MainController
   [HttpPut]
   public async Task<IResult> AddTeacher(
   [FromRoute] Guid tenantId,
-  [FromBody] CreateUserClassCommand command,
+  [FromBody] UpdateUserClassCommand command,
   [FromServices] UpdateStudentClassHandler handler
 )
   {
