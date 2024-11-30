@@ -62,4 +62,12 @@ public class StudentsClassesRepository : Repository<StudentsClasses>, IStudentsC
     .Where(x => x.UserId == userId)
     .ToListAsync();
   }
+
+  public async Task<List<StudentsClasses>> GetByUsersIdsAndClassesIds(Guid tenantId, List<Guid>? usersIds, List<Guid>? classesIds)
+  {
+    return await DbSet
+    .Include(x => x.Class)
+    .Where((tc) => (classesIds.IsNullOrEmpty() || classesIds.Contains(tc.ClassId)) && (usersIds.IsNullOrEmpty() || usersIds.Contains(tc.UserId)) && tc.Class.TenantId == tenantId)
+    .ToListAsync();
+  }
 }

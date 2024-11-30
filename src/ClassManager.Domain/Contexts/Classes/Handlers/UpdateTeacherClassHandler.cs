@@ -52,11 +52,11 @@ public class UpdateTeacherClassHandler
 
     var tenantTeachersfound = await _usersRolesRepository.ListByRoleAsync(tenantId, ["teacher"], command.UsersIds);
 
-    var userAlreadyOnClass = await _teachersClassesRepository.GetByUsersIdsAndClassesIds(tenantId, command.UsersIds, [classEntity.Id]);
+    var teachersAlreadyOnClass = await _teachersClassesRepository.GetByUsersIdsAndClassesIds(tenantId, command.UsersIds, [classEntity.Id]);
 
     var newTeachersclass = new List<TeachersClasses>();
 
-    await _teachersClassesRepository.DeleteRangeAsync(userAlreadyOnClass, new CancellationToken());
+    await _teachersClassesRepository.DeleteRangeAsync(teachersAlreadyOnClass, new CancellationToken());
 
     foreach (var tenantTeacher in tenantTeachersfound)
     {
@@ -65,6 +65,6 @@ public class UpdateTeacherClassHandler
 
     await _teachersClassesRepository.CreateRangeAsync(newTeachersclass, new CancellationToken());
 
-    return new CommandResult(true, "TEACHERS_ADDED", newTeachersclass, null, 200);
+    return new CommandResult(true, "TEACHERS_ADDED", new { }, null, 200);
   }
 }
