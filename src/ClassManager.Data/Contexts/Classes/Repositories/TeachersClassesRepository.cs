@@ -22,9 +22,12 @@ public class TeachersClassesRepository : Repository<TeachersClasses>, ITeacherCl
     return await DbSet.FirstOrDefaultAsync((tc) => tc.ClassId == classId && tc.UserId == userId);
   }
 
-  public async Task<List<TeachersClasses>> GetByUserIdAndTenantId(Guid tenantId, Guid userId)
+  public async Task<List<TeachersClasses>> GetByUsersIdsAndClassesIds(Guid tenantId, List<Guid>? usersIds, List<Guid>? classesIds)
   {
-    return await DbSet.Include(x => x.Class).Where((tc) => tc.Class.TenantId == tenantId && tc.UserId == userId).ToListAsync();
+    return await DbSet
+    .Include(x => x.Class)
+    .Where((tc) => (classesIds.IsNullOrEmpty() || classesIds.Contains(tc.ClassId)) && (usersIds.IsNullOrEmpty() || usersIds.Contains(tc.UserId)) && tc.Class.TenantId == tenantId)
+    .ToListAsync();
   }
 
   public async Task<List<TeachersClasses>> GetByUsersIdsAndTenantActive(List<Guid> usersIds, CancellationToken cancellationToken = default)

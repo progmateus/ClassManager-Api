@@ -1,37 +1,36 @@
-using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Classes.Commands;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
-using ClassManager.Shared.Handlers;
 
 namespace ClassManager.Domain.Contexts.Classes.Handlers;
 
 public class UpdateTeacherClassHandler
 {
   private readonly IClassRepository _classRepository;
-  private readonly IUserRepository _userRepository;
   private readonly ITeacherClassesRepository _teachersClassesRepository;
   private readonly IAccessControlService _accessControlService;
+  private readonly IUsersRolesRepository _usersRolesRepository;
 
 
   public UpdateTeacherClassHandler(
     IClassRepository classRepository,
-    IUserRepository userRepository,
     ITeacherClassesRepository teachersClassesRepository,
-    IAccessControlService accessControlService
+    IAccessControlService accessControlService,
+    IUsersRolesRepository usersRolesRepository
 
     )
   {
     _classRepository = classRepository;
-    _userRepository = userRepository;
     _teachersClassesRepository = teachersClassesRepository;
     _accessControlService = accessControlService;
+    _usersRolesRepository = usersRolesRepository;
 
   }
-  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, CreateUserClassCommand command)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, UpdateUserClassCommand command)
   {
 
     if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
@@ -44,35 +43,28 @@ public class UpdateTeacherClassHandler
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
+    var classEntity = await _classRepository.GetByIdAndTenantIdAsync(tenantId, command.ClassId, new CancellationToken());
 
-    var classFound = await _classRepository.GetByIdAndTenantIdAsync(tenantId, command.ClassId, new CancellationToken());
-    if (classFound is null)
+    if (classEntity is null)
     {
       return new CommandResult(false, "ERR_CLASS_NOT_FOUND", null, null, 404);
     }
 
-    var user = await _userRepository.IdExistsAsync(command.UserId, default);
+    var tenantTeachersfound = await _usersRolesRepository.ListByRoleAsync(tenantId, ["teacher"], command.UsersIds);
 
-    if (!user)
-    {
-      return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null, 404);
-    }
+    var userAlreadyOnClass = await _teachersClassesRepository.GetByUsersIdsAndClassesIds(tenantId, command.UsersIds, [classEntity.Id]);
 
-    var teacherclassalreadyExists = await _teachersClassesRepository.GetByUserIdAndClassId(command.ClassId, command.UserId);
-
-    if (teacherclassalreadyExists is not null)
-    {
-      return new CommandResult(false, "TEACHER_ALREADY_ADDED", null, null, 409);
-    }
-
-    var userAlreadyOnClass = await _teachersClassesRepository.GetByUserIdAndTenantId(tenantId, command.UserId);
+    var newTeachersclass = new List<TeachersClasses>();
 
     await _teachersClassesRepository.DeleteRangeAsync(userAlreadyOnClass, new CancellationToken());
 
-    var teacherClass = new TeachersClasses(command.UserId, command.ClassId);
+    foreach (var tenantTeacher in tenantTeachersfound)
+    {
+      newTeachersclass.Add(new TeachersClasses(tenantTeacher.UserId, classEntity.Id));
+    }
 
-    await _teachersClassesRepository.CreateAsync(teacherClass, new CancellationToken());
+    await _teachersClassesRepository.CreateRangeAsync(newTeachersclass, new CancellationToken());
 
-    return new CommandResult(true, "TEACHER_ADDED", teacherClass, null, 200);
+    return new CommandResult(true, "TEACHERS_ADDED", newTeachersclass, null, 200);
   }
 }
