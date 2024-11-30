@@ -1,3 +1,4 @@
+using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Roles.Commands;
 using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
@@ -13,10 +14,12 @@ public class DeleteUserRoleHandler : Notifiable
 {
   private IUsersRolesRepository _usersRolesRepository;
   private IAccessControlService _accessControlService;
-  public DeleteUserRoleHandler(IUsersRolesRepository usersRolesRepository, IAccessControlService accessControlService)
+  private ITeacherClassesRepository _teacherClassesRepository;
+  public DeleteUserRoleHandler(IUsersRolesRepository usersRolesRepository, IAccessControlService accessControlService, ITeacherClassesRepository teacherClassesRepository)
   {
     _usersRolesRepository = usersRolesRepository;
     _accessControlService = accessControlService;
+    _teacherClassesRepository = teacherClassesRepository;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid userRoleId)
   {
@@ -38,7 +41,14 @@ public class DeleteUserRoleHandler : Notifiable
       return new CommandResult(false, "ERR_USER_ROLE_NOT_FOUND", null, null, 404);
     }
 
+    var userTeacherClasses = await _teacherClassesRepository.GetByUsersIdsAndClassesIds(tenantId, [userRole.UserId], []);
+
     await _usersRolesRepository.DeleteAsync(userRole.Id, tenantId, new CancellationToken());
+
+    if (userTeacherClasses.Count > 0)
+    {
+      await _teacherClassesRepository.DeleteRangeAsync(userTeacherClasses, new CancellationToken());
+    }
 
     return new CommandResult(false, "USER_ROLE_DELETED", null, null, 204);
   }
