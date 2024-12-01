@@ -10,21 +10,18 @@ namespace ClassManager.Domain.Contexts.Classes.Handlers;
 
 public class UpdateTeacherClassHandler
 {
-  private readonly IClassRepository _classRepository;
   private readonly ITeacherClassesRepository _teachersClassesRepository;
   private readonly IAccessControlService _accessControlService;
   private readonly IUsersRolesRepository _usersRolesRepository;
 
 
   public UpdateTeacherClassHandler(
-    IClassRepository classRepository,
     ITeacherClassesRepository teachersClassesRepository,
     IAccessControlService accessControlService,
     IUsersRolesRepository usersRolesRepository
 
     )
   {
-    _classRepository = classRepository;
     _teachersClassesRepository = teachersClassesRepository;
     _accessControlService = accessControlService;
     _usersRolesRepository = usersRolesRepository;
@@ -43,24 +40,21 @@ public class UpdateTeacherClassHandler
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
-    var classEntity = await _classRepository.GetByIdAndTenantIdAsync(tenantId, command.ClassId, new CancellationToken());
+    await _teachersClassesRepository.DeleteByClassId(tenantId, command.ClassId, new CancellationToken());
 
-    if (classEntity is null)
+
+    if (command.UsersIds.Count == 0)
     {
-      return new CommandResult(false, "ERR_CLASS_NOT_FOUND", null, null, 404);
+      return new CommandResult(true, "TEACHERS_ADDED", new { }, null, 200);
     }
 
     var tenantTeachersfound = await _usersRolesRepository.ListByRoleAsync(tenantId, ["teacher"], command.UsersIds);
 
-    var teachersAlreadyOnClass = await _teachersClassesRepository.GetByUsersIdsAndClassesIds(tenantId, [], [classEntity.Id]);
-
     var newTeachersclass = new List<TeachersClasses>();
-
-    await _teachersClassesRepository.DeleteRangeAsync(teachersAlreadyOnClass, new CancellationToken());
 
     foreach (var tenantTeacher in tenantTeachersfound)
     {
-      newTeachersclass.Add(new TeachersClasses(tenantTeacher.UserId, classEntity.Id));
+      newTeachersclass.Add(new TeachersClasses(tenantTeacher.UserId, command.ClassId));
     }
 
     await _teachersClassesRepository.CreateRangeAsync(newTeachersclass, new CancellationToken());
