@@ -20,8 +20,8 @@ namespace ClassManager.Domain.Contexts.Classes.Entities
 
     public Guid UserId { get; private set; }
     public Guid ClassId { get; private set; }
-    public Class Class { get; private set; } = null!;
-    public User User { get; private set; } = null!;
+    public Class? Class { get; private set; }
+    public User? User { get; private set; }
     public DateTime CreatedAt { get; private set; }
   }
 }

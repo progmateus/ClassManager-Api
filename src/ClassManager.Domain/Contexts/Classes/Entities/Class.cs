@@ -30,11 +30,11 @@ namespace ClassManager.Domain.Contexts.Classes.Entities
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
     public Tenant Tenant { get; }
-    public List<User> Users { get; }
+    public IList<User> Users { get; }
     public TimeTable TimeTable { get; }
-    public List<TeachersClasses> TeachersClasses { get; } = [];
-    public List<StudentsClasses> StudentsClasses { get; } = [];
-    public List<ClassDay> ClassDays { get; } = [];
+    public IList<TeachersClasses> TeachersClasses { get; } = [];
+    public IList<StudentsClasses> StudentsClasses { get; } = [];
+    public IList<ClassDay> ClassDays { get; } = [];
 
     public void ChangeClass(string name, string description)
     {

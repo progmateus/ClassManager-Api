@@ -52,7 +52,7 @@ public class UpdateTeacherClassHandler
 
     var tenantTeachersfound = await _usersRolesRepository.ListByRoleAsync(tenantId, ["teacher"], command.UsersIds);
 
-    var teachersAlreadyOnClass = await _teachersClassesRepository.GetByUsersIdsAndClassesIds(tenantId, command.UsersIds, [classEntity.Id]);
+    var teachersAlreadyOnClass = await _teachersClassesRepository.GetByUsersIdsAndClassesIds(tenantId, [], [classEntity.Id]);
 
     var newTeachersclass = new List<TeachersClasses>();
 

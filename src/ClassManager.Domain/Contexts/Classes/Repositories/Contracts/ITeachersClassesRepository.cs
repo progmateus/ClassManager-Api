@@ -9,4 +9,5 @@ public interface ITeacherClassesRepository : IRepository<TeachersClasses>
   Task<List<TeachersClasses>> ListByUserOrClassOrTenantAsync(List<Guid> usersIds, List<Guid> tenantsIds, List<Guid> classesIds, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default);
   Task<List<TeachersClasses>> GetByUsersIdsAndTenantActive(List<Guid> usersIds, CancellationToken cancellationToken = default);
   int CountByClassId(Guid classId);
+  Task DeleteByClassId(Guid tenantId, Guid classId, CancellationToken cancellationToken);
 }

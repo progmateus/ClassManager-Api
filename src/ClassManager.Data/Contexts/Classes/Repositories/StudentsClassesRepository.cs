@@ -66,8 +66,15 @@ public class StudentsClassesRepository : Repository<StudentsClasses>, IStudentsC
   public async Task<List<StudentsClasses>> GetByUsersIdsAndClassesIds(Guid tenantId, List<Guid>? usersIds, List<Guid>? classesIds)
   {
     return await DbSet
+    .AsNoTracking()
     .Include(x => x.Class)
     .Where((tc) => (classesIds.IsNullOrEmpty() || classesIds.Contains(tc.ClassId)) && (usersIds.IsNullOrEmpty() || usersIds.Contains(tc.UserId)) && tc.Class.TenantId == tenantId)
     .ToListAsync();
+  }
+
+  public async Task DeleteByClassId(Guid tenantId, Guid classId, CancellationToken cancellationToken)
+  {
+    DbSet.RemoveRange(DbSet.Where((sc) => sc.Class.TenantId == tenantId && sc.ClassId == classId));
+    await SaveChangesAsync(cancellationToken);
   }
 }

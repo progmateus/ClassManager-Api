@@ -12,7 +12,7 @@ namespace ClassManager.Api.Contexts.Classes.Controllers;
 public class StudentsClasses : MainController
 {
   [HttpPut]
-  public async Task<IResult> AddTeacher(
+  public async Task<IResult> AddStudent(
   [FromRoute] Guid tenantId,
   [FromBody] UpdateUserClassCommand command,
   [FromServices] UpdateStudentClassHandler handler
