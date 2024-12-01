@@ -29,45 +29,45 @@ public class AutoMapperConfig : Profile
     .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Name.FirstName))
     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.Name.FirstName} {src.Name.LastName}"))
     .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Name.LastName))
-    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address)).PreserveReferences();
+    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address));
 
     CreateMap<User, UserProfileViewModel>()
     .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Name.FirstName))
     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.Name.FirstName} {src.Name.LastName}"))
     .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Name.LastName))
     .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address))
-    .ForMember(dest => dest.Document, opt => opt.MapFrom(src => src.Document.Number)).PreserveReferences();
+    .ForMember(dest => dest.Document, opt => opt.MapFrom(src => src.Document.Number));
 
-    CreateMap<Booking, BookingViewModel>().PreserveReferences();
+    CreateMap<Booking, BookingViewModel>();
 
 
-    CreateMap<Class, ClassViewModel>().PreserveReferences().MaxDepth(1);
-    CreateMap<ClassDay, ClassDayViewModel>().PreserveReferences().MaxDepth(1);
-    CreateMap<StudentsClasses, StudentsClassesViewModel>().PreserveReferences().MaxDepth(1);
-    CreateMap<TeachersClasses, TeachersClassesViewModel>().PreserveReferences().MaxDepth(1);
+    CreateMap<Class, ClassViewModel>().PreserveReferences();
+    CreateMap<ClassDay, ClassDayViewModel>().PreserveReferences();
+    CreateMap<StudentsClasses, StudentsClassesViewModel>().PreserveReferences();
+    CreateMap<TeachersClasses, TeachersClassesViewModel>().PreserveReferences();
 
-    CreateMap<Plan, PlanViewModel>().PreserveReferences().MaxDepth(1);
+    CreateMap<Plan, PlanViewModel>().PreserveReferences();
 
-    CreateMap<Role, RoleViewModel>().PreserveReferences().MaxDepth(1);
-    CreateMap<UsersRoles, UsersRolesPreviewViewModel>().PreserveReferences().MaxDepth(1);
-    CreateMap<UsersRoles, UsersRolesProfileViewModel>().PreserveReferences().MaxDepth(1);
+    CreateMap<Role, RoleViewModel>().PreserveReferences();
+    CreateMap<UsersRoles, UsersRolesPreviewViewModel>().PreserveReferences();
+    CreateMap<UsersRoles, UsersRolesProfileViewModel>().PreserveReferences();
 
-    CreateMap<Subscription, SubscriptionPreviewViewModel>().PreserveReferences().MaxDepth(1);
-    CreateMap<Subscription, SubscriptionProfileViewModel>().PreserveReferences().MaxDepth(1);
+    CreateMap<Subscription, SubscriptionPreviewViewModel>().PreserveReferences();
+    CreateMap<Subscription, SubscriptionProfileViewModel>().PreserveReferences();
 
     CreateMap<Tenant, TenantPreviewViewModel>()
-    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address)).PreserveReferences().MaxDepth(1);
+    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address)).PreserveReferences();
 
-    CreateMap<TenantPlan, TenantPlanViewModel>().PreserveReferences().MaxDepth(1);
-    CreateMap<Link, LinkViewModel>().PreserveReferences().MaxDepth(1);
+    CreateMap<TenantPlan, TenantPlanViewModel>().PreserveReferences();
+    CreateMap<Link, LinkViewModel>().PreserveReferences();
 
     CreateMap<Tenant, TenantProfileViewModel>()
-    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address)).PreserveReferences().MaxDepth(1);
+    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address)).PreserveReferences();
 
-    CreateMap<TimeTable, TimeTableViewModel>().PreserveReferences().MaxDepth(1);
-    CreateMap<ScheduleDay, ScheduleDayViewModel>().PreserveReferences().MaxDepth(1);
+    CreateMap<TimeTable, TimeTableViewModel>().PreserveReferences();
+    CreateMap<ScheduleDay, ScheduleDayViewModel>().PreserveReferences();
 
-    CreateMap<Invoice, InvoiceViewModel>().PreserveReferences().MaxDepth(1);
-    CreateMap<StripeCustomer, StripeCustomerViewModel>().PreserveReferences().MaxDepth(1);
+    CreateMap<Invoice, InvoiceViewModel>().PreserveReferences();
+    CreateMap<StripeCustomer, StripeCustomerViewModel>().PreserveReferences();
   }
 }

@@ -23,13 +23,17 @@ public class AccesControlService : IAccessControlService
     IUsersRolesRepository usersRolesRepository,
     ITenantRepository tenantRepository,
     ISubscriptionRepository subscriptionRepository,
-    IInvoiceRepository invoiceRepository
+    IInvoiceRepository invoiceRepository,
+    IStudentsClassesRepository studentsClassesRepository,
+    ITeacherClassesRepository teacherClassesRepository
       )
   {
     _usersRolesRepository = usersRolesRepository;
     _tenantRepository = tenantRepository;
     _subscriptionRepository = subscriptionRepository;
     _invoiceRepository = invoiceRepository;
+    _studentsClassesRepository = studentsClassesRepository;
+    _teacherClassesRepository = teacherClassesRepository;
   }
 
   public async Task<bool> CheckParameterUserIdPermission(Guid? tenantId, Guid loggedUserId, Guid? userIdParameter)
@@ -69,6 +73,14 @@ public class AccesControlService : IAccessControlService
     {
       return true;
     }
+
+    Console.WriteLine("=======================");
+    Console.WriteLine("=======================");
+    Console.WriteLine("=======================");
+    Console.WriteLine("=======================");
+    Console.WriteLine("=======================");
+    Console.WriteLine(classId);
+    Console.WriteLine(loggedUserId);
 
     if (classRolesNames.Contains("student"))
     {
