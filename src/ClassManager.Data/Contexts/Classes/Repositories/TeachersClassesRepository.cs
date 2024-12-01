@@ -61,4 +61,10 @@ public class TeachersClassesRepository : Repository<TeachersClasses>, ITeacherCl
     DbSet.RemoveRange(DbSet.Where((tc) => tc.Class.TenantId == tenantId && tc.ClassId == classId));
     await SaveChangesAsync(cancellationToken);
   }
+
+  public async Task DeleteByUserIdAndTenantId(Guid tenantId, Guid userId, CancellationToken cancellationToken)
+  {
+    DbSet.RemoveRange(DbSet.Where((tc) => tc.Class.TenantId == tenantId && tc.UserId == userId));
+    await SaveChangesAsync(cancellationToken);
+  }
 }
