@@ -5,9 +5,8 @@ namespace ClassManager.Domain.Contexts.Tenants.ViewModels
   public class LinkViewModel
   {
     public Guid Id { get; set; }
-    public int type { get; set; }
-    public string url { get; set; } = string.Empty;
-    public decimal Price { get; set; }
+    public string Url { get; private set; } = null!;
+    public int Type { get; private set; }
     public Guid TenantId { get; set; }
     public TenantPreviewViewModel? Tenant { get; set; }
     public DateTime CreatedAt { get; set; }
