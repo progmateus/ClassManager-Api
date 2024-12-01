@@ -18,7 +18,7 @@ namespace ClassManager.Domain.Contexts.Shared.ValueObjects
     }
 
     public string Number { get; private set; }
-    public EDocumentType Type { get; private set; }
+    public EDocumentType Type { get; private set; } = EDocumentType.CPF;
 
     private bool Validate()
     {

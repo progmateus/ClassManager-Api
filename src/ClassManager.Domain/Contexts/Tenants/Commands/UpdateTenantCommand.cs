@@ -18,12 +18,11 @@ namespace ClassManager.Domain.Contexts.Tenants.Commands
     {
       AddNotifications(new Contract()
       .Requires()
-      .HasMinLen(Name, 3, "CreateTenantCommand.Name", "Name min 3 characters")
-      .HasMaxLen(Name, 40, "CreateTenantCommand.Name", "Name max 40 characters")
-      .IsEmail(Email, "CreateTenantCommand.Email", "Invalid email")
-      .HasMaxLen(Description, 200, "CreateTenantCommand.Description", "Description max 200 characters")
-      .HasMaxLen(Document, 200, "CreateTenantCommand.Description", "Description max 200 characters")
-      .Matchs(Document, "([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})", "CreateTenantCommand.Document", "Inválid document")
+      .HasMinLen(Name, 3, "Name", "Name min 3 characters")
+      .HasMaxLen(Name, 40, "Name", "Name max 40 characters")
+      .IsEmail(Email, "Email", "Invalid email")
+      .HasMaxLen(Description, 200, "Description", "Description max 200 characters")
+      .Matchs(Document, "([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})", "Document", "Inválid document")
     );
     }
   }
