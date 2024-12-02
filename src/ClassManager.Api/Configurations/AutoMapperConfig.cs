@@ -35,28 +35,28 @@ public class AutoMapperConfig : Profile
     CreateMap<Booking, BookingViewModel>();
 
 
-    CreateMap<Class, ClassViewModel>().PreserveReferences();
-    CreateMap<ClassDay, ClassDayViewModel>().PreserveReferences();
-    CreateMap<StudentsClasses, StudentsClassesViewModel>().PreserveReferences();
-    CreateMap<TeachersClasses, TeachersClassesViewModel>().PreserveReferences();
+    CreateMap<Class, ClassViewModel>();
+    CreateMap<ClassDay, ClassDayViewModel>();
+    CreateMap<StudentsClasses, StudentsClassesViewModel>();
+    CreateMap<TeachersClasses, TeachersClassesViewModel>();
 
-    CreateMap<Plan, PlanViewModel>().PreserveReferences();
+    CreateMap<Plan, PlanViewModel>();
 
-    CreateMap<Role, RoleViewModel>().PreserveReferences();
-    CreateMap<UsersRoles, UsersRolesViewModel>().PreserveReferences();
+    CreateMap<Role, RoleViewModel>();
+    CreateMap<UsersRoles, UsersRolesViewModel>();
 
-    CreateMap<Subscription, SubscriptionViewModel>().PreserveReferences();
+    CreateMap<Subscription, SubscriptionViewModel>();
 
     CreateMap<Tenant, TenantViewModel>()
-    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address)).PreserveReferences();
+    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address));
 
-    CreateMap<TenantPlan, TenantPlanViewModel>().PreserveReferences();
-    CreateMap<Link, LinkViewModel>().PreserveReferences();
+    CreateMap<TenantPlan, TenantPlanViewModel>();
+    CreateMap<Link, LinkViewModel>();
 
-    CreateMap<TimeTable, TimeTableViewModel>().PreserveReferences();
-    CreateMap<ScheduleDay, ScheduleDayViewModel>().PreserveReferences();
+    CreateMap<TimeTable, TimeTableViewModel>();
+    CreateMap<ScheduleDay, ScheduleDayViewModel>();
 
-    CreateMap<Invoice, InvoiceViewModel>().PreserveReferences();
-    CreateMap<StripeCustomer, StripeCustomerViewModel>().PreserveReferences();
+    CreateMap<Invoice, InvoiceViewModel>();
+    CreateMap<StripeCustomer, StripeCustomerViewModel>();
   }
 }
