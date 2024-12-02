@@ -6,7 +6,7 @@ using ClassManager.Domain.Contexts.tenants.ViewModels;
 
 namespace ClassManager.Domain.Contexts.Users.ViewModels;
 
-public class UserProfileViewModel
+public class UserViewModel
 {
   public Guid Id { get; set; }
   public string? Name { get => $"{FirstName} {LastName}"; }
@@ -20,13 +20,13 @@ public class UserProfileViewModel
   public int? Status { get; set; }
   public int? Type { get; set; }
   public IList<RoleViewModel> Roles { get; set; } = [];
-  public IList<UsersRolesProfileViewModel> UsersRoles { get; set; } = [];
+  public IList<UsersRolesViewModel> UsersRoles { get; set; } = [];
   public IList<ClassViewModel> Classes { get; set; } = [];
   public IList<TeachersClassesViewModel> TeachersClasses { get; set; } = [];
   public IList<StudentsClassesViewModel> StudentsClasses { get; set; } = [];
-  public IList<SubscriptionPreviewViewModel> Subscriptions { get; set; } = [];
+  public IList<SubscriptionViewModel> Subscriptions { get; set; } = [];
   public IList<BookingViewModel> Bookings { get; set; } = [];
-  public IList<TenantPreviewViewModel> Tenants { get; set; } = [];
+  public IList<TenantViewModel> Tenants { get; set; } = [];
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }
 }

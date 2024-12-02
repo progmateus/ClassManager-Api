@@ -26,7 +26,7 @@ public class Plan : Entity
   public decimal Price { get; private set; }
   public string? StripeProductId { get; private set; }
   public string? StripePriceId { get; private set; }
-  public List<Tenant> Tenants { get; private set; } = [];
+  public IList<Tenant> Tenants { get; private set; } = [];
   public IList<Invoice> Invoices { get; private set; } = [];
   public DateTime CreatedAt { get; private set; }
   public DateTime UpdatedAt { get; private set; }

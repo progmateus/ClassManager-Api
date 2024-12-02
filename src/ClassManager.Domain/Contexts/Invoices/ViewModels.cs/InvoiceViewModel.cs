@@ -20,11 +20,11 @@ public class InvoiceViewModel
   public string? StripeInvoiceUrl { get; set; }
   public string? StripeInvoiceNumber { get; set; }
   public DateTime ExpiresAt { get; set; }
-  public UserPreviewViewModel? User { get; set; }
+  public UserViewModel? User { get; set; }
   public TenantPlanViewModel? TenantPlan { get; set; }
-  public TenantPreviewViewModel? Tenant { get; set; }
+  public TenantViewModel? Tenant { get; set; }
   public PlanViewModel? Plan { get; set; }
-  public SubscriptionProfileViewModel? Subscription { get; set; }
+  public SubscriptionViewModel? Subscription { get; set; }
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }
 }

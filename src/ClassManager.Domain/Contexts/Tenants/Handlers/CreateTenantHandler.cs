@@ -126,7 +126,7 @@ public class CreateTenantHandler :
 
     /* _paymentService.CreateInvoice(tenant.Id, stripeCreatedCustomer.Id, stripeSubscription.Id, null); */
 
-    var tenantCreated = _mapper.Map<TenantProfileViewModel>(tenant);
+    var tenantCreated = _mapper.Map<TenantViewModel>(tenant);
 
     if (tenantCreated.UsersRoles.Count > 0)
     {

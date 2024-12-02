@@ -40,7 +40,7 @@ public class ListUsersRolesHandler : ITenantPaginationHandler<ListUsersRolesComm
 
     var skip = (command.Page - 1) * command.Limit;
 
-    var usersRoles = _mapper.Map<List<UsersRolesPreviewViewModel>>(await _usersRolesRepository.ListByRoleAsync(tenantId, command.RolesNames, command.UsersIds, command.Search, skip, command.Limit));
+    var usersRoles = _mapper.Map<List<UsersRolesViewModel>>(await _usersRolesRepository.ListByRoleAsync(tenantId, command.RolesNames, command.UsersIds, command.Search, skip, command.Limit));
 
     return new CommandResult(true, "USERS_ROLES_LISTED", usersRoles, null, 200);
   }

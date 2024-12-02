@@ -73,6 +73,6 @@ public class RefreshTenantSubscriptionHandler
 
     await _tenantRepository.UpdateAsync(tenant, new CancellationToken());
 
-    return new CommandResult(true, "SUBSCRIPTION_REFRESHED", _mapper.Map<TenantProfileViewModel>(tenant), null, 200);
+    return new CommandResult(true, "SUBSCRIPTION_REFRESHED", _mapper.Map<TenantViewModel>(tenant), null, 200);
   }
 }

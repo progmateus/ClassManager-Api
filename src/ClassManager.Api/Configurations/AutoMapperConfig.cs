@@ -25,13 +25,7 @@ public class AutoMapperConfig : Profile
 {
   public AutoMapperConfig()
   {
-    CreateMap<User, UserPreviewViewModel>()
-    .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Name.FirstName))
-    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.Name.FirstName} {src.Name.LastName}"))
-    .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Name.LastName))
-    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address));
-
-    CreateMap<User, UserProfileViewModel>()
+    CreateMap<User, UserViewModel>()
     .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Name.FirstName))
     .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.Name.FirstName} {src.Name.LastName}"))
     .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Name.LastName))
@@ -49,20 +43,15 @@ public class AutoMapperConfig : Profile
     CreateMap<Plan, PlanViewModel>().PreserveReferences();
 
     CreateMap<Role, RoleViewModel>().PreserveReferences();
-    CreateMap<UsersRoles, UsersRolesPreviewViewModel>().PreserveReferences();
-    CreateMap<UsersRoles, UsersRolesProfileViewModel>().PreserveReferences();
+    CreateMap<UsersRoles, UsersRolesViewModel>().PreserveReferences();
 
-    CreateMap<Subscription, SubscriptionPreviewViewModel>().PreserveReferences();
-    CreateMap<Subscription, SubscriptionProfileViewModel>().PreserveReferences();
+    CreateMap<Subscription, SubscriptionViewModel>().PreserveReferences();
 
-    CreateMap<Tenant, TenantPreviewViewModel>()
+    CreateMap<Tenant, TenantViewModel>()
     .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address)).PreserveReferences();
 
     CreateMap<TenantPlan, TenantPlanViewModel>().PreserveReferences();
     CreateMap<Link, LinkViewModel>().PreserveReferences();
-
-    CreateMap<Tenant, TenantProfileViewModel>()
-    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address)).PreserveReferences();
 
     CreateMap<TimeTable, TimeTableViewModel>().PreserveReferences();
     CreateMap<ScheduleDay, ScheduleDayViewModel>().PreserveReferences();

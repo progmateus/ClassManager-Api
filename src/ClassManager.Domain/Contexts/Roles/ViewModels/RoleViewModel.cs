@@ -9,6 +9,6 @@ public class RoleViewModel
   public string? Description { get; set; }
   public DateTime CreatedAt { get; set; }
   public DateTime Updatedat { get; set; }
-  public List<UserPreviewViewModel> Users { get; set; } = [];
-  public List<UsersRolesPreviewViewModel> UsersRoles { get; set; } = [];
+  public IList<UserViewModel> Users { get; set; } = [];
+  public IList<UsersRolesViewModel> UsersRoles { get; set; } = [];
 }

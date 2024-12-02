@@ -35,7 +35,7 @@ public class GetUserProfileHandler
   public async Task<ICommandResult> Handle(Guid id)
   {
 
-    var user = _mapper.Map<UserProfileViewModel>(await _userReporitory.FindUserProfile(id, default));
+    var user = _mapper.Map<UserViewModel>(await _userReporitory.FindUserProfile(id, default));
 
     /* var user = await _userReporitory.FindUserProfile(id, default); */
 
@@ -45,7 +45,7 @@ public class GetUserProfileHandler
     }
 
     /* var userRoles = _mapper.Map<List<UsersRolesViewModel>>(await _usersRolesRepository.FindByUserId(user.Id)); */
-    var subscriptions = _mapper.Map<List<SubscriptionPreviewViewModel>>(await _subscriptionsrepository.ListSubscriptions([user.Id], []));
+    var subscriptions = _mapper.Map<List<SubscriptionViewModel>>(await _subscriptionsrepository.ListSubscriptions([user.Id], []));
 
     /* user.UsersRoles = userRoles; */
     user.Subscriptions = subscriptions;

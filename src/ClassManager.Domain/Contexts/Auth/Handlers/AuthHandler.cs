@@ -73,15 +73,15 @@ public class AuthHandler :
       return new CommandResult(false, "Internal server error", null, null, 500);
     }
 
-    var userRoles = _mapper.Map<List<UsersRolesProfileViewModel>>(await _usersRolesRepository.FindByUserId(user.Id));
-    var userSubscriptions = _mapper.Map<List<SubscriptionPreviewViewModel>>(await _subscriptionsrepository.ListSubscriptions([user.Id], []));
+    var userRoles = _mapper.Map<List<UsersRolesViewModel>>(await _usersRolesRepository.FindByUserId(user.Id));
+    var userSubscriptions = _mapper.Map<List<SubscriptionViewModel>>(await _subscriptionsrepository.ListSubscriptions([user.Id], []));
 
     var tokenService = new TokenService();
 
     var authData = new AuthData
     {
       Id = user.Id.ToString(),
-      User = _mapper.Map<UserProfileViewModel>(user),
+      User = _mapper.Map<UserViewModel>(user),
     };
     authData.Token = tokenService.Create(authData);
     authData.User.Subscriptions = userSubscriptions;

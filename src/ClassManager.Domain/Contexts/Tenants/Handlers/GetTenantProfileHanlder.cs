@@ -33,7 +33,7 @@ public class GetTenantProfileHandler
       return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, null, 404);
     }
 
-    var tenantResponse = _mapper.Map<TenantProfileViewModel>(tenant);
+    var tenantResponse = _mapper.Map<TenantViewModel>(tenant);
 
     if (!tenant.StripeChargesEnabled)
     {

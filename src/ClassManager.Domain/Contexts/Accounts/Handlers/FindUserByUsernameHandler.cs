@@ -20,7 +20,7 @@ public class GetUserByUsernameHandler
   }
   public async Task<ICommandResult> Handle(string username)
   {
-    var user = _mapper.Map<UserPreviewViewModel>(await _userReporitory.GetByUsernameAsync(username, new CancellationToken()));
+    var user = _mapper.Map<UserViewModel>(await _userReporitory.GetByUsernameAsync(username, new CancellationToken()));
 
     return new CommandResult(true, "USER_GOTTEN", user, null, 200);
   }

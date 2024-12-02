@@ -5,17 +5,17 @@ using ClassManager.Domain.Contexts.Users.ViewModels;
 
 namespace ClassManager.Domain.Contexts.Subscriptions.ViewModels;
 
-public class SubscriptionProfileViewModel
+public class SubscriptionViewModel
 {
   public Guid Id { get; set; }
   public Guid UserId { get; set; }
   public Guid TenantPlanId { get; set; }
   public Guid TenantId { get; set; }
   public int Status { get; set; }
-  public UserProfileViewModel? User { get; set; }
+  public UserViewModel? User { get; set; }
   public TenantPlanViewModel? TenantPlan { get; set; }
-  public TenantPreviewViewModel? Tenant { get; set; }
-  public List<InvoiceViewModel> Invoices { get; set; } = [];
+  public TenantViewModel? Tenant { get; set; }
+  public IList<InvoiceViewModel> Invoices { get; set; } = [];
   public DateTime ExpiresDate { get; set; }
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }

@@ -32,7 +32,7 @@ public class GetSubscriptionProfileHandler : Notifiable
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
-    var subscription = _mapper.Map<SubscriptionProfileViewModel>(await _subscriptionRepository.GetSubscriptionProfileAsync(subscriptionId, tenantId, new CancellationToken()));
+    var subscription = _mapper.Map<SubscriptionViewModel>(await _subscriptionRepository.GetSubscriptionProfileAsync(subscriptionId, tenantId, new CancellationToken()));
 
     if (subscription is null || (!subscription.UserId.Equals(loggedUserId) && !isLoggedUserAdmin))
     {

@@ -3,13 +3,13 @@ using ClassManager.Domain.Contexts.Users.ViewModels;
 
 namespace ClassManager.Domain.Contexts.Roles.ViewModels;
 
-public class UsersRolesPreviewViewModel
+public class UsersRolesViewModel
 {
   public Guid Id { get; set; }
   public Guid UserId { get; set; }
   public Guid TenantId { get; set; }
   public Guid RoleId { get; set; }
-  public UserPreviewViewModel? User { get; set; }
+  public UserViewModel? User { get; set; }
   public RoleViewModel? Role { get; set; }
-  public TenantPreviewViewModel? Tenant { get; set; }
+  public TenantViewModel? Tenant { get; set; }
 }

@@ -11,7 +11,7 @@ public class PlanViewModel
   public int StudentsLimit { get; set; }
   public int ClassesLimit { get; set; }
   public decimal Price { get; set; }
-  public List<TenantPreviewViewModel> Tenants { get; set; } = [];
+  public IList<TenantViewModel> Tenants { get; set; } = [];
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }
 }

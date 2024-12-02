@@ -31,7 +31,7 @@ namespace ClassManager.Domain.Contexts.Auth.Services
       return handler.WriteToken(token);
     }
 
-    private ClaimsIdentity GenerateClaims(UserProfileViewModel user)
+    private ClaimsIdentity GenerateClaims(UserViewModel user)
     {
       var ci = new ClaimsIdentity();
 

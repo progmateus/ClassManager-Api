@@ -8,7 +8,7 @@ using ClassManager.Domain.Contexts.Users.ViewModels;
 
 namespace ClassManager.Domain.Contexts.tenants.ViewModels;
 
-public class TenantProfileViewModel
+public class TenantViewModel
 {
   public Guid Id { get; set; }
   public string? Name { get; set; }
@@ -26,14 +26,14 @@ public class TenantProfileViewModel
   public Guid PlanId { get; set; }
   public DateTime ExpiresDate { get; set; }
   public PlanViewModel? Plan { get; set; }
-  public UserPreviewViewModel? User { get; set; }
-  public List<RoleViewModel> Roles { get; set; } = [];
-  public List<UsersRolesProfileViewModel> UsersRoles { get; set; } = [];
-  public List<TenantPlanViewModel> TenantPlans { get; set; } = [];
-  public List<SubscriptionPreviewViewModel> Subscriptions { get; set; } = [];
-  public List<ClassViewModel> Classes { get; set; } = [];
-  public List<LinkViewModel> Links { get; set; } = [];
-  public List<StripeCustomerViewModel> StripeCustomers { get; set; } = [];
+  public UserViewModel? User { get; set; }
+  public IList<RoleViewModel> Roles { get; set; } = [];
+  public IList<UsersRolesViewModel> UsersRoles { get; set; } = [];
+  public IList<TenantPlanViewModel> TenantPlans { get; set; } = [];
+  public IList<SubscriptionViewModel> Subscriptions { get; set; } = [];
+  public IList<ClassViewModel> Classes { get; set; } = [];
+  public IList<LinkViewModel> Links { get; set; } = [];
+  public IList<StripeCustomerViewModel> StripeCustomers { get; set; } = [];
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }
 }

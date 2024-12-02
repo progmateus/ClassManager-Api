@@ -80,6 +80,6 @@ public class UpdateUserHandler :
 
     // retornar infos
 
-    return new CommandResult(true, "USER_UPDATED", _mapper.Map<UserPreviewViewModel>(user), null, 201);
+    return new CommandResult(true, "USER_UPDATED", _mapper.Map<UserViewModel>(user), null, 201);
   }
 }

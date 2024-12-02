@@ -16,6 +16,6 @@ namespace ClassManager.Domain.Contexts.ClassDays.ViewModels
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
     public ClassViewModel? Class { get; private set; }
-    public List<BookingViewModel> Bookings { get; private set; } = [];
+    public IList<BookingViewModel> Bookings { get; private set; } = [];
   }
 }

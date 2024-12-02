@@ -30,7 +30,7 @@ namespace ClassManager.Domain.Contexts.ClassDays.Entities
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
     public Class Class { get; private set; }
-    public List<Booking> Bookings { get; private set; } = [];
+    public IList<Booking> Bookings { get; private set; } = [];
 
 
     public void ChangeStatus(EClassDayStatus status, string? observation)

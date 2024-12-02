@@ -25,7 +25,7 @@ public class ListTenantsHandler : IPaginationHandler<PaginationCommand>
 
     var skip = (command.Page - 1) * command.Limit;
 
-    var tenants = _mapper.Map<List<TenantPreviewViewModel>>(await _tenantsRepository.SearchAsync(skip, command.Limit, command.Search));
+    var tenants = _mapper.Map<List<TenantViewModel>>(await _tenantsRepository.SearchAsync(skip, command.Limit, command.Search));
 
     return new CommandResult(true, "TENANTS_LISTED", tenants, null, 201);
   }
