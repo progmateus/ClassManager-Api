@@ -44,9 +44,7 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     return await DbSet
   .Include(x => x.TenantPlan)
   .AsNoTracking()
-  .Where(x => x.UserId == userId && x.TenantId == tenantId)
-  .OrderByDescending(x => x.CreatedAt)
-  .FirstAsync();
+  .FirstOrDefaultAsync(x => x.UserId == userId && x.TenantId == tenantId);
   }
 
   public async Task<List<Subscription>> ListSubscriptions(List<Guid>? usersIds, List<Guid>? tenantsIds, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)

@@ -13,7 +13,6 @@ public class CreateBookingCommand : Notifiable, ICommand
   {
     AddNotifications(new Contract()
       .Requires()
-      .IsNotNull(UserId, "CreateBookingCommand.UserId", "UserId not null")
       .IsNotNull(ClassDayId, "CreateBookingCommand.ClassDayId", "ClassDayId not null")
     );
   }
