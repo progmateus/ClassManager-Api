@@ -44,7 +44,7 @@ public class ListStudentsByClassHandler
 
     var skip = (command.Page - 1) * command.Limit;
 
-    var students = _mapper.Map<List<StudentsClassesViewModel>>(await _studentsClassesRepository.ListByUserOrClassOrTenantAsync([], [tenantId], [classId], command.Search, skip, command.Limit));
+    var students = _mapper.Map<List<StudentsClassesViewModel>>(await _studentsClassesRepository.ListByUserOrClassAndTenantAsync([], [tenantId], [classId], command.Search, skip, command.Limit));
 
     return new CommandResult(true, "STUDENTS_LISTED", students, null, 200);
   }

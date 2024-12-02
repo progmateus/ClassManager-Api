@@ -45,12 +45,12 @@ public class StudentsClassesRepository : Repository<StudentsClasses>, IStudentsC
     return await DbSet.Where((sc) => usersIds.Contains(sc.UserId) && sc.Class.Tenant.Status == ETenantStatus.ACTIVE).ToListAsync();
   }
 
-  public async Task<List<StudentsClasses>> ListByUserOrClassOrTenantAsync(List<Guid> usersIds, List<Guid> tenantsIds, List<Guid> classesIds, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)
+  public async Task<List<StudentsClasses>> ListByUserOrClassAndTenantAsync(List<Guid> usersIds, List<Guid> tenantsIds, List<Guid> classesIds, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)
   {
     return await DbSet
     .Include(x => x.Class)
     .Include(x => x.User)
-    .Where(x => (usersIds.IsNullOrEmpty() || usersIds.Contains(x.UserId)) && (classesIds.IsNullOrEmpty() || classesIds.Contains(x.ClassId)) && (tenantsIds.IsNullOrEmpty() || tenantsIds.Contains(x.Class.TenantId)) && x.Class.Tenant.Status == ETenantStatus.ACTIVE)
+    .Where(x => (usersIds.IsNullOrEmpty() || usersIds.Contains(x.UserId)) && (classesIds.IsNullOrEmpty() || classesIds.Contains(x.ClassId)) && tenantsIds.Contains(x.Class.TenantId) && x.Class.Tenant.Status == ETenantStatus.ACTIVE)
     .Skip(skip)
     .Take(limit)
     .ToListAsync();

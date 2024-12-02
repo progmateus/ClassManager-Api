@@ -92,7 +92,7 @@ public class ListClassesDaysHandler : IPaginationHandler<ListClassesDaysCommand>
 
     var tenantsIds = activesubscriptions.Select(s => s.TenantId).ToList();
 
-    var userStudentsClasses = await _studentsClassesRepository.ListByUserOrClassOrTenantAsync([loggedUserId], tenantsIds, []);
+    var userStudentsClasses = await _studentsClassesRepository.ListByUserOrClassAndTenantAsync([loggedUserId], tenantsIds, []);
     var userTeahcerClasses = await _teachersClassesRepository.GetByUsersIdsAndTenantActive([loggedUserId]);
 
     classesIds.AddRange(userStudentsClasses.Select(x => x.ClassId).Union(userTeahcerClasses.Select(x => x.ClassId)).ToList());
