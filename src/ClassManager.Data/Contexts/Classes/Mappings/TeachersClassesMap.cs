@@ -15,11 +15,13 @@ public class TeachersClassesMap : IEntityTypeConfiguration<TeachersClasses>
     builder.HasOne(e => e.User)
       .WithMany(u => u.TeachersClasses)
       .HasForeignKey("UserId")
-      .HasPrincipalKey(u => u.Id);
+      .HasPrincipalKey(u => u.Id)
+      .OnDelete(DeleteBehavior.Cascade);
 
     builder.HasOne(e => e.Class)
       .WithMany(c => c.TeachersClasses)
       .HasForeignKey("ClassId")
-      .HasPrincipalKey(c => c.Id);
+      .HasPrincipalKey(c => c.Id)
+      .OnDelete(DeleteBehavior.Cascade);
   }
 }

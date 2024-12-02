@@ -15,11 +15,13 @@ public class BookingMap : IEntityTypeConfiguration<Booking>
     builder.HasOne(e => e.User)
       .WithMany(u => u.Bookings)
       .HasForeignKey("UserId")
-      .HasPrincipalKey(u => u.Id);
+      .HasPrincipalKey(u => u.Id)
+      .OnDelete(DeleteBehavior.Cascade);
 
     builder.HasOne(e => e.ClassDay)
       .WithMany(t => t.Bookings)
       .HasForeignKey("ClassDayId")
-      .HasPrincipalKey(c => c.Id);
+      .HasPrincipalKey(c => c.Id)
+      .OnDelete(DeleteBehavior.Cascade);
   }
 }

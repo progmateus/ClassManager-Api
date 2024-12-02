@@ -43,6 +43,7 @@ public class ClassDayMap : IEntityTypeConfiguration<ClassDay>
     builder.HasOne(x => x.Class)
       .WithMany(p => p.ClassDays)
       .HasForeignKey(x => x.ClassId)
-      .IsRequired(true);
+      .IsRequired(true)
+      .OnDelete(DeleteBehavior.Cascade);
   }
 }
