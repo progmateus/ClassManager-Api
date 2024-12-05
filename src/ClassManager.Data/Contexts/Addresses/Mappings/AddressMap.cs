@@ -52,11 +52,13 @@ public class AddressMap : IEntityTypeConfiguration<Address>
     builder.HasOne(x => x.Tenant)
       .WithMany(u => u.Addresses)
       .HasForeignKey(x => x.TenantId)
-      .IsRequired(false);
+      .IsRequired(false)
+      .OnDelete(DeleteBehavior.Cascade);
 
     builder.HasOne(x => x.User)
       .WithOne(u => u.Address)
-      .HasForeignKey<Address>(x => x.UserId)
-      .IsRequired(false);
+      .HasForeignKey<User>(x => x.AddressId)
+      .IsRequired(false)
+      .OnDelete(DeleteBehavior.Cascade);
   }
 }

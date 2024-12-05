@@ -116,7 +116,8 @@ public class UserMap : IEntityTypeConfiguration<User>
 
         builder.HasOne(x => x.Address)
             .WithOne(u => u.User)
-            .HasForeignKey<User>(x => x.AddressId)
-            .IsRequired(false);
+            .HasForeignKey<Address>(x => x.UserId)
+            .IsRequired(false)
+            .OnDelete(DeleteBehavior.Cascade);
     }
 }
