@@ -1,9 +1,7 @@
 using ClassManager.Domain;
-using ClassManager.Domain.Contexts.Shared.ValueObjects;
 using ClassManager.Domain.Services.Stripe.Repositories.Contracts;
 using Stripe;
 using Stripe.Identity;
-using Address = ClassManager.Domain.Contexts.Shared.ValueObjects.Address;
 
 namespace ClassManager.Data.Contexts.Tenants.Services;
 

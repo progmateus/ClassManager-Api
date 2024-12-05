@@ -1,4 +1,5 @@
 using ClassManager.Domain.Contexts.Accounts.Entities;
+using ClassManager.Domain.Contexts.Addresses.Entites;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -111,6 +112,11 @@ public class UserMap : IEntityTypeConfiguration<User>
             .HasColumnName("StripeCustomerId")
             .HasColumnType("VARCHAR")
             .HasMaxLength(200)
+            .IsRequired(false);
+
+        builder.HasOne(x => x.Address)
+            .WithOne(u => u.User)
+            .HasForeignKey<User>(x => x.AddressId)
             .IsRequired(false);
     }
 }

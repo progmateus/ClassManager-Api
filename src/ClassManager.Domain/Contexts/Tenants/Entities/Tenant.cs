@@ -8,6 +8,7 @@ using ClassManager.Domain.Contexts.Subscriptions.Entities;
 using ClassManager.Domain.Contexts.Accounts.Entities;
 using ClassManager.Domain.Contexts.TimesTables.Entities;
 using ClassManager.Domain.Contexts.Invoices.Entities;
+using ClassManager.Domain.Contexts.Addresses.Entites;
 
 namespace ClassManager.Domain.Contexts.Tenants.Entities
 {
@@ -49,6 +50,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public DateTime? ExpiresDate { get; private set; }
     public Plan? Plan { get; private set; }
     public User? User { get; private set; }
+    public IList<Address> Addresses { get; private set; } = [];
     public IList<Role> Roles { get; private set; } = [];
     public IList<UsersRoles> UsersRoles { get; private set; } = [];
     public IList<TenantPlan> TenantPlans { get; private set; } = [];

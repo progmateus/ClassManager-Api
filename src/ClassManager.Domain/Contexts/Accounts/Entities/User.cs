@@ -9,6 +9,7 @@ using ClasManager.Domain.Contexts.Bookings.Entities;
 using ClassManager.Domain.Contexts.Tenants.Entities;
 using System.Text.Json.Serialization;
 using ClassManager.Domain.Contexts.Invoices.Entities;
+using ClassManager.Domain.Contexts.Addresses.Entites;
 
 namespace ClassManager.Domain.Contexts.Accounts.Entities
 {
@@ -49,14 +50,16 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     public EUserType Type { get; private set; } = EUserType.NORMAL;
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
-    public IList<Role> Roles { get; private set; }
-    public IList<UsersRoles> UsersRoles { get; private set; }
-    public IList<Class> Classes { get; private set; }
-    public IList<TeachersClasses> TeachersClasses { get; private set; }
-    public IList<StudentsClasses> StudentsClasses { get; private set; }
-    public IList<Subscription> Subscriptions { get; private set; }
-    public IList<Booking> Bookings { get; private set; }
-    public IList<Tenant> Tenants { get; private set; }
+    public Guid? AddressId { get; private set; }
+    public Address? Address { get; private set; }
+    public IList<Role> Roles { get; private set; } = [];
+    public IList<UsersRoles> UsersRoles { get; private set; } = [];
+    public IList<Class> Classes { get; private set; } = [];
+    public IList<TeachersClasses> TeachersClasses { get; private set; } = [];
+    public IList<StudentsClasses> StudentsClasses { get; private set; } = [];
+    public IList<Subscription> Subscriptions { get; private set; } = [];
+    public IList<Booking> Bookings { get; private set; } = [];
+    public IList<Tenant> Tenants { get; private set; } = [];
     public IList<Invoice> Invoices { get; private set; } = [];
     public IList<StripeCustomer> StripeCustomers { get; private set; } = [];
 

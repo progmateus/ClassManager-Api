@@ -5,7 +5,10 @@ using ClassManager.Domain.Shared.Entities;
 namespace ClassManager.Domain.Contexts.Addresses.Entites;
 public class Address : Entity
 {
-  protected Address() { }
+  protected Address()
+  {
+
+  }
   public Address(string street, string city, string state)
   {
     Street = street;

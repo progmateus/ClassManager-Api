@@ -1,5 +1,6 @@
 using ClasManager.Domain.Contexts.Bookings.Entities;
 using ClassManager.Data.Contexts.Accounts.Mappings;
+using ClassManager.Data.Contexts.Addresses.Mappings;
 using ClassManager.Data.Contexts.Bookings.Mappings;
 using ClassManager.Data.Contexts.Classes.Mappings;
 using ClassManager.Data.Contexts.Invoices.Mappings;
@@ -7,6 +8,7 @@ using ClassManager.Data.Contexts.Plans.Mappings;
 using ClassManager.Data.Contexts.Tenants.Mappings;
 using ClassManager.Data.Contexts.TimesTabless.Mappings;
 using ClassManager.Domain.Contexts.Accounts.Entities;
+using ClassManager.Domain.Contexts.Addresses.Entites;
 using ClassManager.Domain.Contexts.ClassDays.Entities;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Invoices.Entities;
@@ -45,6 +47,7 @@ public class AppDbContext : DbContext
   public DbSet<ScheduleDay> SchedulesDays { get; set; } = null!;
   public DbSet<Invoice> Invoices { get; set; } = null!;
   public DbSet<StripeCustomer> StripeCustomers { get; set; } = null!;
+  public DbSet<Address> Addresses { get; set; } = null!;
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
 
@@ -80,6 +83,7 @@ public class AppDbContext : DbContext
     modelBuilder.ApplyConfiguration(new LinkMap());
     modelBuilder.ApplyConfiguration(new InvoiceMap());
     modelBuilder.ApplyConfiguration(new StripeCustomerMap());
+    modelBuilder.ApplyConfiguration(new AddressMap());
 
     base.OnModelCreating(modelBuilder);
   }

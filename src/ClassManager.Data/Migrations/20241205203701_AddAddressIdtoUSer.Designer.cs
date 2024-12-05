@@ -4,6 +4,7 @@ using ClassManager.Data.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 #nullable disable
@@ -11,9 +12,11 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace ClassManager.Data.Migrations
 {
     [DbContext(typeof(AppDbContext))]
-    partial class AppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241205203701_AddAddressIdtoUSer")]
+    partial class AddAddressIdtoUSer
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -94,6 +97,10 @@ namespace ClassManager.Data.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("AddressId")
+                        .IsUnique()
+                        .HasFilter("[AddressId] IS NOT NULL");
+
                     b.ToTable("Users", (string)null);
                 });
 
@@ -149,10 +156,6 @@ namespace ClassManager.Data.Migrations
                     b.HasKey("Id");
 
                     b.HasIndex("TenantId");
-
-                    b.HasIndex("UserId")
-                        .IsUnique()
-                        .HasFilter("[UserId] IS NOT NULL");
 
                     b.ToTable("Addresses", (string)null);
                 });
@@ -866,6 +869,10 @@ namespace ClassManager.Data.Migrations
 
             modelBuilder.Entity("ClassManager.Domain.Contexts.Accounts.Entities.User", b =>
                 {
+                    b.HasOne("ClassManager.Domain.Contexts.Addresses.Entites.Address", "Address")
+                        .WithOne("User")
+                        .HasForeignKey("ClassManager.Domain.Contexts.Accounts.Entities.User", "AddressId");
+
                     b.OwnsOne("ClassManager.Domain.Contexts.Shared.ValueObjects.Document", "Document", b1 =>
                         {
                             b1.Property<Guid>("UserId")
@@ -985,6 +992,8 @@ namespace ClassManager.Data.Migrations
                                 .HasForeignKey("UserId");
                         });
 
+                    b.Navigation("Address");
+
                     b.Navigation("Document")
                         .IsRequired();
 
@@ -1004,13 +1013,7 @@ namespace ClassManager.Data.Migrations
                         .WithMany("Addresses")
                         .HasForeignKey("TenantId");
 
-                    b.HasOne("ClassManager.Domain.Contexts.Accounts.Entities.User", "User")
-                        .WithOne("Address")
-                        .HasForeignKey("ClassManager.Domain.Contexts.Addresses.Entites.Address", "UserId");
-
                     b.Navigation("Tenant");
-
-                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClassManager.Domain.Contexts.ClassDays.Entities.ClassDay", b =>
@@ -1318,8 +1321,6 @@ namespace ClassManager.Data.Migrations
 
             modelBuilder.Entity("ClassManager.Domain.Contexts.Accounts.Entities.User", b =>
                 {
-                    b.Navigation("Address");
-
                     b.Navigation("Bookings");
 
                     b.Navigation("Invoices");
@@ -1335,6 +1336,11 @@ namespace ClassManager.Data.Migrations
                     b.Navigation("Tenants");
 
                     b.Navigation("UsersRoles");
+                });
+
+            modelBuilder.Entity("ClassManager.Domain.Contexts.Addresses.Entites.Address", b =>
+                {
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("ClassManager.Domain.Contexts.ClassDays.Entities.ClassDay", b =>
