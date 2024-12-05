@@ -10,6 +10,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Commands
     public string City { get; set; } = null!;
     public string State { get; set; } = null!;
     public string Number { get; set; } = null!;
+    public Guid? TenantId { get; set; }
 
     public void Validate()
     {
@@ -17,6 +18,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Commands
       .Requires()
       .IsNotNullOrEmpty(Street, "Street", "Street cannot be null")
       .IsNotNullOrEmpty(City, "City", "City cannot be null")
+      .IsNotNullOrEmpty(State, "State", "State cannot be null")
     );
     }
   }
