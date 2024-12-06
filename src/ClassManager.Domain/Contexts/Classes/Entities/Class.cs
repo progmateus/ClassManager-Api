@@ -4,6 +4,7 @@ using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Contexts.Accounts.Entities;
 using ClassManager.Domain.Contexts.ClassDays.Entities;
 using ClassManager.Domain.Contexts.TimesTables.Entities;
+using ClassManager.Domain.Contexts.Addresses.Entites;
 
 namespace ClassManager.Domain.Contexts.Classes.Entities
 {
@@ -26,15 +27,17 @@ namespace ClassManager.Domain.Contexts.Classes.Entities
     public string Name { get; private set; } = null!;
     public Guid TenantId { get; private set; }
     public Guid? TimeTableId { get; private set; }
+    public Guid? AddressId { get; private set; }
     public string? Description { get; private set; } = null!;
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
-    public Tenant Tenant { get; }
-    public IList<User> Users { get; }
-    public TimeTable TimeTable { get; }
-    public IList<TeachersClasses> TeachersClasses { get; } = [];
-    public IList<StudentsClasses> StudentsClasses { get; } = [];
-    public IList<ClassDay> ClassDays { get; } = [];
+    public Tenant? Tenant { get; private set; }
+    public TimeTable? TimeTable { get; private set; }
+    public Address? Address { get; private set; }
+    public IList<User> Users { get; private set; }
+    public IList<TeachersClasses> TeachersClasses { get; private set; } = [];
+    public IList<StudentsClasses> StudentsClasses { get; private set; } = [];
+    public IList<ClassDay> ClassDays { get; private set; } = [];
 
     public void ChangeClass(string name, string description)
     {

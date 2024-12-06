@@ -1,4 +1,5 @@
 using ClassManager.Domain.Contexts.Accounts.Entities;
+using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Shared.Entities;
 
@@ -28,4 +29,5 @@ public class Address : Entity
   public string? ZipCode { get; private set; }
   public User? User { get; private set; }
   public Tenant? Tenant { get; private set; }
+  public IList<Class> Classes { get; private set; } = [];
 }
