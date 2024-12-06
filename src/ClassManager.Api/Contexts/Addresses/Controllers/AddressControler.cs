@@ -7,16 +7,16 @@ using Microsoft.AspNetCore.Mvc;
 namespace ClassManager.Api.Contexts.Addresses.Controllers;
 
 [Authorize]
-[Route("addresses")]
 public class AddressController : MainController
 {
-  [HttpPost]
+  [HttpPost("{tenantId}/addresses")]
   public async Task<IResult> Create(
+    [FromRoute] Guid tenantId,
       [FromBody] CreateAddressCommand command,
-      [FromServices] CreateAddressHandler handler
+      [FromServices] CreateTenantAddressHandler handler
   )
   {
-    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), command);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
@@ -26,7 +26,7 @@ public class AddressController : MainController
     return Results.Ok(result);
   }
 
-  [HttpDelete("${id}")]
+  [HttpDelete("addresses/{id}")]
   public async Task<IResult> Delete(
     [FromRoute] Guid id,
     [FromServices] DeleteAddressHandler handler

@@ -10,8 +10,6 @@ namespace ClassManager.Domain.Contexts.Tenants.Commands
     public string City { get; set; } = null!;
     public string State { get; set; } = null!;
     public string Number { get; set; } = null!;
-    public Guid? TenantId { get; set; }
-
     public void Validate()
     {
       AddNotifications(new Contract()

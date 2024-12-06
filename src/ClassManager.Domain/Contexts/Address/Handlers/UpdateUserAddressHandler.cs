@@ -29,7 +29,7 @@ public class UpdateUserAddressHandler : Notifiable
 
     var addressFound = await _addressRepository.FindAsync(x => x.UserId == loggedUserId);
 
-    var address = new Address(command.Street, command.City, command.State, loggedUserId, command.TenantId);
+    var address = new Address(command.Street, command.City, command.State, loggedUserId, null);
 
     if (addressFound is not null)
     {

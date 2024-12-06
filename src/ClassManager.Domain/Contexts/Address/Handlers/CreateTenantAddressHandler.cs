@@ -10,14 +10,14 @@ using Flunt.Notifications;
 
 namespace ClassManager.Domain.Contexts.Tenants.Handlers;
 
-public class CreateAddressHandler : Notifiable
+public class CreateTenantAddressHandler : Notifiable
 {
   private readonly ITenantRepository _tenantRepository;
   private readonly IMapper _mapper;
   private readonly IAccessControlService _accessControlService;
   private readonly IAddressRepository _addressRepository;
 
-  public CreateAddressHandler(
+  public CreateTenantAddressHandler(
     ITenantRepository tenantRepository,
     IMapper mapper,
     IAccessControlService accessControlService,
@@ -30,7 +30,7 @@ public class CreateAddressHandler : Notifiable
     _accessControlService = accessControlService;
     _addressRepository = addressRepository;
   }
-  public async Task<ICommandResult> Handle(Guid loggedUserId, CreateAddressCommand command)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, CreateAddressCommand command)
   {
     command.Validate();
     if (command.Invalid)
@@ -39,33 +39,17 @@ public class CreateAddressHandler : Notifiable
       return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
 
-    var userId = loggedUserId;
-
-    if (command.TenantId.HasValue && command.TenantId != Guid.Empty)
+    if (!await _tenantRepository.IdExistsAsync(tenantId, new CancellationToken()))
     {
-
-      if (!await _tenantRepository.IdExistsAsync(command.TenantId.Value, new CancellationToken()))
-      {
-        return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, null, 404);
-      }
-
-      if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, command.TenantId.Value, ["admin"]))
-      {
-        return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
-      }
-      userId = Guid.Empty;
-    }
-    else
-    {
-      var addressFound = await _addressRepository.FindAsync(x => x.UserId == loggedUserId);
-
-      if (addressFound is not null)
-      {
-        await _addressRepository.DeleteAsync(addressFound.Id, new CancellationToken());
-      }
+      return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, null, 404);
     }
 
-    var address = new Address(command.Street, command.City, command.State, userId, command.TenantId);
+    if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
+    {
+      return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
+    }
+
+    var address = new Address(command.Street, command.City, command.State, null, tenantId);
 
     await _addressRepository.CreateAsync(address, new CancellationToken());
 
