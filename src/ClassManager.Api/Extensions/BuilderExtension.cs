@@ -368,5 +368,6 @@ public static class BuilderExtension
     builder.Services.AddTransient<UpdateUserAddressHandler>();
     builder.Services.AddTransient<UpdateClassAddressHandler>();
     builder.Services.AddTransient<DeleteAddressHandler>();
+    builder.Services.AddTransient<ListTenantAddressesHandler>();
   }
 }
