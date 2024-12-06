@@ -1,23 +1,11 @@
 using AutoMapper;
-using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Addresses.Entites;
 using ClassManager.Domain.Contexts.Addresses.Repositories.Contracts;
-using ClassManager.Domain.Contexts.Plans.Repositories;
-using ClassManager.Domain.Contexts.Roles.Entities;
-using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
-using ClassManager.Domain.Contexts.Roles.ViewModels;
-using ClassManager.Domain.Contexts.Shared.Enums;
-using ClassManager.Domain.Contexts.Shared.ValueObjects;
-using ClassManager.Domain.Contexts.Subscriptions.Entities;
-using ClassManager.Domain.Contexts.tenants.ViewModels;
 using ClassManager.Domain.Contexts.Tenants.Commands;
-using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
-using ClassManager.Domain.Services.Stripe.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
-using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
 
 namespace ClassManager.Domain.Contexts.Tenants.Handlers;
@@ -66,6 +54,15 @@ public class CreateAddressHandler : Notifiable
         return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
       }
       userId = Guid.Empty;
+    }
+    else
+    {
+      var addressFound = await _addressRepository.FindAsync(x => x.UserId == loggedUserId);
+
+      if (addressFound is not null)
+      {
+        await _addressRepository.DeleteAsync(addressFound.Id, new CancellationToken());
+      }
     }
 
     var address = new Address(command.Street, command.City, command.State, userId, command.TenantId);

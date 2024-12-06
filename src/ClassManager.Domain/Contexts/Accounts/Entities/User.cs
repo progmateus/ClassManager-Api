@@ -101,5 +101,10 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     {
       StripeCustomerId = stripeCustomerId;
     }
+
+    public void UpdateAddress(Guid addressId)
+    {
+      AddressId = addressId;
+    }
   }
 }
