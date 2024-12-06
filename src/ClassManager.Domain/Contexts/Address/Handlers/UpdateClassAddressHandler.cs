@@ -1,5 +1,7 @@
+using AutoMapper;
 using ClassManager.Domain.Contexts.Addresses.Entites;
 using ClassManager.Domain.Contexts.Addresses.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Addresses.ViewModels;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.Commands;
 using ClassManager.Domain.Shared.Commands;
@@ -14,17 +16,20 @@ public class UpdateClassAddressHandler : Notifiable
   private readonly IAddressRepository _addressRepository;
   private readonly IClassRepository _classRepository;
   private readonly IAccessControlService _accessControlService;
+  private readonly IMapper _mapper;
 
   public UpdateClassAddressHandler(
     IAddressRepository addressRepository,
     IClassRepository classRepository,
-    IAccessControlService accessControlService
+    IAccessControlService accessControlService,
+    IMapper mapper
 
     )
   {
     _addressRepository = addressRepository;
     _classRepository = classRepository;
     _accessControlService = accessControlService;
+    _mapper = mapper;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid classId, UpdateAddressCommand command)
   {
@@ -73,6 +78,6 @@ public class UpdateClassAddressHandler : Notifiable
 
     await _classRepository.UpdateAsync(classEntity, new CancellationToken());
 
-    return new CommandResult(true, "ADDRESS_CREATED", address, null, 201);
+    return new CommandResult(true, "ADDRESS_CREATED", _mapper.Map<AddressViewModel>(address), null, 201);
   }
 }

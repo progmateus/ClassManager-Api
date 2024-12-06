@@ -1,6 +1,7 @@
 using AutoMapper;
 using ClassManager.Domain.Contexts.Addresses.Entites;
 using ClassManager.Domain.Contexts.Addresses.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Addresses.ViewModels;
 using ClassManager.Domain.Contexts.Tenants.Commands;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
@@ -53,6 +54,6 @@ public class CreateTenantAddressHandler : Notifiable
 
     await _addressRepository.CreateAsync(address, new CancellationToken());
 
-    return new CommandResult(true, "ADDRESS_CREATED", address, null, 201);
+    return new CommandResult(true, "ADDRESS_CREATED", _mapper.Map<AddressViewModel>(address), null, 201);
   }
 }
