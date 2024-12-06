@@ -26,6 +26,23 @@ public class AddressController : MainController
     return Results.Ok(result);
   }
 
+
+  [HttpGet("{tenantId}/addresses")]
+  public async Task<IResult> List(
+    [FromRoute] Guid tenantId,
+    [FromServices] ListTenantAddressesHandler handler
+  )
+  {
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
   [HttpDelete("addresses/{id}")]
   public async Task<IResult> Delete(
     [FromRoute] Guid id,
@@ -50,6 +67,24 @@ public class AddressController : MainController
   )
   {
     var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), command);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
+  [HttpPatch("{tenantId}/classes/{classId}/address")]
+  public async Task<IResult> UpdateClassAddress(
+    [FromRoute] Guid tenantId,
+    [FromRoute] Guid classId,
+    [FromBody] UpdateAddressCommand command,
+    [FromServices] UpdateClassAddressHandler handler
+  )
+  {
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), classId, classId, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
