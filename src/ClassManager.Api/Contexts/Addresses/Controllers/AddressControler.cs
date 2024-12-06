@@ -84,7 +84,7 @@ public class AddressController : MainController
     [FromServices] UpdateClassAddressHandler handler
   )
   {
-    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), classId, classId, command);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, classId, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
