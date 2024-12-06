@@ -12,8 +12,8 @@ public class AddressController : MainController
   [HttpPost("{tenantId}/addresses")]
   public async Task<IResult> Create(
     [FromRoute] Guid tenantId,
-      [FromBody] CreateAddressCommand command,
-      [FromServices] CreateTenantAddressHandler handler
+    [FromBody] CreateAddressCommand command,
+    [FromServices] CreateTenantAddressHandler handler
   )
   {
     var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, command);
@@ -33,6 +33,23 @@ public class AddressController : MainController
   )
   {
     var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), id);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
+
+  [HttpPatch("users/addresses")]
+  public async Task<IResult> UpdateUserAddress(
+    [FromBody] CreateAddressCommand command,
+    [FromServices] UpdateUserAddressHandler handler
+  )
+  {
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
