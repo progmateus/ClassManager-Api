@@ -49,5 +49,10 @@ namespace ClassManager.Domain.Contexts.Classes.Entities
     {
       TimeTableId = timeTableId;
     }
+
+    public void UpdateAddress(Guid? addressId)
+    {
+      AddressId = addressId;
+    }
   }
 }
