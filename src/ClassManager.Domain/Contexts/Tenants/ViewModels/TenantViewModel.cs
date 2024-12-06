@@ -1,3 +1,4 @@
+using ClassManager.Domain.Contexts.Addresses.ViewModels;
 using ClassManager.Domain.Contexts.Classes.ViewModels;
 using ClassManager.Domain.Contexts.Plans.ViewModels;
 using ClassManager.Domain.Contexts.Roles.ViewModels;
@@ -34,6 +35,7 @@ public class TenantViewModel
   public IList<ClassViewModel> Classes { get; set; } = [];
   public IList<LinkViewModel> Links { get; set; } = [];
   public IList<StripeCustomerViewModel> StripeCustomers { get; set; } = [];
+  public IList<AddressViewModel> Addresses { get; set; } = [];
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }
 }

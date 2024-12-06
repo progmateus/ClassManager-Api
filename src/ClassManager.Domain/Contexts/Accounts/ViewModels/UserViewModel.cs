@@ -1,3 +1,4 @@
+using ClassManager.Domain.Contexts.Addresses.ViewModels;
 using ClassManager.Domain.Contexts.Bookings.ViewModels;
 using ClassManager.Domain.Contexts.Classes.ViewModels;
 using ClassManager.Domain.Contexts.Roles.ViewModels;
@@ -19,6 +20,8 @@ public class UserViewModel
   public string? Avatar { get; set; } = String.Empty;
   public int? Status { get; set; }
   public int? Type { get; set; }
+  public Guid? AddressId { get; set; }
+  public AddressViewModel? Address { get; set; }
   public IList<RoleViewModel> Roles { get; set; } = [];
   public IList<UsersRolesViewModel> UsersRoles { get; set; } = [];
   public IList<ClassViewModel> Classes { get; set; } = [];

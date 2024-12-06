@@ -22,7 +22,6 @@ public class Address : Entity
   public Guid? TenantId { get; private set; }
   public string Street { get; private set; }
   public string? Number { get; private set; }
-  public string? Neighborhood { get; private set; }
   public string City { get; private set; }
   public string State { get; private set; }
   public string Country { get; private set; } = "BR";

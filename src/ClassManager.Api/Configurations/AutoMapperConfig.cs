@@ -1,6 +1,8 @@
 using AutoMapper;
 using ClasManager.Domain.Contexts.Bookings.Entities;
 using ClassManager.Domain.Contexts.Accounts.Entities;
+using ClassManager.Domain.Contexts.Addresses.Entites;
+using ClassManager.Domain.Contexts.Addresses.ViewModels;
 using ClassManager.Domain.Contexts.Bookings.ViewModels;
 using ClassManager.Domain.Contexts.ClassDays.Entities;
 using ClassManager.Domain.Contexts.ClassDays.ViewModels;
@@ -58,5 +60,6 @@ public class AutoMapperConfig : Profile
 
     CreateMap<Invoice, InvoiceViewModel>();
     CreateMap<StripeCustomer, StripeCustomerViewModel>();
+    CreateMap<Address, AddressViewModel>();
   }
 }
