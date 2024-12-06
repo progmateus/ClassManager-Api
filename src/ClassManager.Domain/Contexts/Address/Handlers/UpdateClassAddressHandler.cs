@@ -52,6 +52,11 @@ public class UpdateClassAddressHandler : Notifiable
       return new CommandResult(false, "ERR_CLASS_NOT_FOUND", null, null, 404);
     }
 
+    if (classEntity.AddressId == command.AddressId)
+    {
+      return new CommandResult(false, "ERR_CHOOSE_DIFERENT_ADDRESS", null, null, 400);
+    }
+
     var address = await _addressRepository.GetByIdAsync(command.AddressId, new CancellationToken());
 
     if (address is null)
