@@ -29,6 +29,8 @@ public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
     .ThenInclude((b) => b.User)
     .Include((x) => x.Class)
     .ThenInclude((c) => c.Tenant)
+    .Include(x => x.Class)
+    .ThenInclude(x => x.Address)
     .Where(x => tenantIds.Contains(x.Class.TenantId) || classesIds.Contains(x.ClassId))
     .Where(x => x.Date >= zeroTime && x.Date <= finalTime)
     .OrderBy(x => x.Date)
