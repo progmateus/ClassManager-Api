@@ -30,4 +30,12 @@ public class Address : Entity
   public User? User { get; private set; }
   public Tenant? Tenant { get; private set; }
   public IList<Class> Classes { get; private set; } = [];
+
+  public void Update(string street, string city, string state, string? number)
+  {
+    Street = street;
+    City = city;
+    State = state;
+    Number = number;
+  }
 }

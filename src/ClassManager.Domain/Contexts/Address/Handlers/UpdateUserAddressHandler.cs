@@ -32,17 +32,19 @@ public class UpdateUserAddressHandler : Notifiable
       return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
 
-    var addressFound = await _addressRepository.FindAsync(x => x.UserId == loggedUserId);
+    var address = await _addressRepository.FindAsync(x => x.UserId == loggedUserId);
 
-    var address = new Address(command.Street, command.City, command.State, command.Number, loggedUserId, null);
-
-    if (addressFound is not null)
+    if (address is not null)
     {
-      await _addressRepository.DeleteAsync(addressFound.Id, new CancellationToken());
+      address.Update(command.Street, command.City, command.State, command.Number);
+      await _addressRepository.SaveChangesAsync(new CancellationToken());
+    }
+    else
+    {
+      address = new Address(command.Street, command.City, command.State, command.Number, loggedUserId, null);
+      await _addressRepository.CreateAsync(address, new CancellationToken());
     }
 
-    await _addressRepository.CreateAsync(address, new CancellationToken());
-
-    return new CommandResult(true, "ADDRESS_CREATED", _mapper.Map<AddressViewModel>(address), null, 201);
+    return new CommandResult(true, "ADDRESS_UPDATED", _mapper.Map<AddressViewModel>(address), null, 200);
   }
 }

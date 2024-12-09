@@ -31,6 +31,7 @@ public class UserRepository : Repository<User>, IUserRepository
   {
     return await DbSet
     .AsNoTracking()
+    .Include(x => x.Address)
     .Include(x => x.UsersRoles)
     .ThenInclude(x => x.Role)
     .Include(x => x.UsersRoles)
