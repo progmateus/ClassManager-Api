@@ -10,11 +10,12 @@ public class Address : Entity
   {
 
   }
-  public Address(string street, string city, string state, Guid? userId, Guid? tenantId)
+  public Address(string street, string city, string state, string? number, Guid? userId, Guid? tenantId)
   {
     Street = street;
     City = city;
     State = state;
+    Number = number;
     UserId = userId;
     TenantId = tenantId;
   }

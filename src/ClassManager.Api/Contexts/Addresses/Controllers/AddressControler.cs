@@ -60,7 +60,7 @@ public class AddressController : MainController
   }
 
 
-  [HttpPatch("users/addresses")]
+  [HttpPatch("users/address")]
   public async Task<IResult> UpdateUserAddress(
     [FromBody] CreateAddressCommand command,
     [FromServices] UpdateUserAddressHandler handler

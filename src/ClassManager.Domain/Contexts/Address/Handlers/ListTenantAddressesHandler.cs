@@ -37,6 +37,6 @@ public class ListTenantAddressesHandler
 
     var addresses = _mapper.Map<List<AddressViewModel>>(await _addressRepository.ListByTenantIdAsync(tenantId));
 
-    return new CommandResult(false, "ADDRESSES_LISTED", addresses, null, 403);
+    return new CommandResult(true, "ADDRESSES_LISTED", addresses, null, 403);
   }
 }

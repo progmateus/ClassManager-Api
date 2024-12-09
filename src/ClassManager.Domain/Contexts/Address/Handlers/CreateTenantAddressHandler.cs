@@ -50,7 +50,7 @@ public class CreateTenantAddressHandler : Notifiable
       return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
     }
 
-    var address = new Address(command.Street, command.City, command.State, null, tenantId);
+    var address = new Address(command.Street, command.City, command.State, command.Number, null, tenantId);
 
     await _addressRepository.CreateAsync(address, new CancellationToken());
 
