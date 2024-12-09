@@ -41,6 +41,7 @@ public class UpdateManyStudentsClassesHandler
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
+    await _studentsClassesRepository.DeleteByUsersAndClasses(tenantId, [], command.UsersIds, new CancellationToken());
     await _studentsClassesRepository.DeleteByClassId(tenantId, command.ClassId, new CancellationToken());
 
     if (command.UsersIds.Count == 0)

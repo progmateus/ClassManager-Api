@@ -68,7 +68,9 @@ public class StudentsClassesRepository : Repository<StudentsClasses>, IStudentsC
     return await DbSet
     .AsNoTracking()
     .Include(x => x.Class)
-    .Where((tc) => (classesIds.IsNullOrEmpty() || classesIds.Contains(tc.ClassId)) && (usersIds.IsNullOrEmpty() || usersIds.Contains(tc.UserId)) && tc.Class.TenantId == tenantId)
+    .Where((tc) => classesIds.IsNullOrEmpty() || classesIds.Contains(tc.ClassId))
+    .Where((tc) => usersIds.IsNullOrEmpty() || usersIds.Contains(tc.UserId))
+    .Where((tc) => tc.Class.TenantId == tenantId)
     .ToListAsync();
   }
 
@@ -82,7 +84,10 @@ public class StudentsClassesRepository : Repository<StudentsClasses>, IStudentsC
   {
     DbSet
     .RemoveRange(DbSet
-    .Where((sc) => sc.Class.TenantId == tenantId && classesIds.Contains(sc.ClassId) && usersIds.Contains(sc.UserId)));
+    .Where((sc) => sc.Class.TenantId == tenantId)
+    .Where((sc) => classesIds.IsNullOrEmpty() || classesIds.Contains(sc.ClassId))
+    .Where((sc) => usersIds.Contains(sc.UserId))
+    );
     await SaveChangesAsync(cancellationToken);
   }
 }

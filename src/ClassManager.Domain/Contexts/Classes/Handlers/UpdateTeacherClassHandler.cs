@@ -40,11 +40,11 @@ public class UpdateTeacherClassHandler
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
-    await _teachersClassesRepository.DeleteByUsersAndClasses(tenantId, [command.ClassId], command.UsersIds, new CancellationToken());
+    await _teachersClassesRepository.DeleteByClassId(tenantId, command.ClassId, new CancellationToken());
 
     if (command.UsersIds.Count == 0)
     {
-      return new CommandResult(true, "TEACHERS_ADDED", new { }, null, 200);
+      return new CommandResult(true, "TEACHERS_UPDATED", new { }, null, 200);
     }
 
     var tenantTeachersfound = await _usersRolesRepository.ListByRoleAsync(tenantId, ["teacher"], command.UsersIds);
@@ -58,6 +58,6 @@ public class UpdateTeacherClassHandler
 
     await _teachersClassesRepository.CreateRangeAsync(newTeachersclass, new CancellationToken());
 
-    return new CommandResult(true, "TEACHERS_ADDED", new { }, null, 200);
+    return new CommandResult(true, "TEACHERS_UPDATED", new { }, null, 200);
   }
 }
