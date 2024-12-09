@@ -50,7 +50,7 @@ public class TeachersClassesController : MainController
   public async Task<IResult> GetStudentclasses(
   [FromRoute] Guid tenantId,
   [FromQuery] Guid userId,
-  [FromServices] GetStudentClassesHandler handler
+  [FromServices] ListTeacherClassesHandler handler
 )
   {
     var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, userId);

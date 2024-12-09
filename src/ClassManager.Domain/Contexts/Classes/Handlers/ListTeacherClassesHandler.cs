@@ -7,22 +7,19 @@ using ClassManager.Shared.Commands;
 
 namespace ClassManager.Domain.Contexts.Classes.Handlers;
 
-public class GetStudentClassesHandler
+public class ListTeacherClassesHandler
 {
-  private readonly IClassRepository _classRepository;
-  private readonly IStudentsClassesRepository _studentsClassesRepository;
+  private readonly ITeacherClassesRepository _teacherClassesRepository;
   private readonly IMapper _mapper;
   private readonly IAccessControlService _accessControlService;
 
-  public GetStudentClassesHandler(
-    IClassRepository classRepository,
-    IStudentsClassesRepository studentsClassesRepository,
+  public ListTeacherClassesHandler(
+    ITeacherClassesRepository teacherClassesRepository,
     IMapper mapper,
     IAccessControlService accessControlService
     )
   {
-    _classRepository = classRepository;
-    _studentsClassesRepository = studentsClassesRepository;
+    _teacherClassesRepository = teacherClassesRepository;
     _mapper = mapper;
     _accessControlService = accessControlService;
   }
@@ -33,8 +30,8 @@ public class GetStudentClassesHandler
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
-    var students = _mapper.Map<List<StudentsClassesViewModel>>(await _studentsClassesRepository.ListByUserOrClassAndTenantAsync([targetUserId], [tenantId], []));
+    var teacherClasses = _mapper.Map<List<TeachersClassesViewModel>>(await _teacherClassesRepository.ListByUserOrClassOrTenantAsync([targetUserId], [tenantId], []));
 
-    return new CommandResult(true, "STUDENTS_LISTED", students, null, 200);
+    return new CommandResult(true, "TEACHER_CLASSES_LISTED", teacherClasses, null, 200);
   }
 }
