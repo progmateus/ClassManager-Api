@@ -26,7 +26,7 @@ public class GetClassProfileHandler
   }
   public async Task<ICommandResult> Handle(Guid tenantId, Guid classDayId)
   {
-    var classFound = await _classRepository.GetByIdAndTenantIdAsync(tenantId, classDayId, new CancellationToken());
+    var classFound = await _classRepository.FindClassProfile(tenantId, classDayId, new CancellationToken());
 
     if (classFound is null)
     {

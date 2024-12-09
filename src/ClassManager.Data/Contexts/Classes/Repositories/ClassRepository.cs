@@ -18,6 +18,15 @@ public class ClassRepository : TRepository<Class>, IClassRepository
     .FirstOrDefaultAsync((x) => x.Id == id, cancellationToken);
   }
 
+  public async Task<Class?> FindClassProfile(Guid tenantId, Guid classId, CancellationToken cancellationToken)
+  {
+    return await DbSet
+    .Include(x => x.Address)
+    .Include(x => x.TeachersClasses)
+    .ThenInclude(x => x.User)
+    .FirstOrDefaultAsync((x) => x.TenantId == tenantId && x.Id == classId, cancellationToken);
+  }
+
   public async Task<Class?> GetByIdAndTenantIdAsync(Guid tenantId, Guid classId, CancellationToken cancellationToken)
   {
     return await DbSet.FirstOrDefaultAsync((x) => x.TenantId == tenantId && x.Id == classId, cancellationToken);
