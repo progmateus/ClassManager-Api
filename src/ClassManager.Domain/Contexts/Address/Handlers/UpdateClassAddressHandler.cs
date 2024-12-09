@@ -40,12 +40,12 @@ public class UpdateClassAddressHandler : Notifiable
       return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
 
-    if (await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
+    if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
     {
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
     }
 
-    if (await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
+    if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
     {
       return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
     }
@@ -59,7 +59,7 @@ public class UpdateClassAddressHandler : Notifiable
 
     if (classEntity.AddressId == command.AddressId)
     {
-      return new CommandResult(false, "ERR_CHOOSE_DIFERENT_ADDRESS", null, null, 400);
+      return new CommandResult(false, "ERR_CHOOSE_ANOTHER_ADDRESS", null, null, 400);
     }
 
     var address = await _addressRepository.GetByIdAsync(command.AddressId, new CancellationToken());

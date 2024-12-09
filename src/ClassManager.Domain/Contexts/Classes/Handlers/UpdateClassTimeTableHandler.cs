@@ -70,7 +70,7 @@ public class UpdateClassTimeTableHandler :
 
     if (classEntity.TimeTableId.Equals(command.TimeTableId))
     {
-      return new CommandResult(false, "ERR_CHOOSE_A_DIFERENTE_TIME_TABLE", null, null, 404);
+      return new CommandResult(false, "ERR_CHOOSE_ANOTHER_TIME_TABLE", null, null, 404);
     }
 
     await _classDayRepository.DeleteAllAfterAndBeforeDate([classId], DateTime.Now, DateTime.Now.GetLastDayOfMonth().AddHours(23).AddMinutes(59).AddSeconds(59), new CancellationToken());
