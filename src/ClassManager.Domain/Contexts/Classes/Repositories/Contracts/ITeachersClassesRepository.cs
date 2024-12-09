@@ -10,5 +10,5 @@ public interface ITeacherClassesRepository : IRepository<TeachersClasses>
   Task<List<TeachersClasses>> GetByUsersIdsAndTenantActive(List<Guid> usersIds, CancellationToken cancellationToken = default);
   int CountByClassId(Guid classId);
   Task DeleteByClassId(Guid tenantId, Guid classId, CancellationToken cancellationToken);
-  Task DeleteByUserIdAndTenantId(Guid tenantId, Guid userId, CancellationToken cancellationToken);
+  Task DeleteByUsersAndClasses(Guid tenantId, List<Guid> classesIds, List<Guid> usersIds, CancellationToken cancellationToken);
 }

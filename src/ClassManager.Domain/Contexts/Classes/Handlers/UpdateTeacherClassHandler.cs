@@ -40,8 +40,7 @@ public class UpdateTeacherClassHandler
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
-    await _teachersClassesRepository.DeleteByClassId(tenantId, command.ClassId, new CancellationToken());
-
+    await _teachersClassesRepository.DeleteByUsersAndClasses(tenantId, [command.ClassId], command.UsersIds, new CancellationToken());
 
     if (command.UsersIds.Count == 0)
     {

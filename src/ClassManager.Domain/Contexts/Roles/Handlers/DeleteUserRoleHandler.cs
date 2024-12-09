@@ -41,7 +41,7 @@ public class DeleteUserRoleHandler : Notifiable
       return new CommandResult(false, "ERR_USER_ROLE_NOT_FOUND", null, null, 404);
     }
 
-    await _teacherClassesRepository.DeleteByUserIdAndTenantId(tenantId, userRole.UserId, new CancellationToken());
+    await _teacherClassesRepository.DeleteByUsersAndClasses(tenantId, [], [userRole.UserId], new CancellationToken());
 
     return new CommandResult(false, "USER_ROLE_DELETED", null, null, 204);
   }
