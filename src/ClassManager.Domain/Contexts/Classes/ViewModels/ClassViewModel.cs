@@ -16,7 +16,6 @@ namespace ClassManager.Domain.Contexts.Classes.ViewModels
     public DateTime UpdatedAt { get; set; }
     public TenantViewModel? Tenant { get; set; }
     public AddressViewModel? Address { get; set; }
-    public IList<UserViewModel> Users { get; set; } = [];
     public IList<TeachersClassesViewModel> TeachersClasses { get; set; } = [];
     public IList<StudentsClassesViewModel> StudentsClasses { get; set; } = [];
     public IList<ClassDayViewModel> ClassDays { get; set; } = [];

@@ -38,6 +38,7 @@ public class AutoMapperConfig : Profile
 
 
     CreateMap<Class, ClassViewModel>();
+    CreateMap<Class, ClassPreviewViewModel>();
     CreateMap<ClassDay, ClassDayViewModel>();
     CreateMap<StudentsClasses, StudentsClassesViewModel>();
     CreateMap<TeachersClasses, TeachersClassesViewModel>();

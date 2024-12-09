@@ -2,6 +2,7 @@ using ClassManager.Data.Contexts.shared.Repositories;
 using ClassManager.Data.Data;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Classes.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClassManager.Data.Contexts.Plans.Repositories;
@@ -50,5 +51,24 @@ public class ClassRepository : TRepository<Class>, IClassRepository
   public async Task<bool> PlanAlreadyExists(string name, CancellationToken cancellationToken)
   {
     return await DbSet.AnyAsync((x) => x.Name == name);
+  }
+  public async Task<List<ClassPreviewViewModel>> ListPreviewsWithPagination(Guid tenantId, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)
+  {
+    return await DbSet
+    .Where(x => x.TenantId == tenantId)
+    .Select(x => new ClassPreviewViewModel
+    {
+      Id = x.Id,
+      Description = x.Description,
+      Name = x.Name,
+      StudentsCount = x.StudentsClasses.Count(),
+      TeachersCount = x.TeachersClasses.Count(),
+      TenantId = x.TenantId,
+      CreatedAt = x.CreatedAt,
+      UpdatedAt = x.UpdatedAt,
+    })
+    .Skip(skip)
+    .Take(limit)
+    .ToListAsync(cancellationToken);
   }
 }
