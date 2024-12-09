@@ -6,6 +6,7 @@ using classManager.Data.Contexts.Roles.Repositories;
 using classManager.Data.Contexts.Subscriptions.Repositories;
 using ClassManager.Data.Contexts.Accounts.Repositories;
 using ClassManager.Data.Contexts.Accounts.Services;
+using ClassManager.Data.Contexts.Addresses.Repositories;
 using ClassManager.Data.Contexts.Bookings.Repositories;
 using ClassManager.Data.Contexts.Plans.Repositories;
 using ClassManager.Data.Contexts.Tenants.Repositories;
@@ -14,6 +15,7 @@ using ClassManager.Data.Data;
 using ClassManager.Domain;
 using ClassManager.Domain.Contexts.Accounts.Handlers;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Addresses.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Auth.Services;
 using ClassManager.Domain.Contexts.Bookings.Repositories.Contracts;
 using ClassManager.Domain.Contexts.ClassDays.Handlers;
@@ -259,6 +261,10 @@ public static class BuilderExtension
     builder.Services.AddTransient<
     IStripeCustomerRepository,
     StripeCustomerRepository>();
+
+    builder.Services.AddTransient<
+    IAddressRepository,
+    AddressRepository>();
 
     builder.Services.AddTransient<TokenService>();
 
