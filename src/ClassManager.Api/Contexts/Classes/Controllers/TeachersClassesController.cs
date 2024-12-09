@@ -13,7 +13,7 @@ public class TeachersClassesController : MainController
   [HttpPut]
   public async Task<IResult> AddTeacher(
   [FromRoute] Guid tenantId,
-  [FromBody] UpdateUserClassCommand command,
+  [FromBody] UpdateUsersClassCommand command,
   [FromServices] UpdateTeacherClassHandler handler
 )
   {

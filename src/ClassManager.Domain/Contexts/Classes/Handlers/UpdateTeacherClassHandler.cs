@@ -27,7 +27,7 @@ public class UpdateTeacherClassHandler
     _usersRolesRepository = usersRolesRepository;
 
   }
-  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, UpdateUserClassCommand command)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, UpdateUsersClassCommand command)
   {
 
     if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))

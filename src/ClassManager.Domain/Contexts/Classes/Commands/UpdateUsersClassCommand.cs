@@ -4,7 +4,7 @@ using Flunt.Validations;
 
 namespace ClassManager.Domain.Contexts.Classes.Commands
 {
-  public class UpdateUserClassCommand : Notifiable, ICommand
+  public class UpdateUsersClassCommand : Notifiable, ICommand
   {
     public List<Guid> UsersIds { get; set; } = [];
     public Guid ClassId { get; set; }
@@ -12,7 +12,7 @@ namespace ClassManager.Domain.Contexts.Classes.Commands
     {
       AddNotifications(new Contract()
       .Requires()
-      .IsNotNull(ClassId, "ClassId", "ClassId not null")
+      .IsNotNull(ClassId, "ClassId", "ClassId cannot be null")
     );
     }
   }
