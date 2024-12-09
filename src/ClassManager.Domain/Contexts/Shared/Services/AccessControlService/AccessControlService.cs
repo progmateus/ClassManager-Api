@@ -74,14 +74,6 @@ public class AccesControlService : IAccessControlService
       return true;
     }
 
-    Console.WriteLine("=======================");
-    Console.WriteLine("=======================");
-    Console.WriteLine("=======================");
-    Console.WriteLine("=======================");
-    Console.WriteLine("=======================");
-    Console.WriteLine(classId);
-    Console.WriteLine(loggedUserId);
-
     if (classRolesNames.Contains("student"))
     {
       if (await _studentsClassesRepository.FindByUserIdAndClassId(classId, loggedUserId) is not null)
