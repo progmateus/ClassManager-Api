@@ -55,9 +55,10 @@ public class AddressMap : IEntityTypeConfiguration<Address>
       .IsRequired(false)
       .OnDelete(DeleteBehavior.Cascade);
 
+
     builder.HasOne(x => x.User)
       .WithOne(u => u.Address)
-      .HasForeignKey<User>(x => x.AddressId)
+      .HasForeignKey<Address>(x => x.UserId)
       .IsRequired(false)
       .OnDelete(DeleteBehavior.Cascade);
   }

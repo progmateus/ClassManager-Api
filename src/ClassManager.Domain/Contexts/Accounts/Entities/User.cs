@@ -50,7 +50,6 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     public EUserType Type { get; private set; } = EUserType.NORMAL;
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
-    public Guid? AddressId { get; private set; }
     public Address? Address { get; private set; }
     public IList<Role> Roles { get; private set; } = [];
     public IList<UsersRoles> UsersRoles { get; private set; } = [];

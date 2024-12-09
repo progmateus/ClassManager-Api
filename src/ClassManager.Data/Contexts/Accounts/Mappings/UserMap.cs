@@ -113,11 +113,5 @@ public class UserMap : IEntityTypeConfiguration<User>
             .HasColumnType("VARCHAR")
             .HasMaxLength(200)
             .IsRequired(false);
-
-        builder.HasOne(x => x.Address)
-            .WithOne(u => u.User)
-            .HasForeignKey<Address>(x => x.UserId)
-            .IsRequired(false)
-            .OnDelete(DeleteBehavior.Cascade);
     }
 }
