@@ -156,7 +156,7 @@ public class CreateSubscriptionHandler : Notifiable,
 
     var studentclass = new StudentsClasses(targetUserId, command.ClassId);
 
-    await _studentsClassesRepository.DeleteByUserIdAndtenantId(tenantId, targetUserId, new CancellationToken());
+    await _studentsClassesRepository.DeleteByUserIdAndtenantId(tenantId, [targetUserId], new CancellationToken());
 
     await _studentsClassesRepository.CreateAsync(studentclass, new CancellationToken());
 

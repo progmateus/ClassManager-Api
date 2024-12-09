@@ -13,9 +13,9 @@ public class StudentsClassesRepository : Repository<StudentsClasses>, IStudentsC
 {
   public StudentsClassesRepository(AppDbContext context) : base(context) { }
 
-  public async Task DeleteByUserIdAndtenantId(Guid tenantId, Guid userId, CancellationToken cancellationToken)
+  public async Task DeleteByUserIdAndtenantId(Guid tenantId, List<Guid> usersIds, CancellationToken cancellationToken)
   {
-    DbSet.RemoveRange(DbSet.Where((sc) => sc.Class.TenantId == tenantId && sc.UserId == userId));
+    DbSet.RemoveRange(DbSet.Where((sc) => sc.Class.TenantId == tenantId && usersIds.Contains(sc.UserId)));
     await SaveChangesAsync(cancellationToken);
   }
 
@@ -75,6 +75,14 @@ public class StudentsClassesRepository : Repository<StudentsClasses>, IStudentsC
   public async Task DeleteByClassId(Guid tenantId, Guid classId, CancellationToken cancellationToken)
   {
     DbSet.RemoveRange(DbSet.Where((sc) => sc.Class.TenantId == tenantId && sc.ClassId == classId));
+    await SaveChangesAsync(cancellationToken);
+  }
+
+  public async Task DeleteByUsersAndClasses(Guid tenantId, List<Guid> classesIds, List<Guid> usersIds, CancellationToken cancellationToken)
+  {
+    DbSet
+    .RemoveRange(DbSet
+    .Where((sc) => sc.Class.TenantId == tenantId && classesIds.Contains(sc.ClassId) && usersIds.Contains(sc.UserId)));
     await SaveChangesAsync(cancellationToken);
   }
 }

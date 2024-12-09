@@ -9,6 +9,7 @@ public interface IStudentsClassesRepository : IRepository<StudentsClasses>
   Task<List<StudentsClasses>> GetByUsersIdsAndClassesIds(Guid tenantId, List<Guid>? usersIds, List<Guid>? classesIds);
   int CountByClassId(Guid classId);
   Task<List<StudentsClasses>> GetByUsersIdsAndTenantActive(List<Guid> usersIds, CancellationToken cancellationToken = default);
-  Task DeleteByUserIdAndtenantId(Guid tenantId, Guid userId, CancellationToken cancellationToken);
+  Task DeleteByUserIdAndtenantId(Guid tenantId, List<Guid> usersIds, CancellationToken cancellationToken);
   Task DeleteByClassId(Guid tenantId, Guid classId, CancellationToken cancellationToken);
+  Task DeleteByUsersAndClasses(Guid tenantId, List<Guid> classesIds, List<Guid> usersIds, CancellationToken cancellationToken);
 }
