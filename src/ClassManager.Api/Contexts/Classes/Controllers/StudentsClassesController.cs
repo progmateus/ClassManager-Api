@@ -15,7 +15,7 @@ public class StudentsClasses : MainController
   public async Task<IResult> AddStudent(
   [FromRoute] Guid tenantId,
   [FromBody] UpdateUsersClassCommand command,
-  [FromServices] UpdateStudentsClassesHandler handler
+  [FromServices] UpdateManyStudentsClassesHandler handler
 )
   {
     var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, command);
@@ -32,7 +32,7 @@ public class StudentsClasses : MainController
   public async Task<IResult> AddStudent(
   [FromRoute] Guid tenantId,
   [FromBody] UpdateStudentClassCommand command,
-  [FromServices] UpdateStudentClassHandler handler
+  [FromServices] UpdateOneStudentClassHandler handler
 )
   {
     var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, command);

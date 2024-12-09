@@ -1,4 +1,3 @@
-using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Classes.Commands;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
@@ -9,13 +8,13 @@ using ClassManager.Shared.Commands;
 
 namespace ClassManager.Domain.Contexts.Classes.Handlers;
 
-public class UpdateStudentsClassesHandler
+public class UpdateOneStudentClassHandler
 {
   private readonly IStudentsClassesRepository _studentsClassesRepository;
   private readonly IAccessControlService _accessControlService;
   private readonly IUsersRolesRepository _usersRolesRepository;
 
-  public UpdateStudentsClassesHandler(
+  public UpdateOneStudentClassHandler(
     IStudentsClassesRepository studentsClassesRepository,
     IAccessControlService accessControlService,
     IUsersRolesRepository usersRolesRepository
@@ -28,7 +27,7 @@ public class UpdateStudentsClassesHandler
     _usersRolesRepository = usersRolesRepository;
 
   }
-  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, UpdateUsersClassCommand command)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, UpdateStudentClassCommand command)
   {
 
     if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
@@ -41,20 +40,15 @@ public class UpdateStudentsClassesHandler
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
-    await _studentsClassesRepository.DeleteByClassId(tenantId, command.ClassId, new CancellationToken());
+    await _studentsClassesRepository.DeleteByUserIdAndtenantId(tenantId, [command.UserId], new CancellationToken());
 
-    if (command.UsersIds.Count == 0)
-    {
-      return new CommandResult(true, "STUDENT_ADDED", new { }, null, 200);
-    }
-
-    var tenantStudents = await _usersRolesRepository.ListByRoleAsync(tenantId, ["student"], command.UsersIds);
+    var userTenantsubscriptions = await _usersRolesRepository.ListByRoleAsync(tenantId, ["student"], [command.UserId]);
 
     var newStudentsClass = new List<StudentsClasses>();
 
-    foreach (var tenantStudent in tenantStudents)
+    foreach (var student in userTenantsubscriptions)
     {
-      newStudentsClass.Add(new StudentsClasses(tenantStudent.UserId, command.ClassId));
+      newStudentsClass.Add(new StudentsClasses(student.UserId, command.ClassId));
     }
 
     await _studentsClassesRepository.CreateRangeAsync(newStudentsClass, new CancellationToken());
