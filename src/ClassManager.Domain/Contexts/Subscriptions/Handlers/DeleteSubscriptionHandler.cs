@@ -59,7 +59,7 @@ public class DeleteSubscriptionHandler : Notifiable, ITenantDeleteAction
 
     var userRoles = await _usersRolesrepository.GetStudentsRolesByUserIdAndTenantId(tenantId, subscription.UserId, new CancellationToken());
 
-    subscription.ChangeStatus(ESubscriptionStatus.CANCELED);
+    subscription.Update(ESubscriptionStatus.CANCELED, null, null);
 
     await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
 

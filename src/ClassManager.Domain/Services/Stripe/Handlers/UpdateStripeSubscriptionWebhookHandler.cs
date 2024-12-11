@@ -59,7 +59,7 @@ public class UpdateStripeSubscriptionWebhookHandler
         : stripeSubscription.Status == "canceled" ? ESubscriptionStatus.CANCELED
         : stripeSubscription.Status == "unpaid" ? ESubscriptionStatus.UNPAID
         : stripeSubscription.Status == "paused" ? ESubscriptionStatus.PAUSED
-          : ESubscriptionStatus.ACTIVE;
+          : ESubscriptionStatus.INCOMPLETE;
 
     if (subscriptionType.Value == "user")
     {
@@ -70,7 +70,7 @@ public class UpdateStripeSubscriptionWebhookHandler
         return;
       }
 
-      subscription.ChangeStatus(status);
+      subscription.Update(status, stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);
       await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
     }
     else if (subscriptionType.Value == "tenant")
@@ -82,6 +82,7 @@ public class UpdateStripeSubscriptionWebhookHandler
         return;
       }
       tenant.UpdateSubscriptionStatus(status);
+      tenant.SetCurrentPeriod(stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);
       await _tenantRepository.UpdateAsync(tenant, new CancellationToken());
     }
   }
