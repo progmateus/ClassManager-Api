@@ -89,12 +89,12 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
       StripeChargesEnabled = chargesEnabled;
     }
 
-    public void UpdateSubscriptionStatus(ESubscriptionStatus status)
+    public void SetSubscriptionStatus(ESubscriptionStatus status)
     {
       SubscriptionStatus = status;
     }
 
-    public void SetCurrentPeriod(DateTime? currentPeriodStart, DateTime? currentPeriodEnd)
+    public void SetSubscriptionCurrentPeriod(DateTime? currentPeriodStart, DateTime? currentPeriodEnd)
     {
       CurrentPeriodStart = currentPeriodStart ?? CurrentPeriodStart;
       CurrentPeriodEnd = currentPeriodEnd ?? CurrentPeriodEnd;

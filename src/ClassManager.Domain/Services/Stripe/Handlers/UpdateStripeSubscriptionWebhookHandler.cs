@@ -70,7 +70,8 @@ public class UpdateStripeSubscriptionWebhookHandler
         return;
       }
 
-      subscription.Update(status, stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);
+      subscription.SetStatus(status);
+      subscription.SetCurrentPeriod(stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);
       await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
     }
     else if (subscriptionType.Value == "tenant")
@@ -81,8 +82,8 @@ public class UpdateStripeSubscriptionWebhookHandler
       {
         return;
       }
-      tenant.UpdateSubscriptionStatus(status);
-      tenant.SetCurrentPeriod(stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);
+      tenant.SetSubscriptionStatus(status);
+      tenant.SetSubscriptionCurrentPeriod(stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);
       await _tenantRepository.UpdateAsync(tenant, new CancellationToken());
     }
   }

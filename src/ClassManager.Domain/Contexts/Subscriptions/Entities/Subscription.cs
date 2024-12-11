@@ -39,9 +39,13 @@ public class Subscription : TenantEntity
     TenantPlanId = planId;
   }
 
-  public void Update(ESubscriptionStatus status, DateTime? currentPeriodStart, DateTime? currentPeriodEnd)
+  public void SetStatus(ESubscriptionStatus status)
   {
     Status = status;
+  }
+
+  public void SetCurrentPeriod(DateTime? currentPeriodStart, DateTime? currentPeriodEnd)
+  {
     CurrentPeriodStart = currentPeriodStart ?? CurrentPeriodStart;
     CurrentPeriodEnd = currentPeriodEnd ?? CurrentPeriodEnd;
   }
