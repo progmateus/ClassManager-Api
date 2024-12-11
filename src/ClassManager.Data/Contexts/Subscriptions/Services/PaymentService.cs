@@ -300,7 +300,8 @@ public class PaymentService : IPaymentService
         { "tenantId", tenantId.ToString() },
         { "subscriptionId", subscriptionId.ToString() }
       },
-      Price = newStripePriceId
+      Price = newStripePriceId,
+      ProrationBehavior = "none"
     };
     var service = new SubscriptionItemService();
     service.Update(stripeSubscriptionId, options, requestOptions);
