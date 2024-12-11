@@ -73,6 +73,11 @@ public class UpdateSubscriptionStatusHandler : Notifiable
       return new CommandResult(false, "ERR_INVALID_STATUS", null, null, 400);
     }
 
+    if (subscription.Status != ESubscriptionStatus.ACTIVE && subscription.Status != ESubscriptionStatus.PAUSED)
+    {
+      return new CommandResult(false, "ERR_INVALID_STATUS", null, null, 400);
+    }
+
     if (subscription.Status == ESubscriptionStatus.CANCELED)
     {
       return new CommandResult(false, "ERR_SUBSCRIPTION_CANCELED", null, null, 400);
@@ -82,6 +87,7 @@ public class UpdateSubscriptionStatusHandler : Notifiable
     {
       _paymentService.ResumeSubscription(subscription.StripeSubscriptionId, tenant.StripeAccountId);
     }
+
     else if (command.Status == ESubscriptionStatus.CANCELED)
     {
       _paymentService.CancelSubscription(subscription.StripeSubscriptionId, tenant.StripeAccountId);
