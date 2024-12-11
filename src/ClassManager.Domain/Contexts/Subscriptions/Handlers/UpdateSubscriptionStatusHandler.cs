@@ -67,7 +67,7 @@ public class UpdateSubscriptionStatusHandler : Notifiable
 
     if (userLatestSubscription is not null && !userLatestSubscription.Id.Equals(subscription.Id))
     {
-      return new CommandResult(false, "ERR_CAN_ONLY_UPDATE_THE_LATEST_SUBSCRIPTION", null, null, 409);
+      return new CommandResult(false, "ERR_ONLY_UPDATE_THE_LATEST_SUBSCRIPTION", null, null, 409);
     }
 
     if (!subscription.UserId.Equals(loggedUserId) && !istenantAdmin)
