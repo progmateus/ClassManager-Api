@@ -65,13 +65,32 @@ public class TenantController : MainController
     return Results.Ok(result);
   }
 
-  [HttpPut]
-  [Route("{id}")]
+  [HttpPatch]
+  [Route("{id}/status")]
   public async Task<IResult> Update(
     [FromRoute] Guid tenantId,
     [FromRoute] Guid id,
     [FromBody] UpdateSubscriptionCommand command,
-    [FromServices] UpdateSubscriptionHandler handler
+    [FromServices] UpdateSubscriptionStatusHandler handler
+  )
+  {
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, id, command);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
+  [HttpPatch]
+  [Route("{id}/plan")]
+  public async Task<IResult> Update(
+    [FromRoute] Guid tenantId,
+    [FromRoute] Guid id,
+    [FromBody] UpdateSubscriptionCommand command,
+    [FromServices] UpdateSubscriptionPlanHandler handler
   )
   {
     var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, id, command);

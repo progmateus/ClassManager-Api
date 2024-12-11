@@ -33,7 +33,7 @@ public class UpdateSubscriptionStatusHandler : Notifiable
     _tenantRepository = tenantRepository;
 
   }
-  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid subscriptionId, string property, UpdateSubscriptionCommand command)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid subscriptionId, UpdateSubscriptionCommand command)
   {
 
     if (!command.Status.HasValue)
