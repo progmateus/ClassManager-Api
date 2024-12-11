@@ -10,7 +10,7 @@ using Flunt.Notifications;
 
 namespace ClassManager.Domain.Contexts.Subscriptions.Handlers;
 
-public class UpdateSubscriptionHandler : Notifiable
+public class UpdateSubscriptionPlanHandler : Notifiable
 {
   private ISubscriptionRepository _subscriptionRepository;
   private ITenantPlanRepository _tenantPlanrepository;
@@ -18,7 +18,7 @@ public class UpdateSubscriptionHandler : Notifiable
   private readonly IPaymentService _paymentService;
   private readonly ITenantRepository _tenantRepository;
 
-  public UpdateSubscriptionHandler(ISubscriptionRepository subscriptionRepository,
+  public UpdateSubscriptionPlanHandler(ISubscriptionRepository subscriptionRepository,
   ITenantPlanRepository tenantPlanrepository,
   IAccessControlService accessControlService,
   IPaymentService paymentService,
@@ -36,17 +36,21 @@ public class UpdateSubscriptionHandler : Notifiable
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid subscriptionId, UpdateSubscriptionCommand command)
   {
 
+    if (!command.TenantPlanId.HasValue)
+    {
+      return new CommandResult(false, "ERR_TENANT_PLAN_NOT_FOUND", null, null, 404);
+    }
+
 
     if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
     {
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
     }
 
-    var istenantAdmin = await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]);
-
     var subscription = await _subscriptionRepository.FindByIdAndTenantIdAsync(subscriptionId, tenantId, new CancellationToken());
 
     var tenant = await _tenantRepository.GetByIdAsync(tenantId, new CancellationToken());
+
 
     if (tenant is null)
     {
@@ -58,47 +62,19 @@ public class UpdateSubscriptionHandler : Notifiable
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, null, 404);
     }
 
-    if (!subscription.UserId.Equals(loggedUserId) && !istenantAdmin)
+    if (!subscription.UserId.Equals(loggedUserId) && !await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
     {
       return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 404);
     }
 
-    if (command.Status.HasValue)
+    var tenantPlan = await _tenantPlanrepository.FindByIdAndTenantIdAsync(command.TenantPlanId.Value, tenantId, new CancellationToken());
+
+    if (tenantPlan is null)
     {
-
-      if (command.Status.Value == subscription.Status)
-      {
-        return new CommandResult(false, "ERR_INVALID_STATUS", null, null, 400);
-      }
-
-      if (subscription.Status == ESubscriptionStatus.CANCELED)
-      {
-        return new CommandResult(false, "ERR_SUBSCRIPTION_CANCELED", null, null, 400);
-      }
-
-      if (command.Status == ESubscriptionStatus.ACTIVE)
-      {
-        _paymentService.ResumeSubscription(subscription.StripeSubscriptionId, tenant.StripeAccountId);
-      }
-      else if (command.Status == ESubscriptionStatus.CANCELED)
-      {
-        _paymentService.CancelSubscription(subscription.StripeSubscriptionId, tenant.StripeAccountId);
-      }
-      subscription.ChangeStatus(command.Status.Value);
+      return new CommandResult(false, "ERR_TENANT_PLAN_NOT_FOUND", null, null, 404);
     }
 
-    if (command.TenantPlanId.HasValue && istenantAdmin)
-    {
-      var tenantPlan = await _tenantPlanrepository.FindByIdAndTenantIdAsync(command.TenantPlanId.Value, tenantId, new CancellationToken());
-
-      if (tenantPlan is null)
-      {
-        return new CommandResult(false, "ERR_TENANT_PLAN_NOT_FOUND", null, null, 404);
-      }
-      subscription.ChangePlan(command.TenantPlanId.Value);
-    }
-
-    /* await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken()); */
+    _paymentService.UpdateSubscriptionPlan(tenant.Id, subscription.Id, subscription.StripeSubscriptionId, tenantPlan.StripePriceId, tenant.StripeAccountId);
 
     return new CommandResult(true, "SUBSCRIPTION_UPDATED", subscription, null, 200);
   }
