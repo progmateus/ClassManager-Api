@@ -63,6 +63,13 @@ public class UpdateSubscriptionStatusHandler : Notifiable
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, null, 404);
     }
 
+    var userLatestSubscription = await _subscriptionRepository.FindUserLatestSubscription(tenantId, subscription.UserId, new CancellationToken());
+
+    if (userLatestSubscription is not null && !userLatestSubscription.Id.Equals(subscription.Id))
+    {
+      return new CommandResult(false, "ERR_CAN_ONLY_UPDATE_THE_LATEST_SUBSCRIPTION", null, null, 409);
+    }
+
     if (!subscription.UserId.Equals(loggedUserId) && !istenantAdmin)
     {
       return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 404);
