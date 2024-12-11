@@ -287,4 +287,22 @@ public class PaymentService : IPaymentService
     var service = new AccountService();
     return service.Get(stripeAccountId);
   }
+
+  public void UpdateSubscriptionPlan(Guid tenantId, Guid subscriptionId, string stripeSubscriptionId, string newStripePriceId, string? connectedAccountId)
+  {
+    var requestOptions = new RequestOptions
+    {
+      StripeAccount = connectedAccountId ?? null,
+    };
+    var options = new SubscriptionItemUpdateOptions
+    {
+      Metadata = new Dictionary<string, string> {
+        { "tenantId", tenantId.ToString() },
+        { "subscriptionId", subscriptionId.ToString() }
+      },
+      Price = newStripePriceId
+    };
+    var service = new SubscriptionItemService();
+    service.Update(stripeSubscriptionId, options, requestOptions);
+  }
 }
