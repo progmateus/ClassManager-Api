@@ -61,7 +61,7 @@ public class UpdateStripeSubscriptionWebhookHandler
         : stripeSubscription.Status == "paused" ? ESubscriptionStatus.PAUSED
           : ESubscriptionStatus.INCOMPLETE;
 
-    if (subscriptionType.Value == "user")
+    if (subscriptionType.Value == ESubscriptionType.USER.ToString())
     {
       var subscription = await _subscriptionRepository.FindByStripeSubscriptionId(stripeSubscription.Id, new CancellationToken());
 
@@ -74,7 +74,7 @@ public class UpdateStripeSubscriptionWebhookHandler
       subscription.SetCurrentPeriod(stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);
       await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
     }
-    else if (subscriptionType.Value == "tenant")
+    else if (subscriptionType.Value == ESubscriptionType.TENANT.ToString())
     {
       var tenant = await _tenantRepository.FindByStripeSubscriptionId(stripeSubscription.Id, new CancellationToken());
 

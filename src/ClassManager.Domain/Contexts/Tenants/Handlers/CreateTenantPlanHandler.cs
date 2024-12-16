@@ -1,3 +1,4 @@
+using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Tenants.Commands;
 using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
@@ -66,7 +67,7 @@ public class CreateTenantPlanHandler :
       return new CommandResult(false, "ERR_VALIDATION", null, null, 400);
     }
 
-    var stripeProduct = _paymentService.CreateProduct(tenantPlan.Id, "tenant", tenantPlan.Name, tenantId, tenant.StripeAccountId);
+    var stripeProduct = _paymentService.CreateProduct(tenantPlan.Id, EProductOwner.TENANT, tenantPlan.Name, tenantId, tenant.StripeAccountId);
 
     var stripePrice = _paymentService.CreatePrice(tenantPlan.Id, tenantId, stripeProduct.Id, tenantPlan.Price * 100, tenant.StripeAccountId);
 

@@ -6,7 +6,7 @@ namespace ClassManager.Domain.Services.Stripe.Repositories.Contracts
 {
   public interface IPaymentService
   {
-    Product CreateProduct(Guid entityId, string ownerType, string name, Guid? tenantId, string? connectedAccountId);
+    Product CreateProduct(Guid entityId, EProductOwner ownerType, string name, Guid? tenantId, string? connectedAccountId);
     Subscription CreateSubscription(Guid? entityId, Guid? userId, Guid tenantId, string stripePriceId, string stripeCustomerId, ESubscriptionType type, string? connectedAccountId);
     void UpdateSubscriptionPlan(Guid tenantId, Guid subscriptionId, string stripeSubscriptionId, string newStripePriceId, string? connectedAccountId);
     Customer CreateCustomer(string name, string email, string? connectedAccountId);
