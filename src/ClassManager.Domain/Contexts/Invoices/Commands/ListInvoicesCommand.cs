@@ -6,4 +6,5 @@ public class ListInvoicesCommand : PaginationCommand
 {
   public Guid? UserId { get; set; }
   public Guid? TenantId { get; set; }
+  public Guid? SubscriptionId { get; set; }
 }

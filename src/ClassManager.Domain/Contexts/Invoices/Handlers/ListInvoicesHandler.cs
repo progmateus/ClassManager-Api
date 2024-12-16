@@ -22,33 +22,25 @@ public class ListInvoicesHandler : IPaginationHandler<ListInvoicesCommand>
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, ListInvoicesCommand command)
   {
-    if (command.TenantId.HasValue && command.TenantId != Guid.Empty && command.TenantId != Guid.Empty && !await _accessControlService.IsTenantSubscriptionActiveAsync(command.TenantId.Value))
-    {
-      return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
-    }
-
-    var userTargetId = loggedUserId;
+    var targetUserId = loggedUserId;
 
     if (command.UserId.HasValue && command.UserId != Guid.Empty)
     {
-      if (command.TenantId == Guid.Empty)
+      if (await _accessControlService.CheckParameterUserIdPermission(command.TenantId, loggedUserId, command.UserId))
       {
-        return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
+        targetUserId = command.UserId.Value;
       }
-
-      if (command.UserId.HasValue && command.UserId != Guid.Empty && command.UserId.Value != loggedUserId && !await _accessControlService.HasUserAnyRoleAsync(loggedUserId, command.TenantId.Value, ["admin"]))
+      else
       {
-        return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
+        return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
       }
-
-      userTargetId = command.UserId.Value;
     }
 
     if (command.Page < 1) command.Page = 1;
 
     var skip = (command.Page - 1) * command.Limit;
 
-    var invoices = await _invoiceRepository.ListByUserIdAndTenantId(command.TenantId, userTargetId, command.Search, skip, command.Limit, new CancellationToken());
+    var invoices = await _invoiceRepository.ListByUserIdAndTenantId(command.TenantId, targetUserId, command.SubscriptionId, command.Search, skip, command.Limit, new CancellationToken());
 
     return new CommandResult(true, "INVOICES_LISTED", invoices, null, 200);
   }
