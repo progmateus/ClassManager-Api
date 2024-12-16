@@ -24,16 +24,9 @@ public class ListInvoicesHandler : IPaginationHandler<ListInvoicesCommand>
   {
     var targetUserId = loggedUserId;
 
-    if (command.UserId.HasValue && command.UserId != Guid.Empty)
+    if (await _accessControlService.CheckParameterUserIdPermission(command.TenantId, loggedUserId, command.UserId))
     {
-      if (await _accessControlService.CheckParameterUserIdPermission(command.TenantId, loggedUserId, command.UserId))
-      {
-        targetUserId = command.UserId.Value;
-      }
-      else
-      {
-        return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
-      }
+      targetUserId = command.UserId.Value;
     }
 
     if (command.Page < 1) command.Page = 1;
