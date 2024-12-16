@@ -157,7 +157,7 @@ public class PaymentService : IPaymentService
     return service.Create(options, requestOptions);
   }
 
-  public Product CreateProduct(Guid entityId, string ownerType, string name, Guid? tenantId, string? connectedAccountId)
+  public Product CreateProduct(Guid entityId, EProductOwner ownerType, string name, Guid? tenantId, string? connectedAccountId)
   {
     var requestOptions = new RequestOptions
     {
@@ -171,7 +171,7 @@ public class PaymentService : IPaymentService
       {
         { "entityId", entityId.ToString() },
         { "tenantId", tenantId.ToString() ?? "" },
-        { "ownerType", ownerType },
+        { "ownerType", ownerType.ToString() },
       }
     };
     var service = new ProductService();

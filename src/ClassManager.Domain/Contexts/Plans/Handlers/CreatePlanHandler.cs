@@ -1,6 +1,7 @@
 using ClassManager.Domain.Contexts.Plans.Commands;
 using ClassManager.Domain.Contexts.Plans.Entities;
 using ClassManager.Domain.Contexts.Plans.Repositories;
+using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Services;
 using ClassManager.Domain.Services.Stripe.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
@@ -33,7 +34,7 @@ public class CreatePlandHandler : Notifiable, IHandler<PlanCommand>
 
     var plan = new Plan(command.Name, command.Description, command.StudentsLimit, command.ClassesLimit, command.Price);
 
-    var stripeProduct = _paymentService.CreateProduct(plan.Id, "application", plan.Name, null, null);
+    var stripeProduct = _paymentService.CreateProduct(plan.Id, EProductOwner.APPLICATION, plan.Name, null, null);
     var stripePrice = _paymentService.CreatePrice(plan.Id, null, stripeProduct.Id, plan.Price * 100, null);
 
     plan.SetStripeProductId(stripeProduct.Id);
