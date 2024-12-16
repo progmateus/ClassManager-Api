@@ -109,7 +109,7 @@ public class PaymentService : IPaymentService
     return service.Create(options, requestOptions);
   }
 
-  public Invoice CreateInvoice(Guid entityId, Guid? userId, Guid tenantId, string stripeCustomerId, string stripeSubscriptionId, string? connectedAccountId)
+  public Invoice CreateInvoice(Guid? entityId, Guid? userId, Guid tenantId, string stripeCustomerId, string stripeSubscriptionId, string? connectedAccountId)
   {
     var requestOptions = new RequestOptions
     {
@@ -120,7 +120,7 @@ public class PaymentService : IPaymentService
       Customer = stripeCustomerId,
       Metadata = new Dictionary<string, string>
       {
-        { "entityId", entityId.ToString() },
+        { "entityId", entityId.ToString() ?? ""},
         { "userId", userId.ToString() ?? "" },
         { "tenantId", tenantId.ToString() },
       },
