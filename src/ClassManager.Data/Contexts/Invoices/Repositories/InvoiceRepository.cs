@@ -29,13 +29,6 @@ public class InvoiceRepository : TRepository<Invoice>, IInvoiceRepository
 
   public async Task<List<Invoice>> ListByUserIdAndTenantId(Guid? tenantId, Guid? userId, Guid? subscriptionId, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)
   {
-    Console.WriteLine("========================");
-    Console.WriteLine("========================");
-    Console.WriteLine("========================");
-    Console.WriteLine("========================");
-    Console.WriteLine(tenantId);
-    Console.WriteLine(userId);
-    Console.WriteLine(subscriptionId);
     return await DbSet
     .Include(x => x.Tenant)
     .Where(x => !tenantId.HasValue || x.TenantId == tenantId.Value)
