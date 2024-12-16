@@ -1,4 +1,5 @@
 using ClassManager.Domain;
+using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Services.Stripe.Repositories.Contracts;
 using Stripe;
 using Stripe.Identity;
@@ -108,7 +109,7 @@ public class PaymentService : IPaymentService
     return service.Create(options, requestOptions);
   }
 
-  public Invoice CreateInvoice(Guid tenantId, string stripeCustomerId, string stripeSubscriptionId, string? connectedAccountId)
+  public Invoice CreateInvoice(Guid entityId, Guid? userId, Guid tenantId, string stripeCustomerId, string stripeSubscriptionId, string? connectedAccountId)
   {
     var requestOptions = new RequestOptions
     {
@@ -119,6 +120,8 @@ public class PaymentService : IPaymentService
       Customer = stripeCustomerId,
       Metadata = new Dictionary<string, string>
       {
+        { "entityId", entityId.ToString() },
+        { "userId", userId.ToString() ?? "" },
         { "tenantId", tenantId.ToString() },
       },
       PaymentSettings = new InvoicePaymentSettingsOptions
@@ -145,8 +148,9 @@ public class PaymentService : IPaymentService
       Product = stripeProductId,
       Metadata = new Dictionary<string, string>
       {
-        { "tenantId", tenantId.ToString() ?? "" },
-        { "databaseId", productEntityId.ToString() }
+        { "entityId", productEntityId.ToString() },
+        { "tenantId", tenantId.ToString() ?? "" }
+
       }
     };
     var service = new PriceService();
@@ -165,9 +169,9 @@ public class PaymentService : IPaymentService
       Name = name,
       Metadata = new Dictionary<string, string>
       {
+        { "entityId", entityId.ToString() },
         { "tenantId", tenantId.ToString() ?? "" },
         { "ownerType", ownerType },
-        { "databaseId", entityId.ToString() }
       }
     };
     var service = new ProductService();
@@ -189,7 +193,7 @@ public class PaymentService : IPaymentService
     return service.Create(options);
   }
 
-  public Subscription CreateSubscription(Guid? tenantId, string stripePriceId, string stripeCustomerId, string type, string? connectedAccountId)
+  public Subscription CreateSubscription(Guid? entityId, Guid? userId, Guid tenantId, string stripePriceId, string stripeCustomerId, ESubscriptionType type, string? connectedAccountId)
   {
 
     var requestOptions = new RequestOptions
@@ -209,8 +213,10 @@ public class PaymentService : IPaymentService
       },
       Metadata = new Dictionary<string, string>
       {
-        { "tenantId", tenantId.ToString() ?? "" },
-        { "type", type }
+        { "entityId", entityId.ToString() ?? "" },
+        { "userId", userId.ToString() ?? "" },
+        { "tenantId", tenantId.ToString() },
+        { "type", type.ToString() }
       }
     };
     var service = new SubscriptionService();

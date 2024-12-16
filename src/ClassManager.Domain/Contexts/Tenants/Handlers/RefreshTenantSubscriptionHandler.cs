@@ -65,9 +65,9 @@ public class RefreshTenantSubscriptionHandler
       return new CommandResult(false, "ERR_PLAN_NOT_FOUND", new { }, null, 404);
     }
 
-    var stripeSubscription = _paymentService.CreateSubscription(tenantId, plan.StripePriceId, tenant.StripeCustomers[0].StripeCustomerId, "tenant", null);
+    var stripeSubscription = _paymentService.CreateSubscription(null, null, tenantId, plan.StripePriceId, tenant.StripeCustomers[0].StripeCustomerId, ESubscriptionType.TENANT, null);
 
-    tenant.UpdateSubscriptionStatus(ESubscriptionStatus.INCOMPLETE);
+    tenant.SetSubscriptionStatus(ESubscriptionStatus.INCOMPLETE);
 
     tenant.SetStripeInformations(null, null, stripeSubscription.Id);
 

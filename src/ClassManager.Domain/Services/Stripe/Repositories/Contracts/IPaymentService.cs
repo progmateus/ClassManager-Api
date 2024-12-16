@@ -1,3 +1,4 @@
+using ClassManager.Domain.Contexts.Shared.Enums;
 using Stripe;
 using Stripe.Identity;
 
@@ -6,11 +7,11 @@ namespace ClassManager.Domain.Services.Stripe.Repositories.Contracts
   public interface IPaymentService
   {
     Product CreateProduct(Guid entityId, string ownerType, string name, Guid? tenantId, string? connectedAccountId);
-    Subscription CreateSubscription(Guid? tenantId, string stripePriceId, string stripeCustomerId, string type, string? connectedAccountId);
+    Subscription CreateSubscription(Guid? entityId, Guid? userId, Guid tenantId, string stripePriceId, string stripeCustomerId, ESubscriptionType type, string? connectedAccountId);
     void UpdateSubscriptionPlan(Guid tenantId, Guid subscriptionId, string stripeSubscriptionId, string newStripePriceId, string? connectedAccountId);
     Customer CreateCustomer(string name, string email, string? connectedAccountId);
     Price CreatePrice(Guid productEntityId, Guid? tenantId, string stripeProductId, decimal priceInCents, string? connectedAccountId);
-    Invoice CreateInvoice(Guid tenantId, string stripeCustomerId, string stripeSubscriptionId, string? connectedAccountId);
+    Invoice CreateInvoice(Guid entityId, Guid? userId, Guid tenantId, string stripeCustomerId, string stripeSubscriptionId, string? connectedAccountId);
     Account CreateAccount(string email);
     Subscription ResumeSubscription(string stripeSubscriptionId, string? connectedAccountId);
     Subscription CancelSubscription(string stripeSubscriptionId, string? connectedAccountId);

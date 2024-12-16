@@ -51,10 +51,12 @@ public class CreateStripeSubscriptionWebhookHandler
       return;
     }
 
-    var subscription = new Contexts.Subscriptions.Entities.Subscription(customer.UserId, tenantPlan.Id, tenantPlan.TenantId, stripeSubscription.Id, stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);
+    var subscription = new Contexts.Subscriptions.Entities.Subscription(customer.UserId, tenantPlan.Id, tenantPlan.TenantId);
+    subscription.SetStripeSubscriptionId(stripeSubscription.Id);
+    subscription.SetCurrentPeriod(stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);
 
     await _subscriptionRepository.CreateAsync(subscription, new CancellationToken());
 
-    _paymentService.CreateInvoice(tenantPlan.TenantId, customer.StripeCustomerId, stripeSubscription.Id, tenantPlan.Tenant.StripeAccountId);
+    _paymentService.CreateInvoice(subscription.Id, customer.UserId, tenantPlan.TenantId, customer.StripeCustomerId, stripeSubscription.Id, tenantPlan.Tenant.StripeAccountId);
   }
 }
