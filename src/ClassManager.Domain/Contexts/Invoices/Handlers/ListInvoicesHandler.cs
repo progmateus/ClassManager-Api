@@ -22,11 +22,18 @@ public class ListInvoicesHandler : IPaginationHandler<ListInvoicesCommand>
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, ListInvoicesCommand command)
   {
-    var targetUserId = loggedUserId;
+    Guid? targetUserId = null;
 
-    if (await _accessControlService.CheckParameterUserIdPermission(command.TenantId, loggedUserId, command.UserId))
+    if (command.UserId.HasValue && command.UserId.Value != Guid.Empty)
     {
-      targetUserId = command.UserId.Value;
+      if (await _accessControlService.CheckParameterUserIdPermission(command.TenantId, loggedUserId, command.UserId))
+      {
+        targetUserId = command.UserId.Value;
+      }
+      else
+      {
+        targetUserId = loggedUserId;
+      }
     }
 
     if (command.Page < 1) command.Page = 1;

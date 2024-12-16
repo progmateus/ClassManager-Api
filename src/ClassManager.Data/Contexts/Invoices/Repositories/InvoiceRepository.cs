@@ -29,11 +29,18 @@ public class InvoiceRepository : TRepository<Invoice>, IInvoiceRepository
 
   public async Task<List<Invoice>> ListByUserIdAndTenantId(Guid? tenantId, Guid? userId, Guid? subscriptionId, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)
   {
+    Console.WriteLine("========================");
+    Console.WriteLine("========================");
+    Console.WriteLine("========================");
+    Console.WriteLine("========================");
+    Console.WriteLine(tenantId);
+    Console.WriteLine(userId);
+    Console.WriteLine(subscriptionId);
     return await DbSet
     .Include(x => x.Tenant)
-    .Where(x => !tenantId.HasValue || x.TenantId == tenantId)
-    .Where(x => !userId.HasValue || x.UserId == userId)
-    .Where(x => !subscriptionId.HasValue || x.SubscriptionId == subscriptionId)
+    .Where(x => !tenantId.HasValue || x.TenantId == tenantId.Value)
+    .Where(x => !userId.HasValue || x.UserId == userId.Value)
+    .Where(x => !subscriptionId.HasValue || x.SubscriptionId == subscriptionId.Value)
     .Skip(skip)
     .Take(limit)
     .ToListAsync();
