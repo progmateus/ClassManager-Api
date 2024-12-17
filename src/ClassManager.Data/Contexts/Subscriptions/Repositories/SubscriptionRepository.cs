@@ -33,6 +33,8 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     .Include(x => x.Tenant)
     .Include(x => x.Invoices)
     .Include(x => x.User)
+    .ThenInclude(x => x.Address)
+    .Include(x => x.User)
     .ThenInclude(u => u.StudentsClasses.Where(sc => sc.Class.TenantId == tenantId))
     .ThenInclude(sc => sc.Class)
     .AsNoTracking()
