@@ -33,7 +33,7 @@ public class Invoice : TenantEntity
     StripeInvoiceId = stripeInvoiceId;
     StripeInvoiceUrl = stripeInvoiceUrl;
     StripeInvoiceNumber = stripeInvoiceNumber;
-    ExpiresAt = new DateTime(DateTime.Today.Year, DateTime.Today.Month, DateTime.DaysInMonth(DateTime.Today.Year, DateTime.Today.Month));
+    ExpiresAt = DateTime.Now.AddMonths(1);
   }
 
   protected Invoice() { }
