@@ -46,7 +46,10 @@ public class UsersRolesRepository : TRepository<UsersRoles>, IUsersRolesReposito
   {
     return await DbSet
     .Include(x => x.User)
-    .Where(x => x.TenantId == tenantId && (rolesNames.IsNullOrEmpty() || rolesNames.Contains(x.Role.Name) && (usersIds.IsNullOrEmpty() || usersIds.Contains(x.UserId))))
+    .Where(x => x.TenantId == tenantId)
+    .Where(x => rolesNames.IsNullOrEmpty() || rolesNames.Contains(x.Role.Name))
+    .Where(x => usersIds.IsNullOrEmpty() || usersIds.Contains(x.UserId))
+    .Where(x => search.IsNullOrEmpty() || x.User.Username.Contains(search) || x.User.Name.Contains(search))
     .Skip(skip)
     .Take(limit)
     .ToListAsync();
