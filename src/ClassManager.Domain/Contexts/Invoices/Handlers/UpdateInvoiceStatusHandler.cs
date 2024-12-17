@@ -10,15 +10,15 @@ using Flunt.Notifications;
 
 namespace ClassManager.Domain.Contexts.Invoices.Handlers;
 
-public class PayInvoiceHandler :
+public class UpdateInvoiceStatusHandler :
   Notifiable,
-  ITenantDeleteAction
+  ITenantActionHandler<UpdateInvoiceCommand>
 {
   private IInvoiceRepository _invoiceRepository;
   private readonly IAccessControlService _accessControlService;
   private readonly IPaymentService _paymentService;
 
-  public PayInvoiceHandler(
+  public UpdateInvoiceStatusHandler(
     IInvoiceRepository invoiceRepository,
     IAccessControlService accessControlService,
     IPaymentService paymentService
@@ -28,8 +28,13 @@ public class PayInvoiceHandler :
     _accessControlService = accessControlService;
     _paymentService = paymentService;
   }
-  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid invoiceId)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid invoiceId, UpdateInvoiceCommand command)
   {
+    if (command.Status != EInvoiceStatus.PAID)
+    {
+      return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
+    }
+
     if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
     {
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);

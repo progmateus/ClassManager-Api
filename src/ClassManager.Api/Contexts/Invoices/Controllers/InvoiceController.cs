@@ -47,10 +47,11 @@ public class InvoiceController : MainController
   public async Task<IResult> Update(
   [FromRoute] Guid tenantId,
   [FromRoute] Guid invoiceId,
-  [FromServices] PayInvoiceHandler handler
+  [FromBody] UpdateInvoiceCommand command,
+  [FromServices] UpdateInvoiceStatusHandler handler
 )
   {
-    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, invoiceId);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, invoiceId, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 

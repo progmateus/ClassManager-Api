@@ -363,7 +363,7 @@ public static class BuilderExtension
 
     builder.Services.AddTransient<CreateInvoiceHandler>();
     builder.Services.AddTransient<ListInvoicesHandler>();
-    builder.Services.AddTransient<PayInvoiceHandler>();
+    builder.Services.AddTransient<UpdateInvoiceStatusHandler>();
     builder.Services.AddTransient<DeleteInvoiceHandler>();
 
     builder.Services.AddTransient<CreateStripeWebhookHandler>();
