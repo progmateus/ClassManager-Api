@@ -58,16 +58,15 @@ public class UpdateUserHandler :
     }
 
     // gerar vOS
-    var name = new Name(command.FirstName, command.LastName);
     var document = new Document(command.Document, EDocumentType.CPF);
     var email = new Email(command.Email);
 
     // gerar as entidades
-    user.ChangeUser(name, email, document, command.Phone);
+    user.ChangeUser(command.Name, email, document, command.Phone);
 
     // agrupar validações
 
-    AddNotifications(name, document, email, user);
+    AddNotifications(document, email, user);
 
     if (Invalid)
     {

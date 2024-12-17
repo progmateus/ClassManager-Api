@@ -63,17 +63,16 @@ public class CreateUserHandler :
     }
 
     // gerar vOS
-    var name = new Name(command.FirstName, command.LastName);
     var document = new Document(command.Document, EDocumentType.CPF);
     var email = new Email(command.Email);
     var password = new Password(command.Password);
 
     // gerar as entidades
-    var user = new User(name, document, email, password, command.Username, command.Phone, command.Avatar);
+    var user = new User(command.Name, document, email, password, command.Username, command.Phone, command.Avatar);
 
     // agrupar validações
 
-    AddNotifications(name, document, email, user);
+    AddNotifications(document, email, user);
 
     if (Invalid)
     {

@@ -31,8 +31,7 @@ public class Response : ClassManager.Domain.Contexts.Shared.UseCases.Response
 
 public class UserResponseData
 {
-  public string FirstName { get; set; } = null!;
-  public string LastName { get; set; } = null!;
+  public string Name { get; set; } = null!;
   public string Document { get; set; } = null!;
   public string Email { get; set; } = null!;
   public string Password { get; set; } = null!;

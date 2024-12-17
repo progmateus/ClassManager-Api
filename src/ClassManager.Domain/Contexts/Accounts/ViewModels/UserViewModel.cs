@@ -10,9 +10,7 @@ namespace ClassManager.Domain.Contexts.Users.ViewModels;
 public class UserViewModel
 {
   public Guid Id { get; set; }
-  public string? Name { get => $"{FirstName} {LastName}"; }
-  public string? FirstName { get; set; } = String.Empty;
-  public string? LastName { get; set; } = String.Empty;
+  public string? Name { get; set; } = String.Empty;
   public string? Document { get; set; } = String.Empty;
   public string? Email { get; set; } = String.Empty;
   public string? Username { get; set; } = String.Empty;
