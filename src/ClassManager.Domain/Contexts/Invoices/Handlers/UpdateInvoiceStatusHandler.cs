@@ -1,6 +1,7 @@
 using ClasManager.Domain.Contexts.Invoices.Commands;
 using ClassManager.Domain.Contexts.Invoices.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Shared.Enums;
+using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Services.Stripe.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
@@ -17,16 +18,19 @@ public class UpdateInvoiceStatusHandler :
   private IInvoiceRepository _invoiceRepository;
   private readonly IAccessControlService _accessControlService;
   private readonly IPaymentService _paymentService;
+  private readonly ITenantRepository _tenantRepository;
 
   public UpdateInvoiceStatusHandler(
     IInvoiceRepository invoiceRepository,
     IAccessControlService accessControlService,
-    IPaymentService paymentService
+    IPaymentService paymentService,
+    ITenantRepository tenantRepository
     )
   {
     _invoiceRepository = invoiceRepository;
     _accessControlService = accessControlService;
     _paymentService = paymentService;
+    _tenantRepository = tenantRepository;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid invoiceId, UpdateInvoiceCommand command)
   {
@@ -40,12 +44,12 @@ public class UpdateInvoiceStatusHandler :
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
     }
 
-    if (await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
+    if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
     {
       return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
     }
 
-    var invoice = await _invoiceRepository.FindByIdAndTenantIdAsync(invoiceId, tenantId, default);
+    var invoice = await _invoiceRepository.FindAsync(x => x.Id == invoiceId && x.TenantId == tenantId, [x => x.Tenant]);
 
     if (invoice is null)
     {
@@ -62,7 +66,7 @@ public class UpdateInvoiceStatusHandler :
       return new CommandResult(false, "ERR_INVOICE_ALREADY_BEEN_PAID", null, null, 409);
     }
 
-    _paymentService.PayInvoice(invoice.StripeInvoiceId, null);
+    _paymentService.PayInvoice(invoice.StripeInvoiceId, invoice.Tenant.StripeAccountId);
 
     return new CommandResult(true, "INVOICE_UPDATED", new { }, null, 201);
   }

@@ -7,7 +7,7 @@ namespace ClasManager.Domain.Contexts.Invoices.Commands;
 
 public class UpdateInvoiceCommand : Notifiable, ICommand
 {
-  public EInvoiceStatus Status { get; private set; }
+  public EInvoiceStatus Status { get; set; }
 
   public void Validate()
   {

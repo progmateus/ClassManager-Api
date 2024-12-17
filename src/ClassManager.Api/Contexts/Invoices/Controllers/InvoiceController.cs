@@ -43,7 +43,7 @@ public class InvoiceController : MainController
     return Results.Ok(result);
   }
 
-  [HttpPatch("{tenantId}/invoices{invoiceId}")]
+  [HttpPatch("{tenantId}/invoices/{invoiceId}/status")]
   public async Task<IResult> Update(
   [FromRoute] Guid tenantId,
   [FromRoute] Guid invoiceId,

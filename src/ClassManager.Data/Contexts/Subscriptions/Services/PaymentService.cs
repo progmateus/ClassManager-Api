@@ -315,7 +315,17 @@ public class PaymentService : IPaymentService
 
   public Invoice PayInvoice(string stripeInvoiceId, string? connectedAccountId)
   {
+    var requestOptions = new RequestOptions
+    {
+      StripeAccount = connectedAccountId ?? null,
+    };
+
+    var options = new InvoicePayOptions
+    {
+      PaidOutOfBand = true
+    };
+
     var service = new InvoiceService();
-    return service.Pay(stripeInvoiceId);
+    return service.Pay(stripeInvoiceId, options, requestOptions);
   }
 }
