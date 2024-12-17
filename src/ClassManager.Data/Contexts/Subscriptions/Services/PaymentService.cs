@@ -312,4 +312,10 @@ public class PaymentService : IPaymentService
     var service = new SubscriptionItemService();
     service.Update(stripeSubscriptionId, options, requestOptions);
   }
+
+  public Invoice PayInvoice(string stripeInvoiceId, string? connectedAccountId)
+  {
+    var service = new InvoiceService();
+    return service.Pay(stripeInvoiceId);
+  }
 }

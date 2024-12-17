@@ -43,15 +43,14 @@ public class InvoiceController : MainController
     return Results.Ok(result);
   }
 
-  [HttpPut("{tenantId}/invoices{invoiceId}")]
+  [HttpPatch("{tenantId}/invoices{invoiceId}")]
   public async Task<IResult> Update(
   [FromRoute] Guid tenantId,
   [FromRoute] Guid invoiceId,
-  [FromBody] UpdateInvoiceCommand command,
-  [FromServices] UpdateInvoiceHandler handler
+  [FromServices] PayInvoiceHandler handler
 )
   {
-    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, invoiceId, command);
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, invoiceId);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
