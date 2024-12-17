@@ -54,7 +54,7 @@ public class StudentsClassesRepository : Repository<StudentsClasses>, IStudentsC
     .Where(x => classesIds.IsNullOrEmpty() || classesIds.Contains(x.ClassId))
     .Where(x => tenantsIds.Contains(x.Class.TenantId))
     .Where(x => x.Class.Tenant.Status == ETenantStatus.ACTIVE)
-    .Where(x => search.IsNullOrEmpty() || x.User.Name.Contains(search))
+    .Where(x => search.IsNullOrEmpty() || x.User.Username.Contains(search) || x.User.Name.Contains(search))
     .Skip(skip)
     .Take(limit)
     .ToListAsync();
