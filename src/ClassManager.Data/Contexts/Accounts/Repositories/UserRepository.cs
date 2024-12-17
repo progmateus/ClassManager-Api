@@ -52,7 +52,7 @@ public class UserRepository : Repository<User>, IUserRepository
   {
     return await DbSet
     .AsNoTracking()
-    .Where(x => x.Username.Contains(search) || x.Name.ToString().Contains(search))
+    .Where(x => x.Username.Contains(search) || x.Name.Contains(search))
     .ToListAsync(cancellationToken);
   }
 

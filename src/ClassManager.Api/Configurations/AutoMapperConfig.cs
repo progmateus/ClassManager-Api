@@ -28,9 +28,6 @@ public class AutoMapperConfig : Profile
   public AutoMapperConfig()
   {
     CreateMap<User, UserViewModel>()
-    .ForMember(dest => dest.FirstName, opt => opt.MapFrom(src => src.Name.FirstName))
-    .ForMember(dest => dest.Name, opt => opt.MapFrom(src => $"{src.Name.FirstName} {src.Name.LastName}"))
-    .ForMember(dest => dest.LastName, opt => opt.MapFrom(src => src.Name.LastName))
     .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address))
     .ForMember(dest => dest.Document, opt => opt.MapFrom(src => src.Document.Number));
 

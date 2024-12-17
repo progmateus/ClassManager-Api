@@ -14,32 +14,25 @@ public class UserMap : IEntityTypeConfiguration<User>
 
         builder.HasKey(x => x.Id);
 
-        builder.OwnsOne(x => x.Name)
-            .Property(x => x.FirstName)
-            .HasColumnName("FirstName")
+        builder.Property(x => x.Name)
+            .HasColumnName("Name")
             .HasColumnType("VARCHAR")
-            .HasMaxLength(80)
-            .IsRequired(true);
+            .HasMaxLength(200)
+            .IsRequired();
 
-        builder.OwnsOne(x => x.Name)
-            .Property(x => x.LastName)
-            .HasColumnName("LastName")
+
+        builder.OwnsOne(x => x.Document)
+            .Property(x => x.Number)
+            .HasColumnName("Document")
             .HasColumnType("VARCHAR")
             .HasMaxLength(80)
             .IsRequired(true);
 
         builder.OwnsOne(x => x.Document)
-        .Property(x => x.Number)
-        .HasColumnName("Document")
-        .HasColumnType("VARCHAR")
-        .HasMaxLength(80)
-        .IsRequired(true);
-
-        builder.OwnsOne(x => x.Document)
-        .Property(x => x.Type)
-        .HasColumnName("DocumentType")
-        .HasColumnType("TINYINT")
-        .IsRequired(true);
+            .Property(x => x.Type)
+            .HasColumnName("DocumentType")
+            .HasColumnType("TINYINT")
+            .IsRequired(true);
 
         builder.Property(x => x.Avatar)
             .HasColumnName("Avatar")

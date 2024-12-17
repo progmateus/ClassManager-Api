@@ -23,7 +23,7 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
 
     public User(Name name, Document document, Email email, Password password, string username, string? phone, string? avatar = null)
     {
-      Name = name;
+      Name = name.ToString();
       Document = document;
       Email = email;
       Password = password;
@@ -36,7 +36,7 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
       AddNotifications(name, document, email);
     }
 
-    public Name Name { get; private set; }
+    public string Name { get; private set; }
     public Document Document { get; private set; }
     [JsonIgnore]
     public Password Password { get; private set; }
@@ -65,7 +65,7 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     public void ChangeUser(Name name, Email email, Document document, string? phone)
     {
       AddNotifications(name, email, document);
-      Name = name;
+      Name = name.ToString();
       Email = email;
       Document = document;
       Phone = phone;
