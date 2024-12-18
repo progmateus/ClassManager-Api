@@ -62,11 +62,6 @@ public class AccesControlService : IAccessControlService
     return true;
   }
 
-  public async Task<List<UsersRoles>> GetUserRolesAsync(Guid userId, Guid tenantId)
-  {
-    return await _usersRolesRepository.ListUsersRolesByUserIdAndTenantId(userId, tenantId, new CancellationToken());
-  }
-
   public async Task<bool> HasClassRoleAsync(Guid loggedUserId, Guid tenantId, Guid classId, List<string> classRolesNames)
   {
     if (await HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))

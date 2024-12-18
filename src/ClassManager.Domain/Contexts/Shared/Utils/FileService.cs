@@ -12,7 +12,11 @@ public static class FileService
 
   public static void Delete(string fileName, string folderPath = "wwwroot/files/avatars")
   {
-    File.Delete(Path.Combine(folderPath, fileName));
+
+    if (File.Exists(Path.Combine(folderPath, fileName)))
+    {
+      File.Delete(Path.Combine(folderPath, fileName));
+    }
   }
 
 }

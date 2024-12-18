@@ -1,4 +1,6 @@
 using ClassManager.Api.Contexts.Shared.Controllers;
+using ClassManager.Domain.Contexts.Accounts.Commands;
+using ClassManager.Domain.Contexts.Accounts.Handlers;
 using ClassManager.Domain.Contexts.Tenants.Commands;
 using ClassManager.Domain.Contexts.Tenants.Handlers;
 using ClassManager.Domain.Shared.Commands;
@@ -141,6 +143,24 @@ public class TenantController : MainController
   )
   {
     var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), id);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
+  [Authorize]
+  [HttpPatch("{id}/avatar")]
+  public async Task<IResult> UploadAvatar(
+    [FromRoute] Guid id,
+    [FromServices] UploadTenantAvatarHandler handler,
+    [FromQuery] UploadFileCommand command
+  )
+  {
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), id, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 

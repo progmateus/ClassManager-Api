@@ -99,5 +99,10 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
       CurrentPeriodStart = currentPeriodStart ?? CurrentPeriodStart;
       CurrentPeriodEnd = currentPeriodEnd ?? CurrentPeriodEnd;
     }
+
+    public void SetAvatar(string avatar)
+    {
+      Avatar = avatar;
+    }
   }
 }
