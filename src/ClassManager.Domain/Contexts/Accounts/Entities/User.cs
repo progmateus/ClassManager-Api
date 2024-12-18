@@ -45,7 +45,6 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     public string? Phone { get; private set; } = string.Empty;
     public EUserStatus Status { get; private set; } = EUserStatus.ACTIVE;
     public string? StripeCustomerId { get; private set; }
-
     public EUserType Type { get; private set; } = EUserType.NORMAL;
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
@@ -98,6 +97,11 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     public void SetStripeCustomerId(string stripeCustomerId)
     {
       StripeCustomerId = stripeCustomerId;
+    }
+
+    public void SetAvatar(string avatar)
+    {
+      Avatar = avatar;
     }
   }
 }
