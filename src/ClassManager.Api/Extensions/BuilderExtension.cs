@@ -276,6 +276,7 @@ public static class BuilderExtension
     builder.Services.AddTransient<DeleteUserHandler>();
     builder.Services.AddTransient<GetUserProfileHandler>();
     builder.Services.AddTransient<GetUserByUsernameHandler>();
+    builder.Services.AddTransient<UploadUserAvatarHandler>();
 
 
 

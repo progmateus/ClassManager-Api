@@ -127,4 +127,22 @@ public class UserController : MainController
 
     return Results.Ok(result);
   }
+
+
+  [Authorize]
+  [HttpPatch("avatar")]
+  public async Task<IResult> UploadAvatar(
+    [FromServices] UploadUserAvatarHandler handler,
+    [FromQuery] UploadFileCommand command
+  )
+  {
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), command);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
 }

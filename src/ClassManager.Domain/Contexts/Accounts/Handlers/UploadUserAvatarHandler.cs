@@ -35,7 +35,7 @@ public class UploadUserAvatarHandler
 
     long size = command.Image.Length;
 
-    if (size > (5 * 1024 & 1024))
+    if (size > (20 * 1024 * 1024))
     {
       return new CommandResult(false, "ERR_MAX_SIZE_5MB", null, null, 400);
     }
@@ -49,7 +49,12 @@ public class UploadUserAvatarHandler
 
     var fileName = $"{user.Id}-{Guid.NewGuid()}.{extension}";
 
-    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/files/avatars", fileName);
+    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/files/avatars");
+
+    if (user.Avatar is not null)
+    {
+      File.Delete(Path.Combine(path, user.Avatar));
+    }
 
     using (var stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
     {
