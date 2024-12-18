@@ -293,6 +293,8 @@ public static class BuilderExtension
     builder.Services.AddTransient<GetTenantProfileHandler>();
     builder.Services.AddTransient<RefreshTenantSubscriptionHandler>();
     builder.Services.AddTransient<UploadTenantAvatarHandler>();
+    builder.Services.AddTransient<CreateImageHandler>();
+    builder.Services.AddTransient<DeleteImageHandler>();
 
 
     builder.Services.AddTransient<CreatePlandHandler>();

@@ -133,7 +133,7 @@ public class UserController : MainController
   [HttpPatch("avatar")]
   public async Task<IResult> UploadAvatar(
     [FromServices] UploadUserAvatarHandler handler,
-    [FromQuery] UploadFileCommand command
+    [FromBody] UploadFileCommand command
   )
   {
     var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), command);

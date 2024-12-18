@@ -157,10 +157,46 @@ public class TenantController : MainController
   public async Task<IResult> UploadAvatar(
     [FromRoute] Guid id,
     [FromServices] UploadTenantAvatarHandler handler,
-    [FromQuery] UploadFileCommand command
+    [FromBody] UploadFileCommand command
   )
   {
     var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), id, command);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
+  [Authorize]
+  [HttpPost("{tenantId}/images")]
+  public async Task<IResult> AddImage(
+    [FromRoute] Guid tenantId,
+    [FromServices] CreateImageHandler handler,
+    [FromBody] UploadFileCommand command
+  )
+  {
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, command);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
+  [Authorize]
+  [HttpDelete("{tenantId}/images/{imageId}")]
+  public async Task<IResult> AddImage(
+    [FromRoute] Guid tenantId,
+    [FromRoute] Guid imageId,
+    [FromServices] DeleteImageHandler handler
+  )
+  {
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, imageId);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
