@@ -266,6 +266,10 @@ public static class BuilderExtension
     IAddressRepository,
     AddressRepository>();
 
+    builder.Services.AddTransient<
+    IImageRepository,
+    ImageRepository>();
+
     builder.Services.AddTransient<TokenService>();
 
     builder.Services.AddTransient<AuthHandler>();
