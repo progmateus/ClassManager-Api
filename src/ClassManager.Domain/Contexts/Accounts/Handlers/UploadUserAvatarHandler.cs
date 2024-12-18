@@ -1,5 +1,6 @@
 using System.Text.RegularExpressions;
 using AutoMapper;
+using ClassManager.Api.Contexts.Shared.Utils;
 using ClassManager.Domain.Contexts.Accounts.Commands;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Users.ViewModels;
@@ -53,12 +54,16 @@ public class UploadUserAvatarHandler
 
     if (user.Avatar is not null)
     {
-      File.Delete(Path.Combine(path, user.Avatar));
+      FileService.Delete(Path.Combine(path, user.Avatar));
     }
 
-    using (var stream = new FileStream(Path.Combine(path, fileName), FileMode.Create))
+    try
     {
-      await command.Image.CopyToAsync(stream);
+      await FileService.Upload(command.Image, fileName, path);
+    }
+    catch
+    {
+      return new CommandResult(false, "ERR_INTERNAL_SERVER_ERROR", null, null, 500);
     }
 
     user.SetAvatar(fileName);
