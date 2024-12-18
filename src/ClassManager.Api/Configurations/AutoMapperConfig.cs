@@ -54,6 +54,7 @@ public class AutoMapperConfig : Profile
 
     CreateMap<TenantPlan, TenantPlanViewModel>();
     CreateMap<Link, LinkViewModel>();
+    CreateMap<Image, ImageViewModel>();
 
     CreateMap<TimeTable, TimeTableViewModel>();
     CreateMap<ScheduleDay, ScheduleDayViewModel>();
