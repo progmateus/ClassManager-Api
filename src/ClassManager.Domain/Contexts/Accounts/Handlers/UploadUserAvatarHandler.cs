@@ -48,23 +48,14 @@ public class UploadUserAvatarHandler
       return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null, 404);
     }
 
-    var fileName = $"{user.Id}-{Guid.NewGuid()}.{extension}";
-
-    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/files/avatars");
+    var fileName = $"{user.Id}-{Guid.NewGuid()}{extension}";
 
     if (user.Avatar is not null)
     {
-      FileService.Delete(Path.Combine(path, user.Avatar));
+      FileService.Delete(user.Avatar, "avatars");
     }
 
-    try
-    {
-      await FileService.Upload(command.Image, fileName, path);
-    }
-    catch
-    {
-      return new CommandResult(false, "ERR_INTERNAL_SERVER_ERROR", null, null, 500);
-    }
+    await FileService.Upload(command.Image, fileName, "avatars");
 
     user.SetAvatar(fileName);
 

@@ -4,18 +4,24 @@ namespace ClassManager.Api.Contexts.Shared.Utils;
 
 public static class FileService
 {
-  public async static Task Upload(IFormFile file, string fileName, string folderPath = "wwwroot/files/avatars")
+  public async static Task Upload(IFormFile file, string fileName, string folder = "avatars")
   {
-    using var stream = new FileStream(Path.Combine(folderPath, fileName), FileMode.Create);
+    Console.WriteLine("ENTROU NO UPLOAD");
+    var path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/files/{folder}");
+    Console.WriteLine(path);
+    Console.WriteLine(fileName);
+    using var stream = new FileStream(Path.Combine(path, fileName), FileMode.Create);
     await file.CopyToAsync(stream);
   }
 
-  public static void Delete(string fileName, string folderPath = "wwwroot/files/avatars")
+  public static void Delete(string fileName, string folder = "avatars")
   {
+    Console.WriteLine("ENTROU NO DELETE");
+    var path = Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/files/{folder}");
 
-    if (File.Exists(Path.Combine(folderPath, fileName)))
+    if (File.Exists(Path.Combine(path, fileName)))
     {
-      File.Delete(Path.Combine(folderPath, fileName));
+      File.Delete(Path.Combine(path, fileName));
     }
   }
 

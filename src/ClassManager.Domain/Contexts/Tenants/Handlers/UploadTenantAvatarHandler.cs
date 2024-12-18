@@ -61,16 +61,14 @@ public class UploadTenantAvatarHandler
 
     var fileName = $"{tenant.Id}-{Guid.NewGuid()}.{extension}";
 
-    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/files/avatars");
-
     if (tenant.Avatar is not null)
     {
-      FileService.Delete(Path.Combine(path, tenant.Avatar));
+      FileService.Delete(Path.Combine(tenant.Avatar, "avatars"));
     }
 
     try
     {
-      await FileService.Upload(command.Image, fileName, path);
+      await FileService.Upload(command.Image, fileName, "avatars");
     }
     catch
     {
