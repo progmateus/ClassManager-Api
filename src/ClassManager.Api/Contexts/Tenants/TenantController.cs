@@ -157,7 +157,7 @@ public class TenantController : MainController
   public async Task<IResult> UploadAvatar(
     [FromRoute] Guid id,
     [FromServices] UploadTenantAvatarHandler handler,
-    [FromBody] UploadFileCommand command
+    [FromForm] UploadFileCommand command
   )
   {
     var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), id, command);
@@ -175,7 +175,7 @@ public class TenantController : MainController
   public async Task<IResult> AddImage(
     [FromRoute] Guid tenantId,
     [FromServices] CreateImageHandler handler,
-    [FromBody] UploadFileCommand command
+    [FromForm] UploadFileCommand command
   )
   {
     var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, command);

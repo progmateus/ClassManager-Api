@@ -4,6 +4,7 @@ using ClassManager.Domain.Contexts.Accounts.Commands;
 using ClassManager.Domain.Contexts.tenants.ViewModels;
 using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Tenants.ViewModels;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
@@ -79,10 +80,8 @@ public class CreateImageHandler
       return new CommandResult(false, "ERR_INTERNAL_SERVER_ERROR", null, null, 500);
     }
 
-    tenant.Images.Add(image);
+    await _imageRepository.CreateAsync(image, new CancellationToken());
 
-    await _tenantRepository.UpdateAsync(tenant, new CancellationToken());
-
-    return new CommandResult(true, "IMAGE_ADDED", _mapper.Map<TenantViewModel>(tenant), null, 201);
+    return new CommandResult(true, "IMAGE_ADDED", _mapper.Map<ImageViewModel>(image), null, 201);
   }
 }
