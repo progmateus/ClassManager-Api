@@ -24,10 +24,14 @@ public class UploadUserAvatarHandler
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, UploadFileCommand command)
   {
-
     var extension = Path.GetExtension(command.Image.FileName);
 
     var validExtensions = new List<string>() { ".jpg", ".jpeg", ".png" };
+
+    Console.WriteLine("=================");
+    Console.WriteLine("=================");
+    Console.WriteLine("=================");
+    Console.WriteLine(extension);
 
     if (!validExtensions.Contains(extension))
     {
@@ -52,10 +56,10 @@ public class UploadUserAvatarHandler
 
     if (user.Avatar is not null)
     {
-      FileService.Delete(user.Avatar, "avatars");
+      FileService.Delete(user.Avatar, "images");
     }
 
-    await FileService.Upload(command.Image, fileName, "avatars");
+    await FileService.Upload(command.Image, fileName, "images");
 
     user.SetAvatar(fileName);
 

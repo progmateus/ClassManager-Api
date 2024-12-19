@@ -59,16 +59,16 @@ public class UploadTenantAvatarHandler
       return new CommandResult(false, "ERR_USER_NOT_FOUND", null, null, 404);
     }
 
-    var fileName = $"{tenant.Id}-{Guid.NewGuid()}.{extension}";
+    var fileName = $"{tenant.Id}-{Guid.NewGuid()}{extension}";
 
     if (tenant.Avatar is not null)
     {
-      FileService.Delete(Path.Combine(tenant.Avatar, "avatars"));
+      FileService.Delete(Path.Combine(tenant.Avatar, "images"));
     }
 
     try
     {
-      await FileService.Upload(command.Image, fileName, "avatars");
+      await FileService.Upload(command.Image, fileName, "images");
     }
     catch
     {

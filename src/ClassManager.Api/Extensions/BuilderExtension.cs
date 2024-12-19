@@ -282,8 +282,6 @@ public static class BuilderExtension
     builder.Services.AddTransient<GetUserByUsernameHandler>();
     builder.Services.AddTransient<UploadUserAvatarHandler>();
 
-
-
     builder.Services.AddTransient<CreateTenantHandler>();
     builder.Services.AddTransient<ListTenantsHandler>();
     builder.Services.AddTransient<UpdateTenantHandler>();
