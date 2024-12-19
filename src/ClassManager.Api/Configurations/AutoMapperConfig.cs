@@ -52,7 +52,8 @@ public class AutoMapperConfig : Profile
 
     CreateMap<TenantPlan, TenantPlanViewModel>();
     CreateMap<Link, LinkViewModel>();
-    CreateMap<Image, ImageViewModel>();
+    CreateMap<Image, ImageViewModel>()
+    .ForMember(dest => dest.Url, opt => opt.MapFrom(src => $"http://192.168.15.9:5062/images/{src.Name}"));
 
     CreateMap<TimeTable, TimeTableViewModel>();
     CreateMap<ScheduleDay, ScheduleDayViewModel>();
