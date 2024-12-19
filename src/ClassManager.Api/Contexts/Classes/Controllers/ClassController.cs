@@ -122,8 +122,8 @@ public class ClassController : MainController
   public async Task<IResult> TransferStudents(
     [FromRoute] Guid id,
   [FromRoute] Guid tenantId,
-  [FromBody] TransferStudentsClassCommand command,
-  [FromServices] TransferStudentsClassHandler handler
+  [FromBody] TransferClassStudentsCommand command,
+  [FromServices] TransferClassStudentsHandler handler
 )
   {
     var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, id, command);

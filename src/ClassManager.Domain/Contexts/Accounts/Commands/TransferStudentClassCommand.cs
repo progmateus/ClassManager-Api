@@ -4,7 +4,7 @@ using Flunt.Validations;
 
 namespace ClassManager.Domain.Contexts.Accounts.Commands
 {
-  public class TransferStudentsClassCommand : Notifiable, ICommand
+  public class TransferClassStudentsCommand : Notifiable, ICommand
   {
     public Guid ToId { get; set; }
 

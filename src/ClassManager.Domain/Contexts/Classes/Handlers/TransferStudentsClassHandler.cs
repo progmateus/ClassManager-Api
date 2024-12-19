@@ -12,14 +12,14 @@ using MassTransit.Initializers;
 
 namespace ClassManager.Domain.Contexts.Classes.Handlers;
 
-public class TransferStudentsClassHandler :
+public class TransferClassStudentsHandler :
   Notifiable,
-  ITenantActionHandler<TransferStudentsClassCommand>
+  ITenantActionHandler<TransferClassStudentsCommand>
 {
   private readonly IAccessControlService _accessControlService;
   private readonly IStudentsClassesRepository _studentsClassesRepository;
 
-  public TransferStudentsClassHandler(
+  public TransferClassStudentsHandler(
     IAccessControlService accessControlService,
     IStudentsClassesRepository studentsClassesRepository
     )
@@ -27,7 +27,7 @@ public class TransferStudentsClassHandler :
     _accessControlService = accessControlService;
     _studentsClassesRepository = studentsClassesRepository;
   }
-  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid classId, TransferStudentsClassCommand command)
+  public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid classId, TransferClassStudentsCommand command)
   {
     // fail fast validation
     command.Validate();
