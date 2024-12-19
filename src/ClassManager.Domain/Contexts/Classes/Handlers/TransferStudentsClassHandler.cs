@@ -64,7 +64,7 @@ public class TransferStudentsClassHandler :
 
     }
     await _studentsClassesRepository.CreateRangeAsync(newStudents, new CancellationToken());
-    await _studentsClassesRepository.DeleteByClassId(tenantId, command.FromId, new CancellationToken());
+    await _studentsClassesRepository.DeleteByClassId(tenantId, classId, new CancellationToken());
 
     return new CommandResult(true, "STUDENS_TRANFERED", new { }, null, 201);
   }
