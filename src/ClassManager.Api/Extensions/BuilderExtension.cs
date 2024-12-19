@@ -337,6 +337,7 @@ public static class BuilderExtension
     builder.Services.AddTransient<UpdateManyStudentsClassesHandler>();
     builder.Services.AddTransient<RemoveStudentFromClassHandler>();
     builder.Services.AddTransient<ListStudentClassesHandler>();
+    builder.Services.AddTransient<TransferStudentsClassHandler>();
 
     builder.Services.AddTransient<CreateSubscriptionHandler>();
     builder.Services.AddTransient<UpdateSubscriptionStatusHandler>();

@@ -1,4 +1,5 @@
 using ClassManager.Api.Contexts.Shared.Controllers;
+using ClassManager.Domain.Contexts.Accounts.Commands;
 using ClassManager.Domain.Contexts.Classes.Commands;
 using ClassManager.Domain.Contexts.Classes.Handlers;
 using ClassManager.Domain.Shared.Commands;
@@ -105,6 +106,25 @@ public class ClassController : MainController
     [FromServices] ListTeachersByClassHandler handler,
     [FromQuery] PaginationCommand command
   )
+  {
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, id, command);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
+  [HttpPatch]
+  [Route("{id}/students/transfer")]
+  public async Task<IResult> TransferStudents(
+    [FromRoute] Guid id,
+  [FromRoute] Guid tenantId,
+  [FromBody] TransferStudentsClassCommand command,
+  [FromServices] TransferStudentsClassHandler handler
+)
   {
     var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, id, command);
     if (!result.IsSuccess)
