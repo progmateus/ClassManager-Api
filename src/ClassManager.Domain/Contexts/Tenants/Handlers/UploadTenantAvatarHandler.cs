@@ -30,7 +30,6 @@ public class UploadTenantAvatarHandler
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, UploadFileCommand command)
   {
-
     var extension = Path.GetExtension(command.Image.FileName);
 
     var validExtensions = new List<string>() { ".jpg", ".jpeg", ".png" };
@@ -61,9 +60,9 @@ public class UploadTenantAvatarHandler
 
     var fileName = $"{tenant.Id}-{Guid.NewGuid()}{extension}";
 
-    if (tenant.Avatar is not null)
+    if (string.IsNullOrEmpty(tenant.Avatar))
     {
-      FileService.Delete(Path.Combine(tenant.Avatar, "images"));
+      FileService.Delete(tenant.Avatar, "images");
     }
 
     try

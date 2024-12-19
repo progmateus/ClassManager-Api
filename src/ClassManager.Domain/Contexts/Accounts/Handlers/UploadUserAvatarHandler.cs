@@ -49,7 +49,7 @@ public class UploadUserAvatarHandler
 
     var fileName = $"{user.Id}-{Guid.NewGuid()}{extension}";
 
-    if (user.Avatar is not null)
+    if (string.IsNullOrEmpty(user.Avatar))
     {
       FileService.Delete(user.Avatar, "images");
     }
