@@ -29,8 +29,7 @@ public class AutoMapperConfig : Profile
   {
     CreateMap<User, UserViewModel>()
     .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address))
-    .ForMember(dest => dest.Document, opt => opt.MapFrom(src => src.Document.Number))
-    .ForMember(dest => dest.Avatar, opt => opt.MapFrom(src => Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/files/avatars/{src.Avatar}")));
+    .ForMember(dest => dest.Document, opt => opt.MapFrom(src => src.Document.Number));
 
     CreateMap<Booking, BookingViewModel>();
 
@@ -49,13 +48,11 @@ public class AutoMapperConfig : Profile
     CreateMap<Subscription, SubscriptionViewModel>();
 
     CreateMap<Tenant, TenantViewModel>()
-    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address))
-    .ForMember(dest => dest.Avatar, opt => opt.MapFrom(src => Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/files/avatars/{src.Avatar}")));
+    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address));
 
     CreateMap<TenantPlan, TenantPlanViewModel>();
     CreateMap<Link, LinkViewModel>();
-    CreateMap<Image, ImageViewModel>()
-    .ForMember(dest => dest.Url, opt => opt.MapFrom(src => Path.Combine(Directory.GetCurrentDirectory(), $"wwwroot/files/images/{src.Name}")));
+    CreateMap<Image, ImageViewModel>();
 
     CreateMap<TimeTable, TimeTableViewModel>();
     CreateMap<ScheduleDay, ScheduleDayViewModel>();

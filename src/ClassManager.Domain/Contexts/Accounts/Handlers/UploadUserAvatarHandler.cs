@@ -28,11 +28,6 @@ public class UploadUserAvatarHandler
 
     var validExtensions = new List<string>() { ".jpg", ".jpeg", ".png" };
 
-    Console.WriteLine("=================");
-    Console.WriteLine("=================");
-    Console.WriteLine("=================");
-    Console.WriteLine(extension);
-
     if (!validExtensions.Contains(extension))
     {
       return new CommandResult(false, "ERR_INVALID EXTENSION", null, null, 400);
