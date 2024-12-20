@@ -31,7 +31,7 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     return await DbSet
     .Include(x => x.TenantPlan)
     .Include(x => x.Tenant)
-    .Include(x => x.Invoices)
+    .Include(x => x.LatestInvoice)
     .Include(x => x.User)
     .ThenInclude(x => x.Address)
     .Include(x => x.User)
