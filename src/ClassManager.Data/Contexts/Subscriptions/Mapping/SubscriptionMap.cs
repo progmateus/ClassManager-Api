@@ -24,6 +24,11 @@ public class SubscriptionMap : IEntityTypeConfiguration<Subscription>
       .HasForeignKey("TenantPlanId")
       .HasPrincipalKey(c => c.Id);
 
+    builder.HasOne(e => e.LatestInvoice)
+    .WithOne()
+    .HasForeignKey<Subscription>(x => x.LatestInvoiceId)
+    .OnDelete(DeleteBehavior.Restrict);
+
     builder.Property(e => e.Status)
       .HasColumnType("TINYINT")
       .IsRequired(true)
