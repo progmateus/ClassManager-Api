@@ -51,8 +51,12 @@ public class FinalizeStripeInvoiceWebhookHandler
       }
       var invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, subscription.TenantPlan.Id, subscription.Id, null, customer.TenantId, subscription.TenantPlan.Price, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
       await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
-      subscription.SetLatestInvoice(invoice.Id);
-      await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
+
+      if (stripeInvoice.BillingReason == "subscription_cycle")
+      {
+        subscription.SetLatestInvoice(invoice.Id);
+        await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
+      }
     }
     else
     {
