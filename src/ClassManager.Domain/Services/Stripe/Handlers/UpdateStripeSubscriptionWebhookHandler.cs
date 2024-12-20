@@ -1,3 +1,4 @@
+using ClassManager.Domain.Contexts.Invoices.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
@@ -10,17 +11,20 @@ public class UpdateStripeSubscriptionWebhookHandler
   private readonly IStripeCustomerRepository _stripeCustomerRepository;
   private readonly ISubscriptionRepository _subscriptionRepository;
   private readonly ITenantRepository _tenantRepository;
+  private readonly IInvoiceRepository _invoiceRepository;
 
   public UpdateStripeSubscriptionWebhookHandler(
     IStripeCustomerRepository stripeCustomerRepository,
     ISubscriptionRepository subscriptionRepository,
-    ITenantRepository tenantRepository
+    ITenantRepository tenantRepository,
+    IInvoiceRepository invoiceRepository
 
     )
   {
     _stripeCustomerRepository = stripeCustomerRepository;
     _subscriptionRepository = subscriptionRepository;
     _tenantRepository = tenantRepository;
+    _invoiceRepository = invoiceRepository;
   }
   public async Task Handle(Subscription? stripeSubscription)
   {
@@ -37,13 +41,6 @@ public class UpdateStripeSubscriptionWebhookHandler
       };
 
     if (!enabledStatus.Contains(stripeSubscription.Status))
-    {
-      return;
-    }
-
-    var customer = await _stripeCustomerRepository.FindByCustomerId(stripeSubscription.CustomerId, default);
-
-    if (customer is null)
     {
       return;
     }
@@ -68,6 +65,15 @@ public class UpdateStripeSubscriptionWebhookHandler
       if (subscription is null)
       {
         return;
+      }
+
+      if (subscription.LatestInvoice is not null && subscription.LatestInvoice.StripeInvoiceId != stripeSubscription.LatestInvoiceId)
+      {
+        var latestInvoice = await _invoiceRepository.FindByStripeInvoiceId(stripeSubscription.LatestInvoiceId);
+        if (latestInvoice is not null)
+        {
+          subscription.SetLatestInvoice(latestInvoice.Id);
+        }
       }
 
       subscription.SetStatus(status);

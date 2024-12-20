@@ -68,6 +68,6 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
 
   public async Task<Subscription?> FindByStripeSubscriptionId(string stripeSubscriptionId, CancellationToken cancellationToken)
   {
-    return await DbSet.Include(x => x.TenantPlan).FirstOrDefaultAsync(x => x.StripeSubscriptionId == stripeSubscriptionId);
+    return await DbSet.Include(x => x.TenantPlan).Include(x => x.LatestInvoice).FirstOrDefaultAsync(x => x.StripeSubscriptionId == stripeSubscriptionId);
   }
 }

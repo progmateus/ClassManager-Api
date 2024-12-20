@@ -52,4 +52,9 @@ public class Subscription : TenantEntity
     CurrentPeriodStart = currentPeriodStart ?? CurrentPeriodStart;
     CurrentPeriodEnd = currentPeriodEnd ?? CurrentPeriodEnd;
   }
+
+  public void SetLatestInvoice(Guid invoiceId)
+  {
+    LatestInvoiceId = invoiceId;
+  }
 }

@@ -41,24 +41,23 @@ public class FinalizeStripeInvoiceWebhookHandler
       return;
     }
 
-    if (stripeInvoice.BillingReason == "subscription_create")
+    if (customer.Type == EStripeCustomerType.USER)
     {
-      if (customer.Type == EStripeCustomerType.USER)
-      {
-        var subscription = await _subscriptionRepository.FindByStripeSubscriptionId(stripeInvoice.SubscriptionId, new CancellationToken());
+      var subscription = await _subscriptionRepository.FindByStripeSubscriptionId(stripeInvoice.SubscriptionId, new CancellationToken());
 
-        if (subscription is null)
-        {
-          return;
-        }
-        var invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, subscription.TenantPlan.Id, subscription.Id, null, customer.TenantId, subscription.TenantPlan.Price, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
-        await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
-      }
-      else
+      if (subscription is null)
       {
-        var invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, null, null, customer.Tenant.Plan.Id, customer.TenantId, customer.Tenant.Plan.Price, EInvoiceTargetType.TENANT, EInvoiceType.TENANT_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
-        await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
+        return;
       }
+      var invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, subscription.TenantPlan.Id, subscription.Id, null, customer.TenantId, subscription.TenantPlan.Price, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
+      await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
+      subscription.SetLatestInvoice(invoice.Id);
+      await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
+    }
+    else
+    {
+      var invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, null, null, customer.Tenant.Plan.Id, customer.TenantId, customer.Tenant.Plan.Price, EInvoiceTargetType.TENANT, EInvoiceType.TENANT_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
+      await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
     }
   }
 }
