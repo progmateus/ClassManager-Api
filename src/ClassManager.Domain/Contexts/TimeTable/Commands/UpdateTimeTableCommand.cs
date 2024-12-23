@@ -5,6 +5,7 @@ namespace ClassManager.Domain.Contexts.TimesTables.Commands
 
   public class CreateScheduleParams
   {
+    public string Name { get; set; } = string.Empty;
     public EWeekDay WeekDay { get; set; }
     public string HourStart { get; set; } = string.Empty;
     public string HourEnd { get; set; } = string.Empty;

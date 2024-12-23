@@ -23,6 +23,12 @@ public class ClassDayMap : IEntityTypeConfiguration<ClassDay>
       .HasMaxLength(10)
       .IsRequired(false);
 
+    builder.Property(x => x.Name)
+    .HasColumnName("Name")
+    .HasColumnType("VARCHAR")
+    .HasMaxLength(80)
+    .IsRequired(true);
+
     builder.Property(x => x.HourEnd)
       .HasColumnName("HourEnd")
       .HasColumnType("VARCHAR")

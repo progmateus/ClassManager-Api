@@ -69,7 +69,7 @@ public sealed class RefreshClassClassesDaysEventConsumer : IConsumer<RefreshClas
           {
             var dateGenerated = date.AddHours(int.Parse(hourStart)).AddMinutes(int.Parse(minStart));
 
-            var classDay = new ClassDay(dateGenerated, schedule.HourStart, schedule.HourEnd, classEntity.Id);
+            var classDay = new ClassDay(schedule.Name, dateGenerated, schedule.HourStart, schedule.HourEnd, classEntity.Id);
             classesDays.Add(classDay);
           }
         }

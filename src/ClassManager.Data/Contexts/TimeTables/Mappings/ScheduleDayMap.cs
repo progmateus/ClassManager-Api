@@ -1,5 +1,3 @@
-using ClassManager.Domain.Contexts.ClassDays.Entities;
-using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.TimesTables.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
@@ -13,6 +11,12 @@ public class ScheduleDayMap : IEntityTypeConfiguration<ScheduleDay>
     builder.ToTable("SchedulesDays");
 
     builder.HasKey(x => x.Id);
+
+    builder.Property(x => x.Name)
+    .HasColumnName("Name")
+    .HasColumnType("VARCHAR")
+    .HasMaxLength(80)
+    .IsRequired(true);
 
     builder.Property(x => x.HourStart)
     .HasColumnName("HourStart")

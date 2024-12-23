@@ -69,7 +69,7 @@ public sealed class GeneratedClassesDaysEventConsumer : IConsumer<GeneratedClass
               {
                 var dateGenerated = date.AddHours(int.Parse(hourStart)).AddMinutes(int.Parse(minStart));
 
-                var classDay = new ClassDay(dateGenerated, schedule.HourStart, schedule.HourEnd, timeTableClass.Id);
+                var classDay = new ClassDay(schedule.Name, dateGenerated, schedule.HourStart, schedule.HourEnd, timeTableClass.Id);
                 classesDays.Add(classDay);
               }
             }

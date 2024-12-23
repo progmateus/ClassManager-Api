@@ -62,7 +62,7 @@ public class UpdateTimetableHandler :
 
     foreach (var scheduleHour in command.SchedulesDays)
     {
-      var scheduleDayEntity = new ScheduleDay(timeTableId, scheduleHour.WeekDay, scheduleHour.HourStart, scheduleHour.HourEnd, tenantId);
+      var scheduleDayEntity = new ScheduleDay(scheduleHour.Name, timeTableId, scheduleHour.WeekDay, scheduleHour.HourStart, scheduleHour.HourEnd, tenantId);
       schedulesDaysEntities.Add(scheduleDayEntity);
     }
 
