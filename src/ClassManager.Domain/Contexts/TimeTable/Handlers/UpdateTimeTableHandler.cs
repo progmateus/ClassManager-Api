@@ -36,10 +36,6 @@ public class UpdateTimetableHandler :
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid timeTableId, UpdateTimeTableCommand command)
   {
-    if (command.SchedulesDays.IsNullOrEmpty())
-    {
-      return new CommandResult(false, "ERR_VALIDATION", null, null, 400);
-    }
 
     if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
     {
@@ -60,19 +56,15 @@ public class UpdateTimetableHandler :
 
     List<ScheduleDay> schedulesDaysEntities = [];
 
-    Console.WriteLine("=====================");
+    await _scheduleDayRepository.DeleteAllByTimeTableId(timeTableId, new CancellationToken());
+
     foreach (var scheduleHour in command.SchedulesDays)
     {
-      Console.WriteLine(timeTableId);
-      Console.WriteLine(scheduleHour.Name);
       var scheduleDayEntity = new ScheduleDay(scheduleHour.Name, timeTableId, scheduleHour.WeekDay, scheduleHour.HourStart, scheduleHour.HourEnd, tenantId);
       schedulesDaysEntities.Add(scheduleDayEntity);
     }
 
-    await _scheduleDayRepository.DeleteAllByTimeTableId(timeTableId, new CancellationToken());
-
     await _scheduleDayRepository.CreateRangeAsync(schedulesDaysEntities, new CancellationToken());
-
 
     var lastDayOfMonth = DateTime.Now.GetLastDayOfMonth().AddHours(23).AddMinutes(59).AddSeconds(59);
 
@@ -80,10 +72,12 @@ public class UpdateTimetableHandler :
 
     await _classDayRepository.DeleteAllAfterAndBeforeDate(classesIds, DateTime.Now, lastDayOfMonth, new CancellationToken());
 
-    var eventRequest = new GeneratedClassesDaysEvent([timeTableId], DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
+    if (schedulesDaysEntities.Count > 0)
+    {
+      var eventRequest = new GeneratedClassesDaysEvent([timeTableId], DateTime.Now.Year, DateTime.Now.Month, DateTime.Now.Day);
 
-    await _publishBus.PublicAsync(eventRequest);
-
+      await _publishBus.PublicAsync(eventRequest);
+    }
     return new CommandResult(true, "TIME_TABLE_UPDATED", "", null, 200);
   }
 }
