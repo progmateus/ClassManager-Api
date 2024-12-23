@@ -8,6 +8,7 @@ namespace ClassManager.Domain.Contexts.ClassDays.ViewModels
   {
     public Guid Id { get; set; }
     public DateTime Date { get; private set; }
+    public string? Name { get; set; }
     public string? HourStart { get; private set; }
     public string? HourEnd { get; private set; }
     public int Status { get; private set; }

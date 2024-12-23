@@ -8,6 +8,7 @@ public class ScheduleDay : TenantEntity
   public ScheduleDay(string name, Guid timeTableId, EWeekDay weekDay, string hourStart, string hourEnd, Guid tenantId)
   {
     Name = name;
+    TimeTableId = timeTableId;
     WeekDay = weekDay;
     HourStart = hourStart;
     HourEnd = hourEnd;

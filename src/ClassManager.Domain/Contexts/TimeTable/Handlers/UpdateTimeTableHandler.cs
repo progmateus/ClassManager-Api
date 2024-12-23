@@ -60,8 +60,11 @@ public class UpdateTimetableHandler :
 
     List<ScheduleDay> schedulesDaysEntities = [];
 
+    Console.WriteLine("=====================");
     foreach (var scheduleHour in command.SchedulesDays)
     {
+      Console.WriteLine(timeTableId);
+      Console.WriteLine(scheduleHour.Name);
       var scheduleDayEntity = new ScheduleDay(scheduleHour.Name, timeTableId, scheduleHour.WeekDay, scheduleHour.HourStart, scheduleHour.HourEnd, tenantId);
       schedulesDaysEntities.Add(scheduleDayEntity);
     }

@@ -3,6 +3,7 @@ namespace ClassManager.Domain.Contexts.TimesTables.ViewModels
   public class ScheduleDayViewModel
   {
     public Guid Id { get; set; }
+    public string? Name { get; set; }
     public Guid TimeTableId { get; set; }
     public int WeekDay { get; set; }
     public string? HourStart { get; set; }
