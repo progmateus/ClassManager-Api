@@ -25,7 +25,6 @@ namespace ClassManager.Domain.Contexts.Classes.Entities
     }
 
     public string Name { get; private set; } = null!;
-    public Guid TenantId { get; private set; }
     public Guid? TimeTableId { get; private set; }
     public Guid? AddressId { get; private set; }
     public string? Description { get; private set; } = null!;
