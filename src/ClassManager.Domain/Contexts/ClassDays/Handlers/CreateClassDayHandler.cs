@@ -52,7 +52,7 @@ public class CreateClassDayHandler :
       return new CommandResult(false, "ERR_CLASS_NOT_FOUND", null, null, 404);
     }
 
-    var classDay = new ClassDay(command.Date, command.HourStart, command.HourEnd, command.ClassId);
+    var classDay = new ClassDay(command.Name, command.Date, command.HourStart, command.HourEnd, command.ClassId);
 
     await _classDayRepository.CreateAsync(classDay, new CancellationToken());
 

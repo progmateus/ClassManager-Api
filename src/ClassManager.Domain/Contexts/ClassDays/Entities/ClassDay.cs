@@ -8,8 +8,9 @@ namespace ClassManager.Domain.Contexts.ClassDays.Entities
 {
   public class ClassDay : Entity
   {
-    public ClassDay(DateTime date, string hourStart, string hourEnd, Guid classId)
+    public ClassDay(string name, DateTime date, string hourStart, string hourEnd, Guid classId)
     {
+      Name = name;
       Date = date;
       HourStart = hourStart;
       HourEnd = hourEnd;
@@ -20,7 +21,7 @@ namespace ClassManager.Domain.Contexts.ClassDays.Entities
     {
 
     }
-
+    public string Name { get; private set; } = string.Empty;
     public DateTime Date { get; private set; }
     public string? HourStart { get; private set; }
     public string? HourEnd { get; private set; }
