@@ -56,7 +56,7 @@ public class CreateTenantHandler :
       return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
 
-    if (await _tenantRepository.DocumentAlreadyExistsAsync(command.Document.Replace(".", "").Replace("-", "").Replace(" ", ""), new CancellationToken()))
+    if (await _tenantRepository.DocumentAlreadyExistsAsync(command.Document, new CancellationToken()))
     {
       AddNotification("Document", "Document already exists");
     }
@@ -76,7 +76,7 @@ public class CreateTenantHandler :
       AddNotification("Email", "E-mail already exists");
     }
 
-    var document = new Document(command.Document, EDocumentType.CPF);
+    var document = new Document(command.Document);
     var email = new Email(command.Email);
 
     AddNotifications(document, email);

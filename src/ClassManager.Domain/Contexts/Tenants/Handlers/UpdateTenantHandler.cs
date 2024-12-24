@@ -59,7 +59,7 @@ public class UpdateTenantHandler :
       return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, command.Notifications, 404);
     }
 
-    if ((tenant.Document.Number != command.Document) && await _repository.DocumentAlreadyExistsAsync(command.Document.Replace(".", "").Replace("-", "").Replace(" ", ""), new CancellationToken()))
+    if ((tenant.Document.Number != command.Document) && await _repository.DocumentAlreadyExistsAsync(command.Document, new CancellationToken()))
     {
       AddNotification("Document", "Document already exists");
     }
@@ -70,7 +70,7 @@ public class UpdateTenantHandler :
       AddNotification("Email", "E-mail already exists");
     }
 
-    var document = new Document(command.Document, EDocumentType.CPF);
+    var document = new Document(command.Document);
     var email = new Email(command.Email);
 
     tenant.Update(command.Name, email, document, command.Description);

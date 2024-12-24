@@ -43,7 +43,7 @@ public class CreateUserHandler :
 
     // verificar se doc existe
 
-    if (await _userReporitory.DocumentAlreadyExistsAsync(command.Document.Replace(".", "").Replace("-", "").Replace(" ", ""), new CancellationToken()))
+    if (await _userReporitory.DocumentAlreadyExistsAsync(command.Document, new CancellationToken()))
     {
       AddNotification("Document", "ERR_DOCUMENT_ALREADY_EXISTS");
     }
@@ -63,7 +63,7 @@ public class CreateUserHandler :
     }
 
     // gerar vOS
-    var document = new Document(command.Document, EDocumentType.CPF);
+    var document = new Document(command.Document);
     var email = new Email(command.Email);
     var password = new Password(command.Password);
 

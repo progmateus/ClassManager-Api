@@ -45,7 +45,7 @@ public class UpdateUserHandler :
 
     // verificar se doc existe
 
-    if ((user.Document.Number != command.Document) && await _userReporitory.DocumentAlreadyExistsAsync(command.Document.Replace(".", "").Replace("-", "").Replace(" ", ""), new CancellationToken()))
+    if ((user.Document.Number != command.Document) && await _userReporitory.DocumentAlreadyExistsAsync(command.Document, new CancellationToken()))
     {
       AddNotification("Document", "Document already exists");
     }
@@ -58,7 +58,7 @@ public class UpdateUserHandler :
     }
 
     // gerar vOS
-    var document = new Document(command.Document, EDocumentType.CPF);
+    var document = new Document(command.Document);
     var email = new Email(command.Email);
 
     // gerar as entidades

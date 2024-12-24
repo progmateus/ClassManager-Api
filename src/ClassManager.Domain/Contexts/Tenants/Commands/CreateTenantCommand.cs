@@ -1,4 +1,5 @@
-using ClassManager.Domain.Contexts.Shared.ValueObjects;
+using System.Text.RegularExpressions;
+using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Shared.Commands;
 using Flunt.Notifications;
 using Flunt.Validations;
@@ -7,6 +8,12 @@ namespace ClassManager.Domain.Contexts.Tenants.Commands
 {
   public class CreateTenantCommand : Notifiable, ICommand
   {
+
+    public CreateTenantCommand()
+    {
+      Document = Regex.Replace(Document, "/W/g", "");
+    }
+
     public string Name { get; set; } = null!;
     public string Email { get; set; } = null!;
     public string Username { get; set; } = null!;
@@ -26,6 +33,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Commands
       .HasMaxLen(Description, 200, "Description", "Description max 200 characters")
       .IsNotNull(PlanId, "PlanId", "PlanId cannot be null")
       .IsEmail(Email, "Email", "Invalid email")
+      .Matchs(Document, "([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})", "Document", "Invalid document")
     );
     }
   }
