@@ -150,7 +150,7 @@ public class CreateSubscriptionHandler : Notifiable,
 
     /* await _subscriptionRepository.CreateAsync(subscription, new CancellationToken()); */
 
-    var stripeSubscription = _paymentService.CreateSubscription(subscription.Id, subscription.UserId, tenantId, tenantPlan.StripePriceId, stripeCustomerEntity.StripeCustomerId, ESubscriptionType.USER, tenantPlan.Tenant.StripeAccountId);
+    var stripeSubscription = _paymentService.CreateSubscription(subscription.Id, subscription.UserId, tenantId, tenantPlan.StripePriceId, stripeCustomerEntity.StripeCustomerId, ETargetType.USER, tenantPlan.Tenant.StripeAccountId);
 
     subscription.SetStripeSubscriptionId(stripeSubscription.Id);
     subscription.SetCurrentPeriod(stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);

@@ -14,7 +14,7 @@ public class InvoiceRepository : TRepository<Invoice>, IInvoiceRepository
   public async Task<int> CountUserPendingInvoicesUntilDate(Guid userId, Guid tenantId, DateTime initialDate, DateTime finalDate, CancellationToken cancellationToken)
   {
     return await DbSet
-      .CountAsync((invoice) => invoice.UserId == userId && invoice.TargetType == EInvoiceTargetType.USER && invoice.Type == EInvoiceType.USER_SUBSCRIPTION && invoice.ExpiresAt > initialDate && invoice.ExpiresAt < finalDate);
+      .CountAsync((invoice) => invoice.UserId == userId && invoice.TargetType == ETargetType.USER && invoice.Type == EInvoiceType.USER_SUBSCRIPTION && invoice.ExpiresAt > initialDate && invoice.ExpiresAt < finalDate);
   }
 
   public async Task<Invoice?> FindByStripeInvoiceId(string stripeInvoiceId)
@@ -24,7 +24,7 @@ public class InvoiceRepository : TRepository<Invoice>, IInvoiceRepository
 
   public async Task<Invoice?> FindUserInvoiceById(Guid invoiceId, Guid tenantId, CancellationToken cancellationToken)
   {
-    return await DbSet.FirstOrDefaultAsync(x => x.Id == invoiceId && x.TenantId == tenantId && x.TargetType == EInvoiceTargetType.USER);
+    return await DbSet.FirstOrDefaultAsync(x => x.Id == invoiceId && x.TenantId == tenantId && x.TargetType == ETargetType.USER);
   }
 
   public async Task<List<Invoice>> ListByUserIdAndTenantId(Guid? tenantId, Guid? userId, Guid? subscriptionId, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)

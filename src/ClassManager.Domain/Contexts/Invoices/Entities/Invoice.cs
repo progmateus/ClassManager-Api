@@ -15,7 +15,7 @@ public class Invoice : TenantEntity
     Guid? planId,
     Guid tenantId,
     decimal amount,
-    EInvoiceTargetType targetType,
+    ETargetType targetType,
     EInvoiceType type,
     string stripeInvoiceId,
     string stripeInvoiceUrl,
@@ -44,7 +44,7 @@ public class Invoice : TenantEntity
   public Guid? PlanId { get; private set; }
   public decimal Amount { get; private set; }
   public EInvoiceStatus Status { get; private set; } = EInvoiceStatus.OPEN;
-  public EInvoiceTargetType TargetType { get; private set; } = EInvoiceTargetType.USER;
+  public ETargetType TargetType { get; private set; } = ETargetType.USER;
   public EInvoiceType Type { get; private set; } = EInvoiceType.USER_SUBSCRIPTION;
   public string? StripeInvoiceId { get; private set; }
   public string? StripeInvoiceUrl { get; private set; }

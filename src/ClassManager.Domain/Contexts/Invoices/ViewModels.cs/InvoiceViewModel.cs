@@ -14,7 +14,7 @@ public class InvoiceViewModel
   public Guid? PlanId { get; set; }
   public decimal Amount { get; set; }
   public EInvoiceStatus Status { get; set; }
-  public EInvoiceTargetType TargetType { get; set; }
+  public ETargetType TargetType { get; set; }
   public EInvoiceType Type { get; set; }
   public string? StripeInvoiceId { get; set; }
   public string? StripeInvoiceUrl { get; set; }

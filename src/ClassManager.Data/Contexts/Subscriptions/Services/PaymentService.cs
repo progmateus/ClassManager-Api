@@ -193,7 +193,7 @@ public class PaymentService : IPaymentService
     return service.Create(options);
   }
 
-  public Subscription CreateSubscription(Guid? entityId, Guid? userId, Guid tenantId, string stripePriceId, string stripeCustomerId, ESubscriptionType type, string? connectedAccountId)
+  public Subscription CreateSubscription(Guid? entityId, Guid? userId, Guid tenantId, string stripePriceId, string stripeCustomerId, ETargetType type, string? connectedAccountId)
   {
 
     var requestOptions = new RequestOptions

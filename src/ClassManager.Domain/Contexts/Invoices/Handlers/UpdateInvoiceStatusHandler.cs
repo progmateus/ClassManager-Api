@@ -56,7 +56,7 @@ public class UpdateInvoiceStatusHandler :
       return new CommandResult(false, "ERR_INVOICE_NOT_FOUND", null, null, 404);
     }
 
-    if (invoice.TargetType != EInvoiceTargetType.USER || invoice.Type != EInvoiceType.USER_SUBSCRIPTION)
+    if (invoice.TargetType != ETargetType.USER || invoice.Type != EInvoiceType.USER_SUBSCRIPTION)
     {
       return new CommandResult(false, "ERR_CANNOT_UPDATE_TENANT_INVOICE", null, null, 404);
     }

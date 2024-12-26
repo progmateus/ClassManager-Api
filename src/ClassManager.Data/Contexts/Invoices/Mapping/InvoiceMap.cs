@@ -33,7 +33,7 @@ public class InvoiceMap : IEntityTypeConfiguration<Invoice>
     builder.Property(x => x.TargetType)
       .HasColumnName("TargetType")
       .HasColumnType("TINYINT")
-      .HasDefaultValue(EInvoiceTargetType.USER)
+      .HasDefaultValue(ETargetType.USER)
       .IsRequired();
 
     builder.HasOne(e => e.User)

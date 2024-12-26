@@ -117,7 +117,7 @@ public class CreateTenantHandler :
 
     await _tenantRepository.CreateAsync(tenant, new CancellationToken());
 
-    var stripeSubscription = _paymentService.CreateSubscription(null, null, tenant.Id, plan.StripePriceId, stripeCreatedCustomer.Id, ESubscriptionType.USER, null);
+    var stripeSubscription = _paymentService.CreateSubscription(null, null, tenant.Id, plan.StripePriceId, stripeCreatedCustomer.Id, ETargetType.USER, null);
 
     tenant.SetStripeInformations(stripeCreatedAccount.Id, stripeCreatedCustomer.Id, stripeSubscription.Id);
     tenant.SetSubscriptionCurrentPeriod(stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);

@@ -41,7 +41,7 @@ public class DeleteInvoiceHandler : ITenantDeleteAction
       return new CommandResult(false, "ERR_INVOICE_NOT_FOUND", null, null, 404);
     }
 
-    if (invoice is null || invoice.TargetType != EInvoiceTargetType.USER)
+    if (invoice is null || invoice.TargetType != ETargetType.USER)
     {
       return new CommandResult(false, "ERR_CANNOT_UPDATE_TENANT_INVOICE", null, null, 404);
     }

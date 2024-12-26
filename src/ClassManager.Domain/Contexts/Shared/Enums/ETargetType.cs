@@ -1,6 +1,6 @@
 namespace ClassManager.Domain.Contexts.Shared.Enums
 {
-  public enum EInvoiceTargetType
+  public enum ETargetType
   {
     USER = 1,
     TENANT = 2

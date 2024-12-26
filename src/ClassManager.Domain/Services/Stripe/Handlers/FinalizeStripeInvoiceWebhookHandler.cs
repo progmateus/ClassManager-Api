@@ -49,7 +49,7 @@ public class FinalizeStripeInvoiceWebhookHandler
       {
         return;
       }
-      var invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, subscription.TenantPlan.Id, subscription.Id, null, customer.TenantId, subscription.TenantPlan.Price, EInvoiceTargetType.USER, EInvoiceType.USER_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
+      var invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, subscription.TenantPlan.Id, subscription.Id, null, customer.TenantId, subscription.TenantPlan.Price, ETargetType.USER, EInvoiceType.USER_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
       await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
 
       if (stripeInvoice.BillingReason == "subscription_cycle")
@@ -60,7 +60,7 @@ public class FinalizeStripeInvoiceWebhookHandler
     }
     else
     {
-      var invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, null, null, customer.Tenant.Plan.Id, customer.TenantId, customer.Tenant.Plan.Price, EInvoiceTargetType.TENANT, EInvoiceType.TENANT_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
+      var invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, null, null, customer.Tenant.Plan.Id, customer.TenantId, customer.Tenant.Plan.Price, ETargetType.TENANT, EInvoiceType.TENANT_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
       await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
     }
   }
