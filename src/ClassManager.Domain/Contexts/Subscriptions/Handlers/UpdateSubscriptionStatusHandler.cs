@@ -13,13 +13,11 @@ namespace ClassManager.Domain.Contexts.Subscriptions.Handlers;
 public class UpdateSubscriptionStatusHandler : Notifiable
 {
   private ISubscriptionRepository _subscriptionRepository;
-  private ITenantPlanRepository _tenantPlanrepository;
   private readonly IAccessControlService _accessControlService;
   private readonly IPaymentService _paymentService;
   private readonly ITenantRepository _tenantRepository;
 
   public UpdateSubscriptionStatusHandler(ISubscriptionRepository subscriptionRepository,
-  ITenantPlanRepository tenantPlanrepository,
   IAccessControlService accessControlService,
   IPaymentService paymentService,
   ITenantRepository tenantRepository
@@ -27,7 +25,6 @@ public class UpdateSubscriptionStatusHandler : Notifiable
   )
   {
     _subscriptionRepository = subscriptionRepository;
-    _tenantPlanrepository = tenantPlanrepository;
     _accessControlService = accessControlService;
     _paymentService = paymentService;
     _tenantRepository = tenantRepository;
@@ -80,7 +77,13 @@ public class UpdateSubscriptionStatusHandler : Notifiable
       return new CommandResult(false, "ERR_INVALID_STATUS", null, null, 400);
     }
 
-    if (subscription.Status != ESubscriptionStatus.ACTIVE && subscription.Status != ESubscriptionStatus.PAUSED)
+    if (!new List<ESubscriptionStatus>
+    {
+      ESubscriptionStatus.ACTIVE,
+      ESubscriptionStatus.INCOMPLETE,
+      ESubscriptionStatus.PAST_DUE,
+      ESubscriptionStatus.PAUSED,
+      ESubscriptionStatus.UNPAID}.Contains(subscription.Status))
     {
       return new CommandResult(false, "ERR_INVALID_STATUS", null, null, 400);
     }
@@ -90,12 +93,19 @@ public class UpdateSubscriptionStatusHandler : Notifiable
       return new CommandResult(false, "ERR_SUBSCRIPTION_CANCELED", null, null, 400);
     }
 
-    if (command.Status == ESubscriptionStatus.ACTIVE)
+    if (command.Status == ESubscriptionStatus.ACTIVE && subscription.Status == ESubscriptionStatus.PAUSED)
     {
       _paymentService.ResumeSubscription(subscription.StripeSubscriptionId, tenant.StripeAccountId);
     }
 
-    else if (command.Status == ESubscriptionStatus.CANCELED)
+    if (command.Status == ESubscriptionStatus.CANCELED &&
+    new List<ESubscriptionStatus>
+    {
+      ESubscriptionStatus.ACTIVE,
+      ESubscriptionStatus.INCOMPLETE,
+      ESubscriptionStatus.PAST_DUE,
+      ESubscriptionStatus.PAUSED,
+      ESubscriptionStatus.UNPAID}.Contains(subscription.Status))
     {
       _paymentService.CancelSubscription(subscription.StripeSubscriptionId, tenant.StripeAccountId);
     }
