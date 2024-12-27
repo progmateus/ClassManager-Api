@@ -25,12 +25,15 @@ public class ListStudentClassesHandler
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid targetUserId)
   {
-    if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
+
+    var targetId = loggedUserId;
+
+    if (await _accessControlService.CheckParameterUserIdPermission(tenantId, loggedUserId, targetUserId))
     {
-      return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
+      targetId = targetUserId;
     }
 
-    var studentClasses = _mapper.Map<List<StudentsClassesViewModel>>(await _studentsClassesRepository.ListByUserOrClassAndTenantAsync([targetUserId], [tenantId], []));
+    var studentClasses = _mapper.Map<List<StudentsClassesViewModel>>(await _studentsClassesRepository.ListByUserOrClassAndTenantAsync([targetId], [tenantId], []));
 
     return new CommandResult(true, "STUDENT_CLASSES_LISTED", studentClasses, null, 200);
   }
