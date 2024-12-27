@@ -8,20 +8,17 @@ namespace ClassManager.Domain.Services.Stripe.Handlers;
 
 public class UpdateStripeSubscriptionWebhookHandler
 {
-  private readonly IStripeCustomerRepository _stripeCustomerRepository;
   private readonly ISubscriptionRepository _subscriptionRepository;
   private readonly ITenantRepository _tenantRepository;
   private readonly IInvoiceRepository _invoiceRepository;
 
   public UpdateStripeSubscriptionWebhookHandler(
-    IStripeCustomerRepository stripeCustomerRepository,
     ISubscriptionRepository subscriptionRepository,
     ITenantRepository tenantRepository,
     IInvoiceRepository invoiceRepository
 
     )
   {
-    _stripeCustomerRepository = stripeCustomerRepository;
     _subscriptionRepository = subscriptionRepository;
     _tenantRepository = tenantRepository;
     _invoiceRepository = invoiceRepository;
@@ -35,9 +32,13 @@ public class UpdateStripeSubscriptionWebhookHandler
     }
 
     var enabledStatus = new List<string> {
-        "paused",
-        "canceled",
-        "active",
+      "incomplete",
+      "incomplete_expired",
+      "active",
+      "past_due",
+      "canceled",
+      "unpaid",
+      "paused",
       };
 
     if (!enabledStatus.Contains(stripeSubscription.Status))

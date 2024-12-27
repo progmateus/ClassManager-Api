@@ -46,6 +46,7 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     return await DbSet
   .Include(x => x.TenantPlan)
   .AsNoTracking()
+  .OrderByDescending(x => x.CreatedAt)
   .FirstOrDefaultAsync(x => x.UserId == userId && x.TenantId == tenantId);
   }
 
