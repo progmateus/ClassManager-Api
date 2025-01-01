@@ -30,12 +30,14 @@ public class BookingRepository : Repository<Booking>, IBookingRepository
     .ToListAsync();
   }
 
-  public async Task<List<Booking>> ListByUserIdAndTenantIdWithPagination(Guid? tenantId, Guid userId, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)
+  public async Task<List<Booking>> ListByUserIdOrTenantIdOrClassDayIdWithPagination(Guid? tenantId, Guid? userId, Guid? classDayId, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)
   {
     return await DbSet
       .Include(x => x.ClassDay)
       .ThenInclude(x => x.Class)
-      .Where(x => x.UserId == userId && (!tenantId.HasValue || x.ClassDay.Class.TenantId == tenantId.Value))
+      .Where(x => !userId.HasValue || x.UserId == userId)
+      .Where(x => !classDayId.HasValue || x.ClassDayId == classDayId)
+      .Where(x => !tenantId.HasValue || x.ClassDay.Class.TenantId == tenantId.Value)
       .Skip(skip)
       .Take(limit)
       .ToListAsync();

@@ -1,4 +1,6 @@
 using ClasManager.Domain.Contexts.Bookings.Commands;
+using ClasManager.Domain.Contexts.Bookings.Handlers;
+using ClasManager.Domain.Contexts.ClassDays.Handlers;
 using ClassManager.Api.Contexts.Shared.Controllers;
 using ClassManager.Domain.Contexts.ClassDays.Commands;
 using ClassManager.Domain.Contexts.ClassDays.Handlers;
@@ -36,6 +38,25 @@ public class ClassDayController : MainController
   )
   {
     var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, classDayId);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
+  [HttpGet("{tenantId}/class-days/{classDayId}/bookings")]
+  public async Task<IResult> GetBookings(
+    [FromRoute] Guid tenantId,
+    [FromRoute] Guid classDayId,
+    [FromQuery] ListBookingsCommand command,
+    [FromServices] ListClassDayBookingsHandler handler
+  )
+  {
+    command.ClassDayId = classDayId;
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, command);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 

@@ -114,8 +114,8 @@ public class UserController : MainController
   [Authorize]
   [HttpGet("bookings")]
   public async Task<IResult> ListUserBookings(
-    [FromServices] ListBookingsHandler handler,
-    [FromQuery] ListSubscriptionsCommand command
+    [FromServices] ListUserBookingsHandler handler,
+    [FromQuery] ListBookingsCommand command
   )
   {
     var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), command);

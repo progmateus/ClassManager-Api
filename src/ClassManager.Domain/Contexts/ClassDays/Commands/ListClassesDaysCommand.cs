@@ -4,7 +4,7 @@ using ClassManager.Domain.Shared.Commands;
 
 namespace ClasManager.Domain.Contexts.Bookings.Commands;
 
-public class ListClassesDaysCommand : IPaginationCommand
+public class ListClassesDaysCommand : PaginationCommand
 {
   public DateTime Date { get; set; }
   public Guid? TenantId { get; set; }
