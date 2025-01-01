@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
 using ClasManager.Domain.Contexts.Bookings.Handlers;
+using ClasManager.Domain.Contexts.ClassDays.Handlers;
 using ClasManager.Domain.Contexts.ClassDays.Jobs.GenerateMonthlyClassesDays;
 using classManager.Data.Contexts.Roles.Repositories;
 using classManager.Data.Contexts.Subscriptions.Repositories;
