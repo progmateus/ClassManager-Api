@@ -31,4 +31,9 @@ public class Payout : TenantEntity
   public Tenant? Tenant { get; private set; }
   public DateTime CreatedAt { get; private set; }
   public DateTime UpdatedAt { get; private set; }
+
+  public void SetStatus(EPayoutStatus status)
+  {
+    Status = status;
+  }
 }
