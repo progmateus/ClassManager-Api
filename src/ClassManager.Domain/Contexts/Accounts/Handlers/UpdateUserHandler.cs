@@ -70,6 +70,7 @@ public class UpdateUserHandler :
 
     if (Invalid)
     {
+      Console.WriteLine("SEGUNDO");
       return new CommandResult(false, "ERR_VALIDATION", null, Notifications);
     }
 

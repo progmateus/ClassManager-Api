@@ -9,14 +9,14 @@ namespace ClassManager.Domain.Contexts.Tenants.Commands
   public class UpdateTenantCommand : Notifiable, ICommand
   {
 
-    public UpdateTenantCommand()
-    {
-      Document = Regex.Replace(Document, "/W/g", "");
-    }
-    public string Name { get; set; } = null!;
-    public string Email { get; set; } = null!;
+    /*     public UpdateTenantCommand()
+        {
+          Document = Regex.Replace(Document, "/W/g", "");
+        } */
+    public string Name { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
     public string? Description { get; set; } = string.Empty;
-    public string Document { get; set; } = null!;
+    public string Document { get; set; } = string.Empty;
     public string Phone { get; set; } = string.Empty;
     public List<LinkCommand> Links { get; set; } = [];
 

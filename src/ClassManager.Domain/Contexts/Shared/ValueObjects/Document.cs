@@ -21,8 +21,9 @@ namespace ClassManager.Domain.Contexts.Shared.ValueObjects
 
     private bool Validate()
     {
-      var cpfRegex = new Regex("(^d{3}.?d{3}.?d{3}-?d{2}$)", RegexOptions.IgnoreCase);
+      var cpfRegex = new Regex("(^[0-9]{3}.?[0-9]{3}.?[0-9]{3}-?[0-9]{2}$)", RegexOptions.IgnoreCase);
       var cnpjRegex = new Regex("^[0-9]{2}.?[0-9]{3}.?[0-9]{3}/?[0-9]{4}-?[0-9]{2}$", RegexOptions.IgnoreCase);
+
 
       if (cpfRegex.IsMatch(Number))
       {
@@ -35,6 +36,7 @@ namespace ClassManager.Domain.Contexts.Shared.ValueObjects
         Type = EDocumentType.CNPJ;
         return true;
       }
+
       return false;
     }
 
