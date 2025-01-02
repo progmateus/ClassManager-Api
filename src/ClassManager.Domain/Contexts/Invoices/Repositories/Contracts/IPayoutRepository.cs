@@ -4,4 +4,5 @@ namespace ClassManager.Domain.Contexts.Invoices.Repositories.Contracts;
 
 public interface IPayoutRepository : ITRepository<Payout>
 {
+  Task<Payout?> FindByStripePayoutId(string stripePayoutId);
 }
