@@ -1,4 +1,5 @@
 using ClassManager.Domain.Contexts.Invoices.Entities;
+using ClassManager.Domain.Contexts.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -26,6 +27,11 @@ public class PayoutMap : IEntityTypeConfiguration<Payout>
     builder.Property(x => x.StripePayoutId)
       .HasColumnName("VARCHAR")
       .HasMaxLength(200)
+      .IsRequired();
+
+    builder.Property(x => x.Status)
+      .HasColumnName("Status")
+      .HasColumnType("TINYINT")
       .IsRequired();
 
     builder.HasOne(e => e.Tenant)
