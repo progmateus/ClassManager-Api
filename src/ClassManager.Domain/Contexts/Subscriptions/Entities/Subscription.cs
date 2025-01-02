@@ -58,4 +58,8 @@ public class Subscription : TenantEntity
   {
     LatestInvoiceId = invoiceId;
   }
+  public void SetCanceledAt(DateTime? canceledAt)
+  {
+    CanceledAt = canceledAt;
+  }
 }

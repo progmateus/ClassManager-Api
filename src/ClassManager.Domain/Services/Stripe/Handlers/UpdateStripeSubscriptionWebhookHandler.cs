@@ -76,7 +76,7 @@ public class UpdateStripeSubscriptionWebhookHandler
           subscription.SetLatestInvoice(latestInvoice.Id);
         }
       }
-
+      subscription.SetCanceledAt(stripeSubscription.CanceledAt);
       subscription.SetStatus(status);
       subscription.SetCurrentPeriod(stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);
       await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
