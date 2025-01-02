@@ -49,6 +49,7 @@ public class AppDbContext : DbContext
   public DbSet<StripeCustomer> StripeCustomers { get; set; } = null!;
   public DbSet<Address> Addresses { get; set; } = null!;
   public DbSet<Image> Images { get; set; } = null!;
+  public DbSet<Payout> Payouts { get; set; } = null!;
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
 
@@ -86,6 +87,7 @@ public class AppDbContext : DbContext
     modelBuilder.ApplyConfiguration(new StripeCustomerMap());
     modelBuilder.ApplyConfiguration(new AddressMap());
     modelBuilder.ApplyConfiguration(new ImageMap());
+    modelBuilder.ApplyConfiguration(new PayoutMap());
 
     base.OnModelCreating(modelBuilder);
   }

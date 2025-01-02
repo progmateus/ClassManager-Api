@@ -271,6 +271,10 @@ public static class BuilderExtension
     IImageRepository,
     ImageRepository>();
 
+    builder.Services.AddTransient<
+    IPayoutRepository,
+    PayoutRepository>();
+
     builder.Services.AddTransient<TokenService>();
 
     builder.Services.AddTransient<AuthHandler>();
