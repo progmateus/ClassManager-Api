@@ -15,7 +15,9 @@ public class StripeController : MainController
     [FromServices] CreateStripeSubscriptionWebhookHandler createStripeSubscriptionWebhookHandler,
     [FromServices] UpdateStripeAccountWebhookHandler updateStripeAccountWebhookHandler,
     [FromServices] UpdateStripeInvoiceWebhookHandler updateStripeInvoiceWebhookHandler,
-    [FromServices] UpdateStripeSubscriptionWebhookHandler updateStripeSubscriptionWebhookHandler
+    [FromServices] UpdateStripeSubscriptionWebhookHandler updateStripeSubscriptionWebhookHandler,
+    [FromServices] CreateStripePayoutWebhookHandler createStripeWebhookHandler,
+    [FromServices] UpdateStripePayoutWebhookHandler updateStripePayoutWebhookHandler
   )
   {
     try
@@ -49,6 +51,16 @@ public class StripeController : MainController
       {
         await updateStripeAccountWebhookHandler.Handle(stripeEvent.Data.Object as Account);
       }
+      else if (stripeEvent.Type == EventTypes.PayoutCreated)
+      {
+        await createStripeWebhookHandler.Handle(stripeEvent.Data.Object as Payout);
+      }
+      else if (
+        stripeEvent.Type == EventTypes.PayoutUpdated
+        )
+      {
+        await updateStripePayoutWebhookHandler.Handle(stripeEvent.Data.Object as Payout);
+      }
       else
       {
         Console.WriteLine("Unhandled event type: {0}", stripeEvent.Type);
@@ -59,8 +71,6 @@ public class StripeController : MainController
     {
       return Results.BadRequest();
     }
-
-    return Results.Ok();
   }
 
 
