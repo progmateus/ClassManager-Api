@@ -29,6 +29,7 @@ public class Subscription : TenantEntity
   public Invoice? LatestInvoice { get; private set; }
   public IList<Invoice> Invoices { get; private set; } = [];
   public DateTime ExpiresDate { get; private set; }
+  public DateTime? CanceledAt { get; private set; }
   public DateTime CreatedAt { get; private set; }
   public DateTime UpdatedAt { get; private set; }
 

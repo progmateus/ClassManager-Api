@@ -52,5 +52,9 @@ public class SubscriptionMap : IEntityTypeConfiguration<Subscription>
     builder.Property(x => x.CurrentPeriodEnd)
       .HasColumnName("CurrentPeriodEnd")
       .IsRequired();
+
+    builder.Property(x => x.CanceledAt)
+    .HasColumnName("CanceledAt")
+    .IsRequired(false);
   }
 }
