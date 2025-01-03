@@ -9,18 +9,15 @@ namespace ClassManager.Domain.Services.Stripe.Handlers;
 public class UpdateStripeSubscriptionWebhookHandler
 {
   private readonly ISubscriptionRepository _subscriptionRepository;
-  private readonly ITenantRepository _tenantRepository;
   private readonly IInvoiceRepository _invoiceRepository;
 
   public UpdateStripeSubscriptionWebhookHandler(
     ISubscriptionRepository subscriptionRepository,
-    ITenantRepository tenantRepository,
     IInvoiceRepository invoiceRepository
 
     )
   {
     _subscriptionRepository = subscriptionRepository;
-    _tenantRepository = tenantRepository;
     _invoiceRepository = invoiceRepository;
   }
   public async Task Handle(Subscription? stripeSubscription)
