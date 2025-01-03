@@ -1,5 +1,6 @@
 using AutoMapper;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Invoices.Entities;
 using ClassManager.Domain.Contexts.Plans.Repositories;
 using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
@@ -110,6 +111,9 @@ public class CreateTenantHandler :
 
     var userAdminRole = new UsersRoles(loggedUserId, role.Id, tenant.Id);
 
+    var balance = new Balance(tenant.Id);
+
+    tenant.SetBalance(balance);
     tenant.UsersRoles.Add(userAdminRole);
     tenant.StripeCustomers.Add(stripeCustomerEntity);
 
@@ -121,6 +125,7 @@ public class CreateTenantHandler :
 
     tenant.SetStripeInformations(stripeCreatedAccount.Id, stripeCreatedCustomer.Id, stripeSubscription.Id);
     tenant.SetSubscriptionCurrentPeriod(stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);
+
 
     await _tenantRepository.UpdateAsync(tenant, new CancellationToken());
 
