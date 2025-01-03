@@ -96,12 +96,20 @@ public class AccesControlService : IAccessControlService
   public async Task<bool> IsTenantActiveAndChargesEnabled(Guid tenantId)
   {
     var tenant = await _tenantRepository.GetByIdAsync(tenantId, new CancellationToken());
+
     if (tenant is null)
     {
-
       return false;
     }
-    return tenant.Status == ETenantStatus.ACTIVE && tenant.SubscriptionStatus == ESubscriptionStatus.ACTIVE && tenant.StripeChargesEnabled == true;
+
+    var tenantLatestSubscription = await _subscriptionRepository.FindLatestSubscription(tenant.Id, null, ETargetType.TENANT);
+
+    if (tenantLatestSubscription is null)
+    {
+      return false;
+    }
+
+    return tenant.Status == ETenantStatus.ACTIVE && tenantLatestSubscription.Status == ESubscriptionStatus.ACTIVE && tenant.StripeChargesEnabled == true;
   }
 
   public async Task<bool> IsTenantSubscriptionActiveAsync(Guid tenantId)
@@ -111,12 +119,21 @@ public class AccesControlService : IAccessControlService
     {
       return false;
     }
-    return tenant.Status == ETenantStatus.ACTIVE && tenant.SubscriptionStatus == ESubscriptionStatus.ACTIVE;
+
+    var tenantLatestSubscription = await _subscriptionRepository.FindLatestSubscription(tenant.Id, null, ETargetType.TENANT);
+
+    if (tenantLatestSubscription is null)
+    {
+      return false;
+    }
+
+    return tenant.Status == ETenantStatus.ACTIVE && tenantLatestSubscription.Status == ESubscriptionStatus.ACTIVE;
   }
 
   public async Task<bool> IsUserActiveSubscriptionAsync(Guid userId, Guid tenantId)
   {
-    var subscription = await _subscriptionRepository.FindUserLatestSubscription(tenantId, userId, default);
+    var subscription = await _subscriptionRepository.FindLatestSubscription(tenantId, userId, ETargetType.USER);
+
     if (subscription is null)
     {
       return false;

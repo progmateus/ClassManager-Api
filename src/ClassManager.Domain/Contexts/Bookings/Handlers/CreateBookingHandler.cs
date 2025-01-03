@@ -90,7 +90,7 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
       return new CommandResult(false, "ERR_STUDENT_ROLE_NOT_FOUND", null, null, 403);
     }
 
-    var subscription = await _subscriptionRepository.FindUserLatestSubscription(tenantId, targetUserId, new CancellationToken());
+    var subscription = await _subscriptionRepository.FindLatestSubscription(tenantId, targetUserId, ETargetType.USER);
 
     if (subscription is null)
     {

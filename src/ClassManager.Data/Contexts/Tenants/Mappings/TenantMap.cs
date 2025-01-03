@@ -51,12 +51,6 @@ public class TenantMap : IEntityTypeConfiguration<Tenant>
             .HasDefaultValue(ETenantStatus.ACTIVE)
             .IsRequired();
 
-        builder.Property(x => x.SubscriptionStatus)
-            .HasColumnName("SubscriptionStatus")
-            .HasColumnType("TINYINT")
-            .HasDefaultValue(ESubscriptionStatus.INCOMPLETE)
-            .IsRequired();
-
         builder.OwnsOne(x => x.Email)
             .Ignore(x => x.Verification);
 
@@ -64,9 +58,6 @@ public class TenantMap : IEntityTypeConfiguration<Tenant>
             .WithMany(p => p.Tenants)
             .HasForeignKey(x => x.PlanId)
             .IsRequired();
-
-        builder.Property(x => x.ExpiresDate)
-            .HasColumnName("ExpiresDate");
 
         builder.Property(x => x.Username)
             .HasColumnName("Username")
@@ -98,23 +89,9 @@ public class TenantMap : IEntityTypeConfiguration<Tenant>
             .HasMaxLength(200)
             .IsRequired(false);
 
-        builder.Property(x => x.StripeSubscriptionId)
-            .HasColumnName("StripeSubscriptionId")
-            .HasColumnType("VARCHAR")
-            .HasMaxLength(200)
-            .IsRequired(false);
-
         builder.Property(x => x.StripeChargesEnabled)
             .HasColumnName("StripeChargesEnabled")
             .HasDefaultValue(false)
             .IsRequired(true);
-
-        builder.Property(x => x.CurrentPeriodStart)
-            .HasColumnName("CurrentPeriodStart")
-            .IsRequired(false);
-
-        builder.Property(x => x.CurrentPeriodEnd)
-            .HasColumnName("CurrentPeriodEnd")
-            .IsRequired(false);
     }
 }
