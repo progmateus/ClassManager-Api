@@ -130,7 +130,7 @@ public class CreateTenantHandler :
 
     await _subscriptionsRepository.CreateAsync(subscription, new CancellationToken());
 
-    _paymentService.CreateInvoice(null, null, tenant.Id, stripeCustomerEntity.StripeCustomerId, stripeSubscription.Id, stripeCreatedAccount.Id);
+    _paymentService.CreateInvoice(null, null, tenant.Id, stripeCreatedCustomer.Id, stripeSubscription.Id, null);
 
     var tenantCreated = _mapper.Map<TenantViewModel>(tenant);
 
