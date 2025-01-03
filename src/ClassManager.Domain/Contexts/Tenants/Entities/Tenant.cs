@@ -41,6 +41,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public ESubscriptionStatus SubscriptionStatus { get; private set; } = ESubscriptionStatus.INCOMPLETE;
     public Guid? UserId { get; private set; }
     public Guid PlanId { get; private set; }
+    public Guid BalanceId { get; private set; }
     public string? StripeAccountId { get; private set; }
     public string? StripeCustomerId { get; private set; }
     public string? StripeSubscriptionId { get; private set; }
@@ -50,6 +51,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public DateTime? ExpiresDate { get; private set; }
     public Plan? Plan { get; private set; }
     public User? User { get; private set; }
+    public Balance? Balance { get; private set; }
     public IList<Address> Addresses { get; private set; } = [];
     public IList<Role> Roles { get; private set; } = [];
     public IList<UsersRoles> UsersRoles { get; private set; } = [];
@@ -105,6 +107,12 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public void SetAvatar(string avatar)
     {
       Avatar = avatar;
+    }
+
+    public void SetBalance(Guid balanceId, Balance balance)
+    {
+      BalanceId = balanceId;
+      Balance = balance;
     }
   }
 }
