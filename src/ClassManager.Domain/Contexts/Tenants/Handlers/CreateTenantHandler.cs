@@ -29,6 +29,7 @@ public class CreateTenantHandler :
   private readonly IPaymentService _paymentService;
   private readonly IMapper _mapper;
   private readonly IPlanRepository _planRepository;
+  private readonly ISubscriptionRepository _subscriptionsRepository;
 
   public CreateTenantHandler(
     ITenantRepository tenantRepository,
@@ -36,7 +37,8 @@ public class CreateTenantHandler :
     IRoleRepository roleRepository,
     IPaymentService paymentService,
     IMapper mapper,
-    IPlanRepository planRepository
+    IPlanRepository planRepository,
+    ISubscriptionRepository subscriptionsRepository
 
     )
   {
@@ -46,6 +48,7 @@ public class CreateTenantHandler :
     _paymentService = paymentService;
     _mapper = mapper;
     _planRepository = planRepository;
+    _subscriptionsRepository = subscriptionsRepository;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, string userIpAddress, CreateTenantCommand command)
   {
@@ -105,29 +108,29 @@ public class CreateTenantHandler :
 
     var stripeCreatedAccount = _paymentService.CreateAccount(email);
     var stripeCreatedCustomer = _paymentService.CreateCustomer(tenant.Name, tenant.Email, null);
+    var stripeSubscription = _paymentService.CreateSubscription(null, null, tenant.Id, plan.StripePriceId, stripeCreatedCustomer.Id, ETargetType.USER, null);
+
     _paymentService.AcceptStripeTerms(userIpAddress, stripeCreatedAccount.Id);
 
     var stripeCustomerEntity = new StripeCustomer(loggedUserId, tenant.Id, stripeCreatedCustomer.Id, EStripeCustomerType.TENANT);
 
     var userAdminRole = new UsersRoles(loggedUserId, role.Id, tenant.Id);
 
-
     tenant.UsersRoles.Add(userAdminRole);
     tenant.StripeCustomers.Add(stripeCustomerEntity);
 
-    tenant.SetStripeInformations(stripeCreatedAccount.Id, stripeCreatedCustomer.Id, null);
+    tenant.SetStripeInformations(stripeCreatedAccount.Id, stripeCreatedCustomer.Id);
 
     await _tenantRepository.CreateAsync(tenant, new CancellationToken());
 
-    var stripeSubscription = _paymentService.CreateSubscription(null, null, tenant.Id, plan.StripePriceId, stripeCreatedCustomer.Id, ETargetType.USER, null);
+    var subscription = new Subscription(tenant.Id, plan.Id);
 
-    tenant.SetStripeInformations(stripeCreatedAccount.Id, stripeCreatedCustomer.Id, stripeSubscription.Id);
-    tenant.SetSubscriptionCurrentPeriod(stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);
+    subscription.SetStripeSubscriptionId(stripeSubscription.Id);
+    subscription.SetCurrentPeriod(stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);
 
+    await _subscriptionsRepository.CreateAsync(subscription, new CancellationToken());
 
-    await _tenantRepository.UpdateAsync(tenant, new CancellationToken());
-
-    /* _paymentService.CreateInvoice(tenant.Id, stripeCreatedCustomer.Id, stripeSubscription.Id, null); */
+    _paymentService.CreateInvoice(null, null, tenant.Id, stripeCustomerEntity.StripeCustomerId, stripeSubscription.Id, stripeCreatedAccount.Id);
 
     var tenantCreated = _mapper.Map<TenantViewModel>(tenant);
 

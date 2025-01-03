@@ -79,11 +79,10 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
       Status = status;
     }
 
-    public void SetStripeInformations(string stripeAccountId, string stripeCustomerId, string stripeSubscriptionId)
+    public void SetStripeInformations(string stripeAccountId, string stripeCustomerId)
     {
       StripeAccountId = stripeAccountId;
       StripeCustomerId = stripeCustomerId;
-      StripeSubscriptionId = stripeSubscriptionId;
     }
 
     public void UpdateChargesEnabled(bool chargesEnabled)
