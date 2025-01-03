@@ -59,39 +59,24 @@ public class UpdateStripeSubscriptionWebhookHandler
         : stripeSubscription.Status == "paused" ? ESubscriptionStatus.PAUSED
           : ESubscriptionStatus.INCOMPLETE;
 
-    if (subscriptionType.Value == ETargetType.USER.ToString())
+    var subscription = await _subscriptionRepository.FindByStripeSubscriptionId(stripeSubscription.Id, new CancellationToken());
+
+    if (subscription is null)
     {
-      var subscription = await _subscriptionRepository.FindByStripeSubscriptionId(stripeSubscription.Id, new CancellationToken());
-
-      if (subscription is null)
-      {
-        return;
-      }
-
-      if (subscription.LatestInvoice is not null && subscription.LatestInvoice.StripeInvoiceId != stripeSubscription.LatestInvoiceId)
-      {
-        var latestInvoice = await _invoiceRepository.FindByStripeInvoiceId(stripeSubscription.LatestInvoiceId);
-        if (latestInvoice is not null)
-        {
-          subscription.SetLatestInvoice(latestInvoice.Id);
-        }
-      }
-      subscription.SetCanceledAt(stripeSubscription.CanceledAt);
-      subscription.SetStatus(status);
-      subscription.SetCurrentPeriod(stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);
-      await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
+      return;
     }
-    else if (subscriptionType.Value == ETargetType.TENANT.ToString())
+
+    if (subscription.LatestInvoice is not null && subscription.LatestInvoice.StripeInvoiceId != stripeSubscription.LatestInvoiceId)
     {
-      var tenant = await _tenantRepository.FindByStripeSubscriptionId(stripeSubscription.Id, new CancellationToken());
-
-      if (tenant is null)
+      var latestInvoice = await _invoiceRepository.FindByStripeInvoiceId(stripeSubscription.LatestInvoiceId);
+      if (latestInvoice is not null)
       {
-        return;
+        subscription.SetLatestInvoice(latestInvoice.Id);
       }
-      tenant.SetSubscriptionStatus(status);
-      tenant.SetSubscriptionCurrentPeriod(stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);
-      await _tenantRepository.UpdateAsync(tenant, new CancellationToken());
     }
+    subscription.SetCanceledAt(stripeSubscription.CanceledAt);
+    subscription.SetStatus(status);
+    subscription.SetCurrentPeriod(stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);
+    await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
   }
 }
