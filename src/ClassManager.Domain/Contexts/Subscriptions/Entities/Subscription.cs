@@ -9,13 +9,22 @@ namespace ClassManager.Domain.Contexts.Subscriptions.Entities;
 public class Subscription : TenantEntity
 {
   protected Subscription() { }
-  public Subscription(Guid userId, Guid planId, Guid tenantId)
+
+  public Subscription(Guid tenantId, Guid planId)
   {
-    UserId = userId;
+    PlanId = planId;
     TenantId = tenantId;
-    TenantPlanId = planId;
-    Status = ESubscriptionStatus.INCOMPLETE;
+    TargetType = ETargetType.TENANT;
   }
+  public Subscription(Guid tenantId, Guid tenantPlanId, Guid userId)
+  {
+    TenantId = tenantId;
+    TenantPlanId = tenantPlanId;
+    UserId = userId;
+    TargetType = ETargetType.USER;
+  }
+
+
 
   public Guid UserId { get; private set; }
   public Guid? PlanId { get; private set; }
@@ -37,9 +46,14 @@ public class Subscription : TenantEntity
   public DateTime CreatedAt { get; private set; }
   public DateTime UpdatedAt { get; private set; }
 
-  public void ChangePlan(Guid planId)
+  public void SetTenantPlan(Guid tenantPlanId)
   {
-    TenantPlanId = planId;
+    TenantPlanId = tenantPlanId;
+  }
+
+  public void SetPlan(Guid planId)
+  {
+    PlanId = planId;
   }
 
   public void SetStatus(ESubscriptionStatus status)

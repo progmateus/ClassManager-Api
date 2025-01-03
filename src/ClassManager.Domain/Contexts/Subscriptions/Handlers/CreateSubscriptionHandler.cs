@@ -146,9 +146,7 @@ public class CreateSubscriptionHandler : Notifiable,
       await _stripeCustomerRepository.CreateAsync(stripeCustomerEntity, new CancellationToken());
     }
 
-    var subscription = new Subscription(stripeCustomerEntity.UserId, tenantPlan.Id, tenantPlan.TenantId);
-
-    /* await _subscriptionRepository.CreateAsync(subscription, new CancellationToken()); */
+    var subscription = new Subscription(tenantPlan.TenantId, tenantPlan.Id, stripeCustomerEntity.UserId);
 
     var stripeSubscription = _paymentService.CreateSubscription(subscription.Id, subscription.UserId, tenantId, tenantPlan.StripePriceId, stripeCustomerEntity.StripeCustomerId, ETargetType.USER, tenantPlan.Tenant.StripeAccountId);
 
