@@ -41,7 +41,6 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public ESubscriptionStatus SubscriptionStatus { get; private set; } = ESubscriptionStatus.INCOMPLETE;
     public Guid? UserId { get; private set; }
     public Guid PlanId { get; private set; }
-    public Guid BalanceId { get; private set; }
     public string? StripeAccountId { get; private set; }
     public string? StripeCustomerId { get; private set; }
     public string? StripeSubscriptionId { get; private set; }
@@ -109,9 +108,8 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
       Avatar = avatar;
     }
 
-    public void SetBalance(Guid balanceId, Balance balance)
+    public void SetBalance(Balance balance)
     {
-      BalanceId = balanceId;
       Balance = balance;
     }
   }

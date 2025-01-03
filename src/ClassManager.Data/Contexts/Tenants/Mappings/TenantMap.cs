@@ -116,6 +116,5 @@ public class TenantMap : IEntityTypeConfiguration<Tenant>
         builder.Property(x => x.CurrentPeriodEnd)
             .HasColumnName("CurrentPeriodEnd")
             .IsRequired(false);
-
     }
 }

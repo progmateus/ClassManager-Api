@@ -1,3 +1,4 @@
+using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Shared.Entities;
 
 namespace ClassManager.Domain.Contexts.Invoices.Entities;
@@ -14,6 +15,7 @@ public class Balance : TenantEntity
 
   public decimal Available { get; private set; } = 0;
   public decimal Pending { get; private set; } = 0;
+  public Tenant? Tenant { get; private set; }
   public DateTime CreatedAt { get; private set; }
   public DateTime UpdatedAt { get; private set; }
 
