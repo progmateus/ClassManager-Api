@@ -21,6 +21,7 @@ namespace ClassManager.Domain.Services.Stripe.Repositories.Contracts
     void CreateWebhook();
     VerificationSession CreateVerificationSession(string email, string connectedAccountId);
     AccountLink CreateAccountLink(string connectedAccountId, string? linkType = "account_onboarding");
+    Balance GetBalance(string connectedAccountId);
     Account GetAccount(string stripeAccountId);
   }
 }

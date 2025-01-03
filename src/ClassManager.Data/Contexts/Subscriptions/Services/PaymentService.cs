@@ -333,4 +333,16 @@ public class PaymentService : IPaymentService
     var service = new InvoiceService();
     return service.Pay(stripeInvoiceId, options, requestOptions);
   }
+
+  public Balance GetBalance(string connectedAccountId)
+  {
+    var requestOptions = new RequestOptions
+    {
+      StripeAccount = connectedAccountId ?? null,
+    };
+
+    var options = new BalanceGetOptions();
+    var service = new BalanceService();
+    return service.Get(options, requestOptions);
+  }
 }
