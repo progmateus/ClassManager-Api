@@ -35,6 +35,11 @@ public class GetTenantProfileHandler
 
     var tenantResponse = _mapper.Map<TenantViewModel>(tenant);
 
+    var balance = _paymentService.GetBalance(tenant.StripeAccountId);
+
+    tenantResponse.AvailableBalance = balance.Available.First().Amount;
+    tenantResponse.PendingBalance = balance.Pending.First().Amount;
+
     if (!tenant.StripeChargesEnabled)
     {
       tenantResponse.StripeOnboardUrl = _paymentService.CreateAccountLink(tenant.StripeAccountId).Url;
