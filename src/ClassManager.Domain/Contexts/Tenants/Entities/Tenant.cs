@@ -38,16 +38,11 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public Email Email { get; private set; }
     public string? Avatar { get; private set; } = string.Empty;
     public ETenantStatus Status { get; private set; } = ETenantStatus.ACTIVE;
-    public ESubscriptionStatus SubscriptionStatus { get; private set; } = ESubscriptionStatus.INCOMPLETE;
     public Guid? UserId { get; private set; }
     public Guid PlanId { get; private set; }
     public string? StripeAccountId { get; private set; }
     public string? StripeCustomerId { get; private set; }
-    public string? StripeSubscriptionId { get; private set; }
     public bool StripeChargesEnabled { get; private set; } = false;
-    public DateTime? CurrentPeriodStart { get; private set; }
-    public DateTime? CurrentPeriodEnd { get; private set; }
-    public DateTime? ExpiresDate { get; private set; }
     public Plan? Plan { get; private set; }
     public User? User { get; private set; }
     public IList<Address> Addresses { get; private set; } = [];
@@ -88,17 +83,6 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public void UpdateChargesEnabled(bool chargesEnabled)
     {
       StripeChargesEnabled = chargesEnabled;
-    }
-
-    public void SetSubscriptionStatus(ESubscriptionStatus status)
-    {
-      SubscriptionStatus = status;
-    }
-
-    public void SetSubscriptionCurrentPeriod(DateTime? currentPeriodStart, DateTime? currentPeriodEnd)
-    {
-      CurrentPeriodStart = currentPeriodStart ?? CurrentPeriodStart;
-      CurrentPeriodEnd = currentPeriodEnd ?? CurrentPeriodEnd;
     }
 
     public void SetAvatar(string avatar)

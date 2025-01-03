@@ -86,7 +86,7 @@ public class CreateSubscriptionHandler : Notifiable,
       }
     }
 
-    var subscriptionsAlreadyExists = await _subscriptionRepository.GetSubscriptionsByStatus(targetUserId, tenantId, [ESubscriptionStatus.ACTIVE, ESubscriptionStatus.UNPAID, ESubscriptionStatus.PAST_DUE], new CancellationToken());
+    var subscriptionsAlreadyExists = await _subscriptionRepository.GetSubscriptionsByStatus(targetUserId, tenantId, [ESubscriptionStatus.ACTIVE, ESubscriptionStatus.UNPAID, ESubscriptionStatus.PAST_DUE], ETargetType.USER);
 
     if (subscriptionsAlreadyExists.Any(x => x.Status == ESubscriptionStatus.ACTIVE || x.Status == ESubscriptionStatus.INCOMPLETE))
     {

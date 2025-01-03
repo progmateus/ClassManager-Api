@@ -46,7 +46,7 @@ public class UpdateStripeSubscriptionWebhookHandler
       return;
     }
 
-    var subscriptionType = stripeSubscription.Metadata.FirstOrDefault(x => x.Key == "type");
+    /* var subscriptionType = stripeSubscription.Metadata.FirstOrDefault(x => x.Key == "type"); */
 
     var status =
       stripeSubscription.Status == "incomplete" ? ESubscriptionStatus.INCOMPLETE

@@ -106,9 +106,11 @@ public class CreateTenantHandler :
 
     var tenant = new Tenant(command.Name, document, command.Username, command.Description, email, loggedUserId, command.PlanId);
 
+    var subscription = new Subscription(tenant.Id, plan.Id);
+
     var stripeCreatedAccount = _paymentService.CreateAccount(email);
     var stripeCreatedCustomer = _paymentService.CreateCustomer(tenant.Name, tenant.Email, null);
-    var stripeSubscription = _paymentService.CreateSubscription(null, null, tenant.Id, plan.StripePriceId, stripeCreatedCustomer.Id, ETargetType.USER, null);
+    var stripeSubscription = _paymentService.CreateSubscription(subscription.Id, null, tenant.Id, plan.StripePriceId, stripeCreatedCustomer.Id, ETargetType.TENANT, null);
 
     _paymentService.AcceptStripeTerms(userIpAddress, stripeCreatedAccount.Id);
 
@@ -122,8 +124,6 @@ public class CreateTenantHandler :
     tenant.SetStripeInformations(stripeCreatedAccount.Id, stripeCreatedCustomer.Id);
 
     await _tenantRepository.CreateAsync(tenant, new CancellationToken());
-
-    var subscription = new Subscription(tenant.Id, plan.Id);
 
     subscription.SetStripeSubscriptionId(stripeSubscription.Id);
     subscription.SetCurrentPeriod(stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);

@@ -17,13 +17,16 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     return await DbSet.Include(x => x.TenantPlan).FirstAsync(x => x.UserId == userId && x.TenantPlan.TenantId == tenantId);
   }
 
-  public async Task<List<Subscription>> GetSubscriptionsByStatus(Guid userId, Guid tenantId, List<ESubscriptionStatus> status, CancellationToken cancellationToken)
+  public async Task<List<Subscription>> GetSubscriptionsByStatus(Guid? userId, Guid tenantId, List<ESubscriptionStatus> status, ETargetType targetType = ETargetType.USER)
   {
     return await DbSet
     .Include(x => x.TenantPlan)
     .AsNoTracking()
-    .Where(x => x.TenantPlan.TenantId == tenantId && x.UserId == userId && status.Contains(x.Status))
-    .ToListAsync(cancellationToken);
+    .Where(x => x.TenantId == tenantId)
+    .Where(x => status.Contains(x.Status))
+    .Where(x => !userId.HasValue || x.UserId == userId)
+    .Where(x => x.TargetType == targetType)
+    .ToListAsync();
   }
 
   public async Task<Subscription?> GetSubscriptionProfileAsync(Guid id, Guid tenantId, CancellationToken cancellationToken)
@@ -41,13 +44,13 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     .FirstOrDefaultAsync(x => x.Id == id && x.TenantId == tenantId);
   }
 
-  public async Task<Subscription?> FindUserLatestSubscription(Guid tenantId, Guid userId, CancellationToken cancellationToken)
+  public async Task<Subscription?> FindLatestSubscription(Guid tenantId, Guid? userId, ETargetType? targetType = ETargetType.USER)
   {
     return await DbSet
   .Include(x => x.TenantPlan)
   .AsNoTracking()
   .OrderByDescending(x => x.CreatedAt)
-  .FirstOrDefaultAsync(x => x.UserId == userId && x.TenantId == tenantId);
+  .FirstOrDefaultAsync(x => (!userId.HasValue || x.UserId == userId) && x.TenantId == tenantId && x.TargetType == targetType);
   }
 
   public async Task<List<Subscription>> ListSubscriptions(List<Guid>? usersIds, List<Guid>? tenantsIds, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)

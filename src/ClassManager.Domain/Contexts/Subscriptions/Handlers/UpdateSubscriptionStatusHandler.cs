@@ -60,7 +60,7 @@ public class UpdateSubscriptionStatusHandler : Notifiable
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, null, 404);
     }
 
-    var userLatestSubscription = await _subscriptionRepository.FindUserLatestSubscription(tenantId, subscription.UserId, new CancellationToken());
+    var userLatestSubscription = await _subscriptionRepository.FindLatestSubscription(tenantId, subscription.UserId, ETargetType.USER);
 
     if (userLatestSubscription is not null && !userLatestSubscription.Id.Equals(subscription.Id))
     {
