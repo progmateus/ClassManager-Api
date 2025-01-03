@@ -1,4 +1,5 @@
 using AutoMapper;
+using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Subscriptions.ViewModels;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
@@ -47,7 +48,7 @@ public class ListSubscriptionsHandler : ITenantPaginationHandler<PaginationComma
 
     var skip = (command.Page - 1) * command.Limit;
 
-    var subscriptions = _mapper.Map<List<SubscriptionViewModel>>(await _subscriptionRepository.ListSubscriptions([], [tenantId], command.Search, skip, command.Limit, new CancellationToken()));
+    var subscriptions = _mapper.Map<List<SubscriptionViewModel>>(await _subscriptionRepository.ListSubscriptions([], [tenantId], ETargetType.USER, command.Search, skip, command.Limit, new CancellationToken()));
 
     return new CommandResult(false, "SUBSCRIPTIONS_LISTED", subscriptions, null, 200);
   }

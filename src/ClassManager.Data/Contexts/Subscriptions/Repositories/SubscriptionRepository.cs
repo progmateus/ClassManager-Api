@@ -53,7 +53,7 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
   .FirstOrDefaultAsync(x => (!userId.HasValue || x.UserId == userId) && x.TenantId == tenantId && x.TargetType == targetType);
   }
 
-  public async Task<List<Subscription>> ListSubscriptions(List<Guid>? usersIds, List<Guid>? tenantsIds, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)
+  public async Task<List<Subscription>> ListSubscriptions(List<Guid>? usersIds, List<Guid>? tenantsIds, ETargetType targetType = ETargetType.USER, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)
   {
     return await DbSet
     .Include(x => x.User)
@@ -63,6 +63,7 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     .Where(x => usersIds.IsNullOrEmpty() || usersIds.Contains(x.UserId))
     .Where(x => tenantsIds.IsNullOrEmpty() || tenantsIds.Contains(x.TenantId))
     .Where(x => search.IsNullOrEmpty() || x.User.Username.Contains(search) || x.User.Name.Contains(search))
+    .Where(x => x.TargetType == targetType)
     .GroupBy(x => new { x.TenantId, x.UserId })
     .Select(x => x.OrderByDescending(x => x.CreatedAt).Select(x => x).First())
     .Skip(skip)
