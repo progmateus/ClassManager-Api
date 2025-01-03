@@ -22,7 +22,14 @@ public class SubscriptionMap : IEntityTypeConfiguration<Subscription>
     builder.HasOne(e => e.TenantPlan)
       .WithMany(t => t.Subscriptions)
       .HasForeignKey("TenantPlanId")
-      .HasPrincipalKey(c => c.Id);
+      .HasPrincipalKey(c => c.Id)
+      .IsRequired(false);
+
+    builder.HasOne(e => e.Plan)
+      .WithMany(t => t.Subscriptions)
+      .HasForeignKey("PlanId")
+      .HasPrincipalKey(c => c.Id)
+      .IsRequired(false);
 
     builder.HasOne(e => e.LatestInvoice)
     .WithOne()
@@ -33,6 +40,11 @@ public class SubscriptionMap : IEntityTypeConfiguration<Subscription>
       .HasColumnType("TINYINT")
       .IsRequired(true)
       .HasDefaultValue(ESubscriptionStatus.INCOMPLETE);
+
+    builder.Property(e => e.TargetType)
+      .HasColumnType("TINYINT")
+      .IsRequired(true)
+      .HasDefaultValue(ETargetType.USER);
 
     builder.HasOne(e => e.Tenant)
       .WithMany(t => t.Subscriptions)

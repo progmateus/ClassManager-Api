@@ -1,4 +1,5 @@
 using ClassManager.Domain.Contexts.Invoices.Entities;
+using ClassManager.Domain.Contexts.Subscriptions.Entities;
 using ClassManager.Domain.Contexts.Tenants.Entities;
 using ClassManager.Domain.Shared.Entities;
 
@@ -27,6 +28,7 @@ public class Plan : Entity
   public string? StripeProductId { get; private set; }
   public string? StripePriceId { get; private set; }
   public IList<Tenant> Tenants { get; private set; } = [];
+  public ICollection<Subscription> Subscriptions { get; } = [];
   public IList<Invoice> Invoices { get; private set; } = [];
   public DateTime CreatedAt { get; private set; }
   public DateTime UpdatedAt { get; private set; }
