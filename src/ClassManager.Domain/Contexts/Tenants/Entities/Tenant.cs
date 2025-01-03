@@ -50,7 +50,6 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public DateTime? ExpiresDate { get; private set; }
     public Plan? Plan { get; private set; }
     public User? User { get; private set; }
-    public Balance? Balance { get; private set; }
     public IList<Address> Addresses { get; private set; } = [];
     public IList<Role> Roles { get; private set; } = [];
     public IList<UsersRoles> UsersRoles { get; private set; } = [];
@@ -106,11 +105,6 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public void SetAvatar(string avatar)
     {
       Avatar = avatar;
-    }
-
-    public void SetBalance(Balance balance)
-    {
-      Balance = balance;
     }
   }
 }

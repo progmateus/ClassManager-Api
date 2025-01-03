@@ -111,9 +111,7 @@ public class CreateTenantHandler :
 
     var userAdminRole = new UsersRoles(loggedUserId, role.Id, tenant.Id);
 
-    var balance = new Balance(tenant.Id);
 
-    tenant.SetBalance(balance);
     tenant.UsersRoles.Add(userAdminRole);
     tenant.StripeCustomers.Add(stripeCustomerEntity);
 
