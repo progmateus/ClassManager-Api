@@ -60,7 +60,7 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     .Include(x => x.TenantPlan)
     .Include(x => x.Tenant)
     .Include(x => x.Invoices)
-    .Where(x => usersIds.IsNullOrEmpty() || usersIds.Contains(x.UserId))
+    .Where(x => usersIds.IsNullOrEmpty() || usersIds.Contains(x.UserId.Value))
     .Where(x => tenantsIds.IsNullOrEmpty() || tenantsIds.Contains(x.TenantId))
     .Where(x => search.IsNullOrEmpty() || x.User.Username.Contains(search) || x.User.Name.Contains(search))
     .Where(x => x.TargetType == targetType)

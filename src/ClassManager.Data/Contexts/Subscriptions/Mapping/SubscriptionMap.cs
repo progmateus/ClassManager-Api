@@ -17,7 +17,8 @@ public class SubscriptionMap : IEntityTypeConfiguration<Subscription>
     builder.HasOne(e => e.User)
       .WithMany(u => u.Subscriptions)
       .HasForeignKey("UserId")
-      .HasPrincipalKey(u => u.Id);
+      .HasPrincipalKey(u => u.Id)
+      .IsRequired(false);
 
     builder.HasOne(e => e.TenantPlan)
       .WithMany(t => t.Subscriptions)

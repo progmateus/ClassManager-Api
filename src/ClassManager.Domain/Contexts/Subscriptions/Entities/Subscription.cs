@@ -26,7 +26,7 @@ public class Subscription : TenantEntity
 
 
 
-  public Guid UserId { get; private set; }
+  public Guid? UserId { get; private set; }
   public Guid? PlanId { get; private set; }
   public Guid? TenantPlanId { get; private set; }
   public Guid? LatestInvoiceId { get; private set; }

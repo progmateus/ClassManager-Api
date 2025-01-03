@@ -9,10 +9,10 @@ namespace ClassManager.Domain.Contexts.Tenants.Commands
   public class CreateTenantCommand : Notifiable, ICommand
   {
 
-    public CreateTenantCommand()
-    {
-      Document = Regex.Replace(Document, "/W/g", "");
-    }
+    /*     public CreateTenantCommand()
+        {
+          Document = Regex.Replace(Document, "/W/g", "");
+        } */
 
     public string Name { get; set; } = null!;
     public string Email { get; set; } = null!;
