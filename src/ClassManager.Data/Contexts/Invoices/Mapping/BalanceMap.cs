@@ -13,12 +13,12 @@ public class BalanceMap : IEntityTypeConfiguration<Balance>
     builder.HasKey(x => x.Id);
 
     builder.Property(x => x.Available)
-      .HasColumnName("Amount")
+      .HasColumnName("Available")
       .HasColumnType("DECIMAL")
       .IsRequired();
 
     builder.Property(x => x.Pending)
-      .HasColumnName("Amount")
+      .HasColumnName("Pending")
       .HasColumnType("DECIMAL")
       .IsRequired();
 
