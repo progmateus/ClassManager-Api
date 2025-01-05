@@ -30,6 +30,8 @@ public class Subscription : TenantEntity
   public Guid? PlanId { get; private set; }
   public Guid? TenantPlanId { get; private set; }
   public Guid? LatestInvoiceId { get; private set; }
+  public Guid? NextPlanId { get; private set; }
+  public Guid? NextTenantPlanId { get; private set; }
   public ESubscriptionStatus Status { get; private set; } = ESubscriptionStatus.INCOMPLETE;
   public ETargetType TargetType { get; private set; } = ETargetType.USER;
   public string? StripeSubscriptionId { get; private set; }
@@ -38,6 +40,8 @@ public class Subscription : TenantEntity
   public User? User { get; private set; }
   public Plan? Plan { get; private set; }
   public TenantPlan? TenantPlan { get; private set; }
+  public Plan? NextPlan { get; private set; }
+  public TenantPlan? NextTenantPlan { get; private set; }
   public Tenant? Tenant { get; private set; }
   public Invoice? LatestInvoice { get; private set; }
   public IList<Invoice> Invoices { get; private set; } = [];

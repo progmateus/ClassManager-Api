@@ -1,6 +1,7 @@
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Entities;
+using ClassManager.Domain.Contexts.Tenants.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -33,9 +34,22 @@ public class SubscriptionMap : IEntityTypeConfiguration<Subscription>
       .IsRequired(false);
 
     builder.HasOne(e => e.LatestInvoice)
-    .WithOne()
-    .HasForeignKey<Subscription>(x => x.LatestInvoiceId)
-    .OnDelete(DeleteBehavior.Restrict);
+      .WithOne()
+      .HasForeignKey<Subscription>(x => x.LatestInvoiceId)
+      .IsRequired(false)
+      .OnDelete(DeleteBehavior.Restrict);
+
+    builder.HasOne(e => e.NextTenantPlan)
+      .WithOne()
+      .HasForeignKey<Subscription>(x => x.NextTenantPlanId)
+      .IsRequired(false)
+      .OnDelete(DeleteBehavior.Restrict);
+
+    builder.HasOne(e => e.NextPlan)
+      .WithOne()
+      .HasForeignKey<Subscription>(x => x.NextPlanId)
+      .IsRequired(false)
+      .OnDelete(DeleteBehavior.Restrict);
 
     builder.Property(e => e.Status)
       .HasColumnType("TINYINT")
@@ -67,7 +81,7 @@ public class SubscriptionMap : IEntityTypeConfiguration<Subscription>
       .IsRequired();
 
     builder.Property(x => x.CanceledAt)
-    .HasColumnName("CanceledAt")
-    .IsRequired(false);
+      .HasColumnName("CanceledAt")
+      .IsRequired(false);
   }
 }
