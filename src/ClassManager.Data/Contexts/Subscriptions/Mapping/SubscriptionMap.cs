@@ -72,8 +72,8 @@ public class SubscriptionMap : IEntityTypeConfiguration<Subscription>
       .HasMaxLength(200)
       .IsRequired(false);
 
-    builder.Property(x => x.StripeSubscriptionPriceItem)
-      .HasColumnName("StripeSubscriptionPriceItem")
+    builder.Property(x => x.StripeSubscriptionPriceItemId)
+      .HasColumnName("StripeSubscriptionPriceItemId")
       .HasColumnType("VARCHAR")
       .HasMaxLength(200)
       .IsRequired(false);

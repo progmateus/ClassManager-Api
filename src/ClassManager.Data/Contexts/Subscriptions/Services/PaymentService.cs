@@ -299,29 +299,23 @@ public class PaymentService : IPaymentService
     return service.Get(stripeAccountId);
   }
 
-  public void UpdateSubscriptionPlan(Guid tenantId, Guid subscriptionId, string stripeSubscriptionId, string newStripePriceId, string? connectedAccountId)
+  public void UpdateSubscriptionPlan(Guid tenantId, Guid subscriptionId, string stripeSubscriptionPriceItemId, string newStripePriceId, string? connectedAccountId)
   {
     var requestOptions = new RequestOptions
     {
       StripeAccount = connectedAccountId ?? null,
     };
-    var options = new SubscriptionUpdateOptions
+    var options = new SubscriptionItemUpdateOptions
     {
       Metadata = new Dictionary<string, string> {
         { "tenantId", tenantId.ToString() },
         { "subscriptionId", subscriptionId.ToString() }
       },
-      Items = new List<SubscriptionItemOptions>
-        {
-            new SubscriptionItemOptions {
-              Price = newStripePriceId,
-              Quantity = 1
-            },
-        },
+      Price = newStripePriceId,
       ProrationBehavior = "none"
     };
-    var service = new SubscriptionService();
-    service.Update(stripeSubscriptionId, options, requestOptions);
+    var service = new SubscriptionItemService();
+    service.Update(stripeSubscriptionPriceItemId, options, requestOptions);
   }
 
   public Invoice PayInvoice(string stripeInvoiceId, string? connectedAccountId)

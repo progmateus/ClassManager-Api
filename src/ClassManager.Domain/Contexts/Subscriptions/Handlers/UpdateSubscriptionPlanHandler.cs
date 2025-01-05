@@ -74,7 +74,7 @@ public class UpdateSubscriptionPlanHandler : Notifiable
       return new CommandResult(false, "ERR_TENANT_PLAN_NOT_FOUND", null, null, 404);
     }
 
-    _paymentService.UpdateSubscriptionPlan(tenant.Id, subscription.Id, subscription.StripeSubscriptionId, tenantPlan.StripePriceId, tenant.StripeAccountId);
+    _paymentService.UpdateSubscriptionPlan(tenant.Id, subscription.Id, subscription.StripeSubscriptionPriceItemId, tenantPlan.StripePriceId, tenant.StripeAccountId);
 
     return new CommandResult(true, "SUBSCRIPTION_UPDATED", subscription, null, 200);
   }

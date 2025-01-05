@@ -35,7 +35,7 @@ public class Subscription : TenantEntity
   public ESubscriptionStatus Status { get; private set; } = ESubscriptionStatus.INCOMPLETE;
   public ETargetType TargetType { get; private set; } = ETargetType.USER;
   public string? StripeSubscriptionId { get; private set; }
-  public string? StripeSubscriptionPriceItem { get; private set; }
+  public string? StripeSubscriptionPriceItemId { get; private set; }
   public DateTime CurrentPeriodStart { get; private set; }
   public DateTime CurrentPeriodEnd { get; private set; }
   public User? User { get; private set; }
@@ -84,5 +84,10 @@ public class Subscription : TenantEntity
   public void SetCanceledAt(DateTime? canceledAt)
   {
     CanceledAt = canceledAt;
+  }
+
+  public void SetStripeSubscriptionPriceItemId(string? stripeSubscriptionPriceItemId)
+  {
+    StripeSubscriptionPriceItemId = stripeSubscriptionPriceItemId;
   }
 }
