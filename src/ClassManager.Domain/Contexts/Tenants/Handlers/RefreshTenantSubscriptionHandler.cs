@@ -42,7 +42,7 @@ public class RefreshTenantSubscriptionHandler
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId)
   {
 
-    var tenant = await _tenantRepository.FindAsync(x => x.Id == tenantId, [x => x.StripeCustomers.Where(sc => sc.Type == EStripeCustomerType.TENANT && sc.TenantId == tenantId)]);
+    var tenant = await _tenantRepository.FindAsync(x => x.Id == tenantId, [x => x.StripeCustomers.Where(sc => sc.TargetType == ETargetType.TENANT && sc.TenantId == tenantId)]);
 
     if (tenant is null || tenant.StripeCustomers.Count < 1)
     {

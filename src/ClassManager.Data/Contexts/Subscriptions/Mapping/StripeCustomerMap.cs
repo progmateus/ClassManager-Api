@@ -30,9 +30,9 @@ public class StripeCustomerMap : IEntityTypeConfiguration<StripeCustomer>
       .HasMaxLength(200)
       .IsRequired();
 
-    builder.Property(e => e.Type)
+    builder.Property(e => e.TargetType)
       .HasColumnType("TINYINT")
       .IsRequired(true)
-      .HasDefaultValue(EStripeCustomerType.USER);
+      .HasDefaultValue(ETargetType.USER);
   }
 }

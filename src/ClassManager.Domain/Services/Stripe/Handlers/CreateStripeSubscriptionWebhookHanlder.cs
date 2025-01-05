@@ -39,7 +39,7 @@ public class CreateStripeSubscriptionWebhookHandler
 
     var customer = await _stripeCustomerRepository.FindByCustomerId(stripeSubscription.CustomerId, default);
 
-    if (customer is null || customer.Type != EStripeCustomerType.USER)
+    if (customer is null || customer.TargetType != ETargetType.USER)
     {
       return;
     }

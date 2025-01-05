@@ -60,7 +60,7 @@ public class CreateTenantBankAccountHandler :
       return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, command.Notifications, 404);
     }
 
-    var stripeCustomer = await _stripeCustomerRepository.FindByUserIdAndTenantIdAndType(loggedUserId, tenantId, EStripeCustomerType.TENANT);
+    var stripeCustomer = await _stripeCustomerRepository.FindByUserIdAndTenantIdAndType(loggedUserId, tenantId, ETargetType.TENANT, default);
 
     if (stripeCustomer is null)
     {

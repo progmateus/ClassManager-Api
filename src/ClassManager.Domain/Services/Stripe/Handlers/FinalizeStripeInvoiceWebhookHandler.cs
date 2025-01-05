@@ -41,7 +41,7 @@ public class FinalizeStripeInvoiceWebhookHandler
       return;
     }
 
-    if (customer.Type == EStripeCustomerType.USER)
+    if (customer.TargetType == ETargetType.USER)
     {
       var subscription = await _subscriptionRepository.FindByStripeSubscriptionId(stripeInvoice.SubscriptionId, new CancellationToken());
 
