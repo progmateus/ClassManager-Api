@@ -20,17 +20,24 @@ public class TenantMap : IEntityTypeConfiguration<Tenant>
             .IsRequired(true);
 
         builder.OwnsOne(x => x.Document)
-        .Property(x => x.Number)
-        .HasColumnName("Document")
-        .HasColumnType("VARCHAR")
-        .HasMaxLength(80)
-        .IsRequired(true);
+            .Property(x => x.Number)
+            .HasColumnName("Document")
+            .HasColumnType("VARCHAR")
+            .HasMaxLength(80)
+            .IsRequired(true);
 
         builder.OwnsOne(x => x.Document)
-        .Property(x => x.Type)
-        .HasColumnName("DocumentType")
-        .HasColumnType("TINYINT")
-        .IsRequired(true);
+            .Property(x => x.Type)
+            .HasColumnName("DocumentType")
+            .HasColumnType("TINYINT")
+            .IsRequired(true);
+
+        builder.OwnsOne(x => x.Phone)
+            .Property(x => x.Number)
+            .HasColumnName("Phone")
+            .HasColumnType("VARCHAR")
+            .HasMaxLength(30)
+            .IsRequired(false);
 
         builder.Property(x => x.Avatar)
             .HasColumnName("Avatar")

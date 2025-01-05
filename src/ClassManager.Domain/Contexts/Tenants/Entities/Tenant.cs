@@ -36,6 +36,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public string? Description { get; private set; }
     public Document Document { get; private set; }
     public Email Email { get; private set; }
+    public Phone Phone { get; private set; }
     public string? Avatar { get; private set; } = string.Empty;
     public ETenantStatus Status { get; private set; } = ETenantStatus.ACTIVE;
     public Guid? UserId { get; private set; }
