@@ -18,10 +18,11 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     {
 
     }
-    public Tenant(string name, Document document, string username, string description, Email email, Guid userId, Guid planId)
+    public Tenant(string name, Document document, Phone phone, string username, string description, Email email, Guid userId, Guid planId)
     {
       Name = name;
       Document = document;
+      Phone = phone;
       Username = username;
       Description = description;
       Email = email;

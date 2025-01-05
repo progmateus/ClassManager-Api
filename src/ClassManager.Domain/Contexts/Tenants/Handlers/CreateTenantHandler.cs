@@ -88,8 +88,9 @@ public class CreateTenantHandler :
 
     var document = new Document(command.Document);
     var email = new Email(command.Email);
+    var phone = new Phone(command.Phone);
 
-    AddNotifications(document, email);
+    AddNotifications(document, email, phone);
 
     if (Invalid)
     {

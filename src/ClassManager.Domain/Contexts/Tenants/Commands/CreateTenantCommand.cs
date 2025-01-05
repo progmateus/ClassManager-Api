@@ -34,6 +34,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Commands
       .IsNotNull(PlanId, "PlanId", "PlanId cannot be null")
       .IsEmail(Email, "Email", "Invalid email")
       .Matchs(Document, "([0-9]{2}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[\\/]?[0-9]{4}[-]?[0-9]{2})|([0-9]{3}[\\.]?[0-9]{3}[\\.]?[0-9]{3}[-]?[0-9]{2})", "Document", "Invalid document")
+      .Matchs(Phone, "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$", "Phone", "Invalid phone")
     );
     }
   }
