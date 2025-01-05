@@ -15,6 +15,10 @@ namespace ClassManager.Domain.Contexts.Shared.ValueObjects
       );
     }
 
+    public Phone()
+    {
+    }
+
     public string Number { get; private set; }
 
     private bool Validate()
