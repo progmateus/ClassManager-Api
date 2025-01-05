@@ -29,7 +29,8 @@ public class AutoMapperConfig : Profile
   {
     CreateMap<User, UserViewModel>()
     .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address))
-    .ForMember(dest => dest.Document, opt => opt.MapFrom(src => src.Document.Number));
+    .ForMember(dest => dest.Document, opt => opt.MapFrom(src => src.Document.Number))
+    .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone.Number));
 
     CreateMap<Booking, BookingViewModel>();
 
@@ -48,7 +49,8 @@ public class AutoMapperConfig : Profile
     CreateMap<Subscription, SubscriptionViewModel>();
 
     CreateMap<Tenant, TenantViewModel>()
-    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address));
+    .ForMember(dest => dest.Email, opt => opt.MapFrom(src => src.Email.Address))
+    .ForMember(dest => dest.Phone, opt => opt.MapFrom(src => src.Phone.Number));
 
     CreateMap<TenantPlan, TenantPlanViewModel>();
     CreateMap<Link, LinkViewModel>();

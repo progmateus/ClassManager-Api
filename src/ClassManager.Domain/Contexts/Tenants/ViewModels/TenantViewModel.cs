@@ -15,6 +15,7 @@ public class TenantViewModel
   public string? Username { get; set; }
   public string? Description { get; set; }
   public string? Email { get; set; }
+  public string? Phone { get; set; }
   public string? Document { get; set; }
   public string? Avatar { get; set; }
   public string? StripeOnboardUrl { get; set; }
