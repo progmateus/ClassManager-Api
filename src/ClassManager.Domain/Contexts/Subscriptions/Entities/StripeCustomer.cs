@@ -8,19 +8,12 @@ public class StripeCustomer : TenantEntity
 {
   protected StripeCustomer() { }
 
-  public StripeCustomer(string stripeCustomerId, Guid tenantId, Guid userId)
+  public StripeCustomer(string stripeCustomerId, Guid tenantId, Guid userId, ETargetType eTargetType = ETargetType.USER)
   {
     UserId = userId;
     TenantId = tenantId;
     StripeCustomerId = stripeCustomerId;
-    TargetType = ETargetType.USER;
-  }
-
-  public StripeCustomer(string stripeCustomerId, Guid tenantId)
-  {
-    TenantId = tenantId;
-    StripeCustomerId = stripeCustomerId;
-    TargetType = ETargetType.TENANT;
+    TargetType = eTargetType;
   }
 
   public Guid UserId { get; private set; }

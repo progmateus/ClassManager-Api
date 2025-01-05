@@ -114,7 +114,7 @@ public class CreateTenantHandler :
 
     _paymentService.AcceptStripeTerms(userIpAddress, stripeCreatedAccount.Id);
 
-    var stripeCustomerEntity = new StripeCustomer(stripeCreatedCustomer.Id, tenant.Id);
+    var stripeCustomerEntity = new StripeCustomer(stripeCreatedCustomer.Id, tenant.Id, loggedUserId, ETargetType.TENANT);
 
     var userAdminRole = new UsersRoles(loggedUserId, role.Id, tenant.Id);
 
