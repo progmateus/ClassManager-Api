@@ -11,7 +11,7 @@ public class Invoice : TenantEntity
   public Invoice(
     Guid userId,
     Guid? tenantPlanId,
-      Guid? subscriptionId,
+    Guid? subscriptionId,
     Guid? planId,
     Guid tenantId,
     decimal amount,

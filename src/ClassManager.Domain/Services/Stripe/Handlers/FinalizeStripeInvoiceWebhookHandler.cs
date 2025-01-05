@@ -41,27 +41,22 @@ public class FinalizeStripeInvoiceWebhookHandler
       return;
     }
 
-    if (customer.TargetType == ETargetType.USER)
+    var subscription = await _subscriptionRepository.FindByStripeSubscriptionId(stripeInvoice.SubscriptionId, new CancellationToken());
+
+    if (subscription is null)
     {
-      var subscription = await _subscriptionRepository.FindByStripeSubscriptionId(stripeInvoice.SubscriptionId, new CancellationToken());
-
-      if (subscription is null)
-      {
-        return;
-      }
-      var invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, subscription.TenantPlan.Id, subscription.Id, null, customer.TenantId, subscription.TenantPlan.Price, ETargetType.USER, EInvoiceType.USER_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
-      await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
-
-      if (stripeInvoice.BillingReason == "subscription_cycle")
-      {
-        subscription.SetLatestInvoice(invoice.Id);
-        await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
-      }
+      return;
     }
-    else
+
+
+    var invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, subscription.TenantPlanId, subscription.Id, subscription.PlanId, customer.TenantId, subscription.TenantPlan.Price, subscription.TargetType, EInvoiceType.USER_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
+
+    await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
+
+    if (stripeInvoice.BillingReason == "subscription_cycle")
     {
-      var invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, null, null, customer.Tenant.Plan.Id, customer.TenantId, customer.Tenant.Plan.Price, ETargetType.TENANT, EInvoiceType.TENANT_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
-      await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
+      subscription.SetLatestInvoice(invoice.Id);
+      await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
     }
   }
 }
