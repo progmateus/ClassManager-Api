@@ -35,6 +35,7 @@ public class Subscription : TenantEntity
   public ESubscriptionStatus Status { get; private set; } = ESubscriptionStatus.INCOMPLETE;
   public ETargetType TargetType { get; private set; } = ETargetType.USER;
   public string? StripeSubscriptionId { get; private set; }
+  public string? StripeSubscriptionPriceItem { get; private set; }
   public DateTime CurrentPeriodStart { get; private set; }
   public DateTime CurrentPeriodEnd { get; private set; }
   public User? User { get; private set; }

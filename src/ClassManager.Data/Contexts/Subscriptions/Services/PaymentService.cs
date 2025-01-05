@@ -305,16 +305,22 @@ public class PaymentService : IPaymentService
     {
       StripeAccount = connectedAccountId ?? null,
     };
-    var options = new SubscriptionItemUpdateOptions
+    var options = new SubscriptionUpdateOptions
     {
       Metadata = new Dictionary<string, string> {
         { "tenantId", tenantId.ToString() },
         { "subscriptionId", subscriptionId.ToString() }
       },
-      Price = newStripePriceId,
+      Items = new List<SubscriptionItemOptions>
+        {
+            new SubscriptionItemOptions {
+              Price = newStripePriceId,
+              Quantity = 1
+            },
+        },
       ProrationBehavior = "none"
     };
-    var service = new SubscriptionItemService();
+    var service = new SubscriptionService();
     service.Update(stripeSubscriptionId, options, requestOptions);
   }
 
