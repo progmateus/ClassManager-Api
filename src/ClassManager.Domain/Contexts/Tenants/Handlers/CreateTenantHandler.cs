@@ -111,7 +111,7 @@ public class CreateTenantHandler :
       return new CommandResult(false, "ERR_PLAN_NOT_FOUND", null, null, 404);
     }
 
-    var tenant = new Tenant(command.Name, document, command.Username, command.Description, email, loggedUserId, command.PlanId);
+    var tenant = new Tenant(command.Name, document, phone, command.Username, command.Description, email, loggedUserId, command.PlanId);
 
     var subscription = new Subscription(tenant.Id, plan.Id);
 

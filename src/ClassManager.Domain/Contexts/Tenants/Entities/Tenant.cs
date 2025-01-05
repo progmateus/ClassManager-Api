@@ -62,11 +62,12 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 
-    public void Update(string name, Email email, Document document, string? description)
+    public void Update(string name, Email email, Document document, Phone phone, string? description)
     {
-      AddNotifications(email, document);
+      AddNotifications(email, document, phone);
       Name = name;
       Email = email;
+      Phone = phone;
       Document = document;
       Description = description;
     }

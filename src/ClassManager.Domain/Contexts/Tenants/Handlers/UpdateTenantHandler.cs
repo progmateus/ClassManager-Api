@@ -72,8 +72,16 @@ public class UpdateTenantHandler :
 
     var document = new Document(command.Document);
     var email = new Email(command.Email);
+    var phone = new Phone(command.Phone);
 
-    tenant.Update(command.Name, email, document, command.Description);
+    AddNotifications(document, email, tenant, phone);
+
+    if (Invalid)
+    {
+      return new CommandResult(false, "ERR_VALIDATION", null, Notifications);
+    }
+
+    tenant.Update(command.Name, email, document, phone, command.Description);
 
     if (!command.Links.IsNullOrEmpty())
     {
@@ -82,15 +90,6 @@ public class UpdateTenantHandler :
         var link = new Link(linkCommand.Url, (ESocialType)linkCommand.Type, tenantId);
         links.Add(link);
       }
-    }
-
-    // agrupar validações
-
-    AddNotifications(document, email, tenant);
-
-    if (Invalid)
-    {
-      return new CommandResult(false, "ERR_VALIDATION", null, Notifications);
     }
 
     await _linkRepository.DeleteAllByTenantIdAsync(tenantId, default);
