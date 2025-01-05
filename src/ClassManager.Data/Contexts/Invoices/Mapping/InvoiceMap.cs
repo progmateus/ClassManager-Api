@@ -27,7 +27,7 @@ public class InvoiceMap : IEntityTypeConfiguration<Invoice>
     builder.Property(x => x.Type)
       .HasColumnName("Type")
       .HasColumnType("TINYINT")
-      .HasDefaultValue(EInvoiceType.USER_SUBSCRIPTION)
+      .HasDefaultValue(EInvoiceType.SUBSCRIPTION)
       .IsRequired();
 
     builder.Property(x => x.TargetType)

@@ -45,7 +45,7 @@ public class Invoice : TenantEntity
   public decimal Amount { get; private set; }
   public EInvoiceStatus Status { get; private set; } = EInvoiceStatus.OPEN;
   public ETargetType TargetType { get; private set; } = ETargetType.USER;
-  public EInvoiceType Type { get; private set; } = EInvoiceType.USER_SUBSCRIPTION;
+  public EInvoiceType Type { get; private set; } = EInvoiceType.SUBSCRIPTION;
   public string? StripeInvoiceId { get; private set; }
   public string? StripeInvoiceUrl { get; private set; }
   public string? StripeInvoiceNumber { get; private set; }

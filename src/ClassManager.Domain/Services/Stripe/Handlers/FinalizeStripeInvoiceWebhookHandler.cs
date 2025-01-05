@@ -49,7 +49,7 @@ public class FinalizeStripeInvoiceWebhookHandler
     }
 
 
-    var invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, subscription.TenantPlanId, subscription.Id, subscription.PlanId, customer.TenantId, subscription.TenantPlan.Price, subscription.TargetType, EInvoiceType.USER_SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
+    var invoice = new Contexts.Invoices.Entities.Invoice(customer.UserId, subscription.TenantPlanId, subscription.Id, subscription.PlanId, customer.TenantId, subscription.TenantPlan.Price, subscription.TargetType, EInvoiceType.SUBSCRIPTION, stripeInvoice.Id, stripeInvoice.HostedInvoiceUrl, stripeInvoice.Number);
 
     await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
 
