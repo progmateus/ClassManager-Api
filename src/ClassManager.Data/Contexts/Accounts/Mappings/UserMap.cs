@@ -95,11 +95,12 @@ public class UserMap : IEntityTypeConfiguration<User>
             .HasMaxLength(29)
             .IsRequired();
 
-        builder.Property(x => x.Phone)
+        builder.OwnsOne(x => x.Phone)
+            .Property(x => x.Number)
             .HasColumnName("Phone")
             .HasColumnType("VARCHAR")
-            .HasMaxLength(20)
-            .IsRequired();
+            .HasMaxLength(30)
+            .IsRequired(false);
 
         builder.Property(x => x.StripeCustomerId)
             .HasColumnName("StripeCustomerId")

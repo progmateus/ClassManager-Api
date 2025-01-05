@@ -21,7 +21,7 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
 
     }
 
-    public User(string name, Document document, Email email, Password password, string username, string? phone, string? avatar = null)
+    public User(string name, Document document, Email email, Password password, string username, Phone? phone, string? avatar = null)
     {
       Name = name;
       Document = document;
@@ -42,7 +42,7 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     public Email Email { get; private set; }
     public string Username { get; private set; }
     public string? Avatar { get; private set; } = string.Empty;
-    public string? Phone { get; private set; } = string.Empty;
+    public Phone? Phone { get; private set; } = string.Empty;
     public EUserStatus Status { get; private set; } = EUserStatus.ACTIVE;
     public string? StripeCustomerId { get; private set; }
     public EUserType Type { get; private set; } = EUserType.NORMAL;
@@ -60,7 +60,7 @@ namespace ClassManager.Domain.Contexts.Accounts.Entities
     public IList<Invoice> Invoices { get; private set; } = [];
     public IList<StripeCustomer> StripeCustomers { get; private set; } = [];
 
-    public void ChangeUser(string name, Email email, Document document, string? phone)
+    public void ChangeUser(string name, Email email, Document document, Phone? phone)
     {
       AddNotifications(email, document);
       Name = name;

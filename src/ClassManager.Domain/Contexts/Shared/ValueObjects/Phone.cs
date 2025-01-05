@@ -21,6 +21,8 @@ namespace ClassManager.Domain.Contexts.Shared.ValueObjects
     {
       var phoneRegex = new Regex("^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$", RegexOptions.IgnoreCase);
 
+      if (Number.Length > 30) return false;
+
       return phoneRegex.IsMatch(Number);
     }
 
