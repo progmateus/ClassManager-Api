@@ -60,25 +60,19 @@ public class UpdateUserHandler :
     // gerar vOS
     var document = new Document(command.Document);
     var email = new Email(command.Email);
+    var phone = new Phone(command.Phone);
 
-    // gerar as entidades
-    user.ChangeUser(command.Name, email, document, command.Phone);
 
-    // agrupar validações
-
-    AddNotifications(document, email, user);
+    AddNotifications(document, email, phone);
 
     if (Invalid)
     {
-      Console.WriteLine("SEGUNDO");
       return new CommandResult(false, "ERR_VALIDATION", null, Notifications);
     }
 
-    // salvar as informações
+    user.ChangeUser(command.Name, email, document, phone);
 
     await _userReporitory.UpdateAsync(user, default);
-
-    // retornar infos
 
     return new CommandResult(true, "USER_UPDATED", _mapper.Map<UserViewModel>(user), null, 201);
   }

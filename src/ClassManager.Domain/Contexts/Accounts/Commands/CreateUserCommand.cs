@@ -28,7 +28,7 @@ namespace ClassManager.Domain.Contexts.Accounts.Commands
       .HasMinLen(Name, 3, "Name", "Name min 3 characters")
       .HasMaxLen(Name, 150, "Name", "Name max 150 characters")
       .Matchs(Username, "^(?!.*\\.\\.)(?!.*\\.$)[^\\W][\\w.]{0,29}$", "Username", "Invalid username")
-      .Matchs(Phone, "^[0-9]{10,}$", "Phone", "Invalid phone")
+      .Matchs(Phone, "^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\\s\\./0-9]*$", "Phone", "Invalid phone")
       .Matchs(Document, "(^[0-9]{3}.?[0-9]{3}.?[0-9]{3}-?[0-9]{2}$)", "Document", "Invalid document")
     );
     }
