@@ -37,7 +37,7 @@ public class BookingRepository : Repository<Booking>, IBookingRepository
       .ThenInclude(x => x.Class)
       .Where(x => !userId.HasValue || x.UserId == userId)
       .Where(x => !classDayId.HasValue || x.ClassDayId == classDayId)
-      .Where(x => !tenantId.HasValue || x.ClassDay.Class.TenantId == tenantId.Value)
+      .Where(x => !tenantId.HasValue || x.ClassDay.Class.TenantId == tenantId)
       .Skip(skip)
       .Take(limit)
       .ToListAsync();
