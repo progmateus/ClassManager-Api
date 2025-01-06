@@ -30,6 +30,10 @@ public class StripeController : MainController
       {
         await finalizeStripeInvoiceWebhookHandler.Handle(stripeEvent.Data.Object as Invoice);
       }
+      else if (stripeEvent.Type == EventTypes.InvoiceUpdated)
+      {
+        await updateStripeInvoiceWebhookHandler.Handle(stripeEvent.Data.Object as Invoice);
+      }
       else if (
         stripeEvent.Type == EventTypes.CustomerSubscriptionCreated)
       {
@@ -42,10 +46,6 @@ public class StripeController : MainController
         stripeEvent.Type == EventTypes.CustomerSubscriptionUpdated)
       {
         await updateStripeSubscriptionWebhookHandler.Handle(stripeEvent.Data.Object as Subscription);
-      }
-      else if (stripeEvent.Type == EventTypes.InvoiceUpdated)
-      {
-        await updateStripeInvoiceWebhookHandler.Handle(stripeEvent.Data.Object as Invoice);
       }
       else if (stripeEvent.Type == EventTypes.AccountUpdated)
       {
