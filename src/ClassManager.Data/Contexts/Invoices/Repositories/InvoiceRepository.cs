@@ -4,6 +4,7 @@ using ClassManager.Domain.Contexts.Invoices.Entities;
 using ClassManager.Domain.Contexts.Invoices.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ClassManager.Data.Contexts.Plans.Repositories;
 
@@ -27,13 +28,14 @@ public class InvoiceRepository : TRepository<Invoice>, IInvoiceRepository
     return await DbSet.FirstOrDefaultAsync(x => x.Id == invoiceId && x.TenantId == tenantId && x.TargetType == ETargetType.USER);
   }
 
-  public async Task<List<Invoice>> ListByUserIdAndTenantId(Guid? tenantId, Guid? userId, Guid? subscriptionId, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)
+  public async Task<List<Invoice>> ListByUserIdAndTenantId(Guid? tenantId, Guid? userId, Guid? subscriptionId, List<ETargetType>? targetTypes, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)
   {
     return await DbSet
     .Include(x => x.Tenant)
     .Where(x => !tenantId.HasValue || x.TenantId == tenantId.Value)
     .Where(x => !userId.HasValue || x.UserId == userId.Value)
     .Where(x => !subscriptionId.HasValue || x.SubscriptionId == subscriptionId.Value)
+    .Where(x => targetTypes.IsNullOrEmpty() || targetTypes.Contains(x.TargetType))
     .Skip(skip)
     .Take(limit)
     .ToListAsync();
