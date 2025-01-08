@@ -13,6 +13,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
 
     }
     public ExternalBankAccount(
+      Guid tenantId,
       string stripeExternalBankAccountId,
       string name,
       string country,
@@ -22,6 +23,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
       EExternalBankAccountStatus status
       )
     {
+      TenantId = tenantId;
       StripeExternalBankAccountId = stripeExternalBankAccountId;
       Name = name;
       Country = country;
