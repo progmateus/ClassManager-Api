@@ -6,16 +6,13 @@ namespace ClassManager.Domain.Services.Stripe.Handlers;
 
 public class UpdateStripeExternalBankAccountWebhookHandler
 {
-  private readonly ITenantRepository _tenantRepository;
   private readonly IExternalBankAccountRepository _externalBankAccountRepository;
 
   public UpdateStripeExternalBankAccountWebhookHandler(
-    ITenantRepository tenantRepository,
     IExternalBankAccountRepository externalBankAccountRepository
 
     )
   {
-    _tenantRepository = tenantRepository;
     _externalBankAccountRepository = externalBankAccountRepository;
   }
   public async Task Handle(BankAccount? stripeBankAccount)
