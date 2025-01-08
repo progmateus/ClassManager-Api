@@ -4,13 +4,13 @@ namespace ClassManager.Domain.Contexts.tenants.ViewModels;
 
 public class PayoutViewModel
 {
-  public Guid Id { get; private set; }
-  public Guid TenantId { get; private set; }
-  public string StripePayoutId { get; private set; } = "";
-  public decimal Amount { get; private set; }
-  public string Currency { get; private set; }
-  public EPayoutStatus Status { get; private set; }
-  public TenantViewModel? Tenant { get; private set; }
-  public DateTime CreatedAt { get; private set; }
-  public DateTime UpdatedAt { get; private set; }
+  public Guid Id { get; set; }
+  public Guid TenantId { get; set; }
+  public string StripePayoutId { get; set; } = string.Empty;
+  public decimal Amount { get; set; }
+  public string Currency { get; set; } = string.Empty;
+  public EPayoutStatus Status { get; set; }
+  public TenantViewModel? Tenant { get; set; }
+  public DateTime CreatedAt { get; set; }
+  public DateTime UpdatedAt { get; set; }
 }
