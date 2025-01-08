@@ -43,5 +43,21 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public Tenant? Tenant { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
+
+    public void Update(
+      string name,
+      string country,
+      string currency,
+      string last4,
+      string routingNumber,
+      EExternalBankAccountStatus status)
+    {
+      Name = name;
+      Country = country;
+      Currency = currency;
+      Last4 = last4;
+      RoutingNumber = routingNumber;
+      Status = status;
+    }
   }
 }
