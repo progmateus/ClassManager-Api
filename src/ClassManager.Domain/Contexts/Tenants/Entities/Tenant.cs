@@ -59,6 +59,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public IList<Invoice> Invoices { get; private set; } = [];
     public IList<StripeCustomer> StripeCustomers { get; private set; } = [];
     public IList<Payout> Payouts { get; private set; } = [];
+    public IList<ExternalBankAccount> ExternalsBanksAccounts { get; private set; } = [];
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
 

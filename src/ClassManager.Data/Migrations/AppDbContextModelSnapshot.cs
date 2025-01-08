@@ -655,6 +655,68 @@ namespace ClassManager.Data.Migrations
                     b.ToTable("Subscriptions", (string)null);
                 });
 
+            modelBuilder.Entity("ClassManager.Domain.Contexts.Tenants.Entities.ExternalBankAccount", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Country")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("VARCHAR(100)")
+                        .HasColumnName("Country");
+
+                    b.Property<DateTime>("CreatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Currency")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("VARCHAR(10)")
+                        .HasColumnName("Currency");
+
+                    b.Property<string>("Last4")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("VARCHAR(10)")
+                        .HasColumnName("Last4");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("VARCHAR(150)")
+                        .HasColumnName("Name");
+
+                    b.Property<string>("RoutingNumber")
+                        .IsRequired()
+                        .HasMaxLength(10)
+                        .HasColumnType("VARCHAR(10)")
+                        .HasColumnName("RoutingNumber");
+
+                    b.Property<byte>("Status")
+                        .HasColumnType("TINYINT")
+                        .HasColumnName("Status");
+
+                    b.Property<string>("StripeExternalBankAccountId")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("VARCHAR(150)")
+                        .HasColumnName("StripeExternalBankAccountId");
+
+                    b.Property<Guid>("TenantId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("TenantId");
+
+                    b.ToTable("ExternalsBanksAccounts", (string)null);
+                });
+
             modelBuilder.Entity("ClassManager.Domain.Contexts.Tenants.Entities.Image", b =>
                 {
                     b.Property<Guid>("Id")
@@ -1312,6 +1374,16 @@ namespace ClassManager.Data.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("ClassManager.Domain.Contexts.Tenants.Entities.ExternalBankAccount", b =>
+                {
+                    b.HasOne("ClassManager.Domain.Contexts.Tenants.Entities.Tenant", "Tenant")
+                        .WithMany("ExternalsBanksAccounts")
+                        .HasForeignKey("TenantId")
+                        .IsRequired();
+
+                    b.Navigation("Tenant");
+                });
+
             modelBuilder.Entity("ClassManager.Domain.Contexts.Tenants.Entities.Image", b =>
                 {
                     b.HasOne("ClassManager.Domain.Contexts.Tenants.Entities.Tenant", "Tenant")
@@ -1537,6 +1609,8 @@ namespace ClassManager.Data.Migrations
                     b.Navigation("Addresses");
 
                     b.Navigation("Classes");
+
+                    b.Navigation("ExternalsBanksAccounts");
 
                     b.Navigation("Images");
 
