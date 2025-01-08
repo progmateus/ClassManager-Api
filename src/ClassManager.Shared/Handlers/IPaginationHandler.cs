@@ -3,7 +3,7 @@ using ClassManager.Shared.Commands;
 
 namespace ClassManager.Shared.Handlers
 {
-  public interface IPaginationHandler<T> where T : IPaginationCommand
+  public interface IPaginationHandler<T> where T : PaginationCommand
   {
     Task<ICommandResult> Handle(Guid loggedUserId, T comamnd);
   }

@@ -4,6 +4,6 @@ namespace ClassManager.Domain.Shared.Commands
   {
     public int Page { get; set; }
     public string Search { get; set; }
-    public int Limit { get; }
+    public int Limit { get; set; }
   }
 }

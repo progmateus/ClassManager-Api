@@ -30,8 +30,6 @@ public class Subscription : TenantEntity
   public Guid? PlanId { get; private set; }
   public Guid? TenantPlanId { get; private set; }
   public Guid? LatestInvoiceId { get; private set; }
-  public Guid? NextPlanId { get; private set; }
-  public Guid? NextTenantPlanId { get; private set; }
   public ESubscriptionStatus Status { get; private set; } = ESubscriptionStatus.INCOMPLETE;
   public ETargetType TargetType { get; private set; } = ETargetType.USER;
   public string? StripeSubscriptionId { get; private set; }

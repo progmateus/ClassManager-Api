@@ -37,19 +37,7 @@ public class SubscriptionMap : IEntityTypeConfiguration<Subscription>
       .WithOne()
       .HasForeignKey<Subscription>(x => x.LatestInvoiceId)
       .IsRequired(false)
-      .OnDelete(DeleteBehavior.Restrict);
-
-    builder.HasOne(e => e.NextTenantPlan)
-      .WithOne()
-      .HasForeignKey<Subscription>(x => x.NextTenantPlanId)
-      .IsRequired(false)
-      .OnDelete(DeleteBehavior.Restrict);
-
-    builder.HasOne(e => e.NextPlan)
-      .WithOne()
-      .HasForeignKey<Subscription>(x => x.NextPlanId)
-      .IsRequired(false)
-      .OnDelete(DeleteBehavior.Restrict);
+      .OnDelete(DeleteBehavior.Cascade);
 
     builder.Property(e => e.Status)
       .HasColumnType("TINYINT")
