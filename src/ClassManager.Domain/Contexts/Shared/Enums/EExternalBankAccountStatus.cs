@@ -2,10 +2,10 @@ namespace ClassManager.Domain.Contexts.Shared.Enums
 {
   public enum EExternalBankAccountStatus
   {
-    NEW = 0,
-    VALIDATED = 1,
-    VERIFIED = 2,
-    VERIFICATION_FAILED = 3,
-    ERRORED = 4,
+    NEW = 1,
+    VALIDATED = 2,
+    VERIFIED = 3,
+    VERIFICATION_FAILED = 4,
+    ERRORED = 5,
   }
 }
