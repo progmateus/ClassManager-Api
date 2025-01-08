@@ -1,4 +1,6 @@
 using AutoMapper;
+using ClassManager.Domain.Contexts.Shared.Enums;
+using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Contexts.tenants.ViewModels;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.ViewModels;
@@ -13,15 +15,18 @@ public class GetTenantProfileHandler
   private readonly ITenantRepository _repository;
   private readonly IMapper _mapper;
   private readonly IPaymentService _paymentService;
+  private readonly ISubscriptionRepository _subscriptionRepository;
   public GetTenantProfileHandler(
     ITenantRepository tenantRepository,
     IMapper mapper,
-    IPaymentService paymentService
+    IPaymentService paymentService,
+    ISubscriptionRepository subscriptionRepository
     )
   {
     _repository = tenantRepository;
     _mapper = mapper;
     _paymentService = paymentService;
+    _subscriptionRepository = subscriptionRepository;
   }
   public async Task<ICommandResult> Handle(Guid id)
   {
@@ -33,7 +38,14 @@ public class GetTenantProfileHandler
       return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, null, 404);
     }
 
+    var lastestSubscription = await _subscriptionRepository.FindLatestSubscription(tenant.Id, null, ETargetType.TENANT);
+
     var tenantResponse = _mapper.Map<TenantViewModel>(tenant);
+
+    if (lastestSubscription is not null)
+    {
+      tenantResponse.SubscriptionStatus = lastestSubscription.Status;
+    }
 
     var balance = _paymentService.GetBalance(tenant.StripeAccountId);
 
