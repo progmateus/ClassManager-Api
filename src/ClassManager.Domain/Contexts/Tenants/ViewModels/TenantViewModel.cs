@@ -39,6 +39,7 @@ public class TenantViewModel
   public IList<LinkViewModel> Links { get; set; } = [];
   public IList<ImageViewModel> Images { get; set; } = [];
   public IList<StripeCustomerViewModel> StripeCustomers { get; set; } = [];
+  public IList<ExternalBankAccountViewModel> ExternalsBanksAccounts { get; set; } = [];
   public IList<AddressViewModel> Addresses { get; set; } = [];
   public DateTime CreatedAt { get; set; }
   public DateTime UpdatedAt { get; set; }

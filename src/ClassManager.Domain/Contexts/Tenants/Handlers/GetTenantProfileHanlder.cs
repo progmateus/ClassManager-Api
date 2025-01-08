@@ -30,8 +30,7 @@ public class GetTenantProfileHandler
   }
   public async Task<ICommandResult> Handle(Guid id)
   {
-    var tenant = await _repository.FindAsync(x => x.Id == id, [x => x.Links, x => x.Images]);
-
+    var tenant = await _repository.FindAsync(x => x.Id == id, [x => x.Links, x => x.Images, x => x.ExternalsBanksAccounts]);
 
     if (tenant is null)
     {
