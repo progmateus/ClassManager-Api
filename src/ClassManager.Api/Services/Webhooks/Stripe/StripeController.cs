@@ -17,7 +17,9 @@ public class StripeController : MainController
     [FromServices] UpdateStripeInvoiceWebhookHandler updateStripeInvoiceWebhookHandler,
     [FromServices] UpdateStripeSubscriptionWebhookHandler updateStripeSubscriptionWebhookHandler,
     [FromServices] CreateStripePayoutWebhookHandler createStripeWebhookHandler,
-    [FromServices] UpdateStripePayoutWebhookHandler updateStripePayoutWebhookHandler
+    [FromServices] UpdateStripePayoutWebhookHandler updateStripePayoutWebhookHandler,
+    [FromServices] CreateStripeExternalBankAccountWebhookHandler createStripeExternalBankAccountWebhookHandler,
+    [FromServices] UpdateStripeExternalBankAccountWebhookHandler updateStripeExternalBankAccountWebhookHandler
   )
   {
     try
@@ -60,6 +62,18 @@ public class StripeController : MainController
         )
       {
         await updateStripePayoutWebhookHandler.Handle(stripeEvent.Data.Object as Payout);
+      }
+      else if (
+        stripeEvent.Type == EventTypes.AccountExternalAccountCreated
+        )
+      {
+        await createStripeExternalBankAccountWebhookHandler.Handle(stripeEvent.Data.Object as BankAccount);
+      }
+      else if (
+        stripeEvent.Type == EventTypes.AccountExternalAccountUpdated
+        )
+      {
+        await updateStripeExternalBankAccountWebhookHandler.Handle(stripeEvent.Data.Object as BankAccount);
       }
       else
       {
