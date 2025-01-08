@@ -1,6 +1,6 @@
 namespace ClassManager.Domain.Contexts.Shared.Enums
 {
-  public enum EExternalAccountStatus
+  public enum EExternalBankAccountStatus
   {
     NEW = 0,
     VALIDATED = 1,

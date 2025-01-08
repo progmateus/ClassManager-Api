@@ -5,24 +5,24 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
 {
 
   //tenant split account
-  public class ExternalAccount : TenantEntity
+  public class ExternalBankAccount : TenantEntity
   {
 
-    protected ExternalAccount()
+    protected ExternalBankAccount()
     {
 
     }
-    public ExternalAccount(
-      string stripeExternalAccountId,
+    public ExternalBankAccount(
+      string stripeExternalBankAccountId,
       string name,
       string country,
       string currency,
       string last4,
       string routingNumber,
-      EExternalAccountStatus status
+      EExternalBankAccountStatus status
       )
     {
-      StripeExternalAccountId = stripeExternalAccountId;
+      StripeExternalBankAccountId = stripeExternalBankAccountId;
       Name = name;
       Country = country;
       Currency = currency;
@@ -31,13 +31,13 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
       Status = status;
     }
 
-    public string StripeExternalAccountId { get; private set; } = null!;
+    public string StripeExternalBankAccountId { get; private set; } = null!;
     public string Name { get; private set; } = null!;
     public string Country { get; private set; } = null!;
     public string Currency { get; private set; } = null!;
     public string Last4 { get; private set; } = null!;
     public string RoutingNumber { get; private set; } = null!;
-    public EExternalAccountStatus Status { get; private set; } = EExternalAccountStatus.NEW;
+    public EExternalBankAccountStatus Status { get; private set; } = EExternalBankAccountStatus.NEW;
     public Tenant? Tenant { get; private set; }
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }

@@ -5,7 +5,7 @@ using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 
 namespace ClassManager.Data.Contexts.Plans.Repositories;
 
-public class ExternalAccountRepository : TRepository<ExternalAccount>, IExternalAccountRepository
+public class ExternalAccountRepository : TRepository<ExternalBankAccount>, IExternalBankAccountRepository
 {
   public ExternalAccountRepository(AppDbContext context) : base(context) { }
 }
