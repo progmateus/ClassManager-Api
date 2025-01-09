@@ -6,11 +6,10 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace ClassManager.Api.Contexts.Tenants.Controllers;
 
-[Route("{tenantId}/bookings")]
 public class BookingController : MainController
 {
   [Authorize]
-  [HttpPost]
+  [HttpPost("{tenantId}/bookings")]
   public async Task<IResult> Create(
     [FromRoute] Guid tenantId,
     [FromBody] CreateBookingCommand command,
@@ -30,7 +29,7 @@ public class BookingController : MainController
   [Authorize]
   [HttpGet("/bookings")]
   public async Task<IResult> List(
-    [FromServices] ListUserBookingsHandler handler,
+    [FromServices] ListBookingsHandler handler,
     [FromQuery] ListBookingsCommand command
   )
   {
@@ -45,7 +44,7 @@ public class BookingController : MainController
   }
 
   [Authorize]
-  [HttpDelete("{bookingId}")]
+  [HttpDelete("{tenantId}/{bookingId}")]
   public async Task<IResult> Delete(
       [FromRoute] Guid tenantId,
       [FromRoute] Guid bookingId,

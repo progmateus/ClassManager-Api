@@ -7,11 +7,11 @@ using ClassManager.Shared.Handlers;
 
 namespace ClasManager.Domain.Contexts.Bookings.Handlers;
 
-public class ListUserBookingsHandler : IPaginationHandler<ListBookingsCommand>
+public class ListBookingsHandler : IPaginationHandler<ListBookingsCommand>
 {
   private IBookingRepository _bookingRepository;
   private IAccessControlService _accessControlService;
-  public ListUserBookingsHandler(
+  public ListBookingsHandler(
     IBookingRepository bookingRepository,
     IAccessControlService accessControlService
     )
@@ -40,7 +40,7 @@ public class ListUserBookingsHandler : IPaginationHandler<ListBookingsCommand>
 
     var skip = (command.Page - 1) * command.Limit;
 
-    var bookings = await _bookingRepository.ListByUserIdOrTenantIdOrClassDayIdWithPagination(command.TenantId, targetUserId, null, command.Search, skip, command.Limit, new CancellationToken());
+    var bookings = await _bookingRepository.ListByUserIdOrTenantIdOrClassDayIdWithPagination(command.TenantId, targetUserId, command.ClassDayId, command.Search, skip, command.Limit, new CancellationToken());
 
     return new CommandResult(true, "BOOKINGS_LISTED", bookings, null, 200);
   }

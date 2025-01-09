@@ -112,24 +112,6 @@ public class UserController : MainController
 
 
   [Authorize]
-  [HttpGet("bookings")]
-  public async Task<IResult> ListUserBookings(
-    [FromServices] ListUserBookingsHandler handler,
-    [FromQuery] ListBookingsCommand command
-  )
-  {
-    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), command);
-    if (!result.IsSuccess)
-      return Results.Json(result, statusCode: result.Status);
-
-    if (result.Data is null)
-      return Results.Json(result, statusCode: 500);
-
-    return Results.Ok(result);
-  }
-
-
-  [Authorize]
   [HttpPatch("avatar")]
   public async Task<IResult> UploadAvatar(
     [FromServices] UploadUserAvatarHandler handler,
