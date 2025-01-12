@@ -7,16 +7,17 @@ namespace ClassManager.Domain.Contexts.ClassDays.ViewModels
   public class ClassDayViewModel
   {
     public Guid Id { get; set; }
-    public DateTime Date { get; private set; }
+    public DateTime Date { get; set; }
     public string? Name { get; set; }
-    public string? HourStart { get; private set; }
-    public string? HourEnd { get; private set; }
-    public int Status { get; private set; }
-    public string? Observation { get; private set; }
-    public Guid ClassId { get; private set; }
-    public DateTime CreatedAt { get; private set; }
-    public DateTime UpdatedAt { get; private set; }
-    public ClassViewModel? Class { get; private set; }
-    public IList<BookingViewModel> Bookings { get; private set; } = [];
+    public string? HourStart { get; set; }
+    public string? HourEnd { get; set; }
+    public int Status { get; set; }
+    public string? Observation { get; set; }
+    public int? BookingsCount { get; set; }
+    public Guid ClassId { get; set; }
+    public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
+    public ClassViewModel? Class { get; set; }
+    public IList<BookingViewModel> Bookings { get; set; } = [];
   }
 }
