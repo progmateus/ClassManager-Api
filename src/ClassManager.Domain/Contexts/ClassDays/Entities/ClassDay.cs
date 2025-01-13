@@ -1,4 +1,3 @@
-using System;
 using ClassManager.Domain.Shared.Entities;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClasManager.Domain.Contexts.Bookings.Entities;

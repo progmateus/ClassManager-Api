@@ -46,8 +46,6 @@ public class BookingRepository : Repository<Booking>, IBookingRepository
   public async Task<int> CountByClassDay(Guid tenantId, Guid classDayId, CancellationToken cancellationToken = default)
   {
     return await DbSet
-      .Include(x => x.ClassDay)
-      .ThenInclude(x => x.Class)
       .Where(x => x.ClassDayId == classDayId)
       .Where(x => x.ClassDay.Class.TenantId == tenantId)
       .CountAsync(cancellationToken);

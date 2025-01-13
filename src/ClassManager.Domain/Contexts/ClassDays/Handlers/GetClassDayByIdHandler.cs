@@ -1,4 +1,5 @@
 using AutoMapper;
+using ClassManager.Domain.Contexts.Bookings.Repositories.Contracts;
 using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
 using ClassManager.Domain.Contexts.ClassDays.ViewModels;
 using ClassManager.Domain.Shared.Commands;
@@ -12,15 +13,18 @@ public class GetClassDayByIdHandler
   private readonly IClassDayRepository _classDayRepository;
   private readonly IMapper _mapper;
   private readonly IAccessControlService _accessControlService;
+  private readonly IBookingRepository _bookingsRepository;
   public GetClassDayByIdHandler(
     IClassDayRepository classRepository,
     IMapper mapper,
-    IAccessControlService accessControlService
+    IAccessControlService accessControlService,
+    IBookingRepository bookingRepository
     )
   {
     _classDayRepository = classRepository;
     _mapper = mapper;
     _accessControlService = accessControlService;
+    _bookingsRepository = bookingRepository;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid classDayId)
   {
@@ -35,18 +39,20 @@ public class GetClassDayByIdHandler
       return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
     }
 
-    var classDay = await _classDayRepository.FindClassDayProfile(tenantId, classDayId);
+    var classDay = _mapper.Map<ClassDayViewModel>(await _classDayRepository.FindClassDayProfile(tenantId, classDayId));
 
     if (classDay is null)
     {
       return new CommandResult(false, "ERR_CLASS_DAY_NOT_FOUND", null, null, 404);
     }
 
+    classDay.BookingsCount = await _bookingsRepository.CountByClassDay(tenantId, classDay.Id, default);
+
     if (!await _accessControlService.HasClassRoleAsync(loggedUserId, tenantId, classDay.ClassId, ["student", "teacher"]))
     {
       return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
     }
 
-    return new CommandResult(true, "CLASS_DAY_GOTTEN", _mapper.Map<ClassDayViewModel>(classDay), null, 200);
+    return new CommandResult(true, "CLASS_DAY_GOTTEN", classDay, null, 200);
   }
 }

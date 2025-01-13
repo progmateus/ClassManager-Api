@@ -1,14 +1,25 @@
+using AutoMapper;
 using ClassManager.Data.Contexts.shared.Repositories;
 using ClassManager.Data.Data;
+using ClassManager.Domain.Contexts.Bookings.ViewModels;
 using ClassManager.Domain.Contexts.ClassDays.Entities;
 using ClassManager.Domain.Contexts.ClassDays.Repositories.Contracts;
+using ClassManager.Domain.Contexts.ClassDays.ViewModels;
+using ClassManager.Domain.Contexts.Classes.ViewModels;
 using Microsoft.EntityFrameworkCore;
 
 namespace ClassManager.Data.Contexts.Plans.Repositories;
 
 public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
 {
-  public ClassDayRepository(AppDbContext context) : base(context) { }
+  private readonly IMapper _mapper;
+  public ClassDayRepository(
+    AppDbContext context,
+    IMapper mapper
+    ) : base(context)
+  {
+    _mapper = mapper;
+  }
 
   public object CountByClassId(Guid classId, DateTime initiDate, DateTime endDate)
   {
@@ -18,14 +29,14 @@ public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
       .Select(g => new { status = g.Key, count = g.Count() });
   }
 
-  public async Task<List<ClassDay>> ListByTenantOrClassAndDate(List<Guid> tenantIds, List<Guid> classesIds, DateTime date, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)
+  public async Task<List<ClassDayViewModel>> ListByTenantOrClassAndDate(List<Guid> tenantIds, List<Guid> classesIds, DateTime date, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)
   {
     var zeroTime = date.Date;
     var finalTime = date.Date.AddHours(23).AddMinutes(59).AddSeconds(59);
 
     return await DbSet
     .AsNoTracking()
-    .Include((x) => x.Bookings)
+    .Include((x) => x.Bookings.Take(3))
     .ThenInclude((b) => b.User)
     .Include((x) => x.Class)
     .ThenInclude((c) => c.Tenant)
@@ -34,6 +45,22 @@ public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
     .Where(x => tenantIds.Contains(x.Class.TenantId) || classesIds.Contains(x.ClassId))
     .Where(x => x.Date >= zeroTime && x.Date <= finalTime)
     .OrderBy(x => x.Date)
+    .Select(x => new ClassDayViewModel
+    {
+      Id = x.Id,
+      Name = x.Name,
+      Date = x.Date,
+      HourStart = x.HourStart,
+      HourEnd = x.HourEnd,
+      Status = x.Status,
+      Observation = x.Observation,
+      BookingsCount = x.Bookings.Count(),
+      ClassId = x.ClassId,
+      CreatedAt = x.CreatedAt,
+      UpdatedAt = x.UpdatedAt,
+      Class = _mapper.Map<ClassViewModel>(x.Class),
+      Bookings = _mapper.Map<List<BookingViewModel>>(x.Bookings)
+    })
     .Skip(skip)
     .Take(limit)
     .ToListAsync();
@@ -58,6 +85,7 @@ public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
     .Include((x) => x.Bookings)
     .ThenInclude((b) => b.User)
     .FirstOrDefaultAsync((x) => x.Class.TenantId == tenantId && x.Id == classDayId);
+
   }
 
   public async Task DeleteAllAfterAndBeforeDate(List<Guid> classesIds, DateTime initialDate, DateTime finalDate, CancellationToken cancellationToken)
