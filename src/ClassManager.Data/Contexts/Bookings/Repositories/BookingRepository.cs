@@ -33,6 +33,7 @@ public class BookingRepository : Repository<Booking>, IBookingRepository
   public async Task<List<Booking>> ListByUserIdOrTenantIdOrClassDayIdWithPagination(Guid? tenantId, Guid? userId, Guid? classDayId, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)
   {
     return await DbSet
+      .Include(x => x.User)
       .Include(x => x.ClassDay)
       .ThenInclude(x => x.Class)
       .Where(x => !userId.HasValue || x.UserId == userId)

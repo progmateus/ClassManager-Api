@@ -22,7 +22,12 @@ public class ListBookingsHandler : IPaginationHandler<ListBookingsCommand>
   public async Task<ICommandResult> Handle(Guid loggedUserId, ListBookingsCommand command)
   {
 
-    var targetUserId = loggedUserId;
+    Guid? targetUserId = loggedUserId;
+
+    if ((!command.UserId.HasValue || command.UserId == Guid.Empty) && command.ClassDayId.HasValue && command.ClassDayId != Guid.Empty)
+    {
+      targetUserId = null;
+    }
 
     if (command.UserId.HasValue && command.UserId != Guid.Empty)
     {

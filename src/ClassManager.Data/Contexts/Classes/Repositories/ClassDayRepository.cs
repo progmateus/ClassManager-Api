@@ -82,8 +82,6 @@ public class ClassDayRepository : Repository<ClassDay>, IClassDayRepository
     .ThenInclude(tc => tc.User)
     .Include(x => x.Class)
     .ThenInclude((C) => C.Address)
-    .Include((x) => x.Bookings)
-    .ThenInclude((b) => b.User)
     .FirstOrDefaultAsync((x) => x.Class.TenantId == tenantId && x.Id == classDayId);
 
   }
