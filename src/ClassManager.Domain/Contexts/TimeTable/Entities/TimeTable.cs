@@ -6,10 +6,6 @@ namespace ClassManager.Domain.Contexts.TimesTables.Entities;
 
 public class TimeTable : TenantEntity
 {
-  public string Name { get; set; } = string.Empty!;
-  public List<ScheduleDay> SchedulesDays { get; set; } = [];
-  public Tenant? Tenant { get; private set; }
-  public IList<Class> Classes { get; } = [];
 
   public TimeTable(Guid tenantId, string name)
   {
@@ -20,5 +16,14 @@ public class TimeTable : TenantEntity
   protected TimeTable()
   {
 
+  }
+  public string Name { get; set; } = string.Empty!;
+  public List<ScheduleDay> SchedulesDays { get; set; } = [];
+  public Tenant? Tenant { get; private set; }
+  public IList<Class> Classes { get; } = [];
+
+  public void SetName(string name)
+  {
+    Name = name;
   }
 }

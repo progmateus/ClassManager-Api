@@ -37,6 +37,13 @@ public class UpdateTimetableHandler :
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid timeTableId, UpdateTimeTableCommand command)
   {
 
+    command.Validate();
+    if (command.Invalid)
+    {
+      AddNotifications(command);
+      return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
+    }
+
     if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
     {
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
@@ -63,6 +70,10 @@ public class UpdateTimetableHandler :
       var scheduleDayEntity = new ScheduleDay(scheduleHour.Name, timeTableId, scheduleHour.WeekDay, scheduleHour.HourStart, scheduleHour.HourEnd, tenantId);
       schedulesDaysEntities.Add(scheduleDayEntity);
     }
+
+    timeTable.SetName(command.Name);
+
+    await _timeTableRepository.UpdateAsync(timeTable, new CancellationToken());
 
     await _scheduleDayRepository.CreateRangeAsync(schedulesDaysEntities, new CancellationToken());
 
