@@ -1,5 +1,6 @@
 using ClassManager.Domain.Contexts.Tenants.Commands;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
+using ClassManager.Domain.Services.Stripe.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
@@ -14,16 +15,19 @@ public class UpdateTenantPlanHandler :
 {
   private readonly ITenantPlanRepository _tenantPlanRepository;
   private readonly IAccessControlService _accessControlService;
+  private readonly IPaymentService _paymentservice;
 
 
   public UpdateTenantPlanHandler(
     ITenantPlanRepository tenantPlanRepository,
-    IAccessControlService accessControlService
+    IAccessControlService accessControlService,
+    IPaymentService paymentService
 
     )
   {
     _tenantPlanRepository = tenantPlanRepository;
     _accessControlService = accessControlService;
+    _paymentservice = paymentService;
 
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid planId, TenantPlanCommand command)
@@ -45,12 +49,24 @@ public class UpdateTenantPlanHandler :
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
-    var tenantPlan = await _tenantPlanRepository.GetByIdAndTenantId(tenantId, planId, new CancellationToken());
+    var tenantPlan = await _tenantPlanRepository.FindAsync(x => x.Id == planId && x.TenantId == tenantId, [x => x.Tenant]);
 
     if (tenantPlan is null)
     {
       return new CommandResult(false, "ERR_PLAN_NOT_FOUND", null, null, 404);
     }
+
+    var stripePriceId = tenantPlan.StripePriceId;
+
+    if (command.Price != tenantPlan.Price)
+    {
+      var stripePrice = _paymentservice.CreatePrice(tenantPlan.Id, tenantId, tenantPlan.StripeProductId, command.Price * 100, tenantPlan.Tenant.StripeAccountId);
+      stripePriceId = stripePrice.Id;
+    }
+
+    _paymentservice.UpdateProduct(tenantPlan.StripeProductId, stripePriceId, command.Name, command.Description, tenantPlan.Tenant.StripeAccountId);
+
+    tenantPlan.SetStripeInformations(stripePriceId, tenantPlan.StripeProductId);
     tenantPlan.ChangeTenantPlan(command.Name, command.Description, command.TimesOfWeek, command.Price);
     await _tenantPlanRepository.UpdateAsync(tenantPlan, new CancellationToken());
 

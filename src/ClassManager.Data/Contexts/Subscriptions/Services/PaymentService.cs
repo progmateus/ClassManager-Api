@@ -345,4 +345,45 @@ public class PaymentService : IPaymentService
     var service = new BalanceService();
     return service.Get(options, requestOptions);
   }
+
+  public Product UpdateProduct(string stripeProductId, string stripePriceId, string name, string description, string? connectedAccountId)
+  {
+    var requestOptions = new RequestOptions
+    {
+      StripeAccount = connectedAccountId ?? null,
+    };
+
+    var options = new ProductUpdateOptions
+    {
+      Name = name,
+      Description = description,
+      DefaultPrice = stripePriceId
+    };
+    var service = new ProductService();
+    return service.Update(stripeProductId, options, requestOptions);
+  }
+
+  public Price UpdatePrice(string stripePriceId, decimal priceInCents, string? connectedAccountId)
+  {
+
+    var requestOptions = new RequestOptions
+    {
+      StripeAccount = connectedAccountId ?? null,
+    };
+
+    var options = new PriceUpdateOptions
+    {
+      CurrencyOptions = new Dictionary<string, PriceCurrencyOptionsOptions> {
+        {
+          "unit_amount", new PriceCurrencyOptionsOptions
+          {
+            UnitAmount = Convert.ToInt64(priceInCents),
+          }
+        },
+      }
+    };
+
+    var service = new PriceService();
+    return service.Update(stripePriceId, options, requestOptions);
+  }
 }

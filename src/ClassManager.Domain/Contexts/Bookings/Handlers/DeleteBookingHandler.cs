@@ -19,29 +19,14 @@ namespace ClasManager.Domain.Contexts.Bookings.Handlers;
 
 public class DeleteBookingHandler : Notifiable
 {
-  private ITenantRepository _tenantRepository;
   private IBookingRepository _bookingRepository;
-  private IClassDayRepository _classDayRepository;
-  private IUserRepository _userRepository;
-  private IUsersRolesRepository _usersRolesRepository;
-  private ISubscriptionRepository _subscriptionRepository;
   private IAccessControlService _accessControlService;
   public DeleteBookingHandler(
-    ITenantRepository tenantRepository,
     IBookingRepository bookingRepository,
-    IClassDayRepository classDayRepository,
-    IUserRepository userRepository,
-    IUsersRolesRepository usersRolesRepository,
-    ISubscriptionRepository subscriptionRepository,
     IAccessControlService accessControlService
   )
   {
-    _tenantRepository = tenantRepository;
     _bookingRepository = bookingRepository;
-    _classDayRepository = classDayRepository;
-    _userRepository = userRepository;
-    _usersRolesRepository = usersRolesRepository;
-    _subscriptionRepository = subscriptionRepository;
     _accessControlService = accessControlService;
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid bookingId)
@@ -62,7 +47,7 @@ public class DeleteBookingHandler : Notifiable
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_ACTIVE", null, null, 403);
     }
 
-    var booking = await _bookingRepository.GetWithInclude(loggedUserId, bookingId);
+    var booking = await _bookingRepository.FindAsync(x => x.Id == bookingId, [x => x.ClassDay]);
 
     if (booking is null)
     {

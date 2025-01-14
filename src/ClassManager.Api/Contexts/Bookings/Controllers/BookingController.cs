@@ -44,7 +44,7 @@ public class BookingController : MainController
   }
 
   [Authorize]
-  [HttpDelete("{tenantId}/{bookingId}")]
+  [HttpDelete("{tenantId}/bookings/{bookingId}")]
   public async Task<IResult> Delete(
       [FromRoute] Guid tenantId,
       [FromRoute] Guid bookingId,
