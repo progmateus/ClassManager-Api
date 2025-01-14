@@ -75,4 +75,11 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
   {
     return await DbSet.Include(x => x.TenantPlan).Include(x => x.Plan).Include(x => x.LatestInvoice).FirstOrDefaultAsync(x => x.StripeSubscriptionId == stripeSubscriptionId);
   }
+
+  public async Task<List<Subscription>> GetByTenantPlanIdAsync(Guid tenantPlanId, CancellationToken cancellationToken)
+  {
+    return await DbSet
+    .Where(x => x.TenantPlanId == tenantPlanId)
+    .ToListAsync(cancellationToken);
+  }
 }

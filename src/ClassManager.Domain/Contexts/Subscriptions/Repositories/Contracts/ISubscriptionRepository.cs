@@ -12,4 +12,5 @@ public interface ISubscriptionRepository : ITRepository<Subscription>
   Task<Subscription?> GetSubscriptionProfileAsync(Guid id, Guid tenantId, CancellationToken cancellationToken);
   Task<Subscription?> FindLatestSubscription(Guid tenantId, Guid? userId, ETargetType? targetType = ETargetType.USER);
   Task<Subscription?> FindByStripeSubscriptionId(string stripeSubscriptionId, CancellationToken cancellationToken);
+  Task<List<Subscription>> GetByTenantPlanIdAsync(Guid tenantPlanId, CancellationToken cancellationToken);
 }
