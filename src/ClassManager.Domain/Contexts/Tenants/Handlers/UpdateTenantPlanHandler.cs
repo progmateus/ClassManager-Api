@@ -1,5 +1,7 @@
 using ClassManager.Domain.Contexts.Tenants.Commands;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
+using ClassManager.Domain.Libs.MassTransit.Events;
+using ClassManager.Domain.Libs.MassTransit.Publish;
 using ClassManager.Domain.Services.Stripe.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
@@ -16,18 +18,22 @@ public class UpdateTenantPlanHandler :
   private readonly ITenantPlanRepository _tenantPlanRepository;
   private readonly IAccessControlService _accessControlService;
   private readonly IPaymentService _paymentservice;
+  private IPublishBus _publishBus;
+
 
 
   public UpdateTenantPlanHandler(
     ITenantPlanRepository tenantPlanRepository,
     IAccessControlService accessControlService,
-    IPaymentService paymentService
+    IPaymentService paymentService,
+    IPublishBus publishBus
 
     )
   {
     _tenantPlanRepository = tenantPlanRepository;
     _accessControlService = accessControlService;
     _paymentservice = paymentService;
+    _publishBus = publishBus;
 
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid planId, TenantPlanCommand command)
@@ -56,6 +62,7 @@ public class UpdateTenantPlanHandler :
       return new CommandResult(false, "ERR_PLAN_NOT_FOUND", null, null, 404);
     }
 
+    var oldTenantPlanPrice = tenantPlan.Price;
     var stripePriceId = tenantPlan.StripePriceId;
 
     if (command.Price != tenantPlan.Price)
@@ -69,6 +76,12 @@ public class UpdateTenantPlanHandler :
     tenantPlan.SetStripeInformations(stripePriceId, tenantPlan.StripeProductId);
     tenantPlan.ChangeTenantPlan(command.Name, command.Description, command.TimesOfWeek, command.Price);
     await _tenantPlanRepository.UpdateAsync(tenantPlan, new CancellationToken());
+
+    if (oldTenantPlanPrice != command.Price)
+    {
+      var eventRequest = new UpdatesubscriptionsPricesEvent(tenantPlan.Id);
+      await _publishBus.PublicAsync(eventRequest);
+    }
 
     return new CommandResult(true, "PLAN_UPDATED", tenantPlan, null, 200);
   }

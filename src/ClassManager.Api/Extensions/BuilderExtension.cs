@@ -137,6 +137,7 @@ public static class BuilderExtension
     {
       bussConfigurator.AddConsumer<GeneratedClassesDaysEventConsumer>();
       bussConfigurator.AddConsumer<RefreshClassClassesDaysEventConsumer>();
+      bussConfigurator.AddConsumer<UpdateSubscriptionsPricesEventConsumer>();
 
       bussConfigurator.UsingRabbitMq((ctx, config) =>
       {

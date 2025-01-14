@@ -80,6 +80,7 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
   {
     return await DbSet
     .Where(x => x.TenantPlanId == tenantPlanId)
+    .Where(x => x.Status != ESubscriptionStatus.INCOMPLETE_EXPIRED && x.Status != ESubscriptionStatus.CANCELED)
     .ToListAsync(cancellationToken);
   }
 }

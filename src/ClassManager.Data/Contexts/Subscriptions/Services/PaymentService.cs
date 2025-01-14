@@ -362,28 +362,4 @@ public class PaymentService : IPaymentService
     var service = new ProductService();
     return service.Update(stripeProductId, options, requestOptions);
   }
-
-  public Price UpdatePrice(string stripePriceId, decimal priceInCents, string? connectedAccountId)
-  {
-
-    var requestOptions = new RequestOptions
-    {
-      StripeAccount = connectedAccountId ?? null,
-    };
-
-    var options = new PriceUpdateOptions
-    {
-      CurrencyOptions = new Dictionary<string, PriceCurrencyOptionsOptions> {
-        {
-          "unit_amount", new PriceCurrencyOptionsOptions
-          {
-            UnitAmount = Convert.ToInt64(priceInCents),
-          }
-        },
-      }
-    };
-
-    var service = new PriceService();
-    return service.Update(stripePriceId, options, requestOptions);
-  }
 }
