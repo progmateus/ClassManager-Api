@@ -15,6 +15,8 @@ public class SubscriptionViewModel
   public Guid TenantId { get; set; }
   public Guid? LatestInvoiceId { get; set; }
   public int Status { get; set; }
+  public DateTime CurrentPeriodStart { get; set; }
+  public DateTime CurrentPeriodEnd { get; set; }
   public UserViewModel? User { get; set; }
   public TenantPlanViewModel? TenantPlan { get; set; }
   public TenantViewModel? Tenant { get; set; }
