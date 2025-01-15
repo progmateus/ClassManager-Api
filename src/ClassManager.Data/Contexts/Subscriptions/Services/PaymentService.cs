@@ -362,4 +362,41 @@ public class PaymentService : IPaymentService
     var service = new ProductService();
     return service.Update(stripeProductId, options, requestOptions);
   }
+
+  public void ScheduleUpdateSubscriptionPlan(string stripeSubscriptionId, string newStripePriceId, string? connectedAccountId)
+  {
+    var requestOptions = new RequestOptions
+    {
+      StripeAccount = connectedAccountId ?? null,
+    };
+
+    var subscriptionScheduleOptions = new SubscriptionScheduleCreateOptions
+    {
+      FromSubscription = stripeSubscriptionId,
+    };
+    var subscriptionScheduleService = new SubscriptionScheduleService();
+    var schedule = subscriptionScheduleService.Create(subscriptionScheduleOptions);
+
+    var options = new SubscriptionScheduleUpdateOptions
+    {
+      Phases = new List<SubscriptionSchedulePhaseOptions>
+        {
+          new SubscriptionSchedulePhaseOptions
+            {
+              Items = new List<SubscriptionSchedulePhaseItemOptions>
+                {
+                  new SubscriptionSchedulePhaseItemOptions
+                    {
+                      Price = newStripePriceId,
+                      Quantity = 1
+                    },
+                },
+              StartDate = schedule.Phases[0].StartDate,
+              EndDate = schedule.Phases[0].EndDate,
+            }
+        },
+    };
+    var service = new SubscriptionScheduleService();
+    service.Update(schedule.Id, options, requestOptions);
+  }
 }
