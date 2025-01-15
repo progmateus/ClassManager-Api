@@ -49,7 +49,7 @@ public class TenantController : MainController
   }
 
   [HttpGet("{id}")]
-  public async Task<IResult> List(
+  public async Task<IResult> GetProfile(
     [FromRoute] Guid tenantId,
     [FromRoute] Guid id,
     [FromServices] GetSubscriptionProfileHandler handler
@@ -86,7 +86,7 @@ public class TenantController : MainController
 
   [HttpPatch]
   [Route("{id}/plan")]
-  public async Task<IResult> Update(
+  public async Task<IResult> UpdatePlan(
     [FromRoute] Guid tenantId,
     [FromRoute] Guid id,
     [FromBody] UpdateSubscriptionCommand command,
@@ -112,6 +112,23 @@ public class TenantController : MainController
   )
   {
     var result = await handler.Handle(tenantId, id, new Guid(User.FindFirst("Id")?.Value));
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
+  [HttpPost("{subscriptionId}/refresh")]
+  public async Task<IResult> Refresh(
+    [FromRoute] Guid subscriptionId,
+  [FromRoute] Guid tenantId,
+  [FromServices] RefreshUserSubscriptionHandler handler
+)
+  {
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, subscriptionId);
     if (!result.IsSuccess)
       return Results.Json(result, statusCode: result.Status);
 
