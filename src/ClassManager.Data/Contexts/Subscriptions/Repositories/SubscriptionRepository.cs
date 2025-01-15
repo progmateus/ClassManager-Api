@@ -83,4 +83,13 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     .Where(x => x.Status != ESubscriptionStatus.INCOMPLETE_EXPIRED && x.Status != ESubscriptionStatus.CANCELED)
     .ToListAsync(cancellationToken);
   }
+
+  public async Task<Subscription?> FindTenantLatestSubscriptionProfile(Guid tenantId, ETargetType? targetType = ETargetType.TENANT)
+  {
+    return await DbSet
+    .Include(x => x.Plan)
+    .Include(x => x.LatestInvoice)
+    .AsNoTracking()
+    .FirstOrDefaultAsync(x => x.TenantId == tenantId && x.TargetType == targetType);
+  }
 }

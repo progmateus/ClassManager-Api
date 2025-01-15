@@ -31,18 +31,11 @@ public class GetTenantSubscriptionProfileHandler : Notifiable
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
-    var latestSubscription = await _subscriptionRepository.FindLatestSubscription(tenantId, null, ETargetType.TENANT);
-
-    if (latestSubscription is null)
-    {
-      return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, null, 403);
-    }
-
-    var subscriptionProfile = _mapper.Map<SubscriptionViewModel>(await _subscriptionRepository.GetSubscriptionProfileAsync(latestSubscription.Id, tenantId, new CancellationToken()));
+    var subscriptionProfile = _mapper.Map<SubscriptionViewModel>(await _subscriptionRepository.FindTenantLatestSubscriptionProfile(tenantId, ETargetType.TENANT));
 
     if (subscriptionProfile is null)
     {
-      return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, null, 404);
+      return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, null, 403);
     }
 
     return new CommandResult(true, "SUBSCRIPTION_GOTTEN", subscriptionProfile, null, 200);
