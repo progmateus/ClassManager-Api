@@ -1,6 +1,7 @@
 using ClassManager.Api.Contexts.Shared.Controllers;
 using ClassManager.Domain.Contexts.Accounts.Commands;
 using ClassManager.Domain.Contexts.Accounts.Handlers;
+using ClassManager.Domain.Contexts.Subscriptions.Handlers;
 using ClassManager.Domain.Contexts.Tenants.Commands;
 using ClassManager.Domain.Contexts.Tenants.Handlers;
 using ClassManager.Domain.Shared.Commands;
@@ -140,6 +141,22 @@ public class TenantController : MainController
   public async Task<IResult> RefreshTenanSubscription(
     [FromRoute] Guid id,
     [FromServices] RefreshTenantSubscriptionHandler handler
+  )
+  {
+    var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), id);
+    if (!result.IsSuccess)
+      return Results.Json(result, statusCode: result.Status);
+
+    if (result.Data is null)
+      return Results.Json(result, statusCode: 500);
+
+    return Results.Ok(result);
+  }
+
+  [HttpGet("{id}/subscriptions/profile")]
+  public async Task<IResult> GetSubscriptionProfile(
+    [FromRoute] Guid id,
+    [FromServices] GetTenantSubscriptionProfileHandler handler
   )
   {
     var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), id);
