@@ -8,10 +8,11 @@ using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
 using Flunt.Notifications;
+using Microsoft.IdentityModel.Tokens;
 
 namespace ClassManager.Domain.Contexts.Subscriptions.Handlers.Tenants;
 
-public class UpdateTenantsubscriptionPlanHandler : Notifiable
+public class UpdateTenantSubscriptionPlanHandler : Notifiable
 {
   private ISubscriptionRepository _subscriptionRepository;
   private IPlanRepository _planRepository;
@@ -19,7 +20,7 @@ public class UpdateTenantsubscriptionPlanHandler : Notifiable
   private readonly IPaymentService _paymentService;
   private readonly ITenantRepository _tenantRepository;
 
-  public UpdateTenantsubscriptionPlanHandler(ISubscriptionRepository subscriptionRepository,
+  public UpdateTenantSubscriptionPlanHandler(ISubscriptionRepository subscriptionRepository,
   IPlanRepository planRepository,
   IAccessControlService accessControlService,
   IPaymentService paymentService,
@@ -73,6 +74,11 @@ public class UpdateTenantsubscriptionPlanHandler : Notifiable
     if (plan is null)
     {
       return new CommandResult(false, "ERR_TENANT_PLAN_NOT_FOUND", null, null, 404);
+    }
+
+    if (!subscription.StripeScheduleSubscriptionNextPlanId.IsNullOrEmpty())
+    {
+      _paymentService.CancelSubscriptionSchedule(subscription.StripeScheduleSubscriptionNextPlanId, null);
     }
 
     var subscriptionSchedule = _paymentService.ScheduleUpdateSubscriptionPlan(subscription.StripeSubscriptionId, plan.StripePriceId, null);
