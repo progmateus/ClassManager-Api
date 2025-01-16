@@ -399,4 +399,14 @@ public class PaymentService : IPaymentService
     var service = new SubscriptionScheduleService();
     return service.Update(schedule.Id, options, requestOptions);
   }
+
+  public void CancelSubscriptionSchedule(string stripeSubscriptionScheduleId, string? connectedAccountId)
+  {
+    var requestOptions = new RequestOptions
+    {
+      StripeAccount = connectedAccountId ?? null,
+    };
+    var service = new SubscriptionScheduleService();
+    service.Cancel(stripeSubscriptionScheduleId, null, requestOptions);
+  }
 }
