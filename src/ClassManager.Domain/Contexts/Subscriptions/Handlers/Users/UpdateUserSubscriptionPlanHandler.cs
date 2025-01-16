@@ -10,7 +10,7 @@ using Flunt.Notifications;
 
 namespace ClassManager.Domain.Contexts.Subscriptions.Handlers;
 
-public class UpdateSubscriptionPlanHandler : Notifiable
+public class UpdateUserSubscriptionPlanHandler : Notifiable
 {
   private ISubscriptionRepository _subscriptionRepository;
   private ITenantPlanRepository _tenantPlanrepository;
@@ -18,7 +18,7 @@ public class UpdateSubscriptionPlanHandler : Notifiable
   private readonly IPaymentService _paymentService;
   private readonly ITenantRepository _tenantRepository;
 
-  public UpdateSubscriptionPlanHandler(ISubscriptionRepository subscriptionRepository,
+  public UpdateUserSubscriptionPlanHandler(ISubscriptionRepository subscriptionRepository,
   ITenantPlanRepository tenantPlanrepository,
   IAccessControlService accessControlService,
   IPaymentService paymentService,

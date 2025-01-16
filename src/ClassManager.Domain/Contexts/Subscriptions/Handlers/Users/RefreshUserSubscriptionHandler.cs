@@ -8,7 +8,8 @@ using ClassManager.Domain.Services.Stripe.Repositories.Contracts;
 using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
-namespace ClassManager.Domain.Contexts.Tenants.Handlers;
+
+namespace ClassManager.Domain.Contexts.Subscriptions.Users.Handlers;
 
 public class RefreshUserSubscriptionHandler
 {

@@ -9,4 +9,5 @@ public class UpdateSubscriptionCommand : Notifiable
 {
   public ESubscriptionStatus? Status { get; set; }
   public Guid? TenantPlanId { get; set; }
+  public Guid? PlanId { get; set; }
 }

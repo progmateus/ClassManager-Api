@@ -6,15 +6,15 @@ using ClassManager.Domain.Shared.Services.AccessControlService;
 using ClassManager.Shared.Commands;
 using Flunt.Notifications;
 
-namespace ClassManager.Domain.Contexts.Subscriptions.Handlers;
+namespace ClassManager.Domain.Contexts.Subscriptions.Users.Handlers;
 
-public class GetSubscriptionProfileHandler : Notifiable
+public class GetUserSubscriptionProfileHandler : Notifiable
 {
   private ISubscriptionRepository _subscriptionRepository;
   private IMapper _mapper;
   private readonly IAccessControlService _accessControlService;
 
-  public GetSubscriptionProfileHandler(ISubscriptionRepository subscriptionRepository, IMapper mapper, IAccessControlService accessControlService
+  public GetUserSubscriptionProfileHandler(ISubscriptionRepository subscriptionRepository, IMapper mapper, IAccessControlService accessControlService
 )
   {
     _subscriptionRepository = subscriptionRepository;

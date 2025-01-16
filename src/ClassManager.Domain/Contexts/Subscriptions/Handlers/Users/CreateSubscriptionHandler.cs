@@ -15,7 +15,7 @@ using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
 
-namespace ClassManager.Domain.Contexts.Subscriptions.Handlers;
+namespace ClassManager.Domain.Contexts.Subscriptions.Users.Handlers;
 
 public class CreateSubscriptionHandler : Notifiable,
   ITenantHandler<CreateSubscriptionCommand>
