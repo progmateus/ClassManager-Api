@@ -34,6 +34,7 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     return await DbSet
     .Include(x => x.TenantPlan)
     .Include(x => x.Tenant)
+    .Include(x => x.NextTenantPlan)
     .Include(x => x.LatestInvoice)
     .Include(x => x.User)
     .ThenInclude(x => x.Address)
@@ -89,6 +90,7 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     return await DbSet
     .Include(x => x.Plan)
     .Include(x => x.LatestInvoice)
+    .Include(x => x.NextPlan)
     .AsNoTracking()
     .FirstOrDefaultAsync(x => x.TenantId == tenantId && x.TargetType == targetType);
   }
