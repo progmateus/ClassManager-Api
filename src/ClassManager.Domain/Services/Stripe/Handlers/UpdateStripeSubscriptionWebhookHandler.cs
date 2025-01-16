@@ -75,6 +75,7 @@ public class UpdateStripeSubscriptionWebhookHandler
       var latestInvoice = await _invoiceRepository.FindByStripeInvoiceId(stripeSubscription.LatestInvoiceId);
       if (latestInvoice is not null)
       {
+        subscription.SetStripeScheduleSubscriptionNextPlanId(null);
         subscription.SetLatestInvoice(latestInvoice.Id);
       }
     }
@@ -90,6 +91,7 @@ public class UpdateStripeSubscriptionWebhookHandler
 
         if (tenantPlan is not null)
         {
+          subscription.SetStripeScheduleSubscriptionNextPlanId(null);
           subscription.SetTenantPlan(tenantPlan.Id);
         }
       }
