@@ -77,6 +77,10 @@ public class UpdateTenantsubscriptionPlanHandler : Notifiable
 
     _paymentService.ScheduleUpdateSubscriptionPlan(subscription.StripeSubscriptionId, plan.StripePriceId, null);
 
+    subscription.SetPlan(plan.Id);
+
+    await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
+
     return new CommandResult(true, "SUBSCRIPTION_UPDATED", subscription, null, 200);
   }
 }
