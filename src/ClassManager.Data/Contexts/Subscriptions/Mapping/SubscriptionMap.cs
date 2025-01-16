@@ -66,6 +66,12 @@ public class SubscriptionMap : IEntityTypeConfiguration<Subscription>
       .HasMaxLength(200)
       .IsRequired(false);
 
+    builder.Property(x => x.StripeScheduleSubscriptionNextPlanId)
+    .HasColumnName("StripeScheduleSubscriptionNextPlanId")
+    .HasColumnType("VARCHAR")
+    .HasMaxLength(200)
+    .IsRequired(false);
+
     builder.Property(x => x.CurrentPeriodStart)
       .HasColumnName("CurrentPeriodStart")
       .IsRequired();
