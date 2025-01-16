@@ -1,4 +1,5 @@
 using ClassManager.Domain.Contexts.Invoices.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Plans.Repositories;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
@@ -10,15 +11,21 @@ public class UpdateStripeSubscriptionWebhookHandler
 {
   private readonly ISubscriptionRepository _subscriptionRepository;
   private readonly IInvoiceRepository _invoiceRepository;
+  private readonly ITenantPlanRepository _tenantPlanRepository;
+  private readonly IPlanRepository _planRepository;
 
   public UpdateStripeSubscriptionWebhookHandler(
     ISubscriptionRepository subscriptionRepository,
-    IInvoiceRepository invoiceRepository
+    IInvoiceRepository invoiceRepository,
+    ITenantPlanRepository tenantPlanRepository,
+    IPlanRepository planRepository
 
     )
   {
     _subscriptionRepository = subscriptionRepository;
     _invoiceRepository = invoiceRepository;
+    _tenantPlanRepository = tenantPlanRepository;
+    _planRepository = planRepository;
   }
   public async Task Handle(Subscription? stripeSubscription)
   {
@@ -69,6 +76,34 @@ public class UpdateStripeSubscriptionWebhookHandler
       if (latestInvoice is not null)
       {
         subscription.SetLatestInvoice(latestInvoice.Id);
+      }
+    }
+
+    var stripePrice = stripeSubscription.Items.Data.FirstOrDefault((x) => x.Object == "price");
+
+    if (subscription.TargetType == ETargetType.USER)
+    {
+
+      if (stripePrice is not null && subscription.TenantPlan.StripePriceId != stripePrice.Id)
+      {
+        var tenantPlan = await _tenantPlanRepository.FindByStripePriceId(stripePrice.Id, new CancellationToken());
+
+        if (tenantPlan is not null)
+        {
+          subscription.SetTenantPlan(tenantPlan.Id);
+        }
+      }
+    }
+    else
+    {
+      if (stripePrice is not null && subscription.Plan.StripePriceId != stripePrice.Id)
+      {
+        var plan = await _planRepository.FindByStripePriceId(stripePrice.Id, new CancellationToken());
+
+        if (plan is not null)
+        {
+          subscription.SetPlan(plan.Id);
+        }
       }
     }
     subscription.SetCanceledAt(stripeSubscription.CanceledAt);
