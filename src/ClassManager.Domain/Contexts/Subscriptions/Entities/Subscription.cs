@@ -34,6 +34,7 @@ public class Subscription : TenantEntity
   public ETargetType TargetType { get; private set; } = ETargetType.USER;
   public string? StripeSubscriptionId { get; private set; }
   public string? StripeSubscriptionPriceItemId { get; private set; }
+  public string? StripeScheduleSubscriptionNextPlanId { get; private set; }
   public DateTime CurrentPeriodStart { get; private set; }
   public DateTime CurrentPeriodEnd { get; private set; }
   public User? User { get; private set; }
@@ -87,5 +88,10 @@ public class Subscription : TenantEntity
   public void SetStripeSubscriptionPriceItemId(string? stripeSubscriptionPriceItemId)
   {
     StripeSubscriptionPriceItemId = stripeSubscriptionPriceItemId;
+  }
+
+  public void SetStripeScheduleSubscriptionNextPlanId(string? stripeScheduleSubscriptionNextPlanId)
+  {
+    StripeScheduleSubscriptionNextPlanId = stripeScheduleSubscriptionNextPlanId;
   }
 }

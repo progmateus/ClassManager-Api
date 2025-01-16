@@ -75,9 +75,10 @@ public class UpdateTenantsubscriptionPlanHandler : Notifiable
       return new CommandResult(false, "ERR_TENANT_PLAN_NOT_FOUND", null, null, 404);
     }
 
-    _paymentService.ScheduleUpdateSubscriptionPlan(subscription.StripeSubscriptionId, plan.StripePriceId, null);
+    var subscriptionSchedule = _paymentService.ScheduleUpdateSubscriptionPlan(subscription.StripeSubscriptionId, plan.StripePriceId, null);
 
     subscription.SetPlan(plan.Id);
+    subscription.SetStripeScheduleSubscriptionNextPlanId(subscriptionSchedule.Id);
 
     await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
 

@@ -363,7 +363,7 @@ public class PaymentService : IPaymentService
     return service.Update(stripeProductId, options, requestOptions);
   }
 
-  public void ScheduleUpdateSubscriptionPlan(string stripeSubscriptionId, string newStripePriceId, string? connectedAccountId)
+  public SubscriptionSchedule ScheduleUpdateSubscriptionPlan(string stripeSubscriptionId, string newStripePriceId, string? connectedAccountId)
   {
     var requestOptions = new RequestOptions
     {
@@ -397,6 +397,6 @@ public class PaymentService : IPaymentService
         },
     };
     var service = new SubscriptionScheduleService();
-    service.Update(schedule.Id, options, requestOptions);
+    return service.Update(schedule.Id, options, requestOptions);
   }
 }
