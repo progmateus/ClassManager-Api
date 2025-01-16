@@ -33,9 +33,9 @@ using ClassManager.Domain.Contexts.Roles.Handlers;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Subscriptions.Handlers;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Subscriptions.Users.Handlers;
 using ClassManager.Domain.Contexts.Tenants.Handlers;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
-using ClassManager.Domain.Contexts.TimesTables.Commands;
 using ClassManager.Domain.Contexts.TimesTables.Handlers;
 using ClassManager.Domain.Contexts.TimesTabless.Handlers;
 using ClassManager.Domain.Contexts.Usernames.Handlers;
@@ -299,7 +299,6 @@ public static class BuilderExtension
     builder.Services.AddTransient<GetTenantHandler>();
     builder.Services.AddTransient<CreateTenantBankAccountHandler>();
     builder.Services.AddTransient<GetTenantProfileHandler>();
-    builder.Services.AddTransient<RefreshTenantSubscriptionHandler>();
     builder.Services.AddTransient<UploadTenantAvatarHandler>();
     builder.Services.AddTransient<CreateImageHandler>();
     builder.Services.AddTransient<DeleteImageHandler>();
@@ -354,8 +353,8 @@ public static class BuilderExtension
     builder.Services.AddTransient<UpdateSubscriptionPlanHandler>();
     builder.Services.AddTransient<ListSubscriptionsHandler>();
     builder.Services.AddTransient<DeleteSubscriptionHandler>();
-    builder.Services.AddTransient<GetSubscriptionProfileHandler>();
     builder.Services.AddTransient<RefreshUserSubscriptionHandler>();
+    builder.Services.AddTransient<RefreshTenantSubscriptionHandler>();
 
     builder.Services.AddTransient<CreateClassDayHandler>();
     builder.Services.AddTransient<UpdateClassDayHandler>();

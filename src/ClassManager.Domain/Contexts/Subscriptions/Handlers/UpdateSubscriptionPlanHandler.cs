@@ -10,21 +10,25 @@ using ClassManager.Shared.Commands;
 using Flunt.Notifications;
 using Microsoft.IdentityModel.Tokens;
 
-namespace ClassManager.Domain.Contexts.Subscriptions.Handlers.Tenants;
+namespace ClassManager.Domain.Contexts.Subscriptions.Handlers;
 
-public class UpdateTenantSubscriptionPlanHandler : Notifiable
+public class UpdateSubscriptionPlanHandler : Notifiable
 {
   private ISubscriptionRepository _subscriptionRepository;
   private IPlanRepository _planRepository;
   private readonly IAccessControlService _accessControlService;
   private readonly IPaymentService _paymentService;
   private readonly ITenantRepository _tenantRepository;
+  private ITenantPlanRepository _tenantPlanrepository;
 
-  public UpdateTenantSubscriptionPlanHandler(ISubscriptionRepository subscriptionRepository,
-  IPlanRepository planRepository,
-  IAccessControlService accessControlService,
-  IPaymentService paymentService,
-  ITenantRepository tenantRepository
+
+  public UpdateSubscriptionPlanHandler(ISubscriptionRepository subscriptionRepository,
+    IPlanRepository planRepository,
+    IAccessControlService accessControlService,
+    IPaymentService paymentService,
+    ITenantRepository tenantRepository,
+    ITenantPlanRepository tenantPlanrepository
+
 
   )
   {
@@ -33,6 +37,8 @@ public class UpdateTenantSubscriptionPlanHandler : Notifiable
     _accessControlService = accessControlService;
     _paymentService = paymentService;
     _tenantRepository = tenantRepository;
+    _tenantPlanrepository = tenantPlanrepository;
+
 
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid subscriptionId, UpdateSubscriptionCommand command)
@@ -64,27 +70,48 @@ public class UpdateTenantSubscriptionPlanHandler : Notifiable
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, null, 404);
     }
 
-    if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
+
+    if (subscription.TargetType == ETargetType.TENANT)
     {
-      return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 404);
+      if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
+      {
+        return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 404);
+      }
+
+      var plan = await _planRepository.GetByIdAsync(command.TenantPlanId.Value, new CancellationToken());
+
+      if (plan is null)
+      {
+        return new CommandResult(false, "ERR_TENANT_PLAN_NOT_FOUND", null, null, 404);
+      }
+
+      if (!subscription.StripeScheduleSubscriptionNextPlanId.IsNullOrEmpty())
+      {
+        _paymentService.CancelSubscriptionSchedule(subscription.StripeScheduleSubscriptionNextPlanId, null);
+      }
+
+      var subscriptionSchedule = _paymentService.ScheduleUpdateSubscriptionPlan(subscription.StripeSubscriptionId, plan.StripePriceId, null);
+
+      subscription.SetPlan(plan.Id);
+      subscription.SetStripeScheduleSubscriptionNextPlanId(subscriptionSchedule.Id);
     }
-
-    var plan = await _planRepository.GetByIdAsync(command.TenantPlanId.Value, new CancellationToken());
-
-    if (plan is null)
+    else
     {
-      return new CommandResult(false, "ERR_TENANT_PLAN_NOT_FOUND", null, null, 404);
+      if (!subscription.UserId.Equals(loggedUserId) && !await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
+      {
+        return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 404);
+      }
+
+      var tenantPlan = await _tenantPlanrepository.FindByIdAndTenantIdAsync(command.TenantPlanId.Value, tenantId, new CancellationToken());
+
+      if (tenantPlan is null)
+      {
+        return new CommandResult(false, "ERR_TENANT_PLAN_NOT_FOUND", null, null, 404);
+      }
+
+      _paymentService.UpdateSubscriptionPlan(tenant.Id, subscription.Id, subscription.StripeSubscriptionPriceItemId, tenantPlan.StripePriceId, tenant.StripeAccountId);
+      subscription.SetTenantPlan(tenantPlan.Id);
     }
-
-    if (!subscription.StripeScheduleSubscriptionNextPlanId.IsNullOrEmpty())
-    {
-      _paymentService.CancelSubscriptionSchedule(subscription.StripeScheduleSubscriptionNextPlanId, null);
-    }
-
-    var subscriptionSchedule = _paymentService.ScheduleUpdateSubscriptionPlan(subscription.StripeSubscriptionId, plan.StripePriceId, null);
-
-    subscription.SetPlan(plan.Id);
-    subscription.SetStripeScheduleSubscriptionNextPlanId(subscriptionSchedule.Id);
 
     await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
 

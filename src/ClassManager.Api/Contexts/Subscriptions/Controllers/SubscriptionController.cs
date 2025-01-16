@@ -2,6 +2,7 @@ using ClassManager.Api.Contexts.Shared.Controllers;
 using ClassManager.Domain.Contexts.Accounts.Commands;
 using ClassManager.Domain.Contexts.Roles.Commands;
 using ClassManager.Domain.Contexts.Subscriptions.Handlers;
+using ClassManager.Domain.Contexts.Subscriptions.Users.Handlers;
 using ClassManager.Domain.Contexts.Tenants.Commands;
 using ClassManager.Domain.Contexts.Tenants.Handlers;
 using ClassManager.Domain.Shared.Commands;
@@ -52,7 +53,7 @@ public class TenantController : MainController
   public async Task<IResult> GetProfile(
     [FromRoute] Guid tenantId,
     [FromRoute] Guid id,
-    [FromServices] GetSubscriptionProfileHandler handler
+    [FromServices] GetUserSubscriptionProfileHandler handler
   )
   {
     var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, id);
