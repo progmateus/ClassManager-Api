@@ -30,6 +30,8 @@ public class Subscription : TenantEntity
   public Guid? PlanId { get; private set; }
   public Guid? TenantPlanId { get; private set; }
   public Guid? LatestInvoiceId { get; private set; }
+  public Guid? NextPlanId { get; private set; }
+  public Guid? NextTenantPlanId { get; private set; }
   public ESubscriptionStatus Status { get; private set; } = ESubscriptionStatus.INCOMPLETE;
   public ETargetType TargetType { get; private set; } = ETargetType.USER;
   public string? StripeSubscriptionId { get; private set; }
@@ -88,6 +90,16 @@ public class Subscription : TenantEntity
   public void SetStripeSubscriptionPriceItemId(string? stripeSubscriptionPriceItemId)
   {
     StripeSubscriptionPriceItemId = stripeSubscriptionPriceItemId;
+  }
+
+  public void SetNextPlan(Guid nextPlanId)
+  {
+    NextPlanId = nextPlanId;
+  }
+
+  public void SetNextTenantPlan(Guid nextTenantPlanId)
+  {
+    NextTenantPlanId = nextTenantPlanId;
   }
 
   public void SetStripeScheduleSubscriptionNextPlanId(string? stripeScheduleSubscriptionNextPlanId)

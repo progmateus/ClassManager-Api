@@ -44,12 +44,6 @@ public class UpdateSubscriptionPlanHandler : Notifiable
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, Guid subscriptionId, UpdateSubscriptionCommand command)
   {
 
-    if (!command.TenantPlanId.HasValue)
-    {
-      return new CommandResult(false, "ERR_TENANT_PLAN_NOT_FOUND", null, null, 404);
-    }
-
-
     if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
     {
       return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
@@ -73,16 +67,22 @@ public class UpdateSubscriptionPlanHandler : Notifiable
 
     if (subscription.TargetType == ETargetType.TENANT)
     {
+
+      if (!command.PlanId.HasValue)
+      {
+        return new CommandResult(false, "ERR_TENANT_PLAN_NOT_FOUND", null, null, 404);
+      }
+
       if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
       {
         return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 404);
       }
 
-      var plan = await _planRepository.GetByIdAsync(command.TenantPlanId.Value, new CancellationToken());
+      var plan = await _planRepository.GetByIdAsync(command.PlanId.Value, new CancellationToken());
 
       if (plan is null)
       {
-        return new CommandResult(false, "ERR_TENANT_PLAN_NOT_FOUND", null, null, 404);
+        return new CommandResult(false, "ERR_PLAN_NOT_FOUND", null, null, 404);
       }
 
       if (!subscription.StripeScheduleSubscriptionNextPlanId.IsNullOrEmpty())
@@ -97,6 +97,12 @@ public class UpdateSubscriptionPlanHandler : Notifiable
     }
     else
     {
+
+      if (!command.TenantPlanId.HasValue)
+      {
+        return new CommandResult(false, "ERR_TENANT_PLAN_NOT_FOUND", null, null, 404);
+      }
+
       if (!subscription.UserId.Equals(loggedUserId) && !await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
       {
         return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 404);

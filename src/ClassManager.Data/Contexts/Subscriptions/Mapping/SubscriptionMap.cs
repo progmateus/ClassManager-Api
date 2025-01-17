@@ -33,6 +33,24 @@ public class SubscriptionMap : IEntityTypeConfiguration<Subscription>
       .HasPrincipalKey(c => c.Id)
       .IsRequired(false);
 
+    builder.HasOne(e => e.NextPlan)
+      .WithOne()
+      .HasForeignKey<Subscription>(x => x.NextPlanId)
+      .IsRequired(false)
+      .OnDelete(DeleteBehavior.Cascade);
+
+    builder.HasOne(e => e.NextTenantPlan)
+      .WithOne()
+      .HasForeignKey<Subscription>(x => x.NextTenantPlanId)
+      .IsRequired(false)
+      .OnDelete(DeleteBehavior.Cascade);
+
+    builder.HasOne(e => e.Plan)
+      .WithMany(t => t.Subscriptions)
+      .HasForeignKey("PlanId")
+      .HasPrincipalKey(c => c.Id)
+      .IsRequired(false);
+
     builder.HasOne(e => e.LatestInvoice)
       .WithOne()
       .HasForeignKey<Subscription>(x => x.LatestInvoiceId)
