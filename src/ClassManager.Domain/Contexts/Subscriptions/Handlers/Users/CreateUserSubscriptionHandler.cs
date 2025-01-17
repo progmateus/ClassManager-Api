@@ -15,9 +15,9 @@ using ClassManager.Shared.Commands;
 using ClassManager.Shared.Handlers;
 using Flunt.Notifications;
 
-namespace ClassManager.Domain.Contexts.Subscriptions.Users.Handlers;
+namespace ClassManager.Domain.Contexts.Subscriptions.Handlers.Users;
 
-public class CreateSubscriptionHandler : Notifiable,
+public class CreateUserSubscriptionHandler : Notifiable,
   ITenantHandler<CreateSubscriptionCommand>
 {
   private ISubscriptionRepository _subscriptionRepository;
@@ -31,7 +31,7 @@ public class CreateSubscriptionHandler : Notifiable,
   private readonly IUserRepository _userRepository;
   private readonly IStripeCustomerRepository _stripeCustomerRepository;
 
-  public CreateSubscriptionHandler(
+  public CreateUserSubscriptionHandler(
     ISubscriptionRepository subscriptionRepository,
     IUsersRolesRepository usersRolesRepository,
     IRoleRepository roleRepository,

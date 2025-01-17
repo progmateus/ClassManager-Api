@@ -2,6 +2,7 @@ using ClassManager.Api.Contexts.Shared.Controllers;
 using ClassManager.Domain.Contexts.Accounts.Commands;
 using ClassManager.Domain.Contexts.Roles.Commands;
 using ClassManager.Domain.Contexts.Subscriptions.Handlers;
+using ClassManager.Domain.Contexts.Subscriptions.Handlers.Users;
 using ClassManager.Domain.Contexts.Subscriptions.Users.Handlers;
 using ClassManager.Domain.Contexts.Tenants.Commands;
 using ClassManager.Domain.Contexts.Tenants.Handlers;
@@ -19,7 +20,7 @@ public class TenantController : MainController
   public async Task<IResult> Create(
     [FromRoute] Guid tenantId,
     [FromBody] CreateSubscriptionCommand command,
-    [FromServices] CreateSubscriptionHandler handler
+    [FromServices] CreateUserSubscriptionHandler handler
   )
   {
     var result = await handler.Handle(new Guid(User.FindFirst("Id")?.Value), tenantId, command);

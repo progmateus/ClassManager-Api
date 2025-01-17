@@ -32,6 +32,8 @@ using ClassManager.Domain.Contexts.Roles.Commands;
 using ClassManager.Domain.Contexts.Roles.Handlers;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Subscriptions.Handlers;
+using ClassManager.Domain.Contexts.Subscriptions.Handlers.Tenants;
+using ClassManager.Domain.Contexts.Subscriptions.Handlers.Users;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Subscriptions.Users.Handlers;
 using ClassManager.Domain.Contexts.Tenants.Handlers;
@@ -348,7 +350,8 @@ public static class BuilderExtension
     builder.Services.AddTransient<ListStudentClassesHandler>();
     builder.Services.AddTransient<TransferClassStudentsHandler>();
 
-    builder.Services.AddTransient<CreateSubscriptionHandler>();
+    builder.Services.AddTransient<CreateUserSubscriptionHandler>();
+    builder.Services.AddTransient<CreateTenantSubscriptionHandler>();
     builder.Services.AddTransient<UpdateSubscriptionStatusHandler>();
     builder.Services.AddTransient<UpdateSubscriptionPlanHandler>();
     builder.Services.AddTransient<ListSubscriptionsHandler>();
