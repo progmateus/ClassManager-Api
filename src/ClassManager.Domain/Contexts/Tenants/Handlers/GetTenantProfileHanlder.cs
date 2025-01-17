@@ -1,6 +1,7 @@
 using AutoMapper;
 using ClassManager.Domain.Contexts.Shared.Enums;
 using ClassManager.Domain.Contexts.Subscriptions.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Subscriptions.ViewModels;
 using ClassManager.Domain.Contexts.tenants.ViewModels;
 using ClassManager.Domain.Contexts.Tenants.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Tenants.ViewModels;
@@ -37,14 +38,11 @@ public class GetTenantProfileHandler
       return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, null, 404);
     }
 
-    var lastestSubscription = await _subscriptionRepository.FindLatestSubscription(tenant.Id, null, ETargetType.TENANT);
+    var lastestSubscription = _mapper.Map<SubscriptionViewModel>(await _subscriptionRepository.FindLatestSubscription(tenant.Id, null, ETargetType.TENANT));
 
     var tenantResponse = _mapper.Map<TenantViewModel>(tenant);
 
-    if (lastestSubscription is not null)
-    {
-      tenantResponse.SubscriptionStatus = lastestSubscription.Status;
-    }
+    tenantResponse.LatestSubscription = lastestSubscription;
 
     var balance = _paymentService.GetBalance(tenant.StripeAccountId);
 

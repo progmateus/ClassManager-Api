@@ -51,17 +51,17 @@ public class CreateTenantSubscriptionHandler : Notifiable,
       return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
 
-    if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
-    {
-      return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
-    }
-
     if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))
     {
       return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
     }
 
-    var subscriptionsAlreadyExists = await _subscriptionRepository.GetSubscriptionsByStatus(null, tenantId, [ESubscriptionStatus.ACTIVE, ESubscriptionStatus.UNPAID, ESubscriptionStatus.PAST_DUE], ETargetType.USER);
+    if (await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
+    {
+      return new CommandResult(false, "ACTIVE_SUBSCRIPTION_ALREADY_EXISTS", null, null, 409);
+    }
+
+    var subscriptionsAlreadyExists = await _subscriptionRepository.GetSubscriptionsByStatus(null, tenantId, [ESubscriptionStatus.INCOMPLETE, ESubscriptionStatus.ACTIVE, ESubscriptionStatus.UNPAID, ESubscriptionStatus.PAST_DUE], ETargetType.TENANT);
 
     if (subscriptionsAlreadyExists.Any(x => x.Status == ESubscriptionStatus.ACTIVE || x.Status == ESubscriptionStatus.INCOMPLETE))
     {
@@ -96,7 +96,7 @@ public class CreateTenantSubscriptionHandler : Notifiable,
 
     var subscription = new Subscription(tenantId, plan.Id);
 
-    var stripeSubscription = _paymentService.CreateSubscription(subscription.Id, subscription.UserId, tenantId, plan.StripePriceId, stripeCustomer.StripeCustomerId, ETargetType.USER, tenant.StripeAccountId);
+    var stripeSubscription = _paymentService.CreateSubscription(subscription.Id, subscription.UserId, tenantId, plan.StripePriceId, stripeCustomer.StripeCustomerId, ETargetType.TENANT, null);
 
     var stripeSubscriptionPriceItem = stripeSubscription.Items.Data.FirstOrDefault(x => x.Object == "subscription_item");
 
@@ -110,7 +110,7 @@ public class CreateTenantSubscriptionHandler : Notifiable,
 
     await _subscriptionRepository.CreateAsync(subscription, new CancellationToken());
 
-    _paymentService.CreateInvoice(null, subscription.UserId, tenantId, stripeCustomer.StripeCustomerId, stripeSubscription.Id, tenant.StripeAccountId);
+    _paymentService.CreateInvoice(null, subscription.UserId, tenantId, stripeCustomer.StripeCustomerId, stripeSubscription.Id, null);
 
     return new CommandResult(true, "SUBSCRIPTION_CREATED", subscription, null, 201);
   }

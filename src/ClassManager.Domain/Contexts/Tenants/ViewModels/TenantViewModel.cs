@@ -20,7 +20,6 @@ public class TenantViewModel
   public string? Document { get; set; }
   public string? Avatar { get; set; }
   public string? StripeOnboardUrl { get; set; }
-  public ESubscriptionStatus? SubscriptionStatus { get; set; }
   public long? AvailableBalance { get; set; }
   public long? PendingBalance { get; set; }
   public bool StripeChargesEnabled { get; set; }
@@ -30,6 +29,7 @@ public class TenantViewModel
   public Guid PlanId { get; set; }
   public DateTime ExpiresDate { get; set; }
   public PlanViewModel? Plan { get; set; }
+  public SubscriptionViewModel? LatestSubscription { get; set; }
   public UserViewModel? User { get; set; }
   public IList<RoleViewModel> Roles { get; set; } = [];
   public IList<UsersRolesViewModel> UsersRoles { get; set; } = [];

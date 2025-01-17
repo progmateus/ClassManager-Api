@@ -171,7 +171,7 @@ public class TenantController : MainController
     return Results.Ok(result);
   }
 
-  [HttpGet("{id}/subscriptions")]
+  [HttpPost("{id}/subscriptions")]
   public async Task<IResult> CreateSubscription(
     [FromRoute] Guid id,
     [FromBody] CreateSubscriptionCommand command,

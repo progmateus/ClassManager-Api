@@ -42,6 +42,7 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     .ThenInclude(u => u.StudentsClasses.Where(sc => sc.Class.TenantId == tenantId))
     .ThenInclude(sc => sc.Class)
     .AsNoTracking()
+    .OrderByDescending(x => x.CreatedAt)
     .FirstOrDefaultAsync(x => x.Id == id && x.TenantId == tenantId);
   }
 
@@ -92,6 +93,7 @@ public class SubscriptionRepository : TRepository<Subscription>, ISubscriptionRe
     .Include(x => x.LatestInvoice)
     .Include(x => x.NextPlan)
     .AsNoTracking()
+    .OrderByDescending(x => x.CreatedAt)
     .FirstOrDefaultAsync(x => x.TenantId == tenantId && x.TargetType == targetType);
   }
 }
