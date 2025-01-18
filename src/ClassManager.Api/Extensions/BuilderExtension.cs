@@ -351,6 +351,7 @@ public static class BuilderExtension
     builder.Services.AddTransient<TransferClassStudentsHandler>();
 
     builder.Services.AddTransient<CreateUserSubscriptionHandler>();
+    builder.Services.AddTransient<GetUserSubscriptionProfileHandler>();
     builder.Services.AddTransient<CreateTenantSubscriptionHandler>();
     builder.Services.AddTransient<UpdateSubscriptionStatusHandler>();
     builder.Services.AddTransient<UpdateSubscriptionPlanHandler>();

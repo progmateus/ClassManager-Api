@@ -19,7 +19,6 @@ public class SubscriptionViewModel
   public DateTime CurrentPeriodEnd { get; set; }
   public UserViewModel? User { get; set; }
   public TenantViewModel? Tenant { get; set; }
-
   public TenantPlanViewModel? TenantPlan { get; set; }
   public PlanViewModel? Plan { get; set; }
   public TenantPlanViewModel? NextTenantPlan { get; set; }
