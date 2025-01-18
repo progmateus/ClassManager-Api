@@ -116,7 +116,7 @@ public class UpdateSubscriptionPlanHandler : Notifiable
       }
 
       _paymentService.UpdateSubscriptionPlan(tenant.Id, subscription.Id, subscription.StripeSubscriptionPriceItemId, tenantPlan.StripePriceId, tenant.StripeAccountId);
-      /* subscription.SetTenantPlan(tenantPlan.Id); */
+      subscription.SetTenantPlan(tenantPlan.Id);
     }
 
     await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
