@@ -107,7 +107,6 @@ public class UpdateStripeSubscriptionWebhookHandler
 
           if (tenantPlan is not null)
           {
-            subscription.SetStripeScheduleSubscriptionNextPlanId(null);
             subscription.SetTenantPlan(tenantPlan.Id);
           }
         }
