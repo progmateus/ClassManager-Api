@@ -50,8 +50,6 @@ public class UpdateStripeSubscriptionWebhookHandler
       return;
     }
 
-    /* var subscriptionType = stripeSubscription.Metadata.FirstOrDefault(x => x.Key == "type"); */
-
     var status =
       stripeSubscription.Status == "incomplete" ? ESubscriptionStatus.INCOMPLETE
         : stripeSubscription.Status == "incomplete_expired" ? ESubscriptionStatus.INCOMPLETE_EXPIRED
@@ -70,7 +68,7 @@ public class UpdateStripeSubscriptionWebhookHandler
       return;
     }
 
-    if (subscription.LatestInvoice is not null && subscription.LatestInvoice.StripeInvoiceId != stripeSubscription.LatestInvoiceId)
+    if (subscription.LatestInvoice is null)
     {
       var latestInvoice = await _invoiceRepository.FindByStripeInvoiceId(stripeSubscription.LatestInvoiceId);
       if (latestInvoice is not null)
@@ -79,35 +77,57 @@ public class UpdateStripeSubscriptionWebhookHandler
         subscription.SetLatestInvoice(latestInvoice.Id);
       }
     }
-
-    var stripePrice = stripeSubscription.Items.Data.FirstOrDefault((x) => x.Object == "price");
-
-    if (subscription.TargetType == ETargetType.USER)
-    {
-
-      if (stripePrice is not null && subscription.TenantPlan.StripePriceId != stripePrice.Id)
-      {
-        var tenantPlan = await _tenantPlanRepository.FindByStripePriceId(stripePrice.Id, new CancellationToken());
-
-        if (tenantPlan is not null)
-        {
-          subscription.SetStripeScheduleSubscriptionNextPlanId(null);
-          subscription.SetTenantPlan(tenantPlan.Id);
-        }
-      }
-    }
     else
     {
-      if (stripePrice is not null && subscription.Plan.StripePriceId != stripePrice.Id)
+      if (subscription.LatestInvoice.StripeInvoiceId != stripeSubscription.LatestInvoiceId)
       {
-        var plan = await _planRepository.FindByStripePriceId(stripePrice.Id, new CancellationToken());
-
-        if (plan is not null)
+        var latestInvoice = await _invoiceRepository.FindByStripeInvoiceId(stripeSubscription.LatestInvoiceId);
+        if (latestInvoice is not null)
         {
-          subscription.SetPlan(plan.Id);
+          subscription.SetStripeScheduleSubscriptionNextPlanId(null);
+          subscription.SetLatestInvoice(latestInvoice.Id);
         }
       }
     }
+
+
+
+    var stripeSubscriptionItem = stripeSubscription.Items.Data.FirstOrDefault((x) => x.Object == "subscription_item");
+
+    if (stripeSubscriptionItem is not null)
+    {
+      subscription.SetStripeSubscriptionPriceItemId(stripeSubscriptionItem.Id);
+
+      if (subscription.TargetType == ETargetType.USER)
+      {
+        if (subscription.TenantPlan.StripePriceId != stripeSubscriptionItem.Price.Id)
+        {
+
+          var tenantPlan = await _tenantPlanRepository.FindByStripePriceId(stripeSubscriptionItem.Price.Id, new CancellationToken());
+
+          if (tenantPlan is not null)
+          {
+            subscription.SetStripeScheduleSubscriptionNextPlanId(null);
+            subscription.SetTenantPlan(tenantPlan.Id);
+          }
+        }
+      }
+      else
+      {
+        if (subscription.Plan.StripePriceId != stripeSubscriptionItem.Price.Id)
+        {
+          var plan = await _planRepository.FindByStripePriceId(stripeSubscriptionItem.Price.Id, new CancellationToken());
+
+          if (plan is not null)
+          {
+            subscription.SetPlan(plan.Id);
+          }
+        }
+      }
+
+    }
+
+
     subscription.SetCanceledAt(stripeSubscription.CanceledAt);
     subscription.SetStatus(status);
     subscription.SetCurrentPeriod(stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);

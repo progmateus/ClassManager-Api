@@ -59,7 +59,7 @@ public class UpdateSubscriptionPlanHandler : Notifiable
       return new CommandResult(false, "ERR_TENANT_NOT_FOUND", null, null, 404);
     }
 
-    if (subscription is null || subscription.TargetType != ETargetType.TENANT)
+    if (subscription is null)
     {
       return new CommandResult(false, "ERR_SUBSCRIPTION_NOT_FOUND", null, null, 404);
     }
