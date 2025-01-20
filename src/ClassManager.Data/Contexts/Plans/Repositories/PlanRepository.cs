@@ -12,6 +12,6 @@ public class PlanRepository : Repository<Plan>, IPlanRepository
 
   public async Task<Plan?> FindByStripePriceId(string stripePriceId, CancellationToken cancellationToken = default)
   {
-    return await DbSet.FirstOrDefaultAsync((x) => x.StripePriceId == stripePriceId, cancellationToken);
+    return await DbSet.AsTracking().FirstOrDefaultAsync((x) => x.StripePriceId == stripePriceId, cancellationToken);
   }
 }

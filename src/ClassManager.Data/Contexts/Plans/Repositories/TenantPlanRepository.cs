@@ -13,7 +13,7 @@ public class TenantPlanRepository : TRepository<TenantPlan>, ITenantPlanReposito
   public async Task<TenantPlan?> FindByStripePriceId(string stripePriceId, CancellationToken cancellationToken = default)
   {
     //need include to get the tenant stripe account id
-    return await DbSet.Include(x => x.Tenant).FirstOrDefaultAsync((x) => x.StripePriceId == stripePriceId, cancellationToken);
+    return await DbSet.AsTracking().Include(x => x.Tenant).FirstOrDefaultAsync((x) => x.StripePriceId == stripePriceId, cancellationToken);
   }
 
   public async Task<TenantPlan> GetByIdAndTenantId(Guid tenantId, Guid planId, CancellationToken cancellationToken)

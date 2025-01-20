@@ -55,7 +55,7 @@ public class AutoMapperConfig : Profile
     CreateMap<TenantPlan, TenantPlanViewModel>();
     CreateMap<Link, LinkViewModel>();
     CreateMap<Image, ImageViewModel>()
-    .ForMember(dest => dest.Url, opt => opt.MapFrom(src => $"http://192.168.15.9:5062/images/{src.Name}"));
+    .ForMember(dest => dest.Url, opt => opt.MapFrom(src => $"http://192.168.15.5:5062/images/{src.Name}"));
     CreateMap<ExternalBankAccount, ExternalBankAccountViewModel>();
     CreateMap<Payout, PayoutViewModel>();
 

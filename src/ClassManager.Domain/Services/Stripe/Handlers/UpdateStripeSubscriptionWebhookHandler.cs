@@ -126,7 +126,6 @@ public class UpdateStripeSubscriptionWebhookHandler
 
     }
 
-
     subscription.SetCanceledAt(stripeSubscription.CanceledAt);
     subscription.SetStatus(status);
     subscription.SetCurrentPeriod(stripeSubscription.CurrentPeriodStart, stripeSubscription.CurrentPeriodEnd);
