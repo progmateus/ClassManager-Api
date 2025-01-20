@@ -65,7 +65,7 @@ public class CreateBookingHandler : Notifiable, ITenantHandler<CreateBookingComm
 
     if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
     {
-      return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
+      return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null, 403);
     }
 
     var classDay = await _classDayRepository.GetByIdAsync(command.ClassDayId, new CancellationToken());

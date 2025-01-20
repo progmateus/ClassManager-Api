@@ -23,7 +23,7 @@ public abstract class TRepository<TEntity> : ITRepository<TEntity> where TEntity
 
   public async Task<TEntity?> FindByIdAndTenantIdAsync(Guid id, Guid tenantId, CancellationToken cancellationToken)
   {
-    return await DbSet.FirstOrDefaultAsync(x => x.Id == id && x.TenantId == tenantId, cancellationToken);
+    return await DbSet.AsTracking().FirstOrDefaultAsync(x => x.Id == id && x.TenantId == tenantId, cancellationToken);
   }
 
   public async virtual Task UpdateAsync(TEntity entity, CancellationToken cancellationToken)

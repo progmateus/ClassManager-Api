@@ -46,7 +46,7 @@ public class UpdateClassTimeTableHandler :
 
     if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
     {
-      return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
+      return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null, 403);
     }
 
     if (!await _accessControlService.HasUserAnyRoleAsync(loggedUserId, tenantId, ["admin"]))

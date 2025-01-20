@@ -69,7 +69,7 @@ public class CreateUserSubscriptionHandler : Notifiable,
 
     if (!await _accessControlService.IsTenantSubscriptionActiveAsync(tenantId))
     {
-      return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null);
+      return new CommandResult(false, "ERR_TENANT_INACTIVE", null, null, 403);
     }
 
     Guid targetUserId = loggedUserId;

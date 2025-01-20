@@ -83,7 +83,7 @@ public abstract class Repository<TEntity> : IRepository<TEntity> where TEntity :
 
   public async Task<TEntity?> FindAsync(Expression<Func<TEntity, bool>> predicate, params Expression<Func<TEntity, object>>[] includes)
   {
-    var query = DbSet.AsNoTracking().Where(predicate);
+    var query = DbSet.AsTracking().Where(predicate);
 
     return await includes.Aggregate(query, (current, includeProperty) => current.Include(includeProperty)).FirstOrDefaultAsync();
   }
