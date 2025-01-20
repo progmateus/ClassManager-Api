@@ -53,12 +53,10 @@ public class FinalizeStripeInvoiceWebhookHandler
 
     await _invoiceRepository.CreateAsync(invoice, new CancellationToken());
 
-    /*     if (stripeInvoice.BillingReason == "subscription_cycle")
-        {
-          subscription.SetLatestInvoice(invoice.Id);
-          await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
-        } */
-    subscription.SetLatestInvoice(invoice.Id);
-    await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
+    if (stripeInvoice.BillingReason == "subscription_cycle" || stripeInvoice.BillingReason == "subscription_create")
+    {
+      subscription.SetLatestInvoice(invoice.Id);
+      await _subscriptionRepository.UpdateAsync(subscription, new CancellationToken());
+    }
   }
 }
