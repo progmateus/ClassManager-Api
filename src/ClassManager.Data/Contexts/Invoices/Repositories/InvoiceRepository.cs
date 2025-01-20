@@ -32,6 +32,8 @@ public class InvoiceRepository : TRepository<Invoice>, IInvoiceRepository
   {
     return await DbSet
     .Include(x => x.Tenant)
+    .Include(x => x.Plan)
+    .Include(x => x.TenantPlan)
     .Where(x => !tenantId.HasValue || x.TenantId == tenantId.Value)
     .Where(x => !userId.HasValue || x.UserId == userId.Value)
     .Where(x => !subscriptionId.HasValue || x.SubscriptionId == subscriptionId.Value)
