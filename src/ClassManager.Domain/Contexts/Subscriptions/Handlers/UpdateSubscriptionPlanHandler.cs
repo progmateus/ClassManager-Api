@@ -98,12 +98,6 @@ public class UpdateSubscriptionPlanHandler : Notifiable
 
           if (!subscription.StripeScheduleSubscriptionNextPlanId.IsNullOrEmpty())
           {
-            Console.WriteLine("==============================");
-            Console.WriteLine("==============================");
-            Console.WriteLine("==============================");
-            Console.WriteLine("==============================");
-            Console.WriteLine("não é nullo");
-            Console.WriteLine(subscription.StripeScheduleSubscriptionNextPlanId);
             _paymentService.CancelSubscriptionSchedule(subscription.StripeScheduleSubscriptionNextPlanId, null);
           }
 
