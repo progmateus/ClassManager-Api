@@ -171,7 +171,7 @@ public class PaymentService : IPaymentService
       {
         { "entityId", entityId.ToString() },
         { "tenantId", tenantId.ToString() ?? "" },
-        { "ownerType", ownerType.ToString() },
+        { "ownerType", ((int)ownerType).ToString() },
       }
     };
     var service = new ProductService();
@@ -216,7 +216,7 @@ public class PaymentService : IPaymentService
         { "entityId", entityId.ToString() ?? "" },
         { "userId", userId.ToString() ?? "" },
         { "tenantId", tenantId.ToString() },
-        { "type", type.ToString() }
+        { "type", ((int)type).ToString() }
       }
     };
     var service = new SubscriptionService();
@@ -387,12 +387,24 @@ public class PaymentService : IPaymentService
                 {
                   new SubscriptionSchedulePhaseItemOptions
                     {
-                      Price = newStripePriceId,
-                      Quantity = 1
+                      Price = schedule.Phases[0].Items[0].PriceId,
+                      Quantity = schedule.Phases[0].Items[0].Quantity,
                     },
                 },
               StartDate = schedule.Phases[0].StartDate,
               EndDate = schedule.Phases[0].EndDate,
+            },
+          new SubscriptionSchedulePhaseOptions
+            {
+              Items = new List<SubscriptionSchedulePhaseItemOptions>
+              {
+                new SubscriptionSchedulePhaseItemOptions
+                {
+                  Price = newStripePriceId,
+                  Quantity = 1,
+                },
+              },
+              Iterations = 1,
             }
         },
     };
