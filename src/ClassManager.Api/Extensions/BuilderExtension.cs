@@ -282,6 +282,10 @@ public static class BuilderExtension
     IExternalBankAccountRepository,
     ExternalBankAccountRepository>();
 
+    builder.Services.AddTransient<
+    IPaymentRepository,
+    PaymentRepository>();
+
     builder.Services.AddTransient<TokenService>();
 
     builder.Services.AddTransient<AuthHandler>();
@@ -399,6 +403,7 @@ public static class BuilderExtension
     builder.Services.AddTransient<UpdateStripePayoutWebhookHandler>();
     builder.Services.AddTransient<CreateStripeExternalBankAccountWebhookHandler>();
     builder.Services.AddTransient<UpdateStripeExternalBankAccountWebhookHandler>();
+    builder.Services.AddTransient<CreateStripePaymentWebhookHandler>();
 
     builder.Services.AddTransient<CreateTenantAddressHandler>();
     builder.Services.AddTransient<UpdateUserAddressHandler>();
