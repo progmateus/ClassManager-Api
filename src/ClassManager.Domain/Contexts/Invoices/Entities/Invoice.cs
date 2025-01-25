@@ -51,6 +51,7 @@ public class Invoice : TenantEntity
   public string? StripeInvoiceNumber { get; private set; }
   public DateTime ExpiresAt { get; private set; }
   public User? User { get; private set; }
+  public Payment? Payment { get; private set; }
   public TenantPlan? TenantPlan { get; private set; }
   public Tenant? Tenant { get; private set; }
   public Plan? Plan { get; private set; }

@@ -53,6 +53,7 @@ namespace ClassManager.Domain.Contexts.Tenants.Entities
     public IList<TenantPlan> TenantPlans { get; private set; } = [];
     public IList<Link> Links { get; private set; } = [];
     public IList<Image> Images { get; private set; } = [];
+    public IList<Payment> Payments { get; private set; } = [];
     public IList<Subscription> Subscriptions { get; private set; } = [];
     public IList<TimeTable> TimesTables { get; private set; } = [];
     public IList<Class> Classes { get; private set; } = [];
