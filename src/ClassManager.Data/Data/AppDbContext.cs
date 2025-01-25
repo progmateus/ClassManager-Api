@@ -51,6 +51,7 @@ public class AppDbContext : DbContext
   public DbSet<Image> Images { get; set; } = null!;
   public DbSet<Payout> Payouts { get; set; } = null!;
   public DbSet<ExternalBankAccount> ExternalsBanksAccounts { get; set; } = null!;
+  public DbSet<Payment> Payments { get; set; } = null!;
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
@@ -91,6 +92,7 @@ public class AppDbContext : DbContext
     modelBuilder.ApplyConfiguration(new ImageMap());
     modelBuilder.ApplyConfiguration(new PayoutMap());
     modelBuilder.ApplyConfiguration(new ExternalBankAccountMap());
+    modelBuilder.ApplyConfiguration(new PaymentMap());
 
     base.OnModelCreating(modelBuilder);
   }
