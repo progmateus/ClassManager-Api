@@ -59,7 +59,7 @@ public class UpdateClassDayHandler :
       return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
     }
 
-    if (await _teacherClassesrepository.GetByUserIdAndClassId(loggedUserId, classDay.ClassId) is null && !isAdmin)
+    if (await _teacherClassesrepository.FindByUserIdAndClassId(loggedUserId, classDay.ClassId) is null && !isAdmin)
     {
       return new CommandResult(false, "ERR_PERMISSION_DENIED", null, null, 403);
     }
