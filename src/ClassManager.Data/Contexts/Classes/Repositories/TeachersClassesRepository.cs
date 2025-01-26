@@ -17,7 +17,7 @@ public class TeachersClassesRepository : Repository<TeachersClasses>, ITeacherCl
     return DbSet.Count(x => x.ClassId == classId);
   }
 
-  public async Task<TeachersClasses> GetByUserIdAndClassId(Guid classId, Guid userId)
+  public async Task<TeachersClasses> FindByUserIdAndClassId(Guid classId, Guid userId)
   {
     return await DbSet.FirstOrDefaultAsync((tc) => tc.ClassId == classId && tc.UserId == userId);
   }

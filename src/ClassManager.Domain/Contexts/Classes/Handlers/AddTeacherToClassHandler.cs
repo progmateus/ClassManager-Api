@@ -10,15 +10,15 @@ using ClassManager.Shared.Commands;
 
 namespace ClassManager.Domain.Contexts.Classes.Handlers;
 
-public class AddStudentToClassHandler
+public class AddTeacherToClassHandler
 {
-  private readonly IStudentsClassesRepository _studentsClassesRepository;
   private readonly IAccessControlService _accessControlService;
   private readonly IUsersRolesRepository _usersRolesRepository;
   private readonly IMapper _mapper;
+  private readonly ITeacherClassesRepository _teachersClassesRepository;
 
-  public AddStudentToClassHandler(
-    IStudentsClassesRepository studentsClassesRepository,
+  public AddTeacherToClassHandler(
+    ITeacherClassesRepository teachersClassesRepository,
     IAccessControlService accessControlService,
     IUsersRolesRepository usersRolesRepository,
     IMapper mapper
@@ -26,7 +26,7 @@ public class AddStudentToClassHandler
 
     )
   {
-    _studentsClassesRepository = studentsClassesRepository;
+    _teachersClassesRepository = teachersClassesRepository;
     _accessControlService = accessControlService;
     _usersRolesRepository = usersRolesRepository;
     _mapper = mapper;
@@ -45,24 +45,24 @@ public class AddStudentToClassHandler
       return new CommandResult(false, "ERR_ADMIN_ROLE_NOT_FOUND", null, null, 403);
     }
 
-    var tenantStudent = await _usersRolesRepository.ListByRoleAsync(tenantId, ["student"], [command.UserId]);
+    var tenantTeacher = await _usersRolesRepository.ListByRoleAsync(tenantId, ["teacher"], [command.UserId]);
 
-    if (tenantStudent.Count == 0)
+    if (tenantTeacher.Count == 0)
     {
-      return new CommandResult(false, "ERR_STUDENT_NOT_FOUND", null, null, 404);
+      return new CommandResult(false, "ERR_TEACHER_NOT_FOUND", null, null, 404);
     }
 
-    var studentAlreadyOnClass = await _studentsClassesRepository.FindByUserIdAndClassId(command.ClassId, command.UserId);
+    var teacherAlreadyOnClass = await _teachersClassesRepository.FindByUserIdAndClassId(command.ClassId, command.UserId);
 
-    if (studentAlreadyOnClass is not null)
+    if (teacherAlreadyOnClass is not null)
     {
-      return new CommandResult(false, "ERR_STUDENT_ALREADY_ON_CLASS", null, null, 409);
+      return new CommandResult(false, "ERR_TEACHER_ALREADY_ON_CLASS", null, null, 409);
     }
 
-    var studentClass = new StudentsClasses(command.UserId, command.ClassId);
+    var teacherClass = new TeachersClasses(command.UserId, command.ClassId);
 
-    await _studentsClassesRepository.CreateAsync(studentClass, new CancellationToken());
+    await _teachersClassesRepository.CreateAsync(teacherClass, new CancellationToken());
 
-    return new CommandResult(true, "STUDENT_ADDED", _mapper.Map<StudentsClassesViewModel>(studentClass), null, 200);
+    return new CommandResult(true, "TEACHER_ADDED", _mapper.Map<TeachersClassesViewModel>(teacherClass), null, 200);
   }
 }
