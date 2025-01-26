@@ -3,7 +3,7 @@ namespace ClassManager.Domain
   public static class Configuration
   {
     public static string PrivateKey { get; set; } = "698dc19d489c4e4db73e28a713eab07b";
-    public static string BaseUrl { get; set; } = "http://192.168.15.4:5062";
+    public static string BaseUrl { get; set; } = "http://192.168.15.8:5062";
     public static SecretsConfiguration Secrets { get; set; } = new();
     public static DatabaseConfiguration Database { get; set; } = new();
     public static SendGridConfiguration SendGrid { get; set; } = new();

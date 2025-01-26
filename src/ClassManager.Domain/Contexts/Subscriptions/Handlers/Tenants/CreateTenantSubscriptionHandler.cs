@@ -1,3 +1,4 @@
+using ClassManager.Domain.Contexts.Invoices.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Plans.Repositories;
 using ClassManager.Domain.Contexts.Roles.Commands;
 using ClassManager.Domain.Contexts.Shared.Enums;
@@ -22,14 +23,15 @@ public class CreateTenantSubscriptionHandler : Notifiable,
   private readonly IAccessControlService _accessControlService;
   private readonly IPaymentService _paymentService;
   private readonly IStripeCustomerRepository _stripeCustomerRepository;
-
+  private readonly IInvoiceRepository _invoiceRepository;
   public CreateTenantSubscriptionHandler(
     ISubscriptionRepository subscriptionRepository,
     ITenantRepository tenantRepository,
     IPlanRepository planRepository,
     IAccessControlService accessControlService,
     IPaymentService paymentService,
-    IStripeCustomerRepository stripeCustomerRepository
+    IStripeCustomerRepository stripeCustomerRepository,
+    IInvoiceRepository invoiceRepository
 
   )
   {
@@ -39,6 +41,7 @@ public class CreateTenantSubscriptionHandler : Notifiable,
     _paymentService = paymentService;
     _stripeCustomerRepository = stripeCustomerRepository;
     _tenantRepository = tenantRepository;
+    _invoiceRepository = invoiceRepository;
 
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, CreateSubscriptionCommand command)
@@ -69,6 +72,13 @@ public class CreateTenantSubscriptionHandler : Notifiable,
     }
 
     if (subscriptionsAlreadyExists.Any(x => x.Status != ESubscriptionStatus.ACTIVE && x.Status != ESubscriptionStatus.CANCELED && x.Status != ESubscriptionStatus.INCOMPLETE))
+    {
+      return new CommandResult(false, "UNPAID_SUBSCRIPTION_ALREADY_EXISTS", null, null, 409);
+    }
+
+    var hasSubscriptionUnpaidInvoice = await _invoiceRepository.HasSubscriptionUnpaidInvoice(tenantId, loggedUserId, ETargetType.TENANT, new CancellationToken());
+
+    if (hasSubscriptionUnpaidInvoice)
     {
       return new CommandResult(false, "UNPAID_SUBSCRIPTION_ALREADY_EXISTS", null, null, 409);
     }

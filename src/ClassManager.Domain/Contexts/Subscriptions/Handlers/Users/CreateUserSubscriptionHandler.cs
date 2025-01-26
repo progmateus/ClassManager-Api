@@ -1,6 +1,7 @@
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Classes.Entities;
 using ClassManager.Domain.Contexts.Classes.Repositories.Contracts;
+using ClassManager.Domain.Contexts.Invoices.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Roles.Commands;
 using ClassManager.Domain.Contexts.Roles.Entities;
 using ClassManager.Domain.Contexts.Roles.Repositories.Contracts;
@@ -30,6 +31,7 @@ public class CreateUserSubscriptionHandler : Notifiable,
   private readonly IPaymentService _paymentService;
   private readonly IUserRepository _userRepository;
   private readonly IStripeCustomerRepository _stripeCustomerRepository;
+  private readonly IInvoiceRepository _invoiceRepository;
 
   public CreateUserSubscriptionHandler(
     ISubscriptionRepository subscriptionRepository,
@@ -41,7 +43,8 @@ public class CreateUserSubscriptionHandler : Notifiable,
     IAccessControlService accessControlService,
     IPaymentService paymentService,
     IUserRepository userRepository,
-    IStripeCustomerRepository stripeCustomerRepository
+    IStripeCustomerRepository stripeCustomerRepository,
+    IInvoiceRepository invoiceRepository
 
   )
   {
@@ -55,6 +58,7 @@ public class CreateUserSubscriptionHandler : Notifiable,
     _paymentService = paymentService;
     _userRepository = userRepository;
     _stripeCustomerRepository = stripeCustomerRepository;
+    _invoiceRepository = invoiceRepository;
 
   }
   public async Task<ICommandResult> Handle(Guid loggedUserId, Guid tenantId, CreateSubscriptionCommand command)
@@ -94,6 +98,13 @@ public class CreateUserSubscriptionHandler : Notifiable,
     }
 
     if (subscriptionsAlreadyExists.Any(x => x.Status != ESubscriptionStatus.ACTIVE && x.Status != ESubscriptionStatus.CANCELED && x.Status != ESubscriptionStatus.INCOMPLETE))
+    {
+      return new CommandResult(false, "UNPAID_SUBSCRIPTION_ALREADY_EXISTS", null, null, 409);
+    }
+
+    var hasSubscriptionUnpaidInvoice = await _invoiceRepository.HasSubscriptionUnpaidInvoice(tenantId, targetUserId, ETargetType.USER, new CancellationToken());
+
+    if (hasSubscriptionUnpaidInvoice)
     {
       return new CommandResult(false, "UNPAID_SUBSCRIPTION_ALREADY_EXISTS", null, null, 409);
     }

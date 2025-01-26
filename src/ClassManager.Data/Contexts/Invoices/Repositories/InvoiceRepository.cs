@@ -28,6 +28,11 @@ public class InvoiceRepository : TRepository<Invoice>, IInvoiceRepository
     return await DbSet.FirstOrDefaultAsync(x => x.Id == invoiceId && x.TenantId == tenantId && x.TargetType == ETargetType.USER);
   }
 
+  public async Task<bool> HasSubscriptionUnpaidInvoice(Guid tenantId, Guid userId, ETargetType targetType, CancellationToken cancellationToken)
+  {
+    return await DbSet.AnyAsync(x => x.TenantId == tenantId && x.UserId == userId && x.TargetType == targetType && x.Type == EInvoiceType.SUBSCRIPTION, cancellationToken);
+  }
+
   public async Task<List<Invoice>> ListByUserIdAndTenantId(Guid? tenantId, Guid? userId, Guid? subscriptionId, List<ETargetType>? targetTypes, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)
   {
     return await DbSet

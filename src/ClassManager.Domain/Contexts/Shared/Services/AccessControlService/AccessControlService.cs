@@ -79,7 +79,7 @@ public class AccesControlService : IAccessControlService
 
     if (classRolesNames.Contains("teacher"))
     {
-      if (await _teacherClassesRepository.GetByUserIdAndClassId(classId, loggedUserId) is not null)
+      if (await _teacherClassesRepository.FindByUserIdAndClassId(classId, loggedUserId) is not null)
       {
         return true;
       }
