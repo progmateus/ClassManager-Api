@@ -30,7 +30,17 @@ public class InvoiceRepository : TRepository<Invoice>, IInvoiceRepository
 
   public async Task<bool> HasSubscriptionUnpaidInvoice(Guid tenantId, Guid userId, ETargetType targetType, CancellationToken cancellationToken)
   {
-    return await DbSet.AnyAsync(x => x.TenantId == tenantId && x.UserId == userId && x.TargetType == targetType && x.Type == EInvoiceType.SUBSCRIPTION, cancellationToken);
+
+    var status = new List<EInvoiceStatus>([EInvoiceStatus.OPEN, EInvoiceStatus.VOID, EInvoiceStatus.UNPAID, EInvoiceStatus.UNCOLLECTIBLE]);
+
+    return await
+      DbSet.AnyAsync(
+      x => x.TenantId == tenantId
+        && x.UserId == userId && x.TargetType == targetType
+          && x.Type == EInvoiceType.SUBSCRIPTION
+            && status.Contains(x.Status),
+      cancellationToken
+    );
   }
 
   public async Task<List<Invoice>> ListByUserIdAndTenantId(Guid? tenantId, Guid? userId, Guid? subscriptionId, List<ETargetType>? targetTypes, string search = "", int skip = 0, int limit = int.MaxValue, CancellationToken cancellationToken = default)
