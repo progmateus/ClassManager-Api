@@ -290,9 +290,14 @@ public static class BuilderExtension
     IPaymentRepository,
     PaymentRepository>();
 
+    builder.Services.AddTransient<
+    IUserTokenRepository,
+    UserTokenRepository>();
+
     builder.Services.AddTransient<TokenService>();
 
     builder.Services.AddTransient<AuthHandler>();
+    builder.Services.AddTransient<RefreshTokenHandler>();
 
     builder.Services.AddTransient<CreateUserHandler>();
     builder.Services.AddTransient<ListUsersHandler>();

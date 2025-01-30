@@ -52,6 +52,7 @@ public class AppDbContext : DbContext
   public DbSet<Payout> Payouts { get; set; } = null!;
   public DbSet<ExternalBankAccount> ExternalsBanksAccounts { get; set; } = null!;
   public DbSet<Payment> Payments { get; set; } = null!;
+  public DbSet<UserToken> UsersTokens { get; set; } = null!;
 
   protected override void OnModelCreating(ModelBuilder modelBuilder)
   {
@@ -93,6 +94,7 @@ public class AppDbContext : DbContext
     modelBuilder.ApplyConfiguration(new PayoutMap());
     modelBuilder.ApplyConfiguration(new ExternalBankAccountMap());
     modelBuilder.ApplyConfiguration(new PaymentMap());
+    modelBuilder.ApplyConfiguration(new UserTokenMap());
 
     base.OnModelCreating(modelBuilder);
   }

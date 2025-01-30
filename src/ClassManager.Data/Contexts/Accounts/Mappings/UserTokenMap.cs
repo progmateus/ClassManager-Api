@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace ClassManager.Data.Contexts.Accounts.Mappings;
 
-public class UsersTokens : IEntityTypeConfiguration<UserToken>
+public class UserTokenMap : IEntityTypeConfiguration<UserToken>
 {
   public void Configure(EntityTypeBuilder<UserToken> builder)
   {
