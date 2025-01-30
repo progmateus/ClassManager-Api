@@ -1,4 +1,5 @@
 using AutoMapper;
+using ClassManager.Domain.Contexts.Accounts.Entities;
 using ClassManager.Domain.Contexts.Accounts.Repositories.Contracts;
 using ClassManager.Domain.Contexts.Auth.Commands;
 using ClassManager.Domain.Contexts.Auth.Services;
@@ -21,17 +22,20 @@ public class AuthHandler :
   IHandler<AuthCommand>
 {
   private readonly IUserRepository _userReporitory;
+  private readonly IUserTokenRepository _userTokenRepository;
   private readonly IUsersRolesRepository _usersRolesRepository;
   private readonly ISubscriptionRepository _subscriptionsrepository;
   private IMapper _mapper;
   public AuthHandler(
     IUserRepository userRepository,
+    IUserTokenRepository userTokenRepository,
     IUsersRolesRepository usersRolesRepository,
     ISubscriptionRepository subscriptionsrepository,
     IMapper mapper
   )
   {
     _userReporitory = userRepository;
+    _userTokenRepository = userTokenRepository;
     _usersRolesRepository = usersRolesRepository;
     _subscriptionsrepository = subscriptionsrepository;
     _mapper = mapper;
@@ -73,10 +77,20 @@ public class AuthHandler :
       return new CommandResult(false, "Internal server error", null, null, 500);
     }
 
+    var tokenService = new TokenService();
+
+    var userViewModel = _mapper.Map<UserViewModel>(user);
+
+    var refreshTokenExpiresAt = DateTime.UtcNow.AddHours(30);
+
+    var refreshToken = tokenService.Create(userViewModel, Configuration.Secrets.RefreshToken, refreshTokenExpiresAt);
+
+    var userToken = new UserToken(user.Id, refreshToken, refreshTokenExpiresAt);
+
+    await _userTokenRepository.CreateAsync(userToken, new CancellationToken());
+
     var userRoles = _mapper.Map<List<UsersRolesViewModel>>(await _usersRolesRepository.FindByUserId(user.Id));
     var userSubscriptions = _mapper.Map<List<SubscriptionViewModel>>(await _subscriptionsrepository.ListSubscriptions([user.Id], []));
-
-    var tokenService = new TokenService();
 
     var authData = new AuthData
     {
@@ -84,7 +98,8 @@ public class AuthHandler :
       User = _mapper.Map<UserViewModel>(user),
     };
 
-    authData.Token = tokenService.Create(_mapper.Map<UserViewModel>(user), Configuration.Secrets.Token, DateTime.UtcNow.AddHours(2));
+    authData.Token = tokenService.Create(userViewModel, Configuration.Secrets.Token, DateTime.UtcNow.AddHours(2));
+    authData.RefreshToken = refreshToken;
     authData.User.Subscriptions = userSubscriptions;
     authData.User.UsersRoles = userRoles;
 
