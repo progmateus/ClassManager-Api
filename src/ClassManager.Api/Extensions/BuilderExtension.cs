@@ -46,6 +46,7 @@ using ClassManager.Domain.Libs.MassTransit.Publish;
 using ClassManager.Domain.Services;
 using ClassManager.Domain.Services.Stripe.Handlers;
 using ClassManager.Domain.Services.Stripe.Repositories.Contracts;
+using ClassManager.Domain.Shared.Commands;
 using ClassManager.Domain.Shared.Services.AccessControlService;
 using MassTransit;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -114,6 +115,20 @@ public static class BuilderExtension
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.Secrets.Token)),
             ValidateIssuer = false,
             ValidateAudience = false
+          };
+
+          x.Events = new JwtBearerEvents
+          {
+            OnChallenge = async (context) =>
+              {
+                context.HandleResponse();
+
+                if (context.AuthenticateFailure != null)
+                {
+                  context.Response.StatusCode = 401;
+                  await context.HttpContext.Response.WriteAsync("token.expired");
+                }
+              }
           };
         });
     builder.Services.AddAuthorization(x => { x.AddPolicy("Admin", p => p.RequireRole("admin")); });

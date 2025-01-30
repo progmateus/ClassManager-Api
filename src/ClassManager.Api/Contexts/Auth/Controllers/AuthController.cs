@@ -1,15 +1,17 @@
 using System.Reflection;
+using ClassManager.Api.Contexts.Shared.Controllers;
 using ClassManager.Domain.Contexts.Accounts.Handlers;
 using ClassManager.Domain.Contexts.Auth.Commands;
 using ClassManager.Domain.Contexts.Auth.Services;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ClassManager.Api.Contexts.Auth.Controllers;
 
-[ApiController]
 [Route("/auth")]
-public class AuthController : ControllerBase
+public class AuthController : MainController
 {
+  [AllowAnonymous]
   [HttpPost("login")]
   public async Task<IResult> Create(
       [FromBody] AuthCommand command,
@@ -22,7 +24,7 @@ public class AuthController : ControllerBase
 
     return Results.Ok(result);
   }
-
+  [Authorize]
   [HttpPost("refresh-token")]
   public async Task<IResult> Create(
       [FromBody] RefreshTokenCommand command,
