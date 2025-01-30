@@ -83,7 +83,8 @@ public class AuthHandler :
       Id = user.Id.ToString(),
       User = _mapper.Map<UserViewModel>(user),
     };
-    authData.Token = tokenService.Create(authData);
+
+    authData.Token = tokenService.Create(_mapper.Map<UserViewModel>(user), Configuration.Secrets.Token, DateTime.UtcNow.AddHours(2));
     authData.User.Subscriptions = userSubscriptions;
     authData.User.UsersRoles = userRoles;
 

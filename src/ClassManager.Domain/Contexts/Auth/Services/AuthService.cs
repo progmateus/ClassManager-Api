@@ -2,6 +2,7 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
+using ClassManager.Domain.Contexts.Accounts.Entities;
 using ClassManager.Domain.Contexts.Users.ViewModels;
 using ClassManager.Domain.Shared.Contracts;
 using Microsoft.IdentityModel.Tokens;
@@ -10,11 +11,11 @@ namespace ClassManager.Domain.Contexts.Auth.Services
 {
   public class TokenService
   {
-    public string Create(AuthData data)
+    public string Create(UserViewModel user, string secret, DateTime expiresAt)
     {
       var handler = new JwtSecurityTokenHandler();
 
-      var key = Encoding.ASCII.GetBytes(Configuration.Secrets.JwtPrivateKey);
+      var key = Encoding.ASCII.GetBytes(secret);
 
       var credentials = new SigningCredentials(
         new SymmetricSecurityKey(key),
@@ -24,8 +25,8 @@ namespace ClassManager.Domain.Contexts.Auth.Services
       var tokenDescription = new SecurityTokenDescriptor
       {
         SigningCredentials = credentials,
-        Expires = DateTime.UtcNow.AddHours(2),
-        Subject = GenerateClaims(data.User)
+        Expires = expiresAt,
+        Subject = GenerateClaims(user)
       };
       var token = handler.CreateToken(tokenDescription);
       return handler.WriteToken(token);

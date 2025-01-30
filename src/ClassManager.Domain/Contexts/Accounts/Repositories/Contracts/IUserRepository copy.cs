@@ -4,6 +4,6 @@ namespace ClassManager.Domain.Contexts.Accounts.Repositories.Contracts
 {
   public interface IUserTokenRepository : IRepository<UserToken>
   {
-    Task<UserToken?> FindByrefreshToken(string refreshToken, CancellationToken cancellationToken);
+    Task<UserToken?> FindbyUserIdAndRefreshToken(Guid userId, string refreshToken, CancellationToken cancellationToken);
   }
 }

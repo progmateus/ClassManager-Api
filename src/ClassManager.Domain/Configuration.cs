@@ -15,7 +15,8 @@ namespace ClassManager.Domain
     public class SecretsConfiguration
     {
       public string ApiKey { get; set; } = string.Empty;
-      public string JwtPrivateKey { get; set; } = string.Empty;
+      public string Token { get; set; } = string.Empty;
+      public string RefreshToken { get; set; } = string.Empty;
       public string PasswordSaltKey { get; set; } = string.Empty;
     }
 
