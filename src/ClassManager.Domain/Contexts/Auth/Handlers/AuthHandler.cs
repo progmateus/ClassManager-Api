@@ -85,6 +85,8 @@ public class AuthHandler :
 
     var refreshToken = tokenService.Create(userViewModel, Configuration.Secrets.RefreshToken, refreshTokenExpiresAt);
 
+    await _userTokenRepository.DeleteByUserId(user.Id, new CancellationToken());
+
     var userToken = new UserToken(user.Id, refreshToken, refreshTokenExpiresAt);
 
     await _userTokenRepository.CreateAsync(userToken, new CancellationToken());
