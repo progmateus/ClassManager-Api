@@ -53,11 +53,13 @@ public class RefreshTokenHandler :
 
     var tokenService = new TokenService();
 
-    var espiresDate = DateTime.UtcNow.AddHours(30);
+    var expiresAt = DateTime.UtcNow.AddHours(30);
 
-    var refreshToken = tokenService.Create(_mapper.Map<UserViewModel>(userToken.User), Configuration.Secrets.RefreshToken, espiresDate);
+    var userViewModel = _mapper.Map<UserViewModel>(userToken.User);
 
-    var newUserToken = new UserToken(loggedUserId, refreshToken, espiresDate);
+    var refreshToken = tokenService.Create(userViewModel, Configuration.Secrets.RefreshToken, expiresAt);
+
+    var newUserToken = new UserToken(loggedUserId, refreshToken, expiresAt);
 
     await _userTokenReposiotry.CreateAsync(newUserToken, new CancellationToken());
 
@@ -67,10 +69,10 @@ public class RefreshTokenHandler :
     var authData = new AuthData
     {
       Id = userToken.UserId.ToString(),
-      User = _mapper.Map<UserViewModel>(userToken.User),
+      User = userViewModel,
     };
 
-    authData.Token = tokenService.Create(_mapper.Map<UserViewModel>(userToken.User), Configuration.Secrets.Token, DateTime.UtcNow.AddHours(2));
+    authData.Token = tokenService.Create(userViewModel, Configuration.Secrets.Token, DateTime.UtcNow.AddHours(2));
     authData.RefreshToken = refreshToken;
     authData.User.Subscriptions = userSubscriptions;
     authData.User.UsersRoles = userRoles;
