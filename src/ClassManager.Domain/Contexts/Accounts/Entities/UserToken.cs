@@ -1,15 +1,4 @@
-using System;
 using ClassManager.Domain.Shared.Entities;
-using ClassManager.Domain.Contexts.Shared.ValueObjects;
-using ClassManager.Domain.Contexts.Shared.Enums;
-using ClassManager.Domain.Contexts.Roles.Entities;
-using ClassManager.Domain.Contexts.Classes.Entities;
-using ClassManager.Domain.Contexts.Subscriptions.Entities;
-using ClasManager.Domain.Contexts.Bookings.Entities;
-using ClassManager.Domain.Contexts.Tenants.Entities;
-using System.Text.Json.Serialization;
-using ClassManager.Domain.Contexts.Invoices.Entities;
-using ClassManager.Domain.Contexts.Addresses.Entites;
 
 namespace ClassManager.Domain.Contexts.Accounts.Entities
 {
