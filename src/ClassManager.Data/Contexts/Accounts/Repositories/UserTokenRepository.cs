@@ -10,6 +10,12 @@ public class UserTokenRepository : Repository<UserToken>, IUserTokenRepository
 {
   public UserTokenRepository(AppDbContext context) : base(context) { }
 
+  public async Task DeleteByUserId(Guid userId, CancellationToken cancellationToken)
+  {
+    DbSet.RemoveRange(DbSet.Where((ut) => ut.UserId == userId));
+    await SaveChangesAsync(cancellationToken);
+  }
+
   public async Task<UserToken?> FindByRefreshToken(string refreshToken, CancellationToken cancellationToken)
   {
     return await DbSet
