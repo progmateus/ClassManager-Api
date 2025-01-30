@@ -13,7 +13,6 @@ public class AuthController : ControllerBase
   [HttpPost("login")]
   public async Task<IResult> Create(
       [FromBody] AuthCommand command,
-      [FromServices] TokenService tokenService,
       [FromServices] AuthHandler handler
   )
   {
