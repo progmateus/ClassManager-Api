@@ -41,30 +41,39 @@ public class RefreshTokenHandler :
     if (command.Invalid)
     {
       AddNotifications(command);
-      return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
+      return new CommandResult(false, "ERR_INVALID_REFRESH_TOKEN", null, null, 401);
+    }
+
+    var tokenService = new TokenService();
+
+    if (tokenService.ValidateToken(command.RefreshToken))
+    {
+      return new CommandResult(false, "ERR_INVALID_REFRESH_TOKEN", null, null, 401);
     }
 
     var userToken = await _userTokenReposiotry.FindByRefreshToken(command.RefreshToken, default);
 
     if (userToken is null)
     {
-      return new CommandResult(false, "ERR_REFRESH_TOKEN_NOT_FOUND", null, null, 401);
+      return new CommandResult(false, "ERR_INVALID_REFRESH_TOKEN", null, null, 401);
     }
 
-    var tokenService = new TokenService();
 
-    var expiresAt = DateTime.UtcNow.AddHours(30);
+    var userClaims = tokenService.GetJwtClaims(command.RefreshToken);
 
     var userViewModel = _mapper.Map<UserViewModel>(userToken.User);
 
+
+    var expiresAt = DateTime.UtcNow.AddHours(30);
+
     var refreshToken = tokenService.Create(userViewModel, Configuration.Secrets.RefreshToken, expiresAt);
 
-    var newUserToken = new UserToken(userToken.User.Id, refreshToken, expiresAt);
+    var newUserToken = new UserToken(new Guid(userClaims.Id), refreshToken, expiresAt);
 
     await _userTokenReposiotry.CreateAsync(newUserToken, new CancellationToken());
 
-    var userRoles = _mapper.Map<List<UsersRolesViewModel>>(await _usersRolesRepository.FindByUserId(userToken.User.Id));
-    var userSubscriptions = _mapper.Map<List<SubscriptionViewModel>>(await _subscriptionsrepository.ListSubscriptions([userToken.User.Id], []));
+    var userRoles = _mapper.Map<List<UsersRolesViewModel>>(await _usersRolesRepository.FindByUserId(new Guid(userClaims.Id)));
+    var userSubscriptions = _mapper.Map<List<SubscriptionViewModel>>(await _subscriptionsrepository.ListSubscriptions([new Guid(userClaims.Id)], []));
 
     var authData = new AuthData
     {

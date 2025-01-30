@@ -121,14 +121,15 @@ public static class BuilderExtension
           {
             OnChallenge = (context) =>
               {
-                if (context.Error == "expired_token")
+                context.HandleResponse();
+
+                if (context.AuthenticateFailure != null || context.Error == "expired_token")
                 {
                   context.Response.StatusCode = 401;
                   context.Response.ContentType = "application/json";
                   var response = new { message = "token.expired" };
                   return context.Response.WriteAsJsonAsync(response);
                 }
-
                 return Task.CompletedTask;
               }
           };

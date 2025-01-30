@@ -2,10 +2,8 @@
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
-using ClassManager.Domain.Contexts.Accounts.Entities;
 using ClassManager.Domain.Contexts.Auth.Commands;
 using ClassManager.Domain.Contexts.Users.ViewModels;
-using ClassManager.Domain.Shared.Contracts;
 using Microsoft.IdentityModel.Tokens;
 
 namespace ClassManager.Domain.Contexts.Auth.Services
@@ -48,7 +46,7 @@ namespace ClassManager.Domain.Contexts.Auth.Services
       return ci;
     }
 
-    public static ClaimsCommand GetJwtClaims(string token)
+    public ClaimsCommand GetJwtClaims(string token)
     {
       var handler = new JwtSecurityTokenHandler();
 
@@ -68,7 +66,7 @@ namespace ClassManager.Domain.Contexts.Auth.Services
       };
     }
 
-    public static bool ValidateToken(string token)
+    public bool ValidateToken(string token)
     {
       var handler = new JwtSecurityTokenHandler();
 
