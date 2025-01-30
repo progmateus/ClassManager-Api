@@ -10,10 +10,11 @@ public class UserTokenRepository : Repository<UserToken>, IUserTokenRepository
 {
   public UserTokenRepository(AppDbContext context) : base(context) { }
 
-  public async Task<UserToken?> FindbyUserIdAndRefreshToken(Guid userId, string refreshToken, CancellationToken cancellationToken)
+  public async Task<UserToken?> FindByRefreshToken(string refreshToken, CancellationToken cancellationToken)
   {
     return await DbSet
       .AsNoTracking()
-      .FirstOrDefaultAsync(x => x.UserId == userId && x.RefreshToken == refreshToken, cancellationToken);
+      .Include(x => x.User)
+      .FirstOrDefaultAsync(x => x.RefreshToken == refreshToken, cancellationToken);
   }
 }

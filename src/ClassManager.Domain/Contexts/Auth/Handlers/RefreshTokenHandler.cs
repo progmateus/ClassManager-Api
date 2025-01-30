@@ -34,7 +34,7 @@ public class RefreshTokenHandler :
     _subscriptionsrepository = subscriptionsrepository;
     _mapper = mapper;
   }
-  public async Task<ICommandResult> Handle(Guid loggedUserId, RefreshTokenCommand command)
+  public async Task<ICommandResult> Handle(RefreshTokenCommand command)
   {
 
     command.Validate();
@@ -44,7 +44,7 @@ public class RefreshTokenHandler :
       return new CommandResult(false, "ERR_VALIDATION", null, command.Notifications);
     }
 
-    var userToken = await _userTokenReposiotry.FindbyUserIdAndRefreshToken(loggedUserId, command.RefreshToken, default);
+    var userToken = await _userTokenReposiotry.FindByRefreshToken(command.RefreshToken, default);
 
     if (userToken is null)
     {
@@ -59,12 +59,12 @@ public class RefreshTokenHandler :
 
     var refreshToken = tokenService.Create(userViewModel, Configuration.Secrets.RefreshToken, expiresAt);
 
-    var newUserToken = new UserToken(loggedUserId, refreshToken, expiresAt);
+    var newUserToken = new UserToken(userToken.User.Id, refreshToken, expiresAt);
 
     await _userTokenReposiotry.CreateAsync(newUserToken, new CancellationToken());
 
-    var userRoles = _mapper.Map<List<UsersRolesViewModel>>(await _usersRolesRepository.FindByUserId(loggedUserId));
-    var userSubscriptions = _mapper.Map<List<SubscriptionViewModel>>(await _subscriptionsrepository.ListSubscriptions([loggedUserId], []));
+    var userRoles = _mapper.Map<List<UsersRolesViewModel>>(await _usersRolesRepository.FindByUserId(userToken.User.Id));
+    var userSubscriptions = _mapper.Map<List<SubscriptionViewModel>>(await _subscriptionsrepository.ListSubscriptions([userToken.User.Id], []));
 
     var authData = new AuthData
     {

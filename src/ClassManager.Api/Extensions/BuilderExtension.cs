@@ -119,15 +119,17 @@ public static class BuilderExtension
 
           x.Events = new JwtBearerEvents
           {
-            OnChallenge = async (context) =>
+            OnChallenge = (context) =>
               {
-                context.HandleResponse();
-
-                if (context.AuthenticateFailure != null)
+                if (context.Error == "expired_token")
                 {
                   context.Response.StatusCode = 401;
-                  await context.HttpContext.Response.WriteAsync("token.expired");
+                  context.Response.ContentType = "application/json";
+                  var response = new { message = "token.expired" };
+                  return context.Response.WriteAsJsonAsync(response);
                 }
+
+                return Task.CompletedTask;
               }
           };
         });
