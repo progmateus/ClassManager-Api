@@ -13,9 +13,9 @@ public class UserTokenMap : IEntityTypeConfiguration<UserToken>
     builder.HasKey(x => x.Id);
 
     builder.Property(x => x.RefreshToken)
-        .HasColumnName("Name")
+        .HasColumnName("RefreshToken")
         .HasColumnType("VARCHAR")
-        .HasMaxLength(200)
+        .HasMaxLength(700)
         .IsRequired();
 
     builder.Property(x => x.ExpiresAt)
