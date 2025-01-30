@@ -63,8 +63,12 @@ public static class BuilderExtension
 
     Configuration.Secrets.ApiKey =
         builder.Configuration.GetSection("Secrets").GetValue<string>("ApiKey") ?? string.Empty;
-    Configuration.Secrets.JwtPrivateKey =
-        builder.Configuration.GetSection("Secrets").GetValue<string>("JwtPrivateKey") ?? string.Empty;
+    Configuration.Secrets.Token =
+        builder.Configuration.GetSection("Secrets").GetValue<string>("Token") ?? string.Empty;
+
+    Configuration.Secrets.RefreshToken =
+        builder.Configuration.GetSection("Secrets").GetValue<string>("RefreshToken") ?? string.Empty;
+
     Configuration.Secrets.PasswordSaltKey =
         builder.Configuration.GetSection("Secrets").GetValue<string>("PasswordSaltKey") ?? string.Empty;
 
@@ -107,7 +111,7 @@ public static class BuilderExtension
           x.SaveToken = true;
           x.TokenValidationParameters = new TokenValidationParameters
           {
-            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.Secrets.JwtPrivateKey)),
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.Secrets.Token)),
             ValidateIssuer = false,
             ValidateAudience = false
           };
