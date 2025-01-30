@@ -3,6 +3,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using ClassManager.Domain.Contexts.Accounts.Entities;
+using ClassManager.Domain.Contexts.Auth.Commands;
 using ClassManager.Domain.Contexts.Users.ViewModels;
 using ClassManager.Domain.Shared.Contracts;
 using Microsoft.IdentityModel.Tokens;
@@ -45,6 +46,33 @@ namespace ClassManager.Domain.Contexts.Auth.Services
         ci.AddClaim(new Claim(ClaimTypes.Role, $"@{userRole.TenantId} @{userRole.Role?.Name ?? ""}"));
 
       return ci;
+    }
+
+    public static ClaimsCommand GetJwtClaims(string token)
+    {
+      var handler = new JwtSecurityTokenHandler();
+
+      var jwtToken = handler.ReadJwtToken(token);
+
+      var claims = jwtToken.Claims;
+
+      var userId = claims.FirstOrDefault(c => c.Type == "id")?.Value ?? "";
+
+      var username = claims.FirstOrDefault(c => c.Type == "name")?.Value ?? "";
+
+
+      return new ClaimsCommand
+      {
+        Id = userId,
+        Name = username,
+      };
+    }
+
+    public static bool ValidateToken(string token)
+    {
+      var handler = new JwtSecurityTokenHandler();
+
+      return handler.CanReadToken(token);
     }
   }
 }
